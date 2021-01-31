@@ -1,12 +1,3 @@
-function lookup(pos, ...data) {
-  for (let i = 0; i < data.length - 1; i += 2) {
-    if (pos < data[i + 1]) {
-      return data[i];
-    }
-  }
-  return data[data.length - 1];
-}
-
 const alnum = (c) => '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:'.indexOf(c);
 
 export default {
@@ -14,7 +5,7 @@ export default {
 
   numeric: (value) => (data, version) => {
     data.addInt(0b0001, 4);
-    data.addInt(value.length, lookup(version, 10, 10, 12, 27, 14));
+    data.addInt(value.length, version < 10 ? 10 : version < 27 ? 12 : 14);
     let i = 0;
     for (; i < value.length - 2; i += 3) {
       data.addInt(Number(value.substr(i, 3)), 10);
@@ -28,7 +19,7 @@ export default {
 
   alphaNumeric: (value) => (data, version) => {
     data.addInt(0b0010, 4);
-    data.addInt(value.length, lookup(version, 9, 10, 11, 27, 13));
+    data.addInt(value.length, version < 10 ? 9 : version < 27 ? 11 : 13);
     let i = 0;
     for (; i < value.length - 1; i += 2) {
       data.addInt(alnum(value[i]) * 45 + alnum(value[i + 1]), 11);
@@ -42,7 +33,7 @@ export default {
     const bytes = new TextEncoder('iso-8859-1').encode(value);
     return (data, version) => {
       data.addInt(0b0100, 4);
-      data.addInt(bytes.length, lookup(version, 8, 10, 16));
+      data.addInt(bytes.length, version < 10 ? 8 : 16);
       for (let i = 0; i < bytes.length; ++i) {
         data.addInt(bytes[i], 8);
       }

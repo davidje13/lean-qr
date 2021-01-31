@@ -18,6 +18,7 @@ module.exports = {
           'no-bitwise': ['off'],
           'no-plusplus': ['off'],
           'no-continue': ['off'],
+          'no-nested-ternary': ['off'],
         },
       },
     }),
