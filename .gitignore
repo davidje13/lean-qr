@@ -1,0 +1,5 @@
+.DS_Store
+xcuserdata/
+.idea
+
+node_modules/
