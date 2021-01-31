@@ -25,6 +25,14 @@ process.stdout.write(code.toString({
 
 <img src="docs/example.png" width="300" />
 
+There is also a small commandline tool included for testing:
+
+```shell
+lean-qr 'MY MESSAGE HERE'
+```
+
+For full documentation, run `lean-qr --help`.
+
 ## Modes
 
 | mode                 | bits / char | charset           |

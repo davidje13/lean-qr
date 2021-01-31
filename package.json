@@ -4,13 +4,15 @@
   "description": "minimal QR code generation",
   "files": [
     "build/**/*",
+    "bin/**/*",
     "index.d.ts"
   ],
+  "bin": "./bin/cli.js",
   "main": "build/index.js",
   "types": "index.d.ts",
   "scripts": {
     "build": "webpack --mode production",
-    "lint": "eslint --format codeframe --ext mjs,jsx,js src",
+    "lint": "eslint --format codeframe --ext mjs,jsx,js src bin",
     "test": "jest",
     "posttest": "npm run lint",
     "test:watch": "jest --watch"
