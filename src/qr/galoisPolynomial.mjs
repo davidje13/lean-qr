@@ -46,13 +46,3 @@ export function remPoly(gf, num, denLn) {
   }
   return remainder.slice(num.length);
 }
-
-export function remBinPoly(num, den, denBits) {
-  let remainder = num << (denBits - 1);
-  for (let i = 0x40000000; i; i >>>= 1) {
-    if (remainder & i) {
-      remainder ^= den * (i >>> (denBits - 1));
-    }
-  }
-  return remainder;
-}

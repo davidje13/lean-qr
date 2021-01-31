@@ -43,12 +43,12 @@ function print(code) {
 //}));
 
 print(generate(modes.iso8859_1('http://en.m.wikipedia.org'), {
-  correctionLevel: corrections.Q,
+  minCorrectionLevel: corrections.Q,
   mask: masks[1],
 }));
 
 print(generate(modes.multi(modes.iso8859_1('https://en.wikipedia.org/wiki/'), modes.numeric('12345')), {
-  correctionLevel: corrections.Q,
+  minCorrectionLevel: corrections.Q,
 }));
 
 //print(generate(modes.multi(), {

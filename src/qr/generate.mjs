@@ -1,7 +1,7 @@
 import Bitmap1D from '../structures/Bitmap1D.mjs';
 import Bitmap2D from '../structures/Bitmap2D.mjs';
 import masks from './options/masks.mjs';
-import corrections from './options/corrections.mjs';
+import { data as correctionData, names as correctionNames } from './options/corrections.mjs';
 import calculateEC from './errorCorrection.mjs';
 import {
   drawFrame,
@@ -30,43 +30,62 @@ function getBase(version) {
   };
 }
 
+function pickMask(code, correction) {
+  let bestMasked = null;
+  let bestMaskScore = Number.POSITIVE_INFINITY;
+  masks.forEach((mask) => {
+    const masked = new Bitmap2D(code);
+    applyMask(masked, mask, correction.id);
+    const score = scoreCode(masked);
+    if (score < bestMaskScore) {
+      bestMasked = masked;
+      bestMaskScore = score;
+    }
+  });
+  return bestMasked;
+}
+
 export default function generate(modeData, {
-  correctionLevel = corrections.L,
+  minCorrectionLevel = correctionNames.min,
+  maxCorrectionLevel = correctionNames.max,
   minVersion = 1,
   maxVersion = 40,
   mask = null,
 } = {}) {
+  if (maxCorrectionLevel < minCorrectionLevel) {
+    throw new Error('Invalid correction level range');
+  }
+  if (maxVersion < minVersion) {
+    throw new Error('Invalid version range');
+  }
+
+  let dataLengthBits = 0;
   for (let version = minVersion; version <= maxVersion; ++version) {
+    if (correctionData[minCorrectionLevel].v[version].capBits < dataLengthBits) {
+      continue;
+    }
+
     const data = new Bitmap1D();
     modeData(data, version);
-    const endOfUsefulData = data.bits;
+    dataLengthBits = data.bits;
     EncodeEnd(data);
     data.padToMultiple(8, false);
     data.padToInf(0b11101100_00010001, 16);
 
-    const versionedCorrection = correctionLevel.versions[version - 1];
-    if (versionedCorrection.capacity * 8 < endOfUsefulData) {
-      continue;
-    }
-    const ec = calculateEC(data, versionedCorrection);
-    const { code, path } = getBase(version);
-    drawCode(code, path, ec);
-    if (mask) {
-      applyMask(code, mask, correctionLevel.id);
-      return code;
-    }
-    let bestMasked = null;
-    let bestMaskScore = Number.POSITIVE_INFINITY;
-    masks.forEach((m) => {
-      const masked = new Bitmap2D(code);
-      applyMask(masked, m, correctionLevel.id);
-      const score = scoreCode(masked);
-      if (score < bestMaskScore) {
-        bestMasked = masked;
-        bestMaskScore = score;
+    for (let cl = maxCorrectionLevel; cl >= minCorrectionLevel; --cl) {
+      const correction = correctionData[cl];
+      const versionedCorrection = correction.v[version];
+      if (versionedCorrection.capBits < dataLengthBits) {
+        continue;
       }
-    });
-    return bestMasked;
+      const { code, path } = getBase(version);
+      drawCode(code, path, calculateEC(data, versionedCorrection));
+      if (mask) {
+        applyMask(code, mask, correction.id);
+        return code;
+      }
+      return pickMask(code, correction);
+    }
   }
-  throw new Error('Insufficient storage space for data');
+  throw new Error('Too much data');
 }

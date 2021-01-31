@@ -1,4 +1,12 @@
-import { remBinPoly } from './galoisPolynomial.mjs';
+function remBinPoly(num, den, denBits) {
+  let remainder = num << (denBits - 1);
+  for (let i = 0x40000000; i; i >>>= 1) {
+    if (remainder & i) {
+      remainder ^= den * (i >>> (denBits - 1));
+    }
+  }
+  return remainder;
+}
 
 function drawRect(code, x1, y1, x2, y2, value) {
   for (let y = y1; y < y2; ++y) {
