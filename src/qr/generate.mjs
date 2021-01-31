@@ -68,15 +68,17 @@ export default function generate(modeData, {
     const data = new Bitmap1D();
     modeData(data, version);
     dataLengthBits = data.bits;
-    EncodeEnd(data);
-    data.padToMultiple(8, false);
-    data.padToInf(0b11101100_00010001, 16);
 
     for (let cl = maxCorrectionLevel; cl >= minCorrectionLevel; --cl) {
       const correction = correctionData[cl];
       const versionedCorrection = correction.v[version];
       if (versionedCorrection.capBits < dataLengthBits) {
         continue;
+      }
+      EncodeEnd(data);
+      data.padToByte();
+      while (data.bits < versionedCorrection.capBits) {
+        data.addInt(0b11101100_00010001, 16);
       }
       const { code, path } = getBase(version);
       drawCode(code, path, calculateEC(data, versionedCorrection));

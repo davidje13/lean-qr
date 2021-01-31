@@ -1,14 +1,10 @@
-import { gf256, multPolyLn, remPoly } from './galoisPolynomial.mjs';
+import { mult256PolyLn, rem256Poly } from './galoisPolynomial.mjs';
 
 const generators = [[0], [0, 0]];
 for (let i = 1, last = generators[1]; i < 30; ++i) {
-  const next = multPolyLn(gf256, last, [0, i]);
+  const next = mult256PolyLn(last, [0, i]);
   generators.push(next);
   last = next;
-}
-
-function calculateECBlock(bytes, ecsize) {
-  return new Uint8Array(remPoly(gf256, bytes, generators[ecsize]));
 }
 
 function interleave(target, offset, blocks) {
@@ -39,7 +35,7 @@ export default function calculateEC(versionData, { groups, ecsize }) {
         block[i] = versionData.byte(p++);
       }
       blocks.push(block);
-      eccs.push(calculateECBlock(block, ecsize));
+      eccs.push(rem256Poly(block, generators[ecsize]));
     }
     size += nBlocks * (bytes + ecsize);
   });
