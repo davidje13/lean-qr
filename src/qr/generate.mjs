@@ -31,9 +31,9 @@ function getBase(version) {
 function pickMask(code, correction) {
   let bestMasked = null;
   let bestMaskScore = Number.POSITIVE_INFINITY;
-  masks.forEach((mask) => {
+  masks.forEach((mask, maskId) => {
     const masked = new Bitmap2D(code);
-    applyMask(masked, mask, correction.id);
+    applyMask(masked, mask, maskId, correction.id);
     const score = scoreCode(masked);
     if (score < bestMaskScore) {
       bestMasked = masked;
@@ -81,7 +81,7 @@ export default function generate(modeData, {
       const { code, path } = getBase(version);
       drawCode(code, path, calculateEC(data.bytes, versionedCorrection));
       if (mask !== null) {
-        applyMask(code, masks[mask], correction.id);
+        applyMask(code, masks[mask], mask, correction.id);
         return code;
       }
       return pickMask(code, correction);

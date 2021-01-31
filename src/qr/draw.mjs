@@ -118,13 +118,13 @@ export function drawCode(target, path, data) {
   });
 }
 
-export function applyMask(target, mask, ecId) {
+export function applyMask(target, mask, maskId, ecId) {
   for (let y = 0; y < target.height; ++y) {
     for (let x = 0; x < target.width; ++x) {
-      target.xorNoMask(x, y, mask.fn(x, y));
+      target.xorNoMask(x, y, mask(x, y));
     }
   }
-  const info = ((ecId << 3) | mask.id);
+  const info = ((ecId << 3) | maskId);
   const pattern = 0b101010000010010 ^ ((info << 10) | remBinPoly(info, 0b10100110111, 11));
   let chk = 0b100000000000000;
   for (let i = 0; i < 7; ++i) {
