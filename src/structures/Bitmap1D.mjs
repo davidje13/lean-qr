@@ -1,30 +1,17 @@
 export default class Bitmap1D {
-  constructor() {
-    this.data = [];
-  }
-
-  get bits() {
-    return this.data.length;
-  }
-
-  byte(index) {
-    const p = index * 8;
-    let v = 0;
-    for (let i = 0; i < 8; ++i) {
-      v = (v << 1) | this.data[p + i];
-    }
-    return v;
+  constructor(capacityBytes) {
+    this.bytes = new Uint8Array(capacityBytes);
+    this.bits = 0;
   }
 
   addInt(value, bits) {
-    for (let mask = 1 << (bits - 1); mask; mask >>>= 1) {
-      this.data.push(Boolean(value & mask));
+    for (let b = bits, r = 8 - (this.bits & 7); b > 0; b -= r, r = 8) {
+      this.bytes[this.bits >>> 3] |= ((value << r) >>> b);
+      this.bits += Math.min(b, r);
     }
   }
 
   padToByte() {
-    for (let i = (this.data.length + 7) & 7; i < 7; ++i) {
-      this.data.push(false);
-    }
+    this.bits = (this.bits + 7) & ~7;
   }
 }

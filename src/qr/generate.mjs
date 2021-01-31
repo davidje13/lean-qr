@@ -11,8 +11,6 @@ import {
 } from './draw.mjs';
 import scoreCode from './score.mjs';
 
-const EncodeEnd = (data) => data.addInt(0b0000, 4);
-
 const baseCache = new Map();
 
 function getBase(version) {
@@ -65,7 +63,7 @@ export default function generate(modeData, {
       continue;
     }
 
-    const data = new Bitmap1D();
+    const data = new Bitmap1D(2956); // max capacity of any code
     modeData(data, version);
     dataLengthBits = data.bits;
 
@@ -75,13 +73,13 @@ export default function generate(modeData, {
       if (versionedCorrection.capBits < dataLengthBits) {
         continue;
       }
-      EncodeEnd(data);
+      data.addInt(0b0000, 4);
       data.padToByte();
       while (data.bits < versionedCorrection.capBits) {
         data.addInt(0b11101100_00010001, 16);
       }
       const { code, path } = getBase(version);
-      drawCode(code, path, calculateEC(data, versionedCorrection));
+      drawCode(code, path, calculateEC(data.bytes, versionedCorrection));
       if (mask) {
         applyMask(code, mask, correction.id);
         return code;

@@ -22,18 +22,15 @@ function interleave(target, offset, blocks) {
   return p;
 }
 
-export default function calculateEC(versionData, { groups, ecsize }) {
+export default function calculateEC(versionBytes, { groups, ecsize }) {
   const blocks = [];
   const eccs = [];
 
   let p = 0;
   let size = 0;
   groups.forEach(([nBlocks, bytes]) => {
-    for (let b = 0; b < nBlocks; ++b) {
-      const block = new Uint8Array(bytes);
-      for (let i = 0; i < bytes; ++i) {
-        block[i] = versionData.byte(p++);
-      }
+    for (let b = 0; b < nBlocks; ++b, p += bytes) {
+      const block = versionBytes.slice(p, p + bytes);
       blocks.push(block);
       eccs.push(rem256Poly(block, generators[ecsize]));
     }
