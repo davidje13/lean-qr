@@ -52,8 +52,8 @@ custom modes:
 ```javascript
 const myMode = (value) => (data, version) => {
   // call functions on data to encode the value
-  data.addInt(0b101010, 6); // value, bits (supports up to 24-bit values)
-  data.padToByte(); // pad with 0 bits until the next whole byte boundary
+  data.push(0b101010, 6); // value, bits (supports up to 24-bit values)
+  data.padByte(); // pad with 0 bits until the next whole byte boundary
 };
 
 const code = generate(myMode('foobar'));
@@ -65,10 +65,10 @@ For example the implementation of `iso8859_1`:
 const iso8859_1 = (value) => {
   const bytes = new TextEncoder('iso-8859-1').encode(value);
   return (data, version) => {
-    data.addInt(0b0100, 4);
-    data.addInt(bytes.length, version < 10 ? 8 : 16);
+    data.push(0b0100, 4);
+    data.push(bytes.length, version < 10 ? 8 : 16);
     for (let i = 0; i < bytes.length; ++i) {
-      data.addInt(bytes[i], 8);
+      data.push(bytes[i], 8);
     }
   };
 };
