@@ -3,33 +3,29 @@ export default class Bitmap2D {
     if (width instanceof Bitmap2D) {
       this.width = width.width;
       this.height = width.height;
-      this.step = width.step;
-      this.data = new Uint8Array(width.data);
+      this.d = new Uint8Array(width.d);
     } else {
       this.width = width;
       this.height = height;
-      this.step = Math.ceil(width / 4);
-      this.data = new Uint8Array(this.step * this.height);
+      this.d = new Uint8Array(width * height);
     }
   }
 
   get(x, y) {
-    return !!(this.data[y * this.step + (x >> 2)] & (0b01 << ((x & 3) * 2)));
+    return !!(this.d[y * this.width + x] & 0b01);
   }
 
-  isMasked(x, y) {
-    return this.data[y * this.step + (x >> 2)] & (0b10 << ((x & 3) * 2));
+  masked(x, y) {
+    return (this.d[y * this.width + x] & 0b10);
   }
 
   set(x, y, value, mask = 1) {
-    const p = y * this.step + (x >> 2);
-    const s = (x & 3) * 2;
-    this.data[p] &= ~(0b11 << s);
-    this.data[p] |= (((mask * 0b10) | (!!value)) << s);
+    this.d[y * this.width + x] = (mask * 0b10) | (!!value);
   }
 
   xorNoMask(x, y, value) {
-    const p = y * this.step + (x >> 2);
-    this.data[p] ^= ((!!value) << ((x & 3) * 2)) & ~(this.data[p] >> 1);
+    if (value && !this.masked(x, y)) {
+      this.d[y * this.width + x] ^= 1;
+    }
   }
 }

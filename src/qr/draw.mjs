@@ -92,10 +92,10 @@ export function getPath(code) {
       xB = 4;
     }
     for (y += dirY; y !== -1 && y !== h; y += dirY) {
-      if (!code.isMasked(xB + 1, y)) {
+      if (!code.masked(xB + 1, y)) {
         result.push([xB + 1, y]);
       }
-      if (!code.isMasked(xB, y)) {
+      if (!code.masked(xB, y)) {
         result.push([xB, y]);
       }
     }
