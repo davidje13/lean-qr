@@ -17,7 +17,7 @@ npm install --save-dev lean-qr
 import { modes, corrections, generate } from 'lean-qr';
 
 const code = generate(modes.alphaNumeric('HELLO WORLD'), {
-  correctionLevel: corrections.Q,
+  minCorrectionLevel: corrections.Q,
 });
 
 for (let y = 0; y < code.height; ++y) {

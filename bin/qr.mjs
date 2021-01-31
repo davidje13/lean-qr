@@ -1,4 +1,4 @@
-import { modes, corrections, masks, generate } from '../src/index.mjs';
+import { modes, corrections, generate } from '../src/index.mjs';
 
 //const COL = ['\u001B[107m', '\u001B[40m', '\u001B[0m'];
 const COL = ['\u001B[0m', '\u001B[7m', '\u001B[0m'];
@@ -44,7 +44,7 @@ function print(code) {
 
 print(generate(modes.iso8859_1('http://en.m.wikipedia.org'), {
   minCorrectionLevel: corrections.Q,
-  mask: masks[1],
+  mask: 1,
 }));
 
 print(generate(modes.multi(modes.iso8859_1('https://en.wikipedia.org/wiki/'), modes.numeric('12345')), {

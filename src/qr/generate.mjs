@@ -80,8 +80,8 @@ export default function generate(modeData, {
       }
       const { code, path } = getBase(version);
       drawCode(code, path, calculateEC(data.bytes, versionedCorrection));
-      if (mask) {
-        applyMask(code, mask, correction.id);
+      if (mask !== null) {
+        applyMask(code, masks[mask], correction.id);
         return code;
       }
       return pickMask(code, correction);
