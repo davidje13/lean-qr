@@ -16,22 +16,15 @@ function drawRect(code, x1, y1, x2, y2, value) {
   }
 }
 
-function drawRectOutline(code, x1, y1, x2, y2, value) {
-  drawRect(code, x1, y1, x2, y1 + 1, value);
-  drawRect(code, x1, y1 + 1, x1 + 1, y2, value);
-  drawRect(code, x2 - 1, y1 + 1, x2, y2, value);
-  drawRect(code, x1 + 1, y2 - 1, x2 - 1, y2, value);
-}
-
 function drawPlacement(code, x, y) {
-  drawRectOutline(code, x - 3, y - 3, x + 4, y + 4, 1);
-  drawRectOutline(code, x - 2, y - 2, x + 3, y + 3, 0);
+  drawRect(code, x - 3, y - 3, x + 4, y + 4, 1);
+  drawRect(code, x - 2, y - 2, x + 3, y + 3, 0);
   drawRect(code, x - 1, y - 1, x + 2, y + 2, 1);
 }
 
 function drawAlignment(code, x, y) {
-  drawRectOutline(code, x - 2, y - 2, x + 3, y + 3, 1);
-  drawRectOutline(code, x - 1, y - 1, x + 2, y + 2, 0);
+  drawRect(code, x - 2, y - 2, x + 3, y + 3, 1);
+  drawRect(code, x - 1, y - 1, x + 2, y + 2, 0);
   code.set(x, y, 1);
 }
 
@@ -82,16 +75,14 @@ export function drawFrame(code, version) {
 }
 
 export function getPath(code) {
-  const w = code.width;
   const h = code.height;
   const result = [];
-  let dirY = -1;
-  let y = h;
-  for (let xB = w - 2; xB >= 0; xB -= 2) {
+  for (let xB = code.width - 2, y = h, dirY = -1; xB >= 0; xB -= 2) {
     if (xB === 5) { // special case: skip vertical timing pattern line
       xB = 4;
     }
-    for (y += dirY; y !== -1 && y !== h; y += dirY) {
+    /* eslint-disable no-cond-assign, no-sequences */
+    while (y += dirY, y !== -1 && y !== h) {
       if (!code.masked(xB + 1, y)) {
         result.push([xB + 1, y]);
       }
@@ -99,23 +90,14 @@ export function getPath(code) {
         result.push([xB, y]);
       }
     }
+    /* eslint-enable no-cond-assign, no-sequences */
     dirY *= -1;
   }
   return result;
 }
 
 export function drawCode(target, path, data) {
-  let byte = 0;
-  let bit = 0b10000000;
-  path.forEach(([x, y]) => {
-    const v = data[byte] & bit;
-    target.set(x, y, v, 0);
-    bit >>>= 1;
-    if (!bit) {
-      ++byte;
-      bit = 0b10000000;
-    }
-  });
+  path.forEach(([x, y], bit) => target.set(x, y, (data[bit >> 3] << (bit & 7)) & 0x80, 0));
 }
 
 export function applyMask(target, mask, maskId, ecId) {
