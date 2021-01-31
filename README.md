@@ -20,8 +20,8 @@ const code = generate(modes.alphaNumeric('HELLO WORLD'), {
   minCorrectionLevel: corrections.Q,
 });
 
-for (let y = 0; y < code.height; ++y) {
-  for (let x = 0; x < code.width; ++x) {
+for (let y = 0; y < code.size; ++y) {
+  for (let x = 0; x < code.size; ++x) {
     process.stdout.write(code.get(x, y) ? '##' : '  ');
   }
   process.stdout.write('\n');

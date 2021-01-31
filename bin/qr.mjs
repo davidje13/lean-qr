@@ -9,17 +9,17 @@ const PAD_Y = 3;
 function print(code) {
   for (let y = 0; y < PAD_Y; ++y) {
     process.stdout.write(COL[0]);
-    for (let x = 0; x < code.width + PAD_X * 2; ++x) {
+    for (let x = 0; x < code.size + PAD_X * 2; ++x) {
       process.stdout.write(CELL[0]);
     }
     process.stdout.write(COL[2] + '\n');
   }
-  for (let y = 0; y < code.height; ++y) {
+  for (let y = 0; y < code.size; ++y) {
     process.stdout.write(COL[0]);
     for (let x = 0; x < PAD_X; ++x) {
       process.stdout.write(CELL[0]);
     }
-    for (let x = 0; x < code.width; ++x) {
+    for (let x = 0; x < code.size; ++x) {
       const v = code.get(x, y) | 0;
       process.stdout.write(COL[v] + CELL[v]);
     }
@@ -31,7 +31,7 @@ function print(code) {
   }
   for (let y = 0; y < PAD_Y; ++y) {
     process.stdout.write(COL[0]);
-    for (let x = 0; x < code.width + PAD_X * 2; ++x) {
+    for (let x = 0; x < code.size + PAD_X * 2; ++x) {
       process.stdout.write(CELL[0]);
     }
     process.stdout.write(COL[2] + '\n');

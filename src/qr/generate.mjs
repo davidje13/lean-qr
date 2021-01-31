@@ -15,11 +15,9 @@ const baseCache = new Map();
 
 function getBase(version) {
   if (!baseCache.has(version)) {
-    const size = version * 4 + 17;
-    const code = new Bitmap2D(size, size);
+    const code = new Bitmap2D({ size: version * 4 + 17 });
     drawFrame(code, version);
-    const path = getPath(code);
-    baseCache.set(version, { code, path });
+    baseCache.set(version, { code, path: getPath(code) });
   }
   const cached = baseCache.get(version);
   return {

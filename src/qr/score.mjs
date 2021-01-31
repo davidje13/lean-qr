@@ -1,14 +1,10 @@
 function hv(code, state0, fn) {
-  for (let y = 0; y < code.height; ++y) {
-    let state = state0;
-    for (let x = 0; x < code.width; ++x) {
-      state = fn(state, code.get(x, y));
-    }
-  }
-  for (let x = 0; x < code.width; ++x) {
-    let state = state0;
-    for (let y = 0; y < code.height; ++y) {
-      state = fn(state, code.get(x, y));
+  for (let i = 0; i < code.size; ++i) {
+    let stateX = state0;
+    let stateY = state0;
+    for (let j = 0; j < code.size; ++j) {
+      stateX = fn(stateX, code.get(j, i));
+      stateY = fn(stateY, code.get(i, j));
     }
   }
 }
@@ -31,18 +27,15 @@ function scoreLines(code) {
 
 function countBoxes(code) {
   let score = 0;
-  for (let x = 0; x < code.width - 1; ++x) {
+  for (let x = 0; x < code.size - 1; ++x) {
     let lastV = code.get(x, 0);
     let lastM = code.get(x + 1, 0) === lastV;
-    for (let y = 0; y < code.height - 1; ++y) {
+    for (let y = 0; y < code.size - 1; ++y) {
       const curV = code.get(x, y);
       const curM = code.get(x + 1, y) === curV;
-      if (lastM && curM && lastV === curV) {
-        ++score;
-      } else {
-        lastV = curV;
-        lastM = curM;
-      }
+      score += (lastM && curM && lastV === curV);
+      lastV = curV;
+      lastM = curM;
     }
   }
   return score;
@@ -67,12 +60,12 @@ function countPatterns(code) {
 
 function scoreImbalance(code) {
   let totalOn = 0;
-  for (let y = 0; y < code.height; ++y) {
-    for (let x = 0; x < code.width; ++x) {
+  for (let y = 0; y < code.size; ++y) {
+    for (let x = 0; x < code.size; ++x) {
       totalOn += code.get(x, y);
     }
   }
-  return Math.floor(20 * Math.abs(totalOn / (code.width * code.height) - 0.5)) * 10;
+  return Math.floor(20 * Math.abs(totalOn / (code.size * code.size) - 0.5)) * 10;
 }
 
 export default function scoreCode(code) {

@@ -75,14 +75,14 @@ export function drawFrame(code, version) {
 }
 
 export function getPath(code) {
-  const h = code.height;
+  const s = code.size;
   const result = [];
-  for (let xB = code.width - 2, y = h, dirY = -1; xB >= 0; xB -= 2) {
+  for (let xB = s - 2, y = s, dirY = -1; xB >= 0; xB -= 2) {
     if (xB === 5) { // special case: skip vertical timing pattern line
       xB = 4;
     }
     /* eslint-disable no-cond-assign, no-sequences */
-    while (y += dirY, y !== -1 && y !== h) {
+    while (y += dirY, y !== -1 && y !== s) {
       if (!code.masked(xB + 1, y)) {
         result.push([xB + 1, y]);
       }
@@ -101,9 +101,11 @@ export function drawCode(target, path, data) {
 }
 
 export function applyMask(target, mask, maskId, ecId) {
-  for (let y = 0; y < target.height; ++y) {
-    for (let x = 0; x < target.width; ++x) {
-      target.xorNoMask(x, y, mask(x, y));
+  for (let y = 0; y < target.size; ++y) {
+    for (let x = 0; x < target.size; ++x) {
+      if (mask(x, y) && !target.masked(x, y)) {
+        target.inv(x, y);
+      }
     }
   }
   const info = ((ecId << 3) | maskId);
@@ -112,13 +114,13 @@ export function applyMask(target, mask, maskId, ecId) {
   for (let i = 0; i < 7; ++i) {
     const state = pattern & chk;
     target.set(i === 6 ? 7 : i, 8, state);
-    target.set(8, target.height - i - 1, state);
+    target.set(8, target.size - i - 1, state);
     chk >>>= 1;
   }
   for (let i = 0; i < 8; ++i) {
     const state = pattern & chk;
     target.set(8, (i > 1 ? 7 : 8) - i, state);
-    target.set(target.width - 8 + i, 8, state);
+    target.set(target.size - 8 + i, 8, state);
     chk >>>= 1;
   }
 }
