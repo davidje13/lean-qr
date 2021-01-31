@@ -14,9 +14,9 @@ npm install --save-dev lean-qr
 ## Usage
 
 ```javascript
-import { modes, generate } from 'lean-qr';
+import { mode, generate } from 'lean-qr';
 
-const code = generate(modes.alphaNumeric('LEAN-QR LIBRARY'));
+const code = generate(mode.alphaNumeric('LEAN-QR LIBRARY'));
 
 process.stdout.write(code.toString({
   on: '\u001B[7m  \u001B[0m', // ANSI escape: inverted
@@ -35,19 +35,19 @@ For full documentation, run `lean-qr --help`.
 
 ## Modes
 
-| mode                 | bits / char | charset           |
-|----------------------|------------:|-------------------|
-| `modes.numeric`      |      10 / 3 | `0-9`             |
-| `modes.alphaNumeric` |      11 / 2 | `0-9A-Z $%*+-./:` |
-| `modes.iso8859_1`    |       8 / 1 | ISO-8859-1        |
+| mode                | bits / char | charset           |
+|---------------------|------------:|-------------------|
+| `mode.numeric`      |      10 / 3 | `0-9`             |
+| `mode.alphaNumeric` |      11 / 2 | `0-9A-Z $%*+-./:` |
+| `mode.iso8859_1`    |       8 / 1 | ISO-8859-1        |
 
-`modes.multi` enables switching modes during a message, for example:
+`mode.multi` enables switching modes during a message, for example:
 
 ```javascript
-const code = generate(modes.multi(
-  modes.iso8859_1('https://example.com/'),
-  modes.numeric('123456789012345678901234567890'),
-  modes.alphaNumeric('/LOOKUP'),
+const code = generate(mode.multi(
+  mode.iso8859_1('https://example.com/'),
+  mode.numeric('123456789012345678901234567890'),
+  mode.alphaNumeric('/LOOKUP'),
 ));
 ```
 
@@ -84,9 +84,9 @@ const iso8859_1 = (value) => {
 You can specify minimum and maximum correction levels:
 
 ```javascript
-const code = generate(modes.alphaNumeric('LEAN-QR LIBRARY'), {
-  minCorrectionLevel: corrections.M,
-  maxCorrectionLevel: corrections.Q,
+const code = generate(mode.alphaNumeric('LEAN-QR LIBRARY'), {
+  minCorrectionLevel: correction.M,
+  maxCorrectionLevel: correction.Q,
 });
 ```
 
@@ -96,10 +96,10 @@ possible correction level up to `maxCorrectionLevel`.
 
 | correction level | error tolerance | data overhead |
 |------------------|----------------:|--------------:|
-| `corrections.L`  |           ~7.5% |          ~25% |
-| `corrections.M`  |          ~15.0% |          ~60% |
-| `corrections.Q`  |          ~22.5% |         ~120% |
-| `corrections.H`  |          ~30.0% |         ~190% |
+| `correction.L`   |           ~7.5% |          ~25% |
+| `correction.M`   |          ~15.0% |          ~60% |
+| `correction.Q`   |          ~22.5% |         ~120% |
+| `correction.H`   |          ~30.0% |         ~190% |
 
 ## Versions
 
@@ -107,7 +107,7 @@ By default, all versions (sizes) can be used. To restrict this, you can
 specify a minimum and/or maximum version:
 
 ```javascript
-const code = generate(modes.alphaNumeric('LEAN-QR LIBRARY'), {
+const code = generate(mode.alphaNumeric('LEAN-QR LIBRARY'), {
   minVersion: 10,
   maxVersion: 20,
 });
@@ -126,7 +126,7 @@ is designed to maximize readability by QR code readers. This is done by
 default, however if you would like to specify a particular mask, you can:
 
 ```javascript
-const code = generate(modes.alphaNumeric('LEAN-QR LIBRARY'), {
+const code = generate(mode.alphaNumeric('LEAN-QR LIBRARY'), {
   mask: 5,
 });
 ```

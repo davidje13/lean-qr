@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { modes, corrections, generate } = require('../build/index.js');
+const { mode, correction, generate } = require('../build/index.js');
 const { printUsage, parseArgs } = require('./argparser.js');
 
 const TEXT_FORMATS = new Map();
@@ -21,8 +21,8 @@ TEXT_FORMATS.set('text-ascii', {});
 /* eslint-disable object-curly-newline */
 const FLAGS = [
   { id: 'encoding', name: 'encoding', short: 'e', type: 'enum', values: ['mixed', 'auto', 'numeric', 'alphanumeric', 'iso-8859-1'], def: 'mixed', info: 'Set the encoding type for the content' },
-  { id: 'minCor', name: 'min-correction', short: 'c', type: 'enum', values: [...Object.keys(corrections)], def: 'min', info: 'Set the minimum error correction level' },
-  { id: 'maxCor', name: 'max-correction', short: 'C', type: 'enum', values: [...Object.keys(corrections)], def: 'max', info: 'Set the maximum error correction level' },
+  { id: 'minCor', name: 'min-correction', short: 'c', type: 'enum', values: [...Object.keys(correction)], def: 'min', info: 'Set the minimum error correction level' },
+  { id: 'maxCor', name: 'max-correction', short: 'C', type: 'enum', values: [...Object.keys(correction)], def: 'max', info: 'Set the maximum error correction level' },
   { id: 'minVer', name: 'min-version', short: 'v', type: 'int', min: 1, max: 40, def: 1, info: 'Set the minimum version (size)' },
   { id: 'maxVer', name: 'max-version', short: 'V', type: 'int', min: 1, max: 40, def: 40, info: 'Set the maximum version (size)' },
   { id: 'padding', name: 'padding', short: 'p', type: 'int', min: 0, def: 4, info: 'Set the edge padding size' },
@@ -36,20 +36,20 @@ const FLAGS = [
 function encode(type, content) {
   switch (type.toLowerCase()) {
     case 'numeric':
-      return modes.numeric(content);
+      return mode.numeric(content);
     case 'alphanumeric':
-      return modes.alphaNumeric(content);
+      return mode.alphaNumeric(content);
     case 'iso-8859-1':
-      return modes.iso8859_1(content);
+      return mode.iso8859_1(content);
     case 'auto':
     case 'mixed': // TODO
       if (/^[0-9]*$/.test(content)) {
-        return modes.numeric(content);
+        return mode.numeric(content);
       }
       if (/^[0-9A-Z $%*+./:-]*$/.test(content)) {
-        return modes.alphaNumeric(content);
+        return mode.alphaNumeric(content);
       }
-      return modes.iso8859_1(content);
+      return mode.iso8859_1(content);
     default: throw new Error('Unknown encoding type');
   }
 }
@@ -66,8 +66,8 @@ try {
 
   const tm0 = Date.now();
   const code = generate(encoded, {
-    minCorrectionLevel: corrections[args.minCor],
-    maxCorrectionLevel: corrections[args.maxCor],
+    minCorrectionLevel: correction[args.minCor],
+    maxCorrectionLevel: correction[args.maxCor],
     minVersion: args.minVer,
     maxVersion: args.maxVer,
     mask: (args.mask === 'auto') ? null : Number(args.mask),
@@ -100,4 +100,4 @@ try {
 // lean-qr -cQ 'HELLO WORLD'
 // lean-qr -cQ -m1 'http://en.m.wikipedia.org'
 
-// modes.multi(modes.iso8859_1('https://en.wikipedia.org/wiki/'), modes.numeric('12345')
+// mode.multi(mode.iso8859_1('https://en.wikipedia.org/wiki/'), mode.numeric('12345')
