@@ -24,13 +24,12 @@ export function rem256Poly(num, denLn) {
   const remainder = new Uint8Array(num.length + denLn.length - 1);
   remainder.set(num, 0);
   for (let i = 0; i < num.length; ++i) {
-    if (!remainder[i]) {
-      continue;
-    }
-    // assume denLn[0] === 0 (true for all generator polys)
-    const shift = ln(remainder[i]); // - denLn[0];
-    for (let j = 0; j < denLn.length; ++j) {
-      remainder[i + j] ^= e(denLn[j] + shift);
+    if (remainder[i]) {
+      // assume denLn[0] === 0 (true for all generator polys)
+      const shift = ln(remainder[i]); // - denLn[0];
+      for (let j = 0; j < denLn.length; ++j) {
+        remainder[i + j] ^= e(denLn[j] + shift);
+      }
     }
   }
   return remainder.slice(num.length);

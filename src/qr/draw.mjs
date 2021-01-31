@@ -11,7 +11,7 @@ function remBinPoly(num, den, denBits) {
 function drawRect(code, x1, y1, x2, y2, value) {
   for (let y = y1; y < y2; ++y) {
     for (let x = x1; x < x2; ++x) {
-      code.setAsMask(x, y, value);
+      code.set(x, y, value);
     }
   }
 }
@@ -24,15 +24,15 @@ function drawRectOutline(code, x1, y1, x2, y2, value) {
 }
 
 function drawPlacement(code, x, y) {
-  drawRectOutline(code, x - 3, y - 3, x + 4, y + 4, true);
-  drawRectOutline(code, x - 2, y - 2, x + 3, y + 3, false);
-  drawRect(code, x - 1, y - 1, x + 2, y + 2, true);
+  drawRectOutline(code, x - 3, y - 3, x + 4, y + 4, 1);
+  drawRectOutline(code, x - 2, y - 2, x + 3, y + 3, 0);
+  drawRect(code, x - 1, y - 1, x + 2, y + 2, 1);
 }
 
 function drawAlignment(code, x, y) {
-  drawRectOutline(code, x - 2, y - 2, x + 3, y + 3, true);
-  drawRectOutline(code, x - 1, y - 1, x + 2, y + 2, false);
-  code.setAsMask(x, y, true);
+  drawRectOutline(code, x - 2, y - 2, x + 3, y + 3, 1);
+  drawRectOutline(code, x - 1, y - 1, x + 2, y + 2, 0);
+  code.set(x, y, 1);
 }
 
 export function drawFrame(code, version) {
@@ -40,16 +40,16 @@ export function drawFrame(code, version) {
   drawPlacement(code, 3, 3);
   drawPlacement(code, size - 4, 3);
   drawPlacement(code, 3, size - 4);
-  drawRect(code, 0, 7, 9, 9, false);
-  drawRect(code, 7, 0, 9, 7, false);
-  drawRect(code, size - 8, 7, size, 9, false);
-  drawRect(code, size - 8, 0, size - 7, 7, false);
-  drawRect(code, 7, size - 8, 9, size, false);
-  drawRect(code, 0, size - 8, 7, size - 7, false);
-  code.setAsMask(8, size - 8, true);
+  drawRect(code, 0, 7, 9, 9, 0);
+  drawRect(code, 7, 0, 9, 7, 0);
+  drawRect(code, size - 8, 7, size, 9, 0);
+  drawRect(code, size - 8, 0, size - 7, 7, 0);
+  drawRect(code, 7, size - 8, 9, size, 0);
+  drawRect(code, 0, size - 8, 7, size - 7, 0);
+  code.set(8, size - 8, 1);
   for (let i = 8; i < size - 8; ++i) {
-    code.setAsMask(i, 6, !(i & 1));
-    code.setAsMask(6, i, !(i & 1));
+    code.set(i, 6, !(i & 1));
+    code.set(6, i, !(i & 1));
   }
   if (version >= 2) {
     const numAlignment = Math.floor(version / 7) + 2;
@@ -73,8 +73,8 @@ export function drawFrame(code, version) {
     for (let j = 6; (j--) > 0;) {
       for (let i = 0; i < 3; ++i) {
         const state = vInfo & m;
-        code.setAsMask(j, size - 9 - i, state);
-        code.setAsMask(size - 9 - i, j, state);
+        code.set(j, size - 9 - i, state);
+        code.set(size - 9 - i, j, state);
         m >>>= 1;
       }
     }
@@ -109,7 +109,7 @@ export function drawCode(target, path, data) {
   let bit = 0b10000000;
   path.forEach(([x, y]) => {
     const v = data[byte] & bit;
-    target.setNoMask(x, y, v);
+    target.set(x, y, v, 0);
     bit >>>= 1;
     if (!bit) {
       ++byte;
@@ -121,7 +121,7 @@ export function drawCode(target, path, data) {
 export function applyMask(target, mask, ecId) {
   for (let y = 0; y < target.height; ++y) {
     for (let x = 0; x < target.width; ++x) {
-      target.xorIfUnmasked(x, y, mask.fn(x, y));
+      target.xorNoMask(x, y, mask.fn(x, y));
     }
   }
   const info = ((ecId << 3) | mask.id);
@@ -129,14 +129,14 @@ export function applyMask(target, mask, ecId) {
   let chk = 0b100000000000000;
   for (let i = 0; i < 7; ++i) {
     const state = pattern & chk;
-    target.setAsMask(i === 6 ? 7 : i, 8, state);
-    target.setAsMask(8, target.height - i - 1, state);
+    target.set(i === 6 ? 7 : i, 8, state);
+    target.set(8, target.height - i - 1, state);
     chk >>>= 1;
   }
   for (let i = 0; i < 8; ++i) {
     const state = pattern & chk;
-    target.setAsMask(8, (i > 1 ? 7 : 8) - i, state);
-    target.setAsMask(target.width - 8 + i, 8, state);
+    target.set(8, (i > 1 ? 7 : 8) - i, state);
+    target.set(target.width - 8 + i, 8, state);
     chk >>>= 1;
   }
 }

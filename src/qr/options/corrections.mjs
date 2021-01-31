@@ -3,10 +3,9 @@
 function pixelsForVersion(version) {
   const size = version * 4 + 17;
   let total = (
-    size * size          // total area
-    - 9 * 9              // TL placement
-    - 9 * 8 * 2          // TR & BL placement
-    - (size - 9 - 8) * 2 // timing pattern
+    size * size            // total area
+    - (9 * 9 + 9 * 8 * 2)  // placement
+    - (size - (9 + 8)) * 2 // timing pattern
   );
   if (version >= 2) {
     const numAlignment = Math.floor(version / 7) + 2;

@@ -14,33 +14,22 @@ export default class Bitmap2D {
   }
 
   get(x, y) {
-    return Boolean(this.data[y * this.step + (x >> 2)] & (0b01 << ((x & 3) * 2)));
+    return !!(this.data[y * this.step + (x >> 2)] & (0b01 << ((x & 3) * 2)));
   }
 
   isMasked(x, y) {
-    return Boolean(this.data[y * this.step + (x >> 2)] & (0b10 << ((x & 3) * 2)));
+    return this.data[y * this.step + (x >> 2)] & (0b10 << ((x & 3) * 2));
   }
 
-  setAsMask(x, y, value = true) {
+  set(x, y, value, mask = 1) {
     const p = y * this.step + (x >> 2);
     const s = (x & 3) * 2;
     this.data[p] &= ~(0b11 << s);
-    this.data[p] |= ((0b10 | Boolean(value)) << s);
+    this.data[p] |= (((mask * 0b10) | (!!value)) << s);
   }
 
-  setNoMask(x, y, value = true) {
+  xorNoMask(x, y, value) {
     const p = y * this.step + (x >> 2);
-    const s = (x & 3) * 2;
-    this.data[p] &= ~(0b11 << s);
-    this.data[p] |= (Boolean(value) << s);
-  }
-
-  xor(x, y, value = true) {
-    this.data[y * this.step + (x >> 2)] ^= (Boolean(value) << ((x & 3) * 2));
-  }
-
-  xorIfUnmasked(x, y, value = true) {
-    const p = y * this.step + (x >> 2);
-    this.data[p] ^= (Boolean(value) << ((x & 3) * 2)) & ~(this.data[p] >> 1);
+    this.data[p] ^= ((!!value) << ((x & 3) * 2)) & ~(this.data[p] >> 1);
   }
 }
