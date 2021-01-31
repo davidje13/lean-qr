@@ -19,4 +19,24 @@ export default class Bitmap2D {
   inv(x, y) {
     this.d[y * this.size + x] ^= 1;
   }
+
+  toString({
+    on = '##',
+    off = '  ',
+    lf = '\n',
+    padX = 4,
+    padY = 4,
+  } = {}) {
+    const tbPad = (off.repeat(this.size + padX * 2) + lf).repeat(padY);
+    const lrPad = off.repeat(padX);
+    let r = tbPad;
+    for (let y = 0; y < this.size; ++y) {
+      r += lrPad;
+      for (let x = 0; x < this.size; ++x) {
+        r += this.get(x, y) ? on : off;
+      }
+      r += lrPad + lf;
+    }
+    return r + tbPad;
+  }
 }
