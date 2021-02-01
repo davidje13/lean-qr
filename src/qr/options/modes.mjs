@@ -29,14 +29,12 @@ export default {
     }
   },
 
-  iso8859_1: (value) => {
-    const bytes = new TextEncoder('iso-8859-1').encode(value);
-    return (data, version) => {
-      data.push(0b0100, 4);
-      data.push(bytes.length, version < 10 ? 8 : 16);
-      for (let i = 0; i < bytes.length; ++i) {
-        data.push(bytes[i], 8);
-      }
-    };
+  iso8859_1: (value) => (data, version) => {
+    data.push(0b0100, 4);
+    data.push(value.length, version < 10 ? 8 : 16);
+    for (let i = 0; i < value.length; ++i) {
+      // UTF-8 codepoints and ISO-8859-1 overlap for first 256 chars
+      data.push(value.codePointAt(i), 8);
+    }
   },
 };
