@@ -40,6 +40,7 @@
     "eslint": "7.x",
     "jest": "26.x",
     "neutrino": "9.x",
+    "pngjs": "^6.0.0",
     "webpack": "4.x",
     "webpack-cli": "3.x"
   }

@@ -26,7 +26,7 @@ const FLAGS = [
   { id: 'minVer', name: 'min-version', short: 'v', type: 'int', min: 1, max: 40, def: 1, info: 'Set the minimum version (size)' },
   { id: 'maxVer', name: 'max-version', short: 'V', type: 'int', min: 1, max: 40, def: 40, info: 'Set the maximum version (size)' },
   { id: 'padding', name: 'padding', short: 'p', type: 'int', min: 0, def: 4, info: 'Set the edge padding size' },
-  { id: 'mask', name: 'mask', short: 'm', type: 'enum', values: ['auto', '1', '2', '3', '4', '5', '6', '7'], def: 'auto', info: 'Set the masking type (advanced usage)' },
+  { id: 'mask', name: 'mask', short: 'm', type: 'enum', values: ['auto', '0', '1', '2', '3', '4', '5', '6', '7'], def: 'auto', info: 'Set the masking type (advanced usage)' },
   { id: 'format', name: 'format', short: 'f', type: 'enum', values: [...TEXT_FORMATS.keys()], def: 'text-ansi-invert', info: 'Set the output format' },
   { id: 'info', name: 'info', short: 'i', type: 'presence', info: 'Print meta information to stderr' },
   { id: 'help', name: 'help', short: '?', type: 'presence', info: 'Print documentation' },
