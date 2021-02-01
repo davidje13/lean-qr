@@ -1,4 +1,4 @@
-import {
+import scoreCode, {
   scoreLines,
   countBoxes,
   countPatterns,
@@ -23,6 +23,31 @@ function makeBitmap1D(line, shift = 0, vert = false) {
   }
   return bmp;
 }
+
+// Source: https://www.thonky.com/qr-code-tutorial/data-masking
+const sample = makeBitmap([
+  '#######   #   #######',
+  '#     # ## #  #     #',
+  '# ### # #  #  # ### #',
+  '# ### #    ## # ### #',
+  '# ### #    ## # ### #',
+  '#     #  # #  #     #',
+  '####### # # # #######',
+  '         #           ',
+  ' ### ##           ## ',
+  '#    # #### ##  #####',
+  '# ### ## # ## #   #  ',
+  ' ###   # #   #  # ## ',
+  '# ##  #  # ##     #  ',
+  '        #  # # #  ## ',
+  '#######   # #### # ##',
+  '#     # ##   ###  ## ',
+  '# ### #    ## ##   ##',
+  '# ### # # #  #  ## # ',
+  '# ### # ### ##  ##   ',
+  '#     # ####  ## #   ',
+  '#######        #  ## ',
+]);
 
 describe('scoreLines', () => {
   it('adds 3 for all horizontal lines of either colour of length 5', () => {
@@ -76,6 +101,10 @@ describe('scoreLines', () => {
     ]));
     expect(score).toEqual(0);
   });
+
+  it('produces the expected result for the sample code', () => {
+    expect(scoreLines(sample)).toEqual(180);
+  });
 });
 
 describe('countBoxes', () => {
@@ -101,6 +130,10 @@ describe('countBoxes', () => {
       ' # # #',
     ]));
     expect(count).toEqual(5);
+  });
+
+  it('produces the expected result for the sample code', () => {
+    expect(countBoxes(sample)).toEqual(47);
   });
 });
 
@@ -151,6 +184,10 @@ describe('countPatterns', () => {
     expect(countPatterns(makeBitmap1D('# ### # #     ', 0, true))).toEqual(0);
     expect(countPatterns(makeBitmap1D('  #  ### #    ', 0, true))).toEqual(0);
     expect(countPatterns(makeBitmap1D(' ### #        ', 0, true))).toEqual(0);
+  });
+
+  it('produces the expected result for the sample code', () => {
+    expect(countPatterns(sample)).toEqual(3);
   });
 });
 
@@ -204,5 +241,16 @@ describe('scoreImbalance', () => {
       '######',
       '######',
     ]))).toEqual(90);
+  });
+
+  it('produces the expected result for the sample code', () => {
+    // sample source is incorrectly 2 here as it does not quantise
+    expect(scoreImbalance(sample)).toEqual(0);
+  });
+});
+
+describe('scoreCode', () => {
+  it('combines all scores', () => {
+    expect(scoreCode(sample)).toEqual(180 + 47 * 3 + 3 * 40 + 0);
   });
 });

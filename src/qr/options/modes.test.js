@@ -111,7 +111,7 @@ describe('mode.iso8859_1', () => {
     expect(data27.bits).toEqual(4 + 16);
   });
 
-  it('encodes values 8 bit ISO-8859-1 encoding', () => {
+  it('encodes values in 8 bit ISO-8859-1 encoding', () => {
     const data = new Bitmap1D(10);
     mode.iso8859_1('ab\u00A3\u00FF')(data, 1);
     expect(data.bytes[0]).toEqual(0b0100_0000);
