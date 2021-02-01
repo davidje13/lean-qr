@@ -5,6 +5,7 @@
   "files": [
     "build/**/*",
     "bin/**/*",
+    "docs/example.png",
     "index.d.ts"
   ],
   "bin": "./bin/cli.js",
