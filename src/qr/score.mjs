@@ -9,7 +9,7 @@ function hv(code, state0, fn) {
   }
 }
 
-function scoreLines(code) {
+export function scoreLines(code) {
   let score = 0;
   hv(code, [0, undefined], ([consec, last], cur) => {
     if (cur !== last) {
@@ -25,12 +25,12 @@ function scoreLines(code) {
   return score;
 }
 
-function countBoxes(code) {
+export function countBoxes(code) {
   let score = 0;
   for (let x = 0; x < code.size - 1; ++x) {
     let lastV = code.get(x, 0);
     let lastM = code.get(x + 1, 0) === lastV;
-    for (let y = 0; y < code.size - 1; ++y) {
+    for (let y = 1; y < code.size; ++y) {
       const curV = code.get(x, y);
       const curM = code.get(x + 1, y) === curV;
       score += (lastM && curM && lastV === curV);
@@ -41,7 +41,7 @@ function countBoxes(code) {
   return score;
 }
 
-function countPatterns(code) {
+export function countPatterns(code) {
   let score = 0;
   /* eslint-disable no-multi-spaces */
   const begin   = 0b10000000000_10000000000;
@@ -58,7 +58,7 @@ function countPatterns(code) {
   return score;
 }
 
-function scoreImbalance(code) {
+export function scoreImbalance(code) {
   let totalOn = 0;
   for (let y = 0; y < code.size; ++y) {
     for (let x = 0; x < code.size; ++x) {
