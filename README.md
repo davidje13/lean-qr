@@ -5,6 +5,8 @@ Minimal library for generating QR codes in the browser and server-side.
 Optimised for code size while maintaining decent performance.
 Less than 10kB uncompressed (less than 4kB compressed).
 
+You can see it in action at <https://qr.davidje13.com/>
+
 ## Install dependency
 
 ```bash
