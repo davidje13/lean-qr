@@ -14,6 +14,7 @@
   "scripts": {
     "build": "webpack --mode production",
     "lint": "eslint --format codeframe --ext mjs,jsx,js src bin",
+    "start": "http-server . -d false -c-1 -a localhost -p 8080",
     "test": "jest",
     "posttest": "npm run lint",
     "test:watch": "jest --watch"
@@ -38,6 +39,7 @@
     "@neutrinojs/jest": "9.x",
     "@neutrinojs/library": "9.x",
     "eslint": "7.x",
+    "http-server": "^0.12.3",
     "jest": "26.x",
     "neutrino": "9.x",
     "pngjs": "^6.0.0",

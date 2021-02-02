@@ -13,6 +13,8 @@ npm install --save-dev lean-qr
 
 ## Usage
 
+### NodeJS
+
 ```javascript
 import { mode, generate } from 'lean-qr';
 
@@ -24,6 +26,16 @@ process.stdout.write(code.toString({
 ```
 
 <img src="docs/example.png" width="300" />
+
+### Browser
+
+```javascript
+import { mode, generate } from 'lean-qr';
+
+const code = generate(mode.alphaNumeric('LEAN-QR LIBRARY'));
+
+code.toCanvas(document.getElementById('my-canvas'));
+```
 
 There is also a small commandline tool included for testing:
 
@@ -137,7 +149,7 @@ Valid masks are integers in the range 0 &ndash; 7 (inclusive).
 
 The output can be displayed in several ways.
 
-### `toString`
+### `toString([options])`
 
 `toString` takes several options. The defaults are shown here:
 
@@ -207,7 +219,52 @@ process.stdout.write(code.toString({
  *                                                          */
 ```
 
-### `get`
+### `toCanvas(canvas[, options])`
+
+`toCanvas` takes several options. The defaults are shown here:
+
+```javascript
+code.toCanvas(myTargetCanvas, {
+  on: 0xFF000000,
+  off: 0x00000000,
+  padX: 4,
+  padY: 4,
+});
+```
+
+This will replace the image in `myTargetCanvas` with a copy of the current
+code. The result is always at a scale of 1 pixel per module (the canvas
+will be resized to the correct size automatically). To display this image
+at a reasonable size, it is recommended that you use the following CSS:
+
+```css
+.myTargetCanvas {
+  width: 100%;
+  image-rendering: crisp-edges; /* for firefox */
+  image-rendering: pixelated;
+}
+```
+
+The values of `on` and `off` should be in 0xAABBGGRR format.
+
+### `toImageData(context[, options])`
+
+If you do not want to replace the entire content of a canvas, you can can
+use `toImageData` instead. This returns an `ImageData` representation of
+the code (created using `context.createImageData`). It does not include
+padding.
+
+```javascript
+const imageData = code.toImageData(myContext, {
+  on: 0xFF000000,
+  off: 0x00000000,
+});
+
+// later
+myContext.putImageData(imageData, 200, 100);
+```
+
+### `get(x, y)`
 
 For other types of output, you can inspect the data directly:
 
