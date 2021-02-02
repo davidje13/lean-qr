@@ -57,7 +57,7 @@ export default function generate(modeData, {
 
   let dataLengthBits = 0;
   for (let version = minVersion; version <= maxVersion; ++version) {
-    if (correctionData[minCorrectionLevel].v[version].capBits < dataLengthBits) {
+    if (correctionData[minCorrectionLevel].v[version - 1].capBits < dataLengthBits) {
       continue;
     }
 
@@ -67,7 +67,7 @@ export default function generate(modeData, {
 
     for (let cl = maxCorrectionLevel; cl >= minCorrectionLevel; --cl) {
       const correction = correctionData[cl];
-      const versionedCorrection = correction.v[version];
+      const versionedCorrection = correction.v[version - 1];
       if (versionedCorrection.capBits < dataLengthBits) {
         continue;
       }

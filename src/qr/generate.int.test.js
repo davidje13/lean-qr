@@ -172,10 +172,10 @@ describe('known examples', () => {
     expect(code).toMatchImage(loadImage('v25.png'));
   });
 
-  it('Version 40', () => { // TODO: need to fix corrections data for this to work
+  it('Version 40', () => {
     // Source: https://en.wikipedia.org/wiki/File:Qr-code-ver-40.svg
     const code = generate(mode.iso8859_1((
-      `Version 40 QR Code can contain up to 1852 chars.\n${COMMON_BLURB}`
+      `Version 40 QR Code can contain up to 1852 chars.\n${COMMON_BLURB}\n`
     )), { minCorrectionLevel: correction.H, mask: 2 });
     expect(code).toMatchImage(loadImage('v40.png'));
   });

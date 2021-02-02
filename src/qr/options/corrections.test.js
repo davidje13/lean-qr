@@ -22,7 +22,7 @@ describe('corrections', () => {
   it('divides input data into groups', () => {
     for (let i = 0; i < data.length; ++i) {
       for (let version = 1; version <= 40; ++version) {
-        const item = data[i].v[version];
+        const item = data[i].v[version - 1];
         let total = 0;
         item.groups.forEach((g) => {
           total += g[0] * g[1];
@@ -35,7 +35,7 @@ describe('corrections', () => {
   it('contains no empty or 0-count groups', () => {
     for (let i = 0; i < data.length; ++i) {
       for (let version = 1; version <= 40; ++version) {
-        const item = data[i].v[version];
+        const item = data[i].v[version - 1];
         expect(item.groups.length).toBeGreaterThan(0);
         item.groups.forEach((g) => {
           expect(g[0]).toBeGreaterThan(0);
@@ -47,9 +47,9 @@ describe('corrections', () => {
 
   it('stores more data in larger versions', () => {
     for (let i = 0; i < data.length; ++i) {
-      let last = data[i].v[1].capBits;
+      let last = data[i].v[0].capBits;
       for (let version = 2; version <= 40; ++version) {
-        const cur = data[i].v[version].capBits;
+        const cur = data[i].v[version - 1].capBits;
         expect(cur).toBeGreaterThan(last);
         last = cur;
       }
@@ -58,9 +58,9 @@ describe('corrections', () => {
 
   it('stores less data with more robust correction levels', () => {
     for (let version = 1; version <= 40; ++version) {
-      let last = data[0].v[version].capBits;
+      let last = data[0].v[version - 1].capBits;
       for (let i = 1; i < data.length; ++i) {
-        const cur = data[i].v[version].capBits;
+        const cur = data[i].v[version - 1].capBits;
         expect(cur).toBeLessThan(last);
         last = cur;
       }
@@ -114,8 +114,8 @@ describe('corrections', () => {
     /* eslint-enable max-len, object-curly-newline, indent,
        array-bracket-spacing, comma-spacing, no-multi-spaces */
   }).forEach(([version, v]) => Object.entries(v)
-    .forEach(([level, [ecsize, ...groups]]) => it.skip(`${version}-${level}`, () => {
-      const info = data[names[level]].v[version];
+    .forEach(([level, [ecsize, ...groups]]) => it(`${version}-${level}`, () => {
+      const info = data[names[level]].v[version - 1];
       expect(info.ecsize).toEqual(ecsize);
       expect(info.groups).toEqual(groups);
     })));
