@@ -81,15 +81,12 @@ const code = generate(myMode('foobar'));
 For example the implementation of `iso8859_1`:
 
 ```javascript
-const iso8859_1 = (value) => {
-  const bytes = new TextEncoder('iso-8859-1').encode(value);
-  return (data, version) => {
-    data.push(0b0100, 4);
-    data.push(bytes.length, version < 10 ? 8 : 16);
-    for (let i = 0; i < bytes.length; ++i) {
-      data.push(bytes[i], 8);
-    }
-  };
+const iso8859_1 = (value) => (data, version) => {
+  data.push(0b0100, 4);
+  data.push(value.length, version < 10 ? 8 : 16);
+  for (let i = 0; i < value.length; ++i) {
+    data.push(value.codePointAt(i), 8);
+  }
 };
 ```
 
@@ -247,7 +244,7 @@ at a reasonable size, it is recommended that you use the following CSS:
 }
 ```
 
-The values of `on` and `off` should be in 0xAABBGGRR format.
+The values of `on` and `off` should be in `0xAABBGGRR` format.
 
 ### `toImageData(context[, options])`
 
