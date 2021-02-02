@@ -27,7 +27,7 @@ process.stdout.write(code.toString({
 }));
 ```
 
-<img src="docs/example.png" width="300" />
+<img src="docs/example.png" alt="Example output QR Code" width="300" />
 
 ### Browser
 
