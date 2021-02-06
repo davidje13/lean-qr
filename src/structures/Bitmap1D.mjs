@@ -10,8 +10,4 @@ export default class Bitmap1D {
       this.bits += Math.min(b, r);
     }
   }
-
-  padByte() {
-    this.bits = (this.bits + 7) & ~7;
-  }
 }

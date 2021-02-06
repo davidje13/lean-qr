@@ -19,6 +19,8 @@ module.exports = {
           'no-plusplus': ['off'],
           'no-continue': ['off'],
           'no-nested-ternary': ['off'],
+          'no-control-regex': ['off'],
+          'no-multi-assign': ['off'],
         },
       },
     }),

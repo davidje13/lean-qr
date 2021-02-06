@@ -1,4 +1,4 @@
-function remBinPoly(num, den, denBits) {
+const remBinPoly = (num, den, denBits) => {
   let remainder = num << (denBits - 1);
   for (let i = 0x40000000; i; i >>>= 1) {
     if (remainder & i) {
@@ -6,29 +6,29 @@ function remBinPoly(num, den, denBits) {
     }
   }
   return remainder;
-}
+};
 
-function drawRect(code, x1, y1, x2, y2, value) {
+const drawRect = (code, x1, y1, x2, y2, value) => {
   for (let y = y1; y < y2; ++y) {
     for (let x = x1; x < x2; ++x) {
       code.set(x, y, value);
     }
   }
-}
+};
 
-function drawPlacement(code, x, y) {
+const drawPlacement = (code, x, y) => {
   drawRect(code, x - 3, y - 3, x + 4, y + 4, 1);
   drawRect(code, x - 2, y - 2, x + 3, y + 3, 0);
   drawRect(code, x - 1, y - 1, x + 2, y + 2, 1);
-}
+};
 
-function drawAlignment(code, x, y) {
+const drawAlignment = (code, x, y) => {
   drawRect(code, x - 2, y - 2, x + 3, y + 3, 1);
   drawRect(code, x - 1, y - 1, x + 2, y + 2, 0);
   code.set(x, y, 1);
-}
+};
 
-export function drawFrame(code, version) {
+export const drawFrame = (code, version) => {
   const size = version * 4 + 17;
   drawPlacement(code, 3, 3);
   drawPlacement(code, size - 4, 3);
@@ -57,9 +57,9 @@ export function drawFrame(code, version) {
     for (let i = 0; i <= numAlignmentM; ++i) {
       for (let j = 0; j <= numAlignmentM; ++j) {
         if (
-          (i === 0 && j === 0) ||
-          (i === 0 && j === numAlignmentM) ||
-          (i === numAlignmentM && j === 0)
+          (!i && !j) ||
+          (!i && j === numAlignmentM) ||
+          (i === numAlignmentM && !j)
         ) {
           continue;
         }
@@ -79,9 +79,9 @@ export function drawFrame(code, version) {
       }
     }
   }
-}
+};
 
-export function getPath(code) {
+export const getPath = (code) => {
   const s = code.size;
   const result = [];
   for (let xB = s - 2, y = s, dirY = -1; xB >= 0; xB -= 2) {
@@ -101,13 +101,13 @@ export function getPath(code) {
     dirY *= -1;
   }
   return result;
-}
+};
 
-export function drawCode(target, path, data) {
+export const drawCode = (target, path, data) => {
   path.forEach(([x, y], bit) => target.set(x, y, (data[bit >> 3] << (bit & 7)) & 0x80, 0));
-}
+};
 
-export function applyMask(target, mask, maskId, ecId) {
+export const applyMask = (target, mask, maskId, ecId) => {
   for (let y = 0; y < target.size; ++y) {
     for (let x = 0; x < target.size; ++x) {
       if (mask(x, y) && !target.masked(x, y)) {
@@ -130,4 +130,4 @@ export function applyMask(target, mask, maskId, ecId) {
     target.set(target.size - 8 + i, 8, state);
     chk >>>= 1;
   }
-}
+};

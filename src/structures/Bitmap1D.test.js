@@ -51,30 +51,4 @@ describe('Bitmap1D', () => {
     expect(bmp.bytes[1]).toEqual(0xBC);
     expect(bmp.bytes[2]).toEqual(0xD0);
   });
-
-  describe('padByte', () => {
-    it('pads to the next byte boundary with 0', () => {
-      const bmp = new Bitmap1D(100);
-      bmp.push(0x3, 2);
-      bmp.padByte();
-      bmp.push(0x5B, 8);
-      expect(bmp.bytes[0]).toEqual(0xC0);
-      expect(bmp.bytes[1]).toEqual(0x5B);
-    });
-
-    it('does nothing if at the start', () => {
-      const bmp = new Bitmap1D(100);
-      bmp.padByte();
-      bmp.push(0x5B, 8);
-      expect(bmp.bytes[0]).toEqual(0x5B);
-    });
-
-    it('does nothing if already on a boundary', () => {
-      const bmp = new Bitmap1D(100);
-      bmp.push(0xAA, 8);
-      bmp.padByte();
-      bmp.push(0x5B, 8);
-      expect(bmp.bytes[1]).toEqual(0x5B);
-    });
-  });
 });

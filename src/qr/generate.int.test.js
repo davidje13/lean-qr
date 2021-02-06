@@ -147,6 +147,15 @@ describe('known examples', () => {
     expect(code).toMatchImage(loadImage('v10.png'));
   });
 
+  it('Version 10 with automatic encoding', () => {
+    // Source: https://en.wikipedia.org/wiki/File:Qr-code-ver-10.svg
+    const code = generate((
+      'VERSION 10 QR CODE, UP TO 174 CHAR AT H LEVEL, WITH 57X57 MODULES AND PLENTY OF' +
+      ' ERROR CORRECTION TO GO AROUND.  NOTE THAT THERE ARE ADDITIONAL TRACKING BOXES'
+    ), { minCorrectionLevel: correction.H });
+    expect(code).toMatchImage(loadImage('v10.png'));
+  });
+
   const COMMON_BLURB = (
     'A QR code (abbreviated from Quick Response code) is a type of matrix barcode (or ' +
     'two-dimensional code) that is designed to be read by smartphones. The code consists of ' +

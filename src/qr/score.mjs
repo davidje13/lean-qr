@@ -1,4 +1,4 @@
-function hv(code, state0, fn) {
+const hv = (code, state0, fn) => {
   for (let i = 0; i < code.size; ++i) {
     let stateX = state0;
     let stateY = state0;
@@ -7,11 +7,11 @@ function hv(code, state0, fn) {
       stateY = fn(stateY, code.get(i, j));
     }
   }
-}
+};
 
-export function scoreLines(code) {
+export const scoreLines = (code) => {
   let score = 0;
-  hv(code, [0, undefined], ([consec, last], cur) => {
+  hv(code, [0], ([consec, last], cur) => {
     if (cur !== last) {
       return [1, cur];
     }
@@ -23,25 +23,25 @@ export function scoreLines(code) {
     return [consec + 1, last];
   });
   return score;
-}
+};
 
-export function countBoxes(code) {
+export const countBoxes = (code) => {
   let score = 0;
-  for (let x = 0; x < code.size - 1; ++x) {
-    let lastV = code.get(x, 0);
-    let lastM = code.get(x + 1, 0) === lastV;
+  for (let x = 1; x < code.size; ++x) {
+    let lastV = code.get(x - 1, 0);
+    let lastM = code.get(x, 0) === lastV;
     for (let y = 1; y < code.size; ++y) {
-      const curV = code.get(x, y);
-      const curM = code.get(x + 1, y) === curV;
+      const curV = code.get(x - 1, y);
+      const curM = code.get(x, y) === curV;
       score += (lastM && curM && lastV === curV);
       lastV = curV;
       lastM = curM;
     }
   }
   return score;
-}
+};
 
-export function countPatterns(code) {
+export const countPatterns = (code) => {
   let score = 0;
   /* eslint-disable no-multi-spaces */
   const begin   = 0b10000000000_10000000000;
@@ -56,9 +56,9 @@ export function countPatterns(code) {
     return next;
   });
   return score;
-}
+};
 
-export function scoreImbalance(code) {
+export const scoreImbalance = (code) => {
   let totalOn = 0;
   for (let y = 0; y < code.size; ++y) {
     for (let x = 0; x < code.size; ++x) {
@@ -66,13 +66,11 @@ export function scoreImbalance(code) {
     }
   }
   return Math.floor(20 * Math.abs(totalOn / (code.size * code.size) - 0.5)) * 10;
-}
+};
 
-export default function scoreCode(code) {
-  return (
-    scoreLines(code) +
-    countBoxes(code) * 3 +
-    countPatterns(code) * 40 +
-    scoreImbalance(code)
-  );
-}
+export default (code) => (
+  scoreLines(code) +
+  countBoxes(code) * 3 +
+  countPatterns(code) * 40 +
+  scoreImbalance(code)
+);

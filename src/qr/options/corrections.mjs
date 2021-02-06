@@ -178,7 +178,7 @@ const DATA_H = [
 ];
 /* eslint-enable */
 
-function calculate(v) {
+const calculate = (v) => {
   const g2n = v >> 18;
   const g1n = (v >> 12) & 0b111111;
   const g1s = (v >> 5) & 0b1111111;
@@ -187,7 +187,7 @@ function calculate(v) {
     groups: g2n ? [[g1n, g1s], [g2n, g1s + 1]] : [[g1n, g1s]],
     ecsize: v & 0b11111,
   };
-}
+};
 
 export const data = [
   { id: 0b01, v: DATA_L.map(calculate) },

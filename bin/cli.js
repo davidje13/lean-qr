@@ -3,6 +3,12 @@
 const { mode, correction, generate } = require('../build/index.js');
 const { printUsage, parseArgs } = require('./argparser.js');
 
+const ENCODINGS = new Map();
+ENCODINGS.set('auto', mode.auto);
+ENCODINGS.set('numeric', mode.numeric);
+ENCODINGS.set('alphanumeric', mode.alphaNumeric);
+ENCODINGS.set('iso-8859-1', mode.iso8859_1);
+
 const TEXT_FORMATS = new Map();
 TEXT_FORMATS.set('text-ansi-invert', { on: '\u001B[7m  \u001B[0m' });
 TEXT_FORMATS.set('text-ansi-bw', {
@@ -20,7 +26,7 @@ TEXT_FORMATS.set('text-ascii', {});
 
 /* eslint-disable object-curly-newline */
 const FLAGS = [
-  { id: 'encoding', name: 'encoding', short: 'e', type: 'enum', values: ['mixed', 'auto', 'numeric', 'alphanumeric', 'iso-8859-1'], def: 'mixed', info: 'Set the encoding type for the content' },
+  { id: 'encoding', name: 'encoding', short: 'e', type: 'enum', values: [...ENCODINGS.keys()], def: 'auto', info: 'Set the encoding type for the content' },
   { id: 'minCor', name: 'min-correction', short: 'c', type: 'enum', values: [...Object.keys(correction)], def: 'min', info: 'Set the minimum error correction level' },
   { id: 'maxCor', name: 'max-correction', short: 'C', type: 'enum', values: [...Object.keys(correction)], def: 'max', info: 'Set the maximum error correction level' },
   { id: 'minVer', name: 'min-version', short: 'v', type: 'int', min: 1, max: 40, def: 1, info: 'Set the minimum version (size)' },
@@ -33,27 +39,6 @@ const FLAGS = [
 ];
 /* eslint-enable object-curly-newline */
 
-function encode(type, content) {
-  switch (type.toLowerCase()) {
-    case 'numeric':
-      return mode.numeric(content);
-    case 'alphanumeric':
-      return mode.alphaNumeric(content);
-    case 'iso-8859-1':
-      return mode.iso8859_1(content);
-    case 'auto':
-    case 'mixed': // TODO
-      if (/^[0-9]*$/.test(content)) {
-        return mode.numeric(content);
-      }
-      if (/^[0-9A-Z $%*+./:-]*$/.test(content)) {
-        return mode.alphaNumeric(content);
-      }
-      return mode.iso8859_1(content);
-    default: throw new Error('Unknown encoding type');
-  }
-}
-
 try {
   const args = parseArgs(FLAGS, process.argv);
   if (args.help) {
@@ -62,7 +47,12 @@ try {
   }
 
   const content = args.rest;
-  const encoded = encode(args.encoding, content);
+
+  const encoding = ENCODINGS.get(args.encoding.toLowerCase());
+  if (!encoding) {
+    throw new Error('Unknown encoding type');
+  }
+  const encoded = encoding(content);
 
   const tm0 = Date.now();
   const code = generate(encoded, {
@@ -99,5 +89,3 @@ try {
 // lean-qr 'LEAN-QR LIBRARY'
 // lean-qr -cQ 'HELLO WORLD'
 // lean-qr -cQ -m1 'http://en.m.wikipedia.org'
-
-// mode.multi(mode.iso8859_1('https://en.wikipedia.org/wiki/'), mode.numeric('12345')

@@ -1,14 +1,4 @@
-import { correction, mode, generate } from '../src/index.mjs';
-
-function encode(content) {
-  if (/^[0-9]*$/.test(content)) {
-    return mode.numeric(content);
-  }
-  if (/^[0-9A-Z $%*+./:-]*$/.test(content)) {
-    return mode.alphaNumeric(content);
-  }
-  return mode.iso8859_1(content);
-}
+import { correction, generate } from '../src/index.mjs';
 
 function getValue(name) {
   return document.querySelector(`[name="${name}"]`).value;
@@ -26,12 +16,11 @@ function getMask() {
   return Number(raw);
 }
 
-
 function regenerate() {
   const err = document.getElementById('error');
   const output = document.querySelector('#output');
   try {
-    const code = generate(encode(getValue('message')), {
+    const code = generate(getValue('message'), {
       minVersion: getInt('min-version'),
       maxVersion: getInt('max-version'),
       minCorrectionLevel: correction[getValue('min-correction')],

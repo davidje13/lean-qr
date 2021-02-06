@@ -16,7 +16,6 @@ declare module 'lean-qr' {
 
   export interface Bitmap1D {
     push(value: number, bits: number): void;
-    padByte(): void;
   }
 
   export interface Bitmap2D {
@@ -47,12 +46,22 @@ declare module 'lean-qr' {
 
   export type Mask = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
   export type Mode = (data: Bitmap1D, version: number) => void;
+  export interface ModeFactory {
+    (value: string): Mode;
+    reg: RegExp;
+    est(value: string, version: number): number;
+  }
+
+  interface ModeAutoOptions {
+    modes?: ReadonlyArray<ModeFactory>;
+  }
 
   export const mode: {
+    auto(value: string, options?: ModeAutoOptions): Mode,
     multi(...modes: Mode[]): Mode,
-    numeric(value: string): Mode,
-    alphaNumeric(value: string): Mode,
-    iso8859_1(value: string): Mode,
+    numeric: ModeFactory,
+    alphaNumeric: ModeFactory,
+    iso8859_1: ModeFactory,
   };
 
   export enum correction {
@@ -64,11 +73,13 @@ declare module 'lean-qr' {
     max = 3,
   }
 
-  export const generate: (data: Mode, options?: {
+  interface GenerateOptions {
     minCorrectionLevel?: correction;
     maxCorrectionLevel?: correction;
     minVersion?: number;
     maxVersion?: number;
     mask?: null | Mask;
-  }) => Bitmap2D;
+  }
+
+  export const generate: (data: Mode | string, options?: GenerateOptions) => Bitmap2D;
 }

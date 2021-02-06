@@ -10,7 +10,7 @@ for (let i = 0, v = 1; i < 255; LOG[++i] = v) {
 const e = (x) => LOG[x % 255]; // assume x is never negative
 const ln = (x) => LOG[x + 256];
 
-export function mult256PolyLn(p1Ln, p2Ln) {
+export const mult256PolyLn = (p1Ln, p2Ln) => {
   const result = new Uint8Array(p1Ln.length + p2Ln.length - 1);
   for (let i = 0; i < p1Ln.length; ++i) {
     for (let j = 0; j < p2Ln.length; ++j) {
@@ -18,9 +18,9 @@ export function mult256PolyLn(p1Ln, p2Ln) {
     }
   }
   return result.map(ln);
-}
+};
 
-export function rem256Poly(num, denLn) {
+export const rem256Poly = (num, denLn) => {
   const remainder = new Uint8Array(num.length + denLn.length - 1);
   remainder.set(num, 0);
   for (let i = 0; i < num.length; ++i) {
@@ -33,4 +33,4 @@ export function rem256Poly(num, denLn) {
     }
   }
   return remainder.slice(num.length);
-}
+};

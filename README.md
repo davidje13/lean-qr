@@ -1,9 +1,9 @@
 # Lean QR
 
-Minimal library for generating QR codes in the browser and server-side.
+Minimal library for generating QR Codes in the browser and server-side.
 
 Optimised for code size while maintaining decent performance.
-Less than 10kB uncompressed (less than 4kB compressed).
+Less than 10kB uncompressed (~4kB compressed).
 
 You can see it in action at <https://qr.davidje13.com/>
 
@@ -18,9 +18,9 @@ npm install --save-dev lean-qr
 ### NodeJS
 
 ```javascript
-import { mode, generate } from 'lean-qr';
+import { generate } from 'lean-qr';
 
-const code = generate(mode.alphaNumeric('LEAN-QR LIBRARY'));
+const code = generate('LEAN-QR LIBRARY');
 
 process.stdout.write(code.toString({
   on: '\u001B[7m  \u001B[0m', // ANSI escape: inverted
@@ -32,9 +32,9 @@ process.stdout.write(code.toString({
 ### Browser
 
 ```javascript
-import { mode, generate } from 'lean-qr';
+import { generate } from 'lean-qr';
 
-const code = generate(mode.alphaNumeric('LEAN-QR LIBRARY'));
+const code = generate('LEAN-QR LIBRARY');
 
 code.toCanvas(document.getElementById('my-canvas'));
 ```
@@ -49,11 +49,27 @@ For full documentation, run `lean-qr --help`.
 
 ## Modes
 
+By default, the optimal encoding mode is chosen to minimise the resulting
+image size (this includes switching modes part way through a message if
+it reduces the size). If you want to specify an explicit mode, you can:
+
+```javascript
+import { mode, generate } from 'lean-qr';
+const code = generate(mode.alphaNumeric('LEAN-QR LIBRARY'));
+```
+
 | mode                | bits / char | charset           |
 |---------------------|------------:|-------------------|
 | `mode.numeric`      |      10 / 3 | `0-9`             |
 | `mode.alphaNumeric` |      11 / 2 | `0-9A-Z $%*+-./:` |
 | `mode.iso8859_1`    |       8 / 1 | ISO-8859-1        |
+
+Note that if you specify a mode explicitly, it is your responsibility to
+ensure the content you are encoding conforms to the accepted character
+set. If you provide mismatched content, the resulting QR Code will likely
+be malformed.
+
+### `multi`
 
 `mode.multi` enables switching modes during a message, for example:
 
@@ -65,6 +81,24 @@ const code = generate(mode.multi(
 ));
 ```
 
+### `auto`
+
+`mode.auto` will pick the optimal combination of modes for the message.
+This is used by default if you provide a plain string to `generate`, but
+you can also use it explicitly to get more control:
+
+```javascript
+const code = generate(mode.auto('FOOBAR', {
+  modes: [mode.numeric, mode.iso8859_1], // exclude alphaNumeric mode
+}));
+```
+
+You can omit the `modes` argument to default to the standard modes.
+You can also provide your own custom modes, and `auto` will consider
+them alongside the built-in modes (see below for details).
+
+### Custom modes
+
 Other modes are not currently supported, but it is possible to write
 custom modes:
 
@@ -72,10 +106,21 @@ custom modes:
 const myMode = (value) => (data, version) => {
   // call functions on data to encode the value
   data.push(0b101010, 6); // value, bits (supports up to 24-bits)
-  data.padByte(); // pad with 0s until the next byte boundary
 };
 
 const code = generate(myMode('foobar'));
+```
+
+If you want your custom mode to be compatible with `auto`, you need to
+provide a pair of properties:
+
+```javascript
+// a RegExp which matches all characters that your mode can encode
+myMode.reg = /[0-9a-zA-Z]/;
+
+// a function which estimates the number of bits required for an input
+// (fractional results will be rounded up)
+myMode.est = (value, version) => (12 + value.length * 8);
 ```
 
 For example the implementation of `iso8859_1`:
@@ -88,6 +133,11 @@ const iso8859_1 = (value) => (data, version) => {
     data.push(value.codePointAt(i), 8);
   }
 };
+iso8859_1.reg = /[\u0000-\u00FF]/;
+iso8859_1.est = (value, version) => (
+  4 + (version < 10 ? 8 : 16) +
+  value.length * 8
+);
 ```
 
 ## Correction Levels
@@ -133,7 +183,7 @@ thrown.
 ## Masks
 
 ISO 18004 requires masks be chosen according to a specific algorithm which
-is designed to maximize readability by QR code readers. This is done by
+is designed to maximize readability by QR Code readers. This is done by
 default, however if you would like to specify a particular mask, you can:
 
 ```javascript

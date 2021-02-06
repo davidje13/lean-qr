@@ -1,5 +1,6 @@
 import Bitmap1D from '../structures/Bitmap1D.mjs';
 import Bitmap2D from '../structures/Bitmap2D.mjs';
+import modes from './options/modes.mjs';
 import masks from './options/masks.mjs';
 import { data as correctionData, names as correctionNames } from './options/corrections.mjs';
 import calculateEC from './errorCorrection.mjs';
@@ -11,48 +12,33 @@ import {
 } from './draw.mjs';
 import scoreCode from './score.mjs';
 
-const baseCache = new Map();
-
-function getBase(version) {
-  if (!baseCache.has(version)) {
-    const code = new Bitmap2D({ size: version * 4 + 17 });
-    drawFrame(code, version);
-    baseCache.set(version, { code, path: getPath(code) });
+const baseCache = [];
+const getBase = (version) => {
+  let cached = baseCache[version];
+  if (!cached) {
+    const c = new Bitmap2D({ size: version * 4 + 17 });
+    drawFrame(c, version);
+    baseCache[version] = cached = [c, getPath(c)];
   }
-  const cached = baseCache.get(version);
-  return {
-    code: new Bitmap2D(cached.code),
-    path: cached.path,
-  };
-}
+  return [new Bitmap2D(cached[0]), cached[1]];
+};
 
-function pickMask(code, correction) {
-  let bestMasked = null;
-  let bestMaskScore = Number.POSITIVE_INFINITY;
-  masks.forEach((mask, maskId) => {
-    const masked = new Bitmap2D(code);
-    applyMask(masked, mask, maskId, correction.id);
-    const score = scoreCode(masked);
-    if (score < bestMaskScore) {
-      bestMasked = masked;
-      bestMaskScore = score;
-    }
-  });
-  return bestMasked;
-}
-
-export default function generate(modeData, {
+export default (modeData, {
   minCorrectionLevel = correctionNames.min,
   maxCorrectionLevel = correctionNames.max,
   minVersion = 1,
   maxVersion = 40,
   mask = null,
-} = {}) {
+} = {}) => {
   if (maxCorrectionLevel < minCorrectionLevel) {
     throw new Error('Invalid correction level range');
   }
   if (maxVersion < minVersion) {
     throw new Error('Invalid version range');
+  }
+  if (typeof modeData === 'string') {
+    /* eslint-disable-next-line no-param-reassign */
+    modeData = modes.auto(modeData);
   }
 
   let dataLengthBits = 0;
@@ -72,18 +58,25 @@ export default function generate(modeData, {
         continue;
       }
       data.push(0b0000, 4);
-      data.padByte();
+      data.bits = (data.bits + 7) & ~7; // pad with 0s to the next byte
       while (data.bits < versionedCorrection.capBits) {
         data.push(0b11101100_00010001, 16);
       }
-      const { code, path } = getBase(version);
+      const [code, path] = getBase(version);
       drawCode(code, path, calculateEC(data.bytes, versionedCorrection));
       if (mask !== null) {
         applyMask(code, masks[mask], mask, correction.id);
         return code;
       }
-      return pickMask(code, correction);
+
+      // pick best mask
+      return masks.map((m, maskId) => {
+        const masked = new Bitmap2D(code);
+        applyMask(masked, m, maskId, correction.id);
+        masked.s = scoreCode(masked);
+        return masked;
+      }).reduce((best, masked) => ((!best || masked.s < best.s) ? masked : best));
     }
   }
   throw new Error('Too much data');
-}
+};

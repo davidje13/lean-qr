@@ -7,7 +7,7 @@ for (let i = 1, last = generators[1]; i < 30; ++i) {
   last = next;
 }
 
-function interleave(target, offset, blocks) {
+const interleave = (target, offset, blocks) => {
   /* eslint-disable no-param-reassign, no-loop-func */
   let p = offset;
   const lim = Math.max(...blocks.map((block) => block.length));
@@ -20,9 +20,9 @@ function interleave(target, offset, blocks) {
   }
   /* eslint-enable no-param-reassign, no-loop-func */
   return p;
-}
+};
 
-export default function calculateEC(versionBytes, { groups, ecsize }) {
+export default (versionBytes, { groups, ecsize }) => {
   const blocks = [];
   const eccs = [];
 
@@ -41,4 +41,4 @@ export default function calculateEC(versionBytes, { groups, ecsize }) {
   const pos = interleave(result, 0, blocks);
   interleave(result, pos, eccs);
   return result;
-}
+};

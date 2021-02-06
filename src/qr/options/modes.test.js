@@ -142,3 +142,96 @@ describe('mode.multi', () => {
     expect(data.bits).toEqual(4 + 14);
   });
 });
+
+describe('mode.auto', () => {
+  function checkSame(actual, expected, version) {
+    const actualData = new Bitmap1D(1000);
+    const expectedData = new Bitmap1D(1000);
+    actual(actualData, version);
+    expected(expectedData, version);
+
+    expect(actualData.bits).toEqual(expectedData.bits);
+    const byteCount = Math.ceil(actualData.bits / 8);
+    const actualBytes = actualData.bytes.slice(0, byteCount);
+    const expectedBytes = expectedData.bytes.slice(0, byteCount);
+    expect(actualBytes).toEqual(expectedBytes);
+  }
+
+  it('uses smaller encodings if possible', () => {
+    checkSame(
+      mode.auto('123'),
+      mode.multi(mode.numeric('123')),
+      20,
+    );
+  });
+
+  it('uses larger encodings if needed', () => {
+    checkSame(
+      mode.auto('abc'),
+      mode.multi(mode.iso8859_1('abc')),
+      20,
+    );
+  });
+
+  it('is restricted to the modes given', () => {
+    checkSame(
+      mode.auto('123', { modes: [mode.alphaNumeric, mode.iso8859_1] }),
+      mode.multi(mode.alphaNumeric('123')),
+      20,
+    );
+  });
+
+  it('rejects impossible input', () => {
+    const data = new Bitmap1D(1000);
+    expect(() => mode.auto('nope', { modes: [mode.alphaNumeric] })(data, 10))
+      .toThrow('Unencodable');
+  });
+
+  it('rejects impossible iso8859_1 input', () => {
+    const data = new Bitmap1D(1000);
+    expect(() => mode.auto('nah\u2026', { modes: [mode.iso8859_1] })(data, 10))
+      .toThrow('Unencodable');
+  });
+
+  it('picks the best combination of modes to minimise the resulting size', () => {
+    checkSame(
+      mode.auto('abcabcabcabcabc12345678901234567890'),
+      mode.multi(mode.iso8859_1('abcabcabcabcabc'), mode.numeric('12345678901234567890')),
+      20,
+    );
+  });
+
+  it('handles the trivial case of empty input', () => {
+    checkSame(mode.auto(''), mode.multi(), 20);
+  });
+
+  it('does not switch encoding type for no benefit', () => {
+    checkSame(
+      mode.auto('abc123'),
+      mode.multi(mode.iso8859_1('abc123')),
+      20,
+    );
+
+    checkSame(
+      mode.auto('123abc'),
+      mode.multi(mode.iso8859_1('123abc')),
+      20,
+    );
+  });
+
+  it('can switch mode multiple times if beneficial', () => {
+    checkSame(
+      mode.auto('1&234567890&1234567890&ABCABCABCABCABCABCabc'),
+      mode.multi(
+        mode.iso8859_1('1&'),
+        mode.numeric('234567890'),
+        mode.iso8859_1('&'),
+        mode.numeric('1234567890'),
+        mode.iso8859_1('&'),
+        mode.alphaNumeric('ABCABCABCABCABCABC'),
+        mode.iso8859_1('abc'),
+      ),
+      20,
+    );
+  });
+});
