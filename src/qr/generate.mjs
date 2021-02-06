@@ -75,7 +75,7 @@ export default (modeData, {
         applyMask(masked, m, maskId, correction.id);
         masked.s = scoreCode(masked);
         return masked;
-      }).reduce((best, masked) => ((!best || masked.s < best.s) ? masked : best));
+      }).reduce((best, masked) => ((masked.s < best.s) ? masked : best));
     }
   }
   throw new Error('Too much data');

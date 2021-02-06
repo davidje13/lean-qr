@@ -8,6 +8,7 @@ ENCODINGS.set('auto', mode.auto);
 ENCODINGS.set('numeric', mode.numeric);
 ENCODINGS.set('alphanumeric', mode.alphaNumeric);
 ENCODINGS.set('iso-8859-1', mode.iso8859_1);
+ENCODINGS.set('utf8', mode.utf8);
 
 const TEXT_FORMATS = new Map();
 TEXT_FORMATS.set('text-ansi-invert', { on: '\u001B[7m  \u001B[0m' });

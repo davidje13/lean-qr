@@ -59,9 +59,12 @@ declare module 'lean-qr' {
   export const mode: {
     auto(value: string, options?: ModeAutoOptions): Mode,
     multi(...modes: Mode[]): Mode,
+    eci(id: number): Mode,
     numeric: ModeFactory,
     alphaNumeric: ModeFactory,
+    bytes(data: Uint8Array | number[]): Mode,
     iso8859_1: ModeFactory,
+    utf8: ModeFactory,
   };
 
   export enum correction {

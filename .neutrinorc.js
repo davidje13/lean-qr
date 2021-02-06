@@ -21,6 +21,7 @@ module.exports = {
           'no-nested-ternary': ['off'],
           'no-control-regex': ['off'],
           'no-multi-assign': ['off'],
+          'no-loop-func': ['off'],
         },
       },
     }),

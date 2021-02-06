@@ -124,6 +124,29 @@ describe('mode.iso8859_1', () => {
   });
 });
 
+describe('mode.utf8', () => {
+  it('stores the ECI mode, identifier and length', () => {
+    const data = new Bitmap1D(10);
+    mode.utf8('')(data, 1);
+    expect(data.bytes[0]).toEqual(0b0111_0001);
+    expect(data.bytes[1]).toEqual(0b1010_0100);
+    expect(data.bytes[2]).toEqual(0b0000_0000);
+    expect(data.bits).toEqual(4 + 8 + 4 + 8);
+  });
+
+  it('encodes values in 8 bit UTF8 encoding', () => {
+    const data = new Bitmap1D(10);
+    mode.utf8('\u2026')(data, 1);
+    expect(data.bytes[0]).toEqual(0b0111_0001);
+    expect(data.bytes[1]).toEqual(0b1010_0100);
+    expect(data.bytes[2]).toEqual(0b0000_0011);
+    expect(data.bytes[3]).toEqual(0xE2);
+    expect(data.bytes[4]).toEqual(0x80);
+    expect(data.bytes[5]).toEqual(0xA6);
+    expect(data.bits).toEqual(4 + 8 + 4 + 8 + 8 * 3);
+  });
+});
+
 describe('mode.multi', () => {
   it('appends multiple modes in succession', () => {
     const data = new Bitmap1D(10);
@@ -158,17 +181,17 @@ describe('mode.auto', () => {
   }
 
   it('uses smaller encodings if possible', () => {
-    checkSame(
-      mode.auto('123'),
-      mode.multi(mode.numeric('123')),
-      20,
-    );
+    checkSame(mode.auto('123'), mode.numeric('123'), 20);
   });
 
   it('uses larger encodings if needed', () => {
+    checkSame(mode.auto('abc'), mode.iso8859_1('abc'), 20);
+  });
+
+  it('uses utf8 if nothing else will do', () => {
     checkSame(
-      mode.auto('abc'),
-      mode.multi(mode.iso8859_1('abc')),
+      mode.auto('unicode\u2026'),
+      mode.utf8('unicode\u2026'),
       20,
     );
   });
@@ -176,7 +199,7 @@ describe('mode.auto', () => {
   it('is restricted to the modes given', () => {
     checkSame(
       mode.auto('123', { modes: [mode.alphaNumeric, mode.iso8859_1] }),
-      mode.multi(mode.alphaNumeric('123')),
+      mode.alphaNumeric('123'),
       20,
     );
   });
@@ -201,22 +224,22 @@ describe('mode.auto', () => {
     );
   });
 
+  it('does not combine utf8 with other modes', () => {
+    checkSame(
+      mode.auto('\u2026 00000000000000000'),
+      mode.utf8('\u2026 00000000000000000'),
+      20,
+    );
+  });
+
   it('handles the trivial case of empty input', () => {
     checkSame(mode.auto(''), mode.multi(), 20);
   });
 
   it('does not switch encoding type for no benefit', () => {
-    checkSame(
-      mode.auto('abc123'),
-      mode.multi(mode.iso8859_1('abc123')),
-      20,
-    );
+    checkSame(mode.auto('abc123'), mode.iso8859_1('abc123'), 20);
 
-    checkSame(
-      mode.auto('123abc'),
-      mode.multi(mode.iso8859_1('123abc')),
-      20,
-    );
+    checkSame(mode.auto('123abc'), mode.iso8859_1('123abc'), 20);
   });
 
   it('can switch mode multiple times if beneficial', () => {

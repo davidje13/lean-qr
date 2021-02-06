@@ -63,6 +63,7 @@ const code = generate(mode.alphaNumeric('LEAN-QR LIBRARY'));
 | `mode.numeric`      |      10 / 3 | `0-9`             |
 | `mode.alphaNumeric` |      11 / 2 | `0-9A-Z $%*+-./:` |
 | `mode.iso8859_1`    |       8 / 1 | ISO-8859-1        |
+| `mode.utf8`         |      varies | Unicode           |
 
 Note that if you specify a mode explicitly, it is your responsibility to
 ensure the content you are encoding conforms to the accepted character
@@ -78,6 +79,27 @@ const code = generate(mode.multi(
   mode.iso8859_1('https://example.com/'),
   mode.numeric('123456789012345678901234567890'),
   mode.alphaNumeric('/LOOKUP'),
+));
+```
+
+Note that you should not mix `utf8`, `iso8859_1`, or `eci`, as they all
+involve changing the global interpretation of the message and will
+conflict with each other.
+
+### `eci` / `bytes`
+
+`mode.eci` lets you switch the Extended Channel Interpretation of the
+message. After setting this, subsequent `mode.bytes` will be interpreted
+in the specified character set.
+[Wikipedia includes a list of possible values](https://en.wikipedia.org/wiki/Extended_Channel_Interpretation).
+
+Note that `iso8859_1` and `utf8` both use `bytes` for their data, so
+you cannot combine a custom `eci` with `iso8859_1` or `utf8`.
+
+```javascript
+const code = generate(mode.multi(
+  mode.eci(24), // Arabic (Windows-1256)
+  mode.bytes([0xD3]), // Shin character
 ));
 ```
 

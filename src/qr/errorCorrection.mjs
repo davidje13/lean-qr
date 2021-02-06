@@ -8,7 +8,7 @@ for (let i = 1, last = generators[1]; i < 30; ++i) {
 }
 
 const interleave = (target, offset, blocks) => {
-  /* eslint-disable no-param-reassign, no-loop-func */
+  /* eslint-disable no-param-reassign */
   let p = offset;
   const lim = Math.max(...blocks.map((block) => block.length));
   for (let i = 0; i < lim; ++i) {
@@ -18,7 +18,7 @@ const interleave = (target, offset, blocks) => {
       }
     });
   }
-  /* eslint-enable no-param-reassign, no-loop-func */
+  /* eslint-enable no-param-reassign */
   return p;
 };
 
