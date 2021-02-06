@@ -72,8 +72,16 @@ textarea {
   margin-bottom: 2px;
 }
 
-.options input, .options select {
+.options input[type=number], .options select {
   min-width: 80px;
+}
+
+#reverse-col {
+  padding: 0 5px;
+  border: 1px solid #888888;
+  background: #EEEEEE;
+  border-radius: 5px;
+  vertical-align: top;
 }
 
 #error {
