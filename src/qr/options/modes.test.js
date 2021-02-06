@@ -1,6 +1,31 @@
 import mode from './modes.mjs';
 import Bitmap1D from '../../structures/Bitmap1D.mjs';
 
+function expectSameBytes(actualData, expectedData) {
+  expect(actualData.bits).toEqual(expectedData.bits);
+  const byteCount = Math.ceil(actualData.bits / 8);
+  const actualBytes = actualData.bytes.slice(0, byteCount);
+  const expectedBytes = expectedData.bytes.slice(0, byteCount);
+  expect(actualBytes).toEqual(expectedBytes);
+}
+
+function expectRepeatable(encoderFactory) {
+  const encoder1 = encoderFactory();
+  const encoder2 = encoderFactory();
+  const data1 = new Bitmap1D(10);
+  const data2 = new Bitmap1D(10);
+
+  encoder1(data1, 1);
+  encoder1(data2, 1);
+  expectSameBytes(data2, data1); // exact repeat
+
+  const data3 = new Bitmap1D(10);
+  const data4 = new Bitmap1D(10);
+  encoder1(data3, 40);
+  encoder2(data4, 40);
+  expectSameBytes(data3, data4); // version change
+}
+
 describe('mode.numeric', () => {
   it('stores the identifier and length', () => {
     const data = new Bitmap1D(10);
@@ -49,6 +74,10 @@ describe('mode.numeric', () => {
     expect(data.bytes[2]).toEqual(0b01_000000);
     expect(data.bits).toEqual(4 + 10 + 4);
   });
+
+  it('returns a reusable encoding function', () => {
+    expectRepeatable(() => mode.numeric('1234567890'));
+  });
 });
 
 describe('mode.alphaNumeric', () => {
@@ -90,6 +119,10 @@ describe('mode.alphaNumeric', () => {
     expect(data.bytes[2]).toEqual(0b100_00000);
     expect(data.bits).toEqual(4 + 9 + 6);
   });
+
+  it('returns a reusable encoding function', () => {
+    expectRepeatable(() => mode.alphaNumeric('ABC123:'));
+  });
 });
 
 describe('mode.iso8859_1', () => {
@@ -122,6 +155,10 @@ describe('mode.iso8859_1', () => {
     expect(data.bytes[5]).toEqual(0xF_0);
     expect(data.bits).toEqual(4 + 8 + 8 * 4);
   });
+
+  it('returns a reusable encoding function', () => {
+    expectRepeatable(() => mode.iso8859_1('abc123'));
+  });
 });
 
 describe('mode.utf8', () => {
@@ -145,6 +182,10 @@ describe('mode.utf8', () => {
     expect(data.bytes[5]).toEqual(0xA6);
     expect(data.bits).toEqual(4 + 8 + 4 + 8 + 8 * 3);
   });
+
+  it('returns a reusable encoding function', () => {
+    expectRepeatable(() => mode.utf8('unicode\u2026'));
+  });
 });
 
 describe('mode.multi', () => {
@@ -164,6 +205,10 @@ describe('mode.multi', () => {
     mode.multi(mode.numeric(''))(data, 40);
     expect(data.bits).toEqual(4 + 14);
   });
+
+  it('returns a reusable encoding function', () => {
+    expectRepeatable(() => mode.multi(mode.numeric('123'), mode.alphaNumeric('ABC')));
+  });
 });
 
 describe('mode.auto', () => {
@@ -173,11 +218,7 @@ describe('mode.auto', () => {
     actual(actualData, version);
     expected(expectedData, version);
 
-    expect(actualData.bits).toEqual(expectedData.bits);
-    const byteCount = Math.ceil(actualData.bits / 8);
-    const actualBytes = actualData.bytes.slice(0, byteCount);
-    const expectedBytes = expectedData.bytes.slice(0, byteCount);
-    expect(actualBytes).toEqual(expectedBytes);
+    expectSameBytes(actualData, expectedData);
   }
 
   it('uses smaller encodings if possible', () => {
@@ -256,5 +297,10 @@ describe('mode.auto', () => {
       ),
       20,
     );
+  });
+
+  it('returns a reusable encoding function', () => {
+    expectRepeatable(() => mode.auto('ABCDEFGHIJKL1234567890'));
+    expectRepeatable(() => mode.auto('needs unicode\u2026'));
   });
 });
