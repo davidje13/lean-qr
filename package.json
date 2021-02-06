@@ -1,6 +1,6 @@
 {
   "name": "lean-qr",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "minimal QR code generation",
   "files": [
     "build/**/*",
