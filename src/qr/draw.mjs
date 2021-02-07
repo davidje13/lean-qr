@@ -1,6 +1,6 @@
 const remBinPoly = (num, den, denBits) => {
   let remainder = num << (denBits - 1);
-  for (let i = 0x40000000; i; i >>>= 1) {
+  for (let i = 0x8000000; i; i >>>= 1) {
     if (remainder & i) {
       remainder ^= den * (i >>> (denBits - 1));
     }
@@ -104,8 +104,9 @@ export const drawCode = (target, path, data) => {
 };
 
 export const applyMask = (target, mask, maskId, ecId) => {
-  for (let y = 0; y < target.size; ++y) {
-    for (let x = 0; x < target.size; ++x) {
+  const s = target.size;
+  for (let y = 0; y < s; ++y) {
+    for (let x = 0; x < s; ++x) {
       if (mask(x, y) && !target.masked(x, y)) {
         target.inv(x, y);
       }
@@ -115,10 +116,10 @@ export const applyMask = (target, mask, maskId, ecId) => {
   let pattern = 0b101010000010010 ^ ((info << 10) | remBinPoly(info, 0b10100110111, 11));
   for (let i = 8; (i--) > 0; pattern >>= 1) {
     target.set(8, (i > 1 ? 7 : 8) - i, pattern & 1);
-    target.set(target.size - 8 + i, 8, pattern & 1);
+    target.set(s - 8 + i, 8, pattern & 1);
   }
   for (let i = 7; (i--) > 0; pattern >>= 1) {
     target.set(i > 5 ? 7 : i, 8, pattern & 1);
-    target.set(8, target.size - i - 1, pattern & 1);
+    target.set(8, s - i - 1, pattern & 1);
   }
 };
