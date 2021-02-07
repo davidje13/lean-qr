@@ -68,14 +68,10 @@ export const drawFrame = (code, version) => {
     }
   }
   if (version >= 7) {
-    const vInfo = (version << 12) | remBinPoly(version, 0b1111100100101, 13);
-    let m = 1 << 17;
-    for (let j = 6; (j--) > 0;) {
-      for (let i = 0; i < 3; ++i) {
-        const state = vInfo & m;
-        code.set(j, size - 9 - i, state);
-        code.set(size - 9 - i, j, state);
-        m >>>= 1;
+    for (let dat = (version << 12) | remBinPoly(version, 0b1111100100101, 13), j = 0; j < 6; ++j) {
+      for (let i = 12; (i--) > 9; dat >>>= 1) {
+        code.set(j, size - i, dat & 1);
+        code.set(size - i, j, dat & 1);
       }
     }
   }
@@ -116,18 +112,13 @@ export const applyMask = (target, mask, maskId, ecId) => {
     }
   }
   const info = ((ecId << 3) | maskId);
-  const pattern = 0b101010000010010 ^ ((info << 10) | remBinPoly(info, 0b10100110111, 11));
-  let chk = 0b100000000000000;
-  for (let i = 0; i < 7; ++i) {
-    const state = pattern & chk;
-    target.set(i === 6 ? 7 : i, 8, state);
-    target.set(8, target.size - i - 1, state);
-    chk >>>= 1;
+  let pattern = 0b101010000010010 ^ ((info << 10) | remBinPoly(info, 0b10100110111, 11));
+  for (let i = 8; (i--) > 0; pattern >>= 1) {
+    target.set(8, (i > 1 ? 7 : 8) - i, pattern & 1);
+    target.set(target.size - 8 + i, 8, pattern & 1);
   }
-  for (let i = 0; i < 8; ++i) {
-    const state = pattern & chk;
-    target.set(8, (i > 1 ? 7 : 8) - i, state);
-    target.set(target.size - 8 + i, 8, state);
-    chk >>>= 1;
+  for (let i = 7; (i--) > 0; pattern >>= 1) {
+    target.set(i > 5 ? 7 : i, 8, pattern & 1);
+    target.set(8, target.size - i - 1, pattern & 1);
   }
 };

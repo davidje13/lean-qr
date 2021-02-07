@@ -45,10 +45,10 @@ export default class Bitmap2D {
     off = 0x00000000,
   } = {}) {
     const target = context.createImageData(this.size, this.size);
-    const rgba = new Uint32Array(target.data.buffer);
-    rgba.fill(off);
+    const abgr = new Uint32Array(target.data.buffer);
+    abgr.fill(off);
     for (let p = 0; p < this.size * this.size; ++p) {
-      rgba[p] = (this.d[p] & 0b01) ? on : off;
+      abgr[p] = (this.d[p] & 0b01) ? on : off;
     }
     return target;
   }
