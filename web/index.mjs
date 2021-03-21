@@ -14,10 +14,12 @@ function getInt(name) {
 
 function getColour(name) {
   const rgb = Number.parseInt(getValue(name).substr(1), 16);
-  const r = (rgb >> 16) & 0xFF;
-  const g = (rgb >> 8) & 0xFF;
-  const b = rgb & 0xFF;
-  return 0xFF000000 | (b << 16) | (g << 8) | r;
+  return [
+    (rgb >> 16) & 0xFF,
+    (rgb >> 8) & 0xFF,
+    rgb & 0xFF,
+    0xFF,
+  ];
 }
 
 function getMask() {

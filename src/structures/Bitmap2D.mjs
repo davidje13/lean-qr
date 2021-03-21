@@ -1,3 +1,18 @@
+function getCol(v) {
+  if (!Array.isArray(v)) {
+    // legacy: assume a little-endian colour (ABGR)
+    /* eslint-disable-next-line no-param-reassign */
+    v = [
+      v & 255,
+      (v >>> 8) & 255,
+      (v >>> 16) & 255,
+      (v >>> 24),
+    ];
+  }
+  const b = new Uint8Array([...v, 255]);
+  return new Uint32Array(b.buffer, 0, 1)[0];
+}
+
 export default class Bitmap2D {
   constructor({ size, d }) {
     this.size = size;
@@ -46,9 +61,11 @@ export default class Bitmap2D {
   } = {}) {
     const target = context.createImageData(this.size, this.size);
     const abgr = new Uint32Array(target.data.buffer);
-    abgr.fill(off);
+    const cOn = getCol(on);
+    const cOff = getCol(off);
+    abgr.fill(cOff);
     for (let p = 0; p < this.size * this.size; ++p) {
-      abgr[p] = (this.d[p] & 0b01) ? on : off;
+      abgr[p] = (this.d[p] & 0b01) ? cOn : cOff;
     }
     return target;
   }

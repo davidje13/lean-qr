@@ -296,8 +296,8 @@ process.stdout.write(code.toString({
 
 ```javascript
 code.toCanvas(myTargetCanvas, {
-  on: 0xFF000000,
-  off: 0x00000000,
+  on: [0x00, 0x00, 0x00, 0xFF],
+  off: [0x00, 0x00, 0x00, 0x00],
   padX: 4,
   padY: 4,
 });
@@ -316,7 +316,8 @@ at a reasonable size, it is recommended that you use the following CSS:
 }
 ```
 
-The values of `on` and `off` should be in `0xAABBGGRR` format.
+The values of `on` and `off` should be arrays in `[red, green, blue, alpha]`
+format. If `alpha` is omitted, 255 is assumed.
 
 ### `toImageData(context[, options])`
 
@@ -327,8 +328,8 @@ padding.
 
 ```javascript
 const imageData = code.toImageData(myContext, {
-  on: 0xFF000000,
-  off: 0x00000000,
+  on: [0x00, 0x00, 0x00, 0xFF],
+  off: [0x00, 0x00, 0x00, 0x00],
 });
 
 // later
