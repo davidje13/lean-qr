@@ -2,6 +2,11 @@ image: alpine:latest
 workflow:
   rules:
   - if: '$CI_COMMIT_BRANCH'
+
+stages:
+- build_and_test
+- pages
+
 build_and_test:
   image: node:16
   services:
@@ -15,6 +20,7 @@ build_and_test:
     TESTRUNNER_HOST: '0.0.0.0'
   script:
   - npm install-test
+
 pages:
   rules:
   - if: '$CI_COMMIT_BRANCH == "master"'
