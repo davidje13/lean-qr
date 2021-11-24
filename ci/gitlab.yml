@@ -2,6 +2,19 @@ image: alpine:latest
 workflow:
   rules:
   - if: '$CI_COMMIT_BRANCH'
+build_and_test:
+  image: node:16
+  services:
+  - name: selenium/standalone-firefox
+    alias: firefox
+  - name: selenium/standalone-chrome
+    alias: chrome
+  variables:
+    WEBDRIVER_HOST_CHROME: chrome:4444
+    WEBDRIVER_HOST_FIREFOX: firefox:4444
+    TESTRUNNER_HOST: '0.0.0.0'
+  script:
+  - npm install-test
 pages:
   rules:
   - if: '$CI_COMMIT_BRANCH == "master"'

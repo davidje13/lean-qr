@@ -1,7 +1,7 @@
 import generate from './generate.mjs';
 import mode from './options/modes.mjs';
 import { names as correction } from './options/corrections.mjs';
-import { loadImage } from '../test-helpers/images.mjs';
+import { loadImage, toMatchImage } from '../test-helpers/images.mjs';
 
 // Source https://www.thonky.com/qr-code-tutorial/format-version-information
 const KNOWN = loadImage('helloworld.png');
@@ -27,7 +27,7 @@ describe('generate', () => {
       ...KNOWN_PARAMS,
       mask: 2,
     });
-    expect(code).not.toMatchImage(KNOWN);
+    expect(code).not(toMatchImage(KNOWN));
   });
 
   it('automatically picks the optimal mask by default', () => {
@@ -44,7 +44,7 @@ describe('generate', () => {
       minCorrectionLevel: correction.L,
       maxCorrectionLevel: correction.L,
     });
-    expect(code).not.toMatchImage(KNOWN);
+    expect(code).not(toMatchImage(KNOWN));
   });
 
   it('automatically picks the highest correction level by default', () => {
@@ -62,7 +62,7 @@ describe('generate', () => {
       minVersion: 2,
       maxVersion: 2,
     });
-    expect(code).not.toMatchImage(KNOWN);
+    expect(code).not(toMatchImage(KNOWN));
   });
 
   it('automatically picks the smallest version by default', () => {
