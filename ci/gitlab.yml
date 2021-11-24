@@ -4,10 +4,11 @@ workflow:
   - if: '$CI_COMMIT_BRANCH'
 
 stages:
-- build_and_test
-- pages
+- test
+- package
 
 build_and_test:
+  stage: test
   image: node:16
   services:
   - name: selenium/standalone-firefox
@@ -22,6 +23,7 @@ build_and_test:
   - npm install-test
 
 pages:
+  stage: package
   rules:
   - if: '$CI_COMMIT_BRANCH == "master"'
   script:
