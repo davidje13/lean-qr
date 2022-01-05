@@ -7,6 +7,8 @@ Less than 10kB uncompressed (~4kB compressed).
 
 You can see it in action at <https://qr.davidje13.com/>
 
+Or try it from the commandline: `npx lean-qr 'MY MESSAGE HERE'`
+
 ## Install dependency
 
 ```bash
@@ -39,13 +41,15 @@ const code = generate('LEAN-QR LIBRARY');
 code.toCanvas(document.getElementById('my-canvas'));
 ```
 
+### Shell
+
 There is also a small commandline tool included for testing:
 
 ```shell
-lean-qr 'MY MESSAGE HERE'
+npx lean-qr 'MY MESSAGE HERE'
 ```
 
-For full documentation, run `lean-qr --help`.
+For full documentation, run `npx lean-qr --help`.
 
 ## Modes
 
