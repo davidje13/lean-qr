@@ -15,8 +15,7 @@
     "lint": "eslint --format codeframe --ext mjs,jsx,js src bin",
     "start": "http-server . -d false -c-1 -a localhost -p 8080",
     "test": "lean-test && lean-test --browser=chrome,firefox -x '**/node_modules' -x '**/.*' -x '**/*.int.*'",
-    "posttest": "npm run lint",
-    "test:watch": "jest --watch"
+    "posttest": "npm run lint"
   },
   "repository": {
     "type": "git",

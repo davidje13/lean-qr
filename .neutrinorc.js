@@ -1,6 +1,5 @@
 const airbnbBase = require('@neutrinojs/airbnb-base');
 const library = require('@neutrinojs/library');
-const jest = require('@neutrinojs/jest');
 
 module.exports = {
   options: {
@@ -13,7 +12,6 @@ module.exports = {
         rules: {
           'arrow-parens': ['error', 'always'],
           'operator-linebreak': ['error', 'after'],
-          'jest/expect-expect': ['off'],
           'import/extensions': ['error', 'always'],
           'no-bitwise': ['off'],
           'no-plusplus': ['off'],
@@ -46,6 +44,5 @@ module.exports = {
         ],
       },
     }),
-    jest(),
   ],
 };
