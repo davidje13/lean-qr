@@ -136,7 +136,6 @@ describe('drawFrame', () => {
     function findMarkers(img) {
       const r = [];
       const ln = img[5].slice(9, -11);
-      /* eslint-disable-next-line no-cond-assign */
       for (let p = 0; (p = ln.indexOf('#   #', p)) !== -1; p += 5) {
         r.push(p + 11);
       }

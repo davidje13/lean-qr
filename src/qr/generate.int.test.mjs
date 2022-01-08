@@ -14,7 +14,8 @@ const KNOWN_PARAMS = {
   mask: 6,
 };
 
-const LONG_MESSAGE = 'this is a much longer message which needs at least version 4';
+const LONG_MESSAGE =
+  'this is a much longer message which needs at least version 4';
 
 describe('generate', () => {
   it('renders a QR code given exact parameters', () => {
@@ -75,9 +76,11 @@ describe('generate', () => {
   });
 
   it('throws if too much data is provided for the max version', () => {
-    expect(() => generate(mode.iso8859_1(LONG_MESSAGE), {
-      maxVersion: 2,
-    })).toThrow('Too much data');
+    expect(() =>
+      generate(mode.iso8859_1(LONG_MESSAGE), {
+        maxVersion: 2,
+      }),
+    ).toThrow('Too much data');
   });
 
   it('picks a version depending on the message length', () => {
@@ -134,29 +137,33 @@ describe('known examples', () => {
 
   it('Version 10', () => {
     // Source: https://en.wikipedia.org/wiki/File:Qr-code-ver-10.svg
-    const code = generate(mode.multi(
-      mode.alphaNumeric('VERSION 10 QR CODE'),
-      mode.iso8859_1(','),
-      mode.alphaNumeric(' UP TO 174 CHAR AT H LEVEL'),
-      mode.iso8859_1(','),
-      mode.alphaNumeric((
-        ' WITH 57X57 MODULES AND PLENTY OF ERROR CORRECTION TO GO AROUND.' +
-        '  NOTE THAT THERE ARE ADDITIONAL TRACKING BOXES'
-      )),
-    ), { minCorrectionLevel: correction.H });
+    const code = generate(
+      mode.multi(
+        mode.alphaNumeric('VERSION 10 QR CODE'),
+        mode.iso8859_1(','),
+        mode.alphaNumeric(' UP TO 174 CHAR AT H LEVEL'),
+        mode.iso8859_1(','),
+        mode.alphaNumeric(
+          ' WITH 57X57 MODULES AND PLENTY OF ERROR CORRECTION TO GO AROUND.' +
+            '  NOTE THAT THERE ARE ADDITIONAL TRACKING BOXES',
+        ),
+      ),
+      { minCorrectionLevel: correction.H },
+    );
     expect(code).toMatchImage(loadImage('v10.png'));
   });
 
   it('Version 10 with automatic encoding', () => {
     // Source: https://en.wikipedia.org/wiki/File:Qr-code-ver-10.svg
-    const code = generate((
+    const code = generate(
       'VERSION 10 QR CODE, UP TO 174 CHAR AT H LEVEL, WITH 57X57 MODULES AND PLENTY OF' +
-      ' ERROR CORRECTION TO GO AROUND.  NOTE THAT THERE ARE ADDITIONAL TRACKING BOXES'
-    ), { minCorrectionLevel: correction.H });
+        ' ERROR CORRECTION TO GO AROUND.  NOTE THAT THERE ARE ADDITIONAL TRACKING BOXES',
+      { minCorrectionLevel: correction.H },
+    );
     expect(code).toMatchImage(loadImage('v10.png'));
   });
 
-  const COMMON_BLURB = (
+  const COMMON_BLURB =
     'A QR code (abbreviated from Quick Response code) is a type of matrix barcode (or ' +
     'two-dimensional code) that is designed to be read by smartphones. The code consists of ' +
     'black modules arranged in a square pattern on a white background. The information encoded ' +
@@ -168,24 +175,28 @@ describe('known examples', () => {
     'manufacturing, QR codes now are used in a much broader context, including both commercial ' +
     'tracking applications and convenience-oriented applications aimed at mobile phone users ' +
     '(termed mobile tagging). QR codes may be used to display text to the user, to add a vCard ' +
-    'contact to the user\'s device, to open a Uniform Resource Identifier (URI), or to compose ' +
+    "contact to the user's device, to open a Uniform Resource Identifier (URI), or to compose " +
     'an e-mail or text message. Users can generate and print their own QR codes for others to ' +
-    'scan and use by visiting one of several paid and free QR code generating sites or apps.'
-  );
+    'scan and use by visiting one of several paid and free QR code generating sites or apps.';
 
   it('Version 25', () => {
     // Source: https://en.wikipedia.org/wiki/File:QR_Code_Version_25.svg
-    const code = generate(mode.iso8859_1((
-      `Version 25 QR Code, up to 1853 characters at L level.\n${COMMON_BLURB}`
-    )));
+    const code = generate(
+      mode.iso8859_1(
+        `Version 25 QR Code, up to 1853 characters at L level.\n${COMMON_BLURB}`,
+      ),
+    );
     expect(code).toMatchImage(loadImage('v25.png'));
   });
 
   it('Version 40', () => {
     // Source: https://en.wikipedia.org/wiki/File:Qr-code-ver-40.svg
-    const code = generate(mode.iso8859_1((
-      `Version 40 QR Code can contain up to 1852 chars.\n${COMMON_BLURB}\n`
-    )), { minCorrectionLevel: correction.H, mask: 2 });
+    const code = generate(
+      mode.iso8859_1(
+        `Version 40 QR Code can contain up to 1852 chars.\n${COMMON_BLURB}\n`,
+      ),
+      { minCorrectionLevel: correction.H, mask: 2 },
+    );
     expect(code).toMatchImage(loadImage('v40.png'));
   });
 });

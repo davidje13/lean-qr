@@ -11,11 +11,10 @@
   "main": "build/index.js",
   "types": "index.d.ts",
   "scripts": {
-    "build": "webpack --mode production",
-    "lint": "eslint --format codeframe --ext mjs,jsx,js src bin",
-    "start": "http-server . -d false -c-1 -a localhost -p 8080",
-    "test": "lean-test && lean-test --browser=chrome,firefox -x '**/node_modules' -x '**/.*' -x '**/*.int.*'",
-    "posttest": "npm run lint"
+    "build": "rollup --config rollup.config.js",
+    "format": "prettier --write .",
+    "start": "static-server --index index.html --port 8080",
+    "test": "lean-test && lean-test --browser=chrome,firefox -x '**/node_modules' -x '**/.*' -x '**/*.int.*' && prettier --check ."
   },
   "repository": {
     "type": "git",
@@ -33,14 +32,13 @@
   },
   "homepage": "https://github.com/davidje13/lean-qr#readme",
   "devDependencies": {
-    "@neutrinojs/airbnb-base": "9.x",
-    "@neutrinojs/library": "9.x",
-    "eslint": "7.x",
-    "http-server": "^0.12.3",
-    "lean-test": "^1.4.0",
-    "neutrino": "9.x",
-    "pngjs": "^6.0.0",
-    "webpack": "4.x",
-    "webpack-cli": "3.x"
+    "@babel/preset-env": "7.x",
+    "@rollup/plugin-babel": "5.x",
+    "lean-test": "1.x",
+    "pngjs": "6.x",
+    "prettier": "2.5.1",
+    "rollup": "2.x",
+    "rollup-plugin-terser": "7.x",
+    "static-server": "2.x"
   }
 }

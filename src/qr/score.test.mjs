@@ -51,54 +51,48 @@ const sample = makeBitmap([
 
 describe('scoreLines', () => {
   it('adds 3 for all horizontal lines of either colour of length 5', () => {
-    const score = scoreLines(makeBitmap([
-      '# # # ',
-      ' #####',
-      '##### ',
-      ' # # #',
-      '#     ',
-      ' # # #',
-    ]));
+    const score = scoreLines(
+      makeBitmap(['# # # ', ' #####', '##### ', ' # # #', '#     ', ' # # #']),
+    );
     expect(score).toEqual(3 * 3);
   });
 
   it('adds 3 for all vertical lines of either colour of length 5', () => {
-    const score = scoreLines(makeBitmap([
-      '# # # ',
-      ' # ## ',
-      '### # ',
-      ' # ## ',
-      '### # ',
-      ' # # #',
-    ]));
+    const score = scoreLines(
+      makeBitmap(['# # # ', ' # ## ', '### # ', ' # ## ', '### # ', ' # # #']),
+    );
     expect(score).toEqual(3 * 3);
   });
 
   it('adds 1 for each additional pixel of longer lines', () => {
-    const score = scoreLines(makeBitmap([
-      '# # # # ',
-      ' # # # #',
-      '# # # # ',
-      '########',
-      '# # # # ',
-      ' # # # #',
-      '# # # # ',
-      ' # # # #',
-    ]));
+    const score = scoreLines(
+      makeBitmap([
+        '# # # # ',
+        ' # # # #',
+        '# # # # ',
+        '########',
+        '# # # # ',
+        ' # # # #',
+        '# # # # ',
+        ' # # # #',
+      ]),
+    );
     expect(score).toEqual(6);
   });
 
   it('ignores broken lines', () => {
-    const score = scoreLines(makeBitmap([
-      '### # # ',
-      ' # # #  ',
-      '# # # # ',
-      '#### ###',
-      '### # # ',
-      '   #    ',
-      '# # # # ',
-      ' # # #  ',
-    ]));
+    const score = scoreLines(
+      makeBitmap([
+        '### # # ',
+        ' # # #  ',
+        '# # # # ',
+        '#### ###',
+        '### # # ',
+        '   #    ',
+        '# # # # ',
+        ' # # #  ',
+      ]),
+    );
     expect(score).toEqual(0);
   });
 
@@ -109,26 +103,16 @@ describe('scoreLines', () => {
 
 describe('countBoxes', () => {
   it('returns the number of 2x2 boxes of either colour', () => {
-    const count = countBoxes(makeBitmap([
-      '### # ',
-      '## # #',
-      '# ### ',
-      ' # ###',
-      '  # # ',
-      '   # #',
-    ]));
+    const count = countBoxes(
+      makeBitmap(['### # ', '## # #', '# ### ', ' # ###', '  # # ', '   # #']),
+    );
     expect(count).toEqual(3);
   });
 
   it('includes overlapping boxes', () => {
-    const count = countBoxes(makeBitmap([
-      '### # ',
-      '#### #',
-      '##### ',
-      ' # # #',
-      '# # # ',
-      ' # # #',
-    ]));
+    const count = countBoxes(
+      makeBitmap(['### # ', '#### #', '##### ', ' # # #', '# # # ', ' # # #']),
+    );
     expect(count).toEqual(5);
   });
 
@@ -193,54 +177,74 @@ describe('countPatterns', () => {
 
 describe('scoreImbalance', () => {
   it('returns 0 for evenly distributed grids', () => {
-    expect(scoreImbalance(makeBitmap([
-      '# # # ',
-      ' # # #',
-      '# # # ',
-      ' # # #',
-      '# # # ',
-      ' # # #',
-    ]))).toEqual(0);
+    expect(
+      scoreImbalance(
+        makeBitmap([
+          '# # # ',
+          ' # # #',
+          '# # # ',
+          ' # # #',
+          '# # # ',
+          ' # # #',
+        ]),
+      ),
+    ).toEqual(0);
 
-    expect(scoreImbalance(makeBitmap([
-      '###   ',
-      '###   ',
-      '###   ',
-      '###   ',
-      '###   ',
-      '###   ',
-    ]))).toEqual(0);
+    expect(
+      scoreImbalance(
+        makeBitmap([
+          '###   ',
+          '###   ',
+          '###   ',
+          '###   ',
+          '###   ',
+          '###   ',
+        ]),
+      ),
+    ).toEqual(0);
   });
 
   it('returns 100 for highly imbalanced grids', () => {
-    expect(scoreImbalance(makeBitmap([
-      '######',
-      '######',
-      '######',
-      '######',
-      '######',
-      '######',
-    ]))).toEqual(100);
+    expect(
+      scoreImbalance(
+        makeBitmap([
+          '######',
+          '######',
+          '######',
+          '######',
+          '######',
+          '######',
+        ]),
+      ),
+    ).toEqual(100);
 
-    expect(scoreImbalance(makeBitmap([
-      '      ',
-      '      ',
-      '      ',
-      '      ',
-      '      ',
-      '      ',
-    ]))).toEqual(100);
+    expect(
+      scoreImbalance(
+        makeBitmap([
+          '      ',
+          '      ',
+          '      ',
+          '      ',
+          '      ',
+          '      ',
+        ]),
+      ),
+    ).toEqual(100);
   });
 
   it('returns multiples of 10', () => {
-    expect(scoreImbalance(makeBitmap([
-      ' #####',
-      '######',
-      '######',
-      '######',
-      '######',
-      '######',
-    ]))).toEqual(90);
+    expect(
+      scoreImbalance(
+        makeBitmap([
+          ' #####',
+          '######',
+          '######',
+          '######',
+          '######',
+          '######',
+        ]),
+      ),
+    ).toEqual(90);
   });
 
   it('produces the expected result for the sample code', () => {

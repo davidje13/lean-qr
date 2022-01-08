@@ -1,6 +1,9 @@
 const alnum = (c) => '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:'.indexOf(c);
 
-const multi = (...encodings) => (data, version) => encodings.forEach((enc) => enc(data, version));
+const multi =
+  (...encodings) =>
+  (data, version) =>
+    encodings.forEach((enc) => enc(data, version));
 
 const numeric = (value) => (data, version) => {
   data.push(0b0001, 4);
@@ -44,36 +47,28 @@ const iso88591 = (value) => bytes([...value].map((c) => c.codePointAt(0)));
 
 const utf8 = (value) => multi(eci(26), bytes(new TextEncoder().encode(value)));
 
-const pickBest = (opts) => opts.reduce((best, part) => ((part.e < best.e) ? part : best));
+const pickBest = (opts) =>
+  opts.reduce((best, part) => (part.e < best.e ? part : best));
 
 numeric.reg = /[0-9]/;
-numeric.est = (value, version) => (
-  4 + (version < 10 ? 10 : version < 27 ? 12 : 14) +
-  (value.length * 10) / 3
-);
+numeric.est = (value, version) =>
+  4 + (version < 10 ? 10 : version < 27 ? 12 : 14) + (value.length * 10) / 3;
 
 alphaNumeric.reg = /[0-9A-Z $%*+./:-]/;
-alphaNumeric.est = (value, version) => (
-  4 + (version < 10 ? 9 : version < 27 ? 11 : 13) +
-  value.length * 5.5
-);
+alphaNumeric.est = (value, version) =>
+  4 + (version < 10 ? 9 : version < 27 ? 11 : 13) + value.length * 5.5;
 
 iso88591.reg = /[\u0000-\u00FF]/;
-iso88591.est = (value, version) => (
-  4 + (version < 10 ? 8 : 16) +
-  value.length * 8
-);
+iso88591.est = (value, version) =>
+  4 + (version < 10 ? 8 : 16) + value.length * 8;
 
 export default {
-  auto: (value, {
-    modes = [numeric, alphaNumeric, iso88591, utf8],
-  } = {}) => {
+  auto: (value, { modes = [numeric, alphaNumeric, iso88591, utf8] } = {}) => {
     // UTF8 is special; we cannot mix it with iso88591 since it sets a global flag.
     // detect it, remove it as an option, and only use it if there is no other way.
     const m = new Set(modes);
     const allowUTF8 = m.delete(utf8);
     if (allowUTF8) {
-      /* eslint-disable-next-line no-param-reassign */
       modes = [...m];
     }
 
@@ -89,12 +84,22 @@ export default {
 
       let cur = [{ c: 0, e: 0 }];
       for (let i = 0; i < value.length; ++i) {
-        cur = modes.filter((c) => c.reg.test(value[i])).map((c) => pickBest(cur.map((p) => {
-          const part = { c, p: (p.c === c) ? p.p : p, s: (p.c === c) ? p.s : i };
-          part.v = value.substring(part.s, i + 1);
-          part.e = part.p.e + Math.ceil(c.est(part.v, version));
-          return part;
-        })));
+        cur = modes
+          .filter((c) => c.reg.test(value[i]))
+          .map((c) =>
+            pickBest(
+              cur.map((p) => {
+                const part = {
+                  c,
+                  p: p.c === c ? p.p : p,
+                  s: p.c === c ? p.s : i,
+                };
+                part.v = value.substring(part.s, i + 1);
+                part.e = part.p.e + Math.ceil(c.est(part.v, version));
+                return part;
+              }),
+            ),
+          );
         if (!cur.length) {
           if (allowUTF8) {
             utf8(value)(data, version);

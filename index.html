@@ -1,81 +1,116 @@
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta http-equiv="content-security-policy" content="
-	base-uri 'self';
-	default-src 'none';
-	script-src 'self';
-	style-src 'self';
-	img-src 'self' data:;
-	form-action 'none';
-">
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no, minimal-ui">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="format-detection" content="telephone=no">
-<title>Lean QR</title>
-<link rel="icon" href="web/resources/favicon.png">
-<link rel="apple-touch-icon" href="web/resources/apple-touch-icon.png">
-<link rel="stylesheet" href="web/index.css">
-<script type="module" src="web/index.mjs"></script>
-</head>
-<body>
-<article>
-  <h1>Lean QR</h1>
-  <form>
-    <textarea name="message" placeholder="enter a message"></textarea>
-    <details class="options">
-      <summary>Advanced options</summary>
-      <dl>
-        <dt>Version</dt>
-        <dd>
-          <label>minimum <input type="number" name="min-version" min="1" max="40" value="1" /></label>
-          <label>maximum <input type="number" name="max-version" min="1" max="40" value="40" /></label>
-        </dd>
-        <dt>Error Correction</dt>
-        <dd>
-          <label>minimum <select name="min-correction">
-            <option value="L" selected>L (7%)</option>
-            <option value="M">M (15%)</option>
-            <option value="Q">Q (25%)</option>
-            <option value="H">H (30%)</option>
-          </select></label>
-          <label>maximum <select name="max-correction">
-            <option value="L">L (7%)</option>
-            <option value="M">M (15%)</option>
-            <option value="Q">Q (25%)</option>
-            <option value="H" selected>H (30%)</option>
-          </select></label>
-        </dd>
-        <dt>Mask</dt>
-        <dd>
-          <label>mask <select name="mask">
-            <option value="auto" selected>Automatic</option>
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-          </select></label>
-        </dd>
-        <dt>Colour</dt>
-        <dd>
-          <label>front <input type="color" name="on" value="#000000" /></label>
-          <label>back <input type="color" name="off" value="#FFFFFF" /></label>
-          <button type="button" id="reverse-col" title="Reverse">&#x21CB;</button>
-        </dd>
-      </dl>
-    </details>
-    <p id="error"><noscript><p>You must enable JavaScript to generate a code.</p></noscript></p>
-    <canvas id="output" class="qr" width="1" height="1"></canvas>
-  </form>
-  <nav>
-    <a href="https://github.com/davidje13/lean-qr" target="_blank">GitHub</a>
-  </nav>
-</article>
-
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="content-security-policy"
+      content="base-uri 'self'; default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; form-action 'none';"
+    />
+    <meta
+      name="viewport"
+      content="initial-scale=1.0, user-scalable=no, minimal-ui"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>Lean QR</title>
+    <link rel="icon" href="web/resources/favicon.png" />
+    <link rel="apple-touch-icon" href="web/resources/apple-touch-icon.png" />
+    <link rel="stylesheet" href="web/index.css" />
+    <script type="module" src="web/index.mjs"></script>
+  </head>
+  <body>
+    <article>
+      <h1>Lean QR</h1>
+      <form>
+        <textarea name="message" placeholder="enter a message"></textarea>
+        <details class="options">
+          <summary>Advanced options</summary>
+          <dl>
+            <dt>Version</dt>
+            <dd>
+              <label
+                >minimum
+                <input
+                  type="number"
+                  name="min-version"
+                  min="1"
+                  max="40"
+                  value="1"
+              /></label>
+              <label
+                >maximum
+                <input
+                  type="number"
+                  name="max-version"
+                  min="1"
+                  max="40"
+                  value="40"
+              /></label>
+            </dd>
+            <dt>Error Correction</dt>
+            <dd>
+              <label
+                >minimum
+                <select name="min-correction">
+                  <option value="L" selected>L (7%)</option>
+                  <option value="M">M (15%)</option>
+                  <option value="Q">Q (25%)</option>
+                  <option value="H">H (30%)</option>
+                </select></label
+              >
+              <label
+                >maximum
+                <select name="max-correction">
+                  <option value="L">L (7%)</option>
+                  <option value="M">M (15%)</option>
+                  <option value="Q">Q (25%)</option>
+                  <option value="H" selected>H (30%)</option>
+                </select></label
+              >
+            </dd>
+            <dt>Mask</dt>
+            <dd>
+              <label
+                >mask
+                <select name="mask">
+                  <option value="auto" selected>Automatic</option>
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                </select></label
+              >
+            </dd>
+            <dt>Colour</dt>
+            <dd>
+              <label
+                >front <input type="color" name="on" value="#000000"
+              /></label>
+              <label
+                >back <input type="color" name="off" value="#FFFFFF"
+              /></label>
+              <button type="button" id="reverse-col" title="Reverse">
+                &#x21CB;
+              </button>
+            </dd>
+          </dl>
+        </details>
+        <p id="error">
+          <noscript
+            ><p>You must enable JavaScript to generate a code.</p></noscript
+          >
+        </p>
+        <canvas id="output" class="qr" width="1" height="1"></canvas>
+      </form>
+      <nav>
+        <a href="https://github.com/davidje13/lean-qr" target="_blank"
+          >GitHub</a
+        >
+      </nav>
+    </article>
+  </body>
 </html>

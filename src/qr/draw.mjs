@@ -51,7 +51,7 @@ export const drawFrame = (code, version) => {
     // the -0.25 avoids a quirk in the spec for version 32
     const stepAlignment = Math.ceil((size - 13) / numAlignmentM / 2 - 0.25) * 2;
     const positions = [6];
-    for (let i = numAlignmentM; (i--) > 0;) {
+    for (let i = numAlignmentM; i-- > 0; ) {
       positions.push(size - 7 - i * stepAlignment);
     }
     for (let i = 0; i <= numAlignmentM; ++i) {
@@ -68,8 +68,13 @@ export const drawFrame = (code, version) => {
     }
   }
   if (version >= 7) {
-    for (let dat = (version << 12) | remBinPoly(version, 0b1111100100101, 13), j = 0; j < 6; ++j) {
-      for (let i = 12; (i--) > 9; dat >>>= 1) {
+    for (
+      let dat = (version << 12) | remBinPoly(version, 0b1111100100101, 13),
+        j = 0;
+      j < 6;
+      ++j
+    ) {
+      for (let i = 12; i-- > 9; dat >>>= 1) {
         code.set(j, size - i, dat & 1);
         code.set(size - i, j, dat & 1);
       }
@@ -81,11 +86,11 @@ export const getPath = (code) => {
   const s = code.size;
   const result = [];
   for (let xB = s - 2, y = s, dirY = -1; xB >= 0; xB -= 2) {
-    if (xB === 5) { // special case: skip vertical timing pattern line
+    if (xB === 5) {
+      // special case: skip vertical timing pattern line
       xB = 4;
     }
-    /* eslint-disable no-cond-assign, no-sequences */
-    while (y += dirY, y !== -1 && y !== s) {
+    while (((y += dirY), y !== -1 && y !== s)) {
       if (!code.masked(xB + 1, y)) {
         result.push([xB + 1, y]);
       }
@@ -93,14 +98,15 @@ export const getPath = (code) => {
         result.push([xB, y]);
       }
     }
-    /* eslint-enable no-cond-assign, no-sequences */
     dirY *= -1;
   }
   return result;
 };
 
 export const drawCode = (target, path, data) => {
-  path.forEach(([x, y], bit) => target.set(x, y, (data[bit >> 3] << (bit & 7)) & 0x80, 0));
+  path.forEach(([x, y], bit) =>
+    target.set(x, y, (data[bit >> 3] << (bit & 7)) & 0x80, 0),
+  );
 };
 
 export const applyMask = (target, mask, maskId, ecId) => {
@@ -112,13 +118,14 @@ export const applyMask = (target, mask, maskId, ecId) => {
       }
     }
   }
-  const info = ((ecId << 3) | maskId);
-  let pattern = 0b101010000010010 ^ ((info << 10) | remBinPoly(info, 0b10100110111, 11));
-  for (let i = 8; (i--) > 0; pattern >>= 1) {
+  const info = (ecId << 3) | maskId;
+  let pattern =
+    0b101010000010010 ^ ((info << 10) | remBinPoly(info, 0b10100110111, 11));
+  for (let i = 8; i-- > 0; pattern >>= 1) {
     target.set(8, (i > 1 ? 7 : 8) - i, pattern & 1);
     target.set(s - 8 + i, 8, pattern & 1);
   }
-  for (let i = 7; (i--) > 0; pattern >>= 1) {
+  for (let i = 7; i-- > 0; pattern >>= 1) {
     target.set(i > 5 ? 7 : i, 8, pattern & 1);
     target.set(8, s - i - 1, pattern & 1);
   }

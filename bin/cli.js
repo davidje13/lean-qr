@@ -25,20 +25,96 @@ TEXT_FORMATS.set('text-ansi-wb', {
 TEXT_FORMATS.set('text-box', { on: '\u2588\u2588' });
 TEXT_FORMATS.set('text-ascii', {});
 
-/* eslint-disable object-curly-newline */
 const FLAGS = [
-  { id: 'encoding', name: 'encoding', short: 'e', type: 'enum', values: [...ENCODINGS.keys()], def: 'auto', info: 'Set the encoding type for the content' },
-  { id: 'minCor', name: 'min-correction', short: 'c', type: 'enum', values: [...Object.keys(correction)], def: 'min', info: 'Set the minimum error correction level' },
-  { id: 'maxCor', name: 'max-correction', short: 'C', type: 'enum', values: [...Object.keys(correction)], def: 'max', info: 'Set the maximum error correction level' },
-  { id: 'minVer', name: 'min-version', short: 'v', type: 'int', min: 1, max: 40, def: 1, info: 'Set the minimum version (size)' },
-  { id: 'maxVer', name: 'max-version', short: 'V', type: 'int', min: 1, max: 40, def: 40, info: 'Set the maximum version (size)' },
-  { id: 'padding', name: 'padding', short: 'p', type: 'int', min: 0, def: 4, info: 'Set the edge padding size' },
-  { id: 'mask', name: 'mask', short: 'm', type: 'enum', values: ['auto', '0', '1', '2', '3', '4', '5', '6', '7'], def: 'auto', info: 'Set the masking type (advanced usage)' },
-  { id: 'format', name: 'format', short: 'f', type: 'enum', values: [...TEXT_FORMATS.keys()], def: 'text-ansi-invert', info: 'Set the output format' },
-  { id: 'info', name: 'info', short: 'i', type: 'presence', info: 'Print meta information to stderr' },
-  { id: 'help', name: 'help', short: '?', type: 'presence', info: 'Print documentation' },
+  {
+    id: 'encoding',
+    name: 'encoding',
+    short: 'e',
+    type: 'enum',
+    values: [...ENCODINGS.keys()],
+    def: 'auto',
+    info: 'Set the encoding type for the content',
+  },
+  {
+    id: 'minCor',
+    name: 'min-correction',
+    short: 'c',
+    type: 'enum',
+    values: [...Object.keys(correction)],
+    def: 'min',
+    info: 'Set the minimum error correction level',
+  },
+  {
+    id: 'maxCor',
+    name: 'max-correction',
+    short: 'C',
+    type: 'enum',
+    values: [...Object.keys(correction)],
+    def: 'max',
+    info: 'Set the maximum error correction level',
+  },
+  {
+    id: 'minVer',
+    name: 'min-version',
+    short: 'v',
+    type: 'int',
+    min: 1,
+    max: 40,
+    def: 1,
+    info: 'Set the minimum version (size)',
+  },
+  {
+    id: 'maxVer',
+    name: 'max-version',
+    short: 'V',
+    type: 'int',
+    min: 1,
+    max: 40,
+    def: 40,
+    info: 'Set the maximum version (size)',
+  },
+  {
+    id: 'padding',
+    name: 'padding',
+    short: 'p',
+    type: 'int',
+    min: 0,
+    def: 4,
+    info: 'Set the edge padding size',
+  },
+  {
+    id: 'mask',
+    name: 'mask',
+    short: 'm',
+    type: 'enum',
+    values: ['auto', '0', '1', '2', '3', '4', '5', '6', '7'],
+    def: 'auto',
+    info: 'Set the masking type (advanced usage)',
+  },
+  {
+    id: 'format',
+    name: 'format',
+    short: 'f',
+    type: 'enum',
+    values: [...TEXT_FORMATS.keys()],
+    def: 'text-ansi-invert',
+    info: 'Set the output format',
+  },
+  {
+    id: 'info',
+    name: 'info',
+    short: 'i',
+    type: 'presence',
+    info: 'Print meta information to stderr',
+  },
+  {
+    id: 'help',
+    name: 'help',
+    short: '?',
+    type: 'presence',
+    info: 'Print documentation',
+  },
 ];
-/* eslint-enable object-curly-newline */
 
 try {
   const args = parseArgs(FLAGS, process.argv);
@@ -61,7 +137,7 @@ try {
     maxCorrectionLevel: correction[args.maxCor],
     minVersion: args.minVer,
     maxVersion: args.maxVer,
-    mask: (args.mask === 'auto') ? null : Number(args.mask),
+    mask: args.mask === 'auto' ? null : Number(args.mask),
   });
   const tm1 = Date.now();
   let tm2;

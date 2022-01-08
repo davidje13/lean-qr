@@ -1,7 +1,6 @@
 {
   "editor.tabSize": 2,
   "files.exclude": {
-    "**/.eslintcache": true,
     "**/build": true,
     "**/node_modules": true
   },

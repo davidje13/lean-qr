@@ -1,34 +1,34 @@
 image: alpine:latest
 workflow:
   rules:
-  - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_COMMIT_BRANCH'
 
 stages:
-- test
-- package
+  - test
+  - package
 
 build_and_test:
   stage: test
   image: node:16
   services:
-  - name: selenium/standalone-firefox
-    alias: firefox
-  - name: selenium/standalone-chrome
-    alias: chrome
+    - name: selenium/standalone-firefox
+      alias: firefox
+    - name: selenium/standalone-chrome
+      alias: chrome
   variables:
     WEBDRIVER_HOST_CHROME: chrome:4444
     WEBDRIVER_HOST_FIREFOX: firefox:4444
     TESTRUNNER_HOST: '0.0.0.0'
   script:
-  - npm install-test
+    - npm install-test
 
 pages:
   stage: package
   rules:
-  - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_BRANCH == "master"'
   script:
-  - mkdir -p public
-  - mv src web index.html public
+    - mkdir -p public
+    - mv src web index.html public
   artifacts:
     paths:
-    - public
+      - public

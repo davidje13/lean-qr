@@ -4,7 +4,7 @@
 // this bit packing is compiled down to single ints, saving a lot of space
 // format: [group 2 count] | [group 1 count] | [group 1 size] | [ecsize]
 
-/* eslint-disable */
+/* prettier-ignore */
 const DATA_L = [
                ( 1 << 12) | ( 19 << 5) |  7,
                ( 1 << 12) | ( 34 << 5) | 10,
@@ -48,6 +48,7 @@ const DATA_L = [
   ( 6 << 18) | (19 << 12) | (118 << 5) | 30,
 ];
 
+/* prettier-ignore */
 const DATA_M = [
                ( 1 << 12) | ( 16 << 5) | 10,
                ( 1 << 12) | ( 28 << 5) | 16,
@@ -91,6 +92,7 @@ const DATA_M = [
   (31 << 18) | (18 << 12) | ( 47 << 5) | 28,
 ];
 
+/* prettier-ignore */
 const DATA_Q = [
                ( 1 << 12) | ( 13 << 5) | 13,
                ( 1 << 12) | ( 22 << 5) | 22,
@@ -134,6 +136,7 @@ const DATA_Q = [
   (34 << 18) | (34 << 12) | ( 24 << 5) | 30,
 ];
 
+/* prettier-ignore */
 const DATA_H = [
                ( 1 << 12) | (  9 << 5) | 17,
                ( 1 << 12) | ( 16 << 5) | 28,
@@ -176,7 +179,6 @@ const DATA_H = [
   (67 << 18) | (10 << 12) | ( 15 << 5) | 30,
   (61 << 18) | (20 << 12) | ( 15 << 5) | 30,
 ];
-/* eslint-enable */
 
 const calculate = (v) => {
   const g2n = v >> 18;
@@ -184,7 +186,12 @@ const calculate = (v) => {
   const g1s = (v >> 5) & 0b1111111;
   return {
     capBits: (g1n * g1s + g2n * (g1s + 1)) * 8,
-    groups: g2n ? [[g1n, g1s], [g2n, g1s + 1]] : [[g1n, g1s]],
+    groups: g2n
+      ? [
+          [g1n, g1s],
+          [g2n, g1s + 1],
+        ]
+      : [[g1n, g1s]],
     ecsize: v & 0b11111,
   };
 };

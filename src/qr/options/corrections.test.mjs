@@ -68,9 +68,8 @@ describe('corrections', () => {
   });
 
   // comparison data from https://www.thonky.com/qr-code-tutorial/error-correction-table
-  Object.entries({
-    /* eslint-disable max-len, object-curly-newline, indent,
-       array-bracket-spacing, comma-spacing, no-multi-spaces */
+  /* prettier-ignore */
+  const dataset = {
      1: { L: [ 7, [ 1, 19]          ], M: [10, [ 1, 16]          ], Q: [13, [ 1, 13]          ], H: [17, [ 1,  9]          ] },
      2: { L: [10, [ 1, 34]          ], M: [16, [ 1, 28]          ], Q: [22, [ 1, 22]          ], H: [28, [ 1, 16]          ] },
      3: { L: [15, [ 1, 55]          ], M: [26, [ 1, 44]          ], Q: [18, [ 2, 17]          ], H: [22, [ 2, 13]          ] },
@@ -111,12 +110,15 @@ describe('corrections', () => {
     38: { L: [30, [ 4,122], [18,123]], M: [28, [13, 46], [32, 47]], Q: [30, [48, 24], [14, 25]], H: [30, [42, 15], [32, 16]] },
     39: { L: [30, [20,117], [ 4,118]], M: [28, [40, 47], [ 7, 48]], Q: [30, [43, 24], [22, 25]], H: [30, [10, 15], [67, 16]] },
     40: { L: [30, [19,118], [ 6,119]], M: [28, [18, 47], [31, 48]], Q: [30, [34, 24], [34, 25]], H: [30, [20, 15], [61, 16]] },
-    /* eslint-enable max-len, object-curly-newline, indent,
-       array-bracket-spacing, comma-spacing, no-multi-spaces */
-  }).forEach(([version, v]) => Object.entries(v)
-    .forEach(([level, [ecsize, ...groups]]) => it(`${version}-${level}`, () => {
-      const info = data[names[level]].v[version - 1];
-      expect(info.ecsize).toEqual(ecsize);
-      expect(info.groups).toEqual(groups);
-    })));
+  };
+
+  Object.entries(dataset).forEach(([version, v]) =>
+    Object.entries(v).forEach(([level, [ecsize, ...groups]]) =>
+      it(`${version}-${level}`, () => {
+        const info = data[names[level]].v[version - 1];
+        expect(info.ecsize).toEqual(ecsize);
+        expect(info.groups).toEqual(groups);
+      }),
+    ),
+  );
 });

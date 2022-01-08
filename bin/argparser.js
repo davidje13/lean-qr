@@ -1,9 +1,14 @@
 function parseArg(flag, arg) {
   switch (flag.type) {
-    case 'string': return arg;
+    case 'string':
+      return arg;
     case 'enum':
       if (!flag.values.includes(arg)) {
-        throw new Error(`Unknown value ${arg} for ${flag.name}; expected: ${flag.values.join(', ')}`);
+        throw new Error(
+          `Unknown value ${arg} for ${flag.name}; expected: ${flag.values.join(
+            ', ',
+          )}`,
+        );
       }
       return arg;
     case 'int': {
@@ -57,7 +62,9 @@ function printUsage(name, headline, flags, rest) {
 function parseArgs(flags, argv) {
   let i = 2;
   const result = {};
-  flags.forEach(({ id, def }) => { result[id] = def; });
+  flags.forEach(({ id, def }) => {
+    result[id] = def;
+  });
   for (; i < argv.length; ++i) {
     const arg = argv[i];
     if (arg === '--') {
@@ -70,19 +77,22 @@ function parseArgs(flags, argv) {
         p = arg.length;
       }
       const keyName = arg.substr(2, p - 2);
-      const flag = flags.find(({ name }) => (name === keyName));
+      const flag = flags.find(({ name }) => name === keyName);
       if (!flag) {
         throw new Error(`Unknown option ${keyName}`);
       }
       if (flag.type === 'presence') {
         result[flag.id] = true;
       } else {
-        result[flag.id] = parseArg(flag, (p < arg.length) ? arg.substr(p) : argv[++i]);
+        result[flag.id] = parseArg(
+          flag,
+          p < arg.length ? arg.substr(p) : argv[++i],
+        );
       }
     } else if (arg.startsWith('-')) {
       for (let p = 1; p < arg.length; ++p) {
         const keyName = arg[p];
-        const flag = flags.find(({ short }) => (short === keyName));
+        const flag = flags.find(({ short }) => short === keyName);
         if (!flag) {
           throw new Error(`Unknown shorthand option ${keyName}`);
         }
@@ -92,7 +102,10 @@ function parseArgs(flags, argv) {
           result[flag.id] = parseArg(flag, arg.substr(p + 2));
           break;
         } else {
-          result[flag.id] = parseArg(flag, (p < arg.length - 1) ? arg.substr(p + 1) : argv[++i]);
+          result[flag.id] = parseArg(
+            flag,
+            p < arg.length - 1 ? arg.substr(p + 1) : argv[++i],
+          );
           break;
         }
       }

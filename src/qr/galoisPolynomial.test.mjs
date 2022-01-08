@@ -31,7 +31,9 @@ describe('mult256PolyLn', () => {
 describe('rem256Poly', () => {
   it('divides a polynomial (with non-log terms) by another polynomial with log terms', () => {
     // implicit condition: denLn always begins with 0
-    const num = [32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17];
+    const num = [
+      32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17,
+    ];
     const denLn = [0, 251, 67, 46, 61, 118, 70, 64, 94, 32, 45];
     const expected = [196, 35, 39, 119, 235, 215, 231, 226, 93, 23];
     expect([...rem256Poly(num, denLn)]).toEqual(expected);

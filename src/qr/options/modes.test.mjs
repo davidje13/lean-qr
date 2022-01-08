@@ -150,9 +150,9 @@ describe('mode.iso8859_1', () => {
     expect(data.bytes[0]).toEqual(0b0100_0000);
     expect(data.bytes[1]).toEqual(0x4_6);
     expect(data.bytes[2]).toEqual(0x1_6);
-    expect(data.bytes[3]).toEqual(0x2_A);
-    expect(data.bytes[4]).toEqual(0x3_F);
-    expect(data.bytes[5]).toEqual(0xF_0);
+    expect(data.bytes[3]).toEqual(0x2_a);
+    expect(data.bytes[4]).toEqual(0x3_f);
+    expect(data.bytes[5]).toEqual(0xf_0);
     expect(data.bits).toEqual(4 + 8 + 8 * 4);
   });
 
@@ -177,9 +177,9 @@ describe('mode.utf8', () => {
     expect(data.bytes[0]).toEqual(0b0111_0001);
     expect(data.bytes[1]).toEqual(0b1010_0100);
     expect(data.bytes[2]).toEqual(0b0000_0011);
-    expect(data.bytes[3]).toEqual(0xE2);
+    expect(data.bytes[3]).toEqual(0xe2);
     expect(data.bytes[4]).toEqual(0x80);
-    expect(data.bytes[5]).toEqual(0xA6);
+    expect(data.bytes[5]).toEqual(0xa6);
     expect(data.bits).toEqual(4 + 8 + 4 + 8 + 8 * 3);
   });
 
@@ -197,7 +197,7 @@ describe('mode.multi', () => {
     expect(data.bytes[2]).toEqual(0b00_0001_00);
     expect(data.bytes[3]).toEqual(0b00000001);
     expect(data.bytes[4]).toEqual(0b1001_0000);
-    expect(data.bits).toEqual((4 + 10 + 4) + (4 + 10 + 4));
+    expect(data.bits).toEqual(4 + 10 + 4 + (4 + 10 + 4));
   });
 
   it('passes version information down', () => {
@@ -207,7 +207,9 @@ describe('mode.multi', () => {
   });
 
   it('returns a reusable encoding function', () => {
-    expectRepeatable(() => mode.multi(mode.numeric('123'), mode.alphaNumeric('ABC')));
+    expectRepeatable(() =>
+      mode.multi(mode.numeric('123'), mode.alphaNumeric('ABC')),
+    );
   });
 });
 
@@ -230,11 +232,7 @@ describe('mode.auto', () => {
   });
 
   it('uses utf8 if nothing else will do', () => {
-    checkSame(
-      mode.auto('unicode\u2026'),
-      mode.utf8('unicode\u2026'),
-      20,
-    );
+    checkSame(mode.auto('unicode\u2026'), mode.utf8('unicode\u2026'), 20);
   });
 
   it('is restricted to the modes given', () => {
@@ -247,20 +245,25 @@ describe('mode.auto', () => {
 
   it('rejects impossible input', () => {
     const data = new Bitmap1D(1000);
-    expect(() => mode.auto('nope', { modes: [mode.alphaNumeric] })(data, 10))
-      .toThrow('Unencodable');
+    expect(() =>
+      mode.auto('nope', { modes: [mode.alphaNumeric] })(data, 10),
+    ).toThrow('Unencodable');
   });
 
   it('rejects impossible iso8859_1 input', () => {
     const data = new Bitmap1D(1000);
-    expect(() => mode.auto('nah\u2026', { modes: [mode.iso8859_1] })(data, 10))
-      .toThrow('Unencodable');
+    expect(() =>
+      mode.auto('nah\u2026', { modes: [mode.iso8859_1] })(data, 10),
+    ).toThrow('Unencodable');
   });
 
   it('picks the best combination of modes to minimise the resulting size', () => {
     checkSame(
       mode.auto('abcabcabcabcabc12345678901234567890'),
-      mode.multi(mode.iso8859_1('abcabcabcabcabc'), mode.numeric('12345678901234567890')),
+      mode.multi(
+        mode.iso8859_1('abcabcabcabcabc'),
+        mode.numeric('12345678901234567890'),
+      ),
       20,
     );
   });

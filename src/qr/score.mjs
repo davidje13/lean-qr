@@ -33,7 +33,7 @@ export const countBoxes = (code) => {
     for (let y = 1; y < code.size; ++y) {
       const curV = code.get(x - 1, y);
       const curM = code.get(x, y) === curV;
-      score += (lastM && curM && lastV === curV);
+      score += lastM && curM && lastV === curV;
       lastV = curV;
       lastM = curM;
     }
@@ -43,14 +43,12 @@ export const countBoxes = (code) => {
 
 export const countPatterns = (code) => {
   let score = 0;
-  /* eslint-disable no-multi-spaces */
-  const begin   = 0b10000000000_10000000000;
+  const initial = 0b10000000000_10000000000;
   const pattern = 0b10111010000_00001011101;
-  const end     = 0b00000000001_00000000001;
-  /* eslint-enable no-multi-spaces */
+  const matches = 0b00000000001_00000000001;
   hv(code, 0, (state, cur) => {
-    const next = ((state >>> 1) | begin) & (pattern ^ (cur ? 0 : -1));
-    if (next & end) {
+    const next = ((state >>> 1) | initial) & (pattern ^ (cur ? 0 : -1));
+    if (next & matches) {
       ++score;
     }
     return next;
@@ -65,12 +63,13 @@ export const scoreImbalance = (code) => {
       totalOn += code.get(x, y);
     }
   }
-  return Math.floor(20 * Math.abs(totalOn / (code.size * code.size) - 0.5)) * 10;
+  return (
+    Math.floor(20 * Math.abs(totalOn / (code.size * code.size) - 0.5)) * 10
+  );
 };
 
-export default (code) => (
+export default (code) =>
   scoreLines(code) +
   countBoxes(code) * 3 +
   countPatterns(code) * 40 +
-  scoreImbalance(code)
-);
+  scoreImbalance(code);

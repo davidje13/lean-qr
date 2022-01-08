@@ -24,24 +24,30 @@ declare module 'lean-qr' {
     get(x: number, y: number): boolean;
 
     toString(options?: {
-      on?: string,
-      off?: string,
-      lf?: string,
-      padX?: number,
-      padY?: number,
+      on?: string;
+      off?: string;
+      lf?: string;
+      padX?: number;
+      padY?: number;
     }): string;
 
-    toImageData<DataT extends ImageDataLike>(context: Context2DLike<DataT>, options?: {
-      on?: number,
-      off?: number,
-    }): DataT;
+    toImageData<DataT extends ImageDataLike>(
+      context: Context2DLike<DataT>,
+      options?: {
+        on?: number;
+        off?: number;
+      },
+    ): DataT;
 
-    toCanvas(canvas: CanvasLike<ImageDataLike>, options?: {
-      on?: number,
-      off?: number,
-      padX?: number,
-      padY?: number,
-    }): void;
+    toCanvas(
+      canvas: CanvasLike<ImageDataLike>,
+      options?: {
+        on?: number;
+        off?: number;
+        padX?: number;
+        padY?: number;
+      },
+    ): void;
   }
 
   export type Mask = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
@@ -57,14 +63,14 @@ declare module 'lean-qr' {
   }
 
   export const mode: {
-    auto(value: string, options?: ModeAutoOptions): Mode,
-    multi(...modes: Mode[]): Mode,
-    eci(id: number): Mode,
-    numeric: ModeFactory,
-    alphaNumeric: ModeFactory,
-    bytes(data: Uint8Array | number[]): Mode,
-    iso8859_1: ModeFactory,
-    utf8: ModeFactory,
+    auto(value: string, options?: ModeAutoOptions): Mode;
+    multi(...modes: Mode[]): Mode;
+    eci(id: number): Mode;
+    numeric: ModeFactory;
+    alphaNumeric: ModeFactory;
+    bytes(data: Uint8Array | number[]): Mode;
+    iso8859_1: ModeFactory;
+    utf8: ModeFactory;
   };
 
   export enum correction {
@@ -84,5 +90,8 @@ declare module 'lean-qr' {
     mask?: null | Mask;
   }
 
-  export const generate: (data: Mode | string, options?: GenerateOptions) => Bitmap2D;
+  export const generate: (
+    data: Mode | string,
+    options?: GenerateOptions,
+  ) => Bitmap2D;
 }

@@ -1,12 +1,10 @@
 import fs from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-/* eslint-disable-next-line import/no-extraneous-dependencies */ // we are a test file
 import { PNG } from 'pngjs';
 
 const SELF_DIR = dirname(fileURLToPath(import.meta.url));
 
-/* eslint-disable-next-line import/prefer-default-export */
 export function loadImage(name) {
   const fileBuffer = fs.readFileSync(join(SELF_DIR, name));
   const { width, height, data } = PNG.sync.read(fileBuffer);
@@ -51,7 +49,6 @@ export const toMatchImage = (expectedImage) => (actualImage) => {
     throw new Error('Image expectation should be a string pattern');
   }
   if (actualImage && typeof actualImage === 'object') {
-    /* eslint-disable-next-line no-param-reassign */
     actualImage = actualImage.toString({
       on: '#',
       off: ' ',
@@ -72,19 +69,18 @@ export const toMatchImage = (expectedImage) => (actualImage) => {
   if (actual.width !== expected.width || actual.height !== expected.height) {
     return {
       pass: false,
-      message: () => (
+      message: () =>
         `${msgPrefix}\n\n` +
         `Expected: image of size ${colExpected(expected.width)}` +
         `x${colExpected(expected.height)}\n` +
         `Received: image of size ${colReceived(actual.width)}` +
-        `x${colReceived(actual.height)}\n`
-      ),
+        `x${colReceived(actual.height)}\n`,
     };
   }
 
   const col2 = Math.max(actual.width, 'Expected:'.length) + 6;
   const pad = ' '.repeat(col2 - actual.width);
-  const stacked = (actual.width >= 60);
+  const stacked = actual.width >= 60;
   let vis = colExpected('Expected:');
   let vis2 = '';
   if (stacked) {
@@ -105,7 +101,7 @@ export const toMatchImage = (expectedImage) => (actualImage) => {
     for (let x = 0; x < actual.width + 1; ++x) {
       const e = expected.data[y][x];
       const a = actual.data[y][x];
-      const m = (e === '?' || a === e);
+      const m = e === '?' || a === e;
       if (!e || m !== runM) {
         if (runM) {
           markedE += runE;
@@ -138,14 +134,13 @@ export const toMatchImage = (expectedImage) => (actualImage) => {
   if (match) {
     return {
       pass: true,
-      message: () => (
+      message: () =>
         `${msgPrefix}\n\n` +
         `Expected: not\n${colExpected(makeVisible(expectedImage))}\n` +
-        `Received: matching image\n${colReceived(makeVisible(actualImage))}\n`
-      ),
+        `Received: matching image\n${colReceived(makeVisible(actualImage))}\n`,
     };
   }
-  return { pass: false, message: () => (`${msgPrefix}\n\n${vis}${vis2}\n`) };
+  return { pass: false, message: () => `${msgPrefix}\n\n${vis}${vis2}\n` };
 };
 
 expect.extend({ toMatchImage });

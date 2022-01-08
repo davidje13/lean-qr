@@ -14,12 +14,7 @@ function getInt(name) {
 
 function getColour(name) {
   const rgb = Number.parseInt(getValue(name).substr(1), 16);
-  return [
-    (rgb >> 16) & 0xFF,
-    (rgb >> 8) & 0xFF,
-    rgb & 0xFF,
-    0xFF,
-  ];
+  return [(rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff, 0xff];
 }
 
 function getMask() {
@@ -52,7 +47,9 @@ function regenerate() {
   }
 }
 
-document.querySelectorAll('input, select, textarea').forEach((o) => o.addEventListener('input', regenerate));
+document
+  .querySelectorAll('input, select, textarea')
+  .forEach((o) => o.addEventListener('input', regenerate));
 document.getElementById('reverse-col').addEventListener('click', () => {
   const on = getInput('on');
   const off = getInput('off');

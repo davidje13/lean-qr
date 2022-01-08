@@ -2,14 +2,12 @@ import Bitmap1D from '../structures/Bitmap1D.mjs';
 import Bitmap2D from '../structures/Bitmap2D.mjs';
 import modes from './options/modes.mjs';
 import masks from './options/masks.mjs';
-import { data as correctionData, names as correctionNames } from './options/corrections.mjs';
-import calculateEC from './errorCorrection.mjs';
 import {
-  drawFrame,
-  getPath,
-  drawCode,
-  applyMask,
-} from './draw.mjs';
+  data as correctionData,
+  names as correctionNames,
+} from './options/corrections.mjs';
+import calculateEC from './errorCorrection.mjs';
+import { drawFrame, getPath, drawCode, applyMask } from './draw.mjs';
 import scoreCode from './score.mjs';
 
 const baseCache = [];
@@ -23,13 +21,16 @@ const getBase = (version) => {
   return [new Bitmap2D(cached[0]), cached[1]];
 };
 
-export default (modeData, {
-  minCorrectionLevel = correctionNames.min,
-  maxCorrectionLevel = correctionNames.max,
-  minVersion = 1,
-  maxVersion = 40,
-  mask = null,
-} = {}) => {
+export default (
+  modeData,
+  {
+    minCorrectionLevel = correctionNames.min,
+    maxCorrectionLevel = correctionNames.max,
+    minVersion = 1,
+    maxVersion = 40,
+    mask = null,
+  } = {},
+) => {
   if (maxCorrectionLevel < minCorrectionLevel) {
     throw new Error('Invalid correction level range');
   }
@@ -37,13 +38,14 @@ export default (modeData, {
     throw new Error('Invalid version range');
   }
   if (typeof modeData === 'string') {
-    /* eslint-disable-next-line no-param-reassign */
     modeData = modes.auto(modeData);
   }
 
   let dataLengthBits = 0;
   for (let version = minVersion; version <= maxVersion; ++version) {
-    if (correctionData[minCorrectionLevel].v[version - 1].capBits < dataLengthBits) {
+    if (
+      correctionData[minCorrectionLevel].v[version - 1].capBits < dataLengthBits
+    ) {
       continue;
     }
 
@@ -70,12 +72,14 @@ export default (modeData, {
       }
 
       // pick best mask
-      return masks.map((m, maskId) => {
-        const masked = new Bitmap2D(code);
-        applyMask(masked, m, maskId, correction.id);
-        masked.s = scoreCode(masked);
-        return masked;
-      }).reduce((best, masked) => ((masked.s < best.s) ? masked : best));
+      return masks
+        .map((m, maskId) => {
+          const masked = new Bitmap2D(code);
+          applyMask(masked, m, maskId, correction.id);
+          masked.s = scoreCode(masked);
+          return masked;
+        })
+        .reduce((best, masked) => (masked.s < best.s ? masked : best));
     }
   }
   throw new Error('Too much data');
