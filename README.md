@@ -12,7 +12,7 @@ Or try it from the commandline: `npx lean-qr 'MY MESSAGE HERE'`
 ## Install dependency
 
 ```bash
-npm install --save-dev lean-qr
+npm install --save lean-qr
 ```
 
 ## Usage
