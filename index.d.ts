@@ -14,6 +14,8 @@ declare module 'lean-qr' {
     getContext(type: '2d'): Context2DLike<DataT> | null;
   }
 
+  export type RGBA = [number, number, number, number?];
+
   export interface Bitmap1D {
     push(value: number, bits: number): void;
   }
@@ -24,8 +26,8 @@ declare module 'lean-qr' {
     get(x: number, y: number): boolean;
 
     toString(options?: {
-      on?: string;
-      off?: string;
+      on?: RGBA;
+      off?: RGBA;
       lf?: string;
       padX?: number;
       padY?: number;
@@ -34,16 +36,16 @@ declare module 'lean-qr' {
     toImageData<DataT extends ImageDataLike>(
       context: Context2DLike<DataT>,
       options?: {
-        on?: number;
-        off?: number;
+        on?: RGBA;
+        off?: RGBA;
       },
     ): DataT;
 
     toCanvas(
       canvas: CanvasLike<ImageDataLike>,
       options?: {
-        on?: number;
-        off?: number;
+        on?: RGBA;
+        off?: RGBA;
         padX?: number;
         padY?: number;
       },

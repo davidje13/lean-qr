@@ -20,7 +20,7 @@
     "build": "rollup --config rollup.config.js",
     "format": "prettier --write .",
     "start": "static-server --index index.html --port 8080",
-    "test": "lean-test && lean-test --browser=chrome,firefox -x '**/node_modules' -x '**/.*' -x '**/*.int.*' && prettier --check ."
+    "test": "lean-test && lean-test --browser=chrome,firefox -x '**/node_modules' -x '**/.*' -x '**/*.int.*' && ./test-package/run.sh && prettier --check ."
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,11 @@
+{
+  "name": "lean-qr-package-test",
+  "private": true,
+  "scripts": {
+    "test": "node commonjs.js && node es6modules.mjs && tsc typescript.ts --noEmit"
+  },
+  "devDependencies": {
+    "lean-qr": "file:lean-qr.tgz",
+    "typescript": "4.6.x"
+  }
+}

@@ -32,8 +32,7 @@ export default [
     output: {
       file: 'build/index.js',
       sourcemap: true,
-      format: 'umd',
-      name: 'lean-qr',
+      format: 'cjs',
     },
     plugins,
   },
@@ -42,8 +41,7 @@ export default [
     output: {
       file: 'build/extras/svg.js',
       sourcemap: true,
-      format: 'umd',
-      name: 'lean-qr-svg',
+      format: 'cjs',
     },
     plugins,
   },
