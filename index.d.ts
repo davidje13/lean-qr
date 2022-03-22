@@ -95,3 +95,27 @@ declare module 'lean-qr' {
     options?: GenerateOptions,
   ) => Bitmap2D;
 }
+
+declare module 'lean-qr/extras/svg' {
+  import type { Bitmap2D } from 'lean-qr';
+
+  interface SVGOptions {
+    on?: string;
+    off?: string;
+    padX?: number;
+    padY?: number;
+    width?: number;
+    height?: number;
+    scale?: number;
+  }
+
+  export const toSvgPath: (code: Bitmap2D) => string;
+
+  export const toSvg: (
+    code: Bitmap2D,
+    target: Document | SVGElement,
+    options?: SVGOptions,
+  ) => SVGElement;
+
+  export const toSvgSource: (code: Bitmap2D, options?: SVGOptions) => string;
+}

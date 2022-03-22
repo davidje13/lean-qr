@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const { mode, correction, generate } = require('../build/index.js');
+const { toSvgSource } = require('../build/extras/svg.js');
 const { printUsage, parseArgs } = require('./argparser.js');
 
 const ENCODINGS = new Map();
@@ -96,7 +97,7 @@ const FLAGS = [
     name: 'format',
     short: 'f',
     type: 'enum',
-    values: [...TEXT_FORMATS.keys()],
+    values: [...TEXT_FORMATS.keys(), 'svg'],
     def: 'text-ansi-invert',
     info: 'Set the output format',
   },
@@ -141,7 +142,16 @@ try {
   });
   const tm1 = Date.now();
   let tm2;
-  if (TEXT_FORMATS.has(args.format)) {
+  if (args.format === 'svg') {
+    const result = toSvgSource(code, {
+      on: 'black',
+      off: 'white',
+      padX: args.padding,
+      padY: args.padding,
+    });
+    tm2 = Date.now();
+    process.stdout.write(`<?xml version="1.0" encoding="UTF-8" ?>${result}\n`);
+  } else if (TEXT_FORMATS.has(args.format)) {
     const result = code.toString({
       ...TEXT_FORMATS.get(args.format),
       padX: args.padding,

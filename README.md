@@ -340,6 +340,81 @@ const imageData = code.toImageData(myContext, {
 myContext.putImageData(imageData, 200, 100);
 ```
 
+### `toSvg(code, target[, options])`
+
+This is not included in the main library to keep it small, but if you need
+SVG output, you can access it from a separate import (adds ~2kB):
+
+```javascript
+import { toSvg } from 'lean-qr/extras/svg';
+
+const mySvg = document.getElementById('my-svg');
+const svg = toSvg(code, mySvg, {
+  on: 'black',
+  off: 'transparent',
+  padX: 4,
+  padY: 4,
+  width: null,
+  height: null,
+  scale: 1,
+});
+```
+
+This will replace the image in `mySvg` with a copy of the current code. The
+result is always at a scale of 1 SVG unit per module (the viewBox will be
+resized to the correct size automatically). You can define a different
+size for the SVG element to scale the image.
+
+If `mySvg` is the `document` object, this will create and return a new SVG
+entity associated with the document (but not attached to it).
+
+If `width` / `height` is given, the root SVG element will have the explicit
+size applied. If these are not specified, they will be auto-calculated by
+multiplying the code size + padding by `scale`. You can override this for
+display by setting CSS properties (e.g. `mySvg.style.width = '100%'`).
+
+### `toSvgSource(code[, options])`
+
+Like `toSvg` but returns the source code for an SVG, rather than manipulating
+DOM nodes (can be called inside NodeJS).
+
+```javascript
+import { toSvgSource } from 'lean-qr/extras/svg';
+
+const svgSource = toSvgSource(code, {
+  on: 'black',
+  off: 'transparent',
+  padX: 4,
+  padY: 4,
+  width: null,
+  height: null,
+  scale: 1,
+});
+```
+
+Returns a complete SVG document which can be written to a standalone file or
+included inside a HTML document. If written to a file, you should prefix the
+source with `<?xml version="1.0" encoding="UTF-8" ?>`.
+
+### `toSvgPath(code)`
+
+A raw SVG path definition for the QR code. Used by `toSvg` and `toSvgSource`.
+
+```javascript
+import { toSvgPath } from 'lean-qr/extras/svg';
+
+const svgPath = toSvgPath(code);
+// e.g. "M1 2L1 1L2 1L2 2ZM3 3L3 2L4 2L4 3Z"
+```
+
+The returned path is always at a scale of 1 SVG unit to 1 module, with no
+padding. The path will define the whole QR code in a single string suitable for
+use inside `<path d="[path here]">`, and can be used with `fill-rule` of either
+`evenodd` or `nonzero`. The path is optimised to ensure only true edges are
+defined; it will not include overlapping edges (and will not have "cracks"
+between pixels). No other guarantees are made about the structure of this
+string, and the details could change in later versions.
+
 ### `get(x, y)`
 
 For other types of output, you can inspect the data directly:
@@ -352,6 +427,10 @@ for (let y = 0; y < code.size; ++y) {
   process.stdout.write('\n');
 }
 ```
+
+Note that this is only well-defined for `x` and `y` inside the QR code area.
+In particular: providing negative `x` or `y`, or values beyond the value of
+`code.size`, will give undefined results.
 
 ## Resources
 

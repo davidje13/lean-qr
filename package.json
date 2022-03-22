@@ -9,6 +9,12 @@
   ],
   "bin": "./bin/cli.js",
   "main": "build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./extras/*": "./build/extras/*.js",
+    "./extras/*.js": "./build/extras/*.js",
+    "./package.json": "./package.json"
+  },
   "types": "index.d.ts",
   "scripts": {
     "build": "rollup --config rollup.config.js",

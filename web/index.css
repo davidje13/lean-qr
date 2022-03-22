@@ -6,7 +6,9 @@ form,
 summary,
 dl,
 dt,
-dd {
+dd,
+pre,
+svg {
   margin: 0;
   padding: 0;
   font-style: normal;
@@ -46,7 +48,7 @@ textarea {
 }
 
 .options {
-  margin: 10px 0;
+  margin: 10px 0 20px;
 }
 
 .options summary {
@@ -62,6 +64,8 @@ textarea {
   margin: 0 10px;
   display: grid;
   grid-template-columns: auto 1fr;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eeeeee;
 }
 
 .options dt {
@@ -85,12 +89,36 @@ textarea {
   min-width: 80px;
 }
 
-#reverse-col {
-  padding: 0 5px;
-  border: 1px solid #888888;
-  background: #eeeeee;
-  border-radius: 5px;
-  vertical-align: top;
+.options input[type='color'],
+.options button {
+  vertical-align: middle;
+}
+
+#download {
+  text-align: center;
+}
+
+#download a {
+  color: #999999;
+  margin: 0 10px;
+}
+
+#download a::before {
+  content: '\21E9';
+  padding-right: 5px;
+}
+
+#download a:link,
+#download a:visited {
+  text-decoration: none;
+  color: #666699;
+}
+
+#download a:link:active,
+#download a:link:hover {
+  text-decoration: none;
+  color: #5555aa;
+  box-shadow: 0 1px #5555aa;
 }
 
 #error {
@@ -100,13 +128,30 @@ textarea {
   text-align: center;
 }
 
-.qr {
+#output {
   display: block;
   width: 100%;
   max-width: 400px;
+  max-height: 400px;
+  overflow: hidden;
   margin: 0 auto;
+  text-align: center;
+}
+
+#output canvas,
+#output svg {
+  width: 100%;
+}
+
+canvas.qr {
   image-rendering: crisp-edges; /* for firefox */
   image-rendering: pixelated;
+}
+
+pre.qr {
+  line-height: 1;
+  font-size: 11px;
+  transform-origin: top left;
 }
 
 nav {

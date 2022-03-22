@@ -85,7 +85,7 @@
                 </select></label
               >
             </dd>
-            <dt>Colour</dt>
+            <dt>Output</dt>
             <dd>
               <label
                 >front <input type="color" name="on" value="#000000"
@@ -96,15 +96,31 @@
               <button type="button" id="reverse-col" title="Reverse">
                 &#x21CB;
               </button>
+              <label
+                >format
+                <select name="format">
+                  <option value="canvas" selected>Canvas</option>
+                  <option value="text">Text</option>
+                  <option value="svg">SVG</option>
+                </select></label
+              >
             </dd>
           </dl>
         </details>
+        <div id="download">
+          <a class="png" download="qr-code.png">Download as PNG</a>
+          <a class="svg" download="qr-code.svg">Download as SVG</a>
+        </div>
         <p id="error">
           <noscript
             ><p>You must enable JavaScript to generate a code.</p></noscript
           >
         </p>
-        <canvas id="output" class="qr" width="1" height="1"></canvas>
+        <div id="output">
+          <canvas class="qr" width="1" height="1"></canvas>
+          <pre class="qr"></pre>
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1"></svg>
+        </div>
       </form>
       <nav>
         <a href="https://github.com/davidje13/lean-qr" target="_blank"
