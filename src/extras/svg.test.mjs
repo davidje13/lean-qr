@@ -63,7 +63,7 @@ describe('toSvgSource', () => {
     bitmap.set(1, 1, true);
 
     expect(toSvgSource(bitmap)).toEqual(
-      '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-4 -4 11 11" width="11" height="11"><path d="M1 2L1 1L2 1L2 2Z" fill="black"></path></svg>',
+      '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-4 -4 11 11" width="11" height="11" shape-rendering="crispedges"><path d="M1 2L1 1L2 1L2 2Z" fill="black"></path></svg>',
     );
   });
 
@@ -72,7 +72,7 @@ describe('toSvgSource', () => {
     bitmap.set(1, 1, true);
 
     expect(toSvgSource(bitmap, { off: 'red' })).toEqual(
-      '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-4 -4 11 11" width="11" height="11"><rect x="-4" y="-4" width="11" height="11" fill="red"></rect><path d="M1 2L1 1L2 1L2 2Z" fill="black"></path></svg>',
+      '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-4 -4 11 11" width="11" height="11" shape-rendering="crispedges"><rect x="-4" y="-4" width="11" height="11" fill="red"></rect><path d="M1 2L1 1L2 1L2 2Z" fill="black"></path></svg>',
     );
   });
 });

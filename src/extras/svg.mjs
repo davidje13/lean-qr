@@ -85,6 +85,7 @@ const toSvgInternal = (
       viewBox: `${-padX} ${-padY} ${w} ${h}`,
       width: width ?? w * scale,
       height: height ?? h * scale,
+      'shape-rendering': 'crispedges',
     },
     [
       off
