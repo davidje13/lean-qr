@@ -42,7 +42,7 @@
     "@rollup/plugin-babel": "5.x",
     "lean-test": "1.x",
     "pngjs": "6.x",
-    "prettier": "2.5.1",
+    "prettier": "2.6.1",
     "rollup": "2.x",
     "rollup-plugin-terser": "7.x",
     "static-server": "2.x"
