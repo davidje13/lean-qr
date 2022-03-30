@@ -371,7 +371,8 @@ entity associated with the document (but not attached to it).
 If `width` / `height` is given, the root SVG element will have the explicit
 size applied. If these are not specified, they will be auto-calculated by
 multiplying the code size + padding by `scale`. You can override this for
-display by setting CSS properties (e.g. `mySvg.style.width = '100%'`).
+display by setting CSS properties
+(e.g. `mySvg.style.width = '100%'; mySvg.style.height = 'auto';`).
 
 ### `toSvgSource(code[, options])`
 
