@@ -344,6 +344,30 @@ myContext.putImageData(imageData, 200, 100);
 Note that until version 1.4.0, `toImageData` did not include padding. To get
 the same behaviour in 1.4.0+, set `padX` and `padY` to 0.
 
+### `toDataURL([options])`
+
+Returns a string which can be used as a `href`, e.g. for downloading;
+
+```javascript
+const url = code.toDataURL({
+  type: 'image/png',
+  on: [0x00, 0x00, 0x00, 0xFF],
+  off: [0x00, 0x00, 0x00, 0x00],
+  padX: 4,
+  padY: 4,
+  scale: 1,
+});
+
+// use with elements such as:
+// <a href="<url>" download="my-qr.png">Download</a>
+```
+
+This URL can also be used as an `img` source, but this is not recommended
+(for best results use `toCanvas` as shown above &mdash; this will avoid blurry
+edges on high resolution displays and if the user zooms in).
+
+Note that this is only available in-browser; it will fail if called in NodeJS.
+
 ### `toSvg(code, target[, options])`
 
 This is not included in the main library to keep it small, but if you need
