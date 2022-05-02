@@ -26,16 +26,13 @@ const getAndDelete = (map, key) => {
 };
 
 export const toSvgPath = (code) => {
-  const s = code.size;
-  const get = (x, y) => x >= 0 && x < s && y >= 0 && y < s && code.get(x, y);
-
   const anchors = new Map();
   const paths = [];
-  for (let y = 0; y <= s; ++y) {
-    for (let x = 0; x <= s; ++x) {
-      const v5 = get(x, y);
-      const v2 = get(x, y - 1);
-      const v4 = get(x - 1, y);
+  for (let y = 0; y <= code.size; ++y) {
+    for (let x = 0; x <= code.size; ++x) {
+      const v5 = code.get(x, y);
+      const v2 = code.get(x, y - 1);
+      const v4 = code.get(x - 1, y);
       if (v5 === v2 && v5 === v4) {
         continue;
       }
@@ -109,4 +106,9 @@ export const toSvg = (code, svg, options = {}) =>
     : toSvgInternal(code, options, make.bind(null, svg.ownerDocument), svg);
 
 export const toSvgSource = (code, options = {}) =>
+  (options.xmlDeclaration ? '<?xml version="1.0" encoding="UTF-8" ?>' : '') +
   toSvgInternal(code, options, makeSrc);
+
+export const toSvgDataURL = (code, options) =>
+  'data:image/svg;base64,' +
+  btoa(toSvgSource(code, { xmlDeclaration: true, ...options }));

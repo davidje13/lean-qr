@@ -11,6 +11,8 @@ const code2 = generate(mode.numeric('123'), { minVersion: 3 });
 const svgSource = toSvgSource(code2);
 process.stdout.write(svgSource);
 
+process.stdout.write(toSvgSource(code2, { padX: 2, xmlDeclaration: true }));
+
 // @ts-expect-error
 generate(7);
 

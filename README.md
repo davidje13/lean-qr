@@ -327,18 +327,22 @@ format. If `alpha` is omitted, 255 is assumed.
 
 If you do not want to replace the entire content of a canvas, you can can
 use `toImageData` instead. This returns an `ImageData` representation of
-the code (created using `context.createImageData`). It does not include
-padding.
+the code (created using `context.createImageData`).
 
 ```javascript
 const imageData = code.toImageData(myContext, {
   on: [0x00, 0x00, 0x00, 0xFF],
   off: [0x00, 0x00, 0x00, 0x00],
+  padX: 4,
+  padY: 4,
 });
 
 // later
 myContext.putImageData(imageData, 200, 100);
 ```
+
+Note that until version 1.4.0, `toImageData` did not include padding. To get
+the same behaviour in 1.4.0+, set `padX` and `padY` to 0.
 
 ### `toSvg(code, target[, options])`
 
@@ -389,13 +393,36 @@ const svgSource = toSvgSource(code, {
   padY: 4,
   width: null,
   height: null,
+  xmlDeclaration: false,
   scale: 1,
 });
 ```
 
 Returns a complete SVG document which can be written to a standalone file or
-included inside a HTML document. If written to a file, you should prefix the
-source with `<?xml version="1.0" encoding="UTF-8" ?>`.
+included inside a HTML document.
+
+If writing to a file, you should set `xmlDeclaration` to `true` (this prefixes
+the source with `<?xml version="1.0" encoding="UTF-8" ?>`).
+
+### `toSvgDataURL(code[, options])`
+
+Like `toSvg` but returns a `data:image/svg` URL containing the image data,
+suitable for displaying in an `img` tag or downloading from an `a` tag.
+Can be called inside NodeJS.
+
+```javascript
+import { toSvgDataURL } from 'lean-qr/extras/svg';
+
+const dataURL = toSvgDataURL(code, {
+  on: 'black',
+  off: 'transparent',
+  padX: 4,
+  padY: 4,
+  width: null,
+  height: null,
+  scale: 1,
+});
+```
 
 ### `toSvgPath(code)`
 
@@ -429,9 +456,7 @@ for (let y = 0; y < code.size; ++y) {
 }
 ```
 
-Note that this is only well-defined for `x` and `y` inside the QR code area.
-In particular: providing negative `x` or `y`, or values beyond the value of
-`code.size`, will give undefined results.
+Requests outside the range `0 <= x < size, 0 <= y < size` will return `false`.
 
 ## Resources
 

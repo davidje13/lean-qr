@@ -148,9 +148,10 @@ try {
       off: 'white',
       padX: args.padding,
       padY: args.padding,
+      xmlDeclaration: true,
     });
     tm2 = Date.now();
-    process.stdout.write(`<?xml version="1.0" encoding="UTF-8" ?>${result}\n`);
+    process.stdout.write(result + '\n');
   } else if (TEXT_FORMATS.has(args.format)) {
     const result = code.toString({
       ...TEXT_FORMATS.get(args.format),

@@ -1,4 +1,4 @@
-import { toSvgPath, toSvgSource } from './svg.mjs';
+import { toSvgPath, toSvgSource, toSvgDataURL } from './svg.mjs';
 import Bitmap2D from '../structures/Bitmap2D.mjs';
 
 describe('toSvgPath', () => {
@@ -73,6 +73,40 @@ describe('toSvgSource', () => {
 
     expect(toSvgSource(bitmap, { off: 'red' })).toEqual(
       '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-4 -4 11 11" width="11" height="11" shape-rendering="crispedges"><rect x="-4" y="-4" width="11" height="11" fill="red"></rect><path d="M1 2L1 1L2 1L2 2Z" fill="black"></path></svg>',
+    );
+  });
+
+  it('can include XML declaration', () => {
+    const bitmap = new Bitmap2D({ size: 1 });
+
+    const source = toSvgSource(bitmap, {
+      xmlDeclaration: true,
+      padX: 0,
+      padY: 0,
+    });
+
+    expect(source).toEqual(
+      '<?xml version="1.0" encoding="UTF-8" ?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1 1" width="1" height="1" shape-rendering="crispedges"><path d="" fill="black"></path></svg>',
+    );
+  });
+});
+
+describe('toSvgDataURL', () => {
+  it('generates a data:image/svg URL for the code', () => {
+    const bitmap = new Bitmap2D({ size: 3 });
+    bitmap.set(1, 1, true);
+
+    const data = toSvgDataURL(bitmap);
+    const [type, content] = data.split(';');
+
+    expect(type).toEqual('data:image/svg');
+    expect(content).toEqual(
+      'base64,' +
+        'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiID8+PHN2ZyB4bWxu' +
+        'cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgdmll' +
+        'd0JveD0iLTQgLTQgMTEgMTEiIHdpZHRoPSIxMSIgaGVpZ2h0PSIxMSIgc2hhcGUt' +
+        'cmVuZGVyaW5nPSJjcmlzcGVkZ2VzIj48cGF0aCBkPSJNMSAyTDEgMUwyIDFMMiAy' +
+        'WiIgZmlsbD0iYmxhY2siPjwvcGF0aD48L3N2Zz4=',
     );
   });
 });

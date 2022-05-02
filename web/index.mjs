@@ -1,5 +1,5 @@
 import { correction, generate } from '../src/index.mjs';
-import { toSvg, toSvgSource } from '../src/extras/svg.mjs';
+import { toSvg, toSvgDataURL } from '../src/extras/svg.mjs';
 
 function getInput(name) {
   return document.querySelector(`[name="${name}"]`);
@@ -62,7 +62,6 @@ function regenerate() {
           on: getColour('on'),
           off: getColour('off'),
         });
-        outputCanvas.style.background = getValue('off');
         outputCanvas.style.display = 'block';
         break;
       case 'text':
@@ -88,11 +87,13 @@ downloadPng.addEventListener('click', (e) => {
     e.preventDefault();
     return;
   }
-  latestCode.toCanvas(outputCanvas, {
+  const url = latestCode.toDataURL({
+    type: 'image/png',
     on: getColour('on'),
     off: getColour('off'),
+    scale: 10,
   });
-  downloadPng.setAttribute('href', outputCanvas.toDataURL('image/png'));
+  downloadPng.setAttribute('href', url);
 });
 
 downloadSvg.addEventListener('click', (e) => {
@@ -100,12 +101,12 @@ downloadSvg.addEventListener('click', (e) => {
     e.preventDefault();
     return;
   }
-  const source = toSvgSource(latestCode, {
+  const url = toSvgDataURL(latestCode, {
     on: getValue('on'),
     off: getValue('off'),
     scale: 10,
   });
-  downloadSvg.setAttribute('href', `data:image/svg;base64,${btoa(source)}`);
+  downloadSvg.setAttribute('href', url);
 });
 
 document

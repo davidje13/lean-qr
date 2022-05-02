@@ -14,7 +14,13 @@ export default class Bitmap2D {
   }
 
   get(x, y) {
-    return !!(this.d[y * this.size + x] & 0b01);
+    return (
+      x >= 0 &&
+      y >= 0 &&
+      x < this.size &&
+      y < this.size &&
+      !!(this.d[y * this.size + x] & 0b01)
+    );
   }
 
   masked(x, y) {
@@ -30,36 +36,62 @@ export default class Bitmap2D {
   }
 
   toString({ on = '##', off = '  ', lf = '\n', padX = 4, padY = 4 } = {}) {
-    const tbPad = (off.repeat(this.size + padX * 2) + lf).repeat(padY);
-    const lrPad = off.repeat(padX);
-    let r = tbPad;
-    for (let y = 0; y < this.size; ++y) {
-      r += lrPad;
-      for (let x = 0; x < this.size; ++x) {
+    let r = '';
+    for (let y = -padY; y < this.size + padY; ++y) {
+      for (let x = -padX; x < this.size + padX; ++x) {
         r += this.get(x, y) ? on : off;
       }
-      r += lrPad + lf;
+      r += lf;
     }
-    return r + tbPad;
+    return r;
   }
 
-  toImageData(context, { on = 0xff000000, off = 0x00000000 } = {}) {
-    const target = context.createImageData(this.size, this.size);
+  toImageData(
+    context,
+    { on = 0xff000000, off = 0x00000000, padX = 4, padY = 4 } = {},
+  ) {
+    const fullX = this.size + padX * 2;
+    const fullY = this.size + padY * 2;
+    const target = context.createImageData(fullX, fullY);
     const abgr = new Uint32Array(target.data.buffer);
     const cOn = getCol(on);
     const cOff = getCol(off);
-    abgr.fill(cOff);
-    for (let p = 0; p < this.size * this.size; ++p) {
-      abgr[p] = this.d[p] & 0b01 ? cOn : cOff;
+    for (let y = 0; y < fullY; ++y) {
+      for (let x = 0; x < fullX; ++x) {
+        abgr[y * fullX + x] = this.get(x - padX, y - padY) ? cOn : cOff;
+      }
     }
     return target;
   }
 
-  toCanvas(canvas, { padX = 4, padY = 4, ...options } = {}) {
-    canvas.width = this.size + padX * 2;
-    canvas.height = this.size + padY * 2;
+  toCanvas(canvas, options) {
     const ctx = canvas.getContext('2d');
     const data = this.toImageData(ctx, options);
-    ctx.putImageData(data, padX, padY);
+    canvas.width = data.width;
+    canvas.height = data.height;
+    ctx.putImageData(data, 0, 0);
+  }
+
+  toDataURL({ type = 'image/png', scale = 1, ...options } = {}) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const data = this.toImageData(ctx, options);
+    canvas.width = data.width * scale;
+    canvas.height = data.height * scale;
+    ctx.putImageData(data, 0, 0);
+    ctx.imageSmoothingEnabled = false;
+    ctx.globalCompositeOperation = 'copy';
+    ctx.drawImage(
+      canvas,
+      0,
+      0,
+      data.width,
+      data.height,
+      0,
+      0,
+      canvas.width,
+      canvas.height,
+    );
+    return canvas.toDataURL(type, 1);
   }
 }

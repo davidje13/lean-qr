@@ -38,6 +38,8 @@ declare module 'lean-qr' {
       options?: {
         on?: RGBA;
         off?: RGBA;
+        padX?: number;
+        padY?: number;
       },
     ): DataT;
 
@@ -119,5 +121,10 @@ declare module 'lean-qr/extras/svg' {
     options?: SVGOptions,
   ) => SVGElement;
 
-  export const toSvgSource: (code: Bitmap2D, options?: SVGOptions) => string;
+  export const toSvgSource: (
+    code: Bitmap2D,
+    options?: SVGOptions & { xmlDeclaration?: boolean },
+  ) => string;
+
+  export const toSvgDataURL: (code: Bitmap2D, options?: SVGOptions) => string;
 }
