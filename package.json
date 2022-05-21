@@ -20,7 +20,7 @@
     "build": "rollup --config rollup.config.js",
     "format": "prettier --write .",
     "start": "static-server --index index.html --port 8080",
-    "test": "lean-test && lean-test --browser=chrome,firefox -x '**/node_modules' -x '**/.*' -x '**/*.int.*' && ./test-package/run.sh && prettier --check ."
+    "test": "lean-test && lean-test --target=chrome,firefox -x '**/*.int.*' && ./test-package/run.sh && prettier --check ."
   },
   "repository": {
     "type": "git",
@@ -40,7 +40,7 @@
   "devDependencies": {
     "@babel/preset-env": "7.x",
     "@rollup/plugin-babel": "5.x",
-    "lean-test": "1.x",
+    "lean-test": "2.x",
     "pngjs": "6.x",
     "prettier": "2.6.2",
     "rollup": "2.x",
