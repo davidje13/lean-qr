@@ -42,10 +42,6 @@ code.toCanvas(document.getElementById('my-canvas'));
 ```
 
 ```html
-<!DOCTYPE html>
-<html>
-<body>
-
 <canvas id="my-canvas" />
 
 <style>
@@ -55,9 +51,6 @@ code.toCanvas(document.getElementById('my-canvas'));
   image-rendering: pixelated;
 }
 </style>
-
-</body>
-</html>
 ```
 
 ### Shell
