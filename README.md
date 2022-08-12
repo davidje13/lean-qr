@@ -41,6 +41,25 @@ const code = generate('LEAN-QR LIBRARY');
 code.toCanvas(document.getElementById('my-canvas'));
 ```
 
+```html
+<!DOCTYPE html>
+<html>
+<body>
+
+<canvas id="my-canvas" />
+
+<style>
+#my-canvas {
+  width: 100%;
+  image-rendering: crisp-edges; /* for firefox */
+  image-rendering: pixelated;
+}
+</style>
+
+</body>
+</html>
+```
+
 ### Shell
 
 There is also a small commandline tool included for testing:
@@ -307,10 +326,11 @@ code.toCanvas(myTargetCanvas, {
 });
 ```
 
-This will replace the image in `myTargetCanvas` with a copy of the current
-code. The result is always at a scale of 1 pixel per module (the canvas
-will be resized to the correct size automatically). To display this image
-at a reasonable size, it is recommended that you use the following CSS:
+This will replace the image in `myTargetCanvas` (which must be a `canvas`
+element) with a copy of the current code. The result is always at a scale
+of 1 pixel per module (the canvas will be resized to the correct size
+automatically). To display this image at a reasonable size, it is
+recommended that you use the following CSS:
 
 ```css
 .myTargetCanvas {
@@ -340,6 +360,9 @@ const imageData = code.toImageData(myContext, {
 // later
 myContext.putImageData(imageData, 200, 100);
 ```
+
+`myContext` must be a 2D context (i.e. the result of calling
+`myCanvas.getContext('2d')`) on a canvas element.
 
 Note that until version 1.4.0, `toImageData` did not include padding. To get
 the same behaviour in 1.4.0+, set `padX` and `padY` to 0.
@@ -388,10 +411,11 @@ const svg = toSvg(code, mySvg, {
 });
 ```
 
-This will replace the image in `mySvg` with a copy of the current code. The
-result is always at a scale of 1 SVG unit per module (the viewBox will be
-resized to the correct size automatically). You can define a different
-size for the SVG element to scale the image.
+This will replace the image in `mySvg` (which must be an `svg` element)
+with a copy of the current code. The result is always at a scale of 1 SVG
+unit per module (the viewBox will be resized to the correct size
+automatically). You can define a different size for the SVG element to scale
+the image.
 
 If `mySvg` is the `document` object, this will create and return a new SVG
 entity associated with the document (but not attached to it).
