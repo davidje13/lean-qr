@@ -31,7 +31,6 @@ export default [
     input: 'src/index.mjs',
     output: {
       file: 'build/index.js',
-      sourcemap: true,
       format: 'cjs',
     },
     plugins,
@@ -40,7 +39,6 @@ export default [
     input: 'src/extras/svg.mjs',
     output: {
       file: 'build/extras/svg.js',
-      sourcemap: true,
       format: 'cjs',
     },
     plugins,
