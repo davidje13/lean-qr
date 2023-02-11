@@ -37,7 +37,6 @@
   },
   "homepage": "https://github.com/davidje13/lean-qr#readme",
   "devDependencies": {
-    "@babel/preset-env": "7.x",
     "@rollup/plugin-babel": "6.x",
     "lean-test": "2.x",
     "pngjs": "6.x",
