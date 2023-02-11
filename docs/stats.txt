@@ -1,2 +1,2 @@
-Library size:        8901 bytes
-Compressed size:     4270 bytes
+Library size:        8846 bytes
+Compressed size:     4228 bytes

@@ -16,7 +16,7 @@
   },
   "types": "index.d.ts",
   "scripts": {
-    "build": "rollup --config rollup.config.js",
+    "build": "rollup --config rollup.config.mjs",
     "format": "prettier --write .",
     "start": "static-server --index index.html --port 8080",
     "test": "lean-test && lean-test --target=chrome,firefox -x '**/*.int.*' && ./test-package/run.sh && prettier --check ."
@@ -38,12 +38,12 @@
   "homepage": "https://github.com/davidje13/lean-qr#readme",
   "devDependencies": {
     "@babel/preset-env": "7.x",
-    "@rollup/plugin-babel": "5.x",
+    "@rollup/plugin-babel": "6.x",
     "lean-test": "2.x",
     "pngjs": "6.x",
-    "prettier": "2.7.1",
-    "rollup": "2.x",
-    "rollup-plugin-terser": "7.x",
+    "prettier": "2.8.4",
+    "rollup": "3.x",
+    "@rollup/plugin-terser": "0.4.x",
     "static-server": "2.x"
   }
 }
