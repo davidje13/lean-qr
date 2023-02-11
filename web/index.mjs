@@ -1,17 +1,9 @@
 import { correction, generate } from '../src/index.mjs';
 import { toSvg, toSvgDataURL } from '../src/extras/svg.mjs';
 
-function getInput(name) {
-  return document.querySelector(`[name="${name}"]`);
-}
-
-function getValue(name) {
-  return getInput(name).value;
-}
-
-function getInt(name) {
-  return Math.round(Number.parseInt(getValue(name), 10));
-}
+const getInput = (name) => document.querySelector(`[name="${name}"]`);
+const getValue = (name) => getInput(name).value;
+const getInt = (name) => Math.round(Number.parseInt(getValue(name), 10));
 
 function getColour(name) {
   const rgb = Number.parseInt(getValue(name).substr(1), 16);

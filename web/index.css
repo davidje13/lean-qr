@@ -84,7 +84,10 @@ textarea {
   margin-bottom: 2px;
 }
 
-.options input[type='number'],
+.options input[type='number'] {
+  width: 80px;
+}
+
 .options select {
   min-width: 80px;
 }
