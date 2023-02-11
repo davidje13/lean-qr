@@ -128,3 +128,9 @@ declare module 'lean-qr/extras/svg' {
 
   export const toSvgDataURL: (code: Bitmap2D, options?: SVGOptions) => string;
 }
+
+declare module 'lean-qr/extras/jis' {
+  import type { Mode } from 'lean-qr';
+
+  export const shift_jis: (value: string) => Mode;
+}

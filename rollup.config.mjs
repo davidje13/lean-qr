@@ -10,4 +10,4 @@ const target = (path) => ({
   ],
 });
 
-export default [target('index'), target('extras/svg')];
+export default [target('index'), target('extras/svg'), target('extras/jis')];

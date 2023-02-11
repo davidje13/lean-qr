@@ -61,6 +61,13 @@ There is also a small commandline tool included for testing:
 npx lean-qr 'MY MESSAGE HERE'
 ```
 
+The commandline tool includes all extras by default (SVG output and Shift-JIS mode):
+
+```shell
+npx lean-qr '漢字'
+npx lean-qr --format svg 'hello'
+```
+
 For full documentation, run `npx lean-qr --help`.
 
 ## Modes
@@ -79,6 +86,7 @@ const code = generate(mode.alphaNumeric('LEAN-QR LIBRARY'));
 | `mode.numeric`      |      10 / 3 | `0-9`             |
 | `mode.alphaNumeric` |      11 / 2 | `0-9A-Z $%*+-./:` |
 | `mode.iso8859_1`    |       8 / 1 | ISO-8859-1        |
+| `shift_jis`         |      13 / 1 | See notes below   |
 | `mode.utf8`         |      varies | Unicode           |
 
 Note that if you specify a mode explicitly, it is your responsibility to
@@ -135,6 +143,34 @@ You can omit the `modes` argument to default to the standard modes.
 You can also provide your own custom modes, and `auto` will consider
 them alongside the built-in modes (see below for details).
 
+### `shift_jis`
+
+This is not included in the main library to keep it small, but if you need
+Shift-JIS encoding, you can access it from a separate import (adds ~24kB):
+
+```javascript
+import { shift_jis } from 'lean-qr/extras/jis';
+
+const code = generate(shift_jis('漢字'));
+```
+
+It can also be registered with `auto` mode:
+
+```javascript
+const code = generate(mode.auto('漢字', {
+  modes: [
+    mode.numeric,
+    mode.alphaNumeric,
+    mode.iso8859_1,
+    shift_jis,
+    mode.utf8,
+  ],
+}));
+```
+
+The supported character set is all double-byte Shift-JIS characters in the
+ranges: [0x8140 &ndash; 0x9FFC], [0xE040 &ndash; 0xEBBF].
+
 ### Custom modes
 
 Other modes are not currently supported, but it is possible to write
@@ -177,6 +213,11 @@ iso8859_1.est = (value, version) => (
   value.length * 8
 );
 ```
+
+The `.reg` property does not have to be a regular expression, as long as
+it is an object which conforms to the `RegExp.test` API (i.e. it is an
+object with a `test` method that accepts a character to check, returning
+`true` if the character is supported and `false` if not).
 
 ## Correction Levels
 

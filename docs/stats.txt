@@ -1,2 +1,8 @@
-Library size:        8354 bytes
-Compressed size:     4122 bytes
+core:                      8354 bytes
+core compressed:           4122 bytes
+
+extras/svg:                1434 bytes
+extras/svg compressed:      990 bytes
+
+extras/jis:               24182 bytes
+extras/jis compressed:    16715 bytes

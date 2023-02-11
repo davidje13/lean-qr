@@ -142,5 +142,3 @@ export const toMatchImage = (expectedImage) => (actualImage) => {
   }
   return { pass: false, message: () => `${msgPrefix}\n\n${vis}${vis2}\n` };
 };
-
-expect.extend({ toMatchImage });

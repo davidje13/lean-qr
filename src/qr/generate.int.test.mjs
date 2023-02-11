@@ -3,6 +3,8 @@ import mode from './options/modes.mjs';
 import { names as correction } from './options/corrections.mjs';
 import { loadImage, toMatchImage } from '../test-helpers/images.mjs';
 
+expect.extend({ toMatchImage });
+
 // Source https://www.thonky.com/qr-code-tutorial/format-version-information
 const KNOWN = loadImage('helloworld.png');
 const KNOWN_DATA = mode.alphaNumeric('HELLO WORLD');

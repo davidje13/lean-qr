@@ -2,13 +2,24 @@
 
 const { mode, correction, generate } = require('../build/index.js');
 const { toSvgSource } = require('../build/extras/svg.js');
+const { shift_jis } = require('../build/extras/jis.js');
 const { printUsage, parseArgs } = require('./argparser.js');
 
+const MODE_CONFIG = {
+  modes: [
+    mode.numeric,
+    mode.alphaNumeric,
+    mode.iso8859_1,
+    shift_jis,
+    mode.utf8,
+  ],
+};
 const ENCODINGS = new Map();
-ENCODINGS.set('auto', mode.auto);
+ENCODINGS.set('auto', (v) => mode.auto(v, MODE_CONFIG));
 ENCODINGS.set('numeric', mode.numeric);
 ENCODINGS.set('alphanumeric', mode.alphaNumeric);
 ENCODINGS.set('iso-8859-1', mode.iso8859_1);
+ENCODINGS.set('shift-jis', shift_jis);
 ENCODINGS.set('utf8', mode.utf8);
 
 const TEXT_FORMATS = new Map();

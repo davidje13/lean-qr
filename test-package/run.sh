@@ -7,10 +7,17 @@ cd "$BASE_DIR";
 echo "Building library...";
 echo;
 npm run build;
-RAW_SIZE="$(wc -c < build/index.js)";
-COMPRESSED_SIZE="$(zip -jqX9 - build/index.js | wc -c)";
 
-printf "Library size:    $RAW_SIZE bytes\nCompressed size: $COMPRESSED_SIZE bytes\n" > docs/stats.txt;
+{
+  printf "core:                  $(wc -c < build/index.js) bytes\n";
+  printf "core compressed:       $(zip -jqX9 - build/index.js | wc -c) bytes\n";
+  printf "\n";
+  printf "extras/svg:            $(wc -c < build/extras/svg.js) bytes\n";
+  printf "extras/svg compressed: $(zip -jqX9 - build/extras/svg.js | wc -c) bytes\n";
+  printf "\n";
+  printf "extras/jis:            $(wc -c < build/extras/jis.js) bytes\n";
+  printf "extras/jis compressed: $(zip -jqX9 - build/extras/jis.js | wc -c) bytes\n";
+} > docs/stats.txt;
 
 echo "Running package test...";
 echo;
