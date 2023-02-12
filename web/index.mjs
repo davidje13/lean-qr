@@ -7,7 +7,7 @@ const getValue = (name) => getInput(name).value;
 const getInt = (name) => Math.round(Number.parseInt(getValue(name), 10));
 
 function getColour(name) {
-  const rgb = Number.parseInt(getValue(name).substr(1), 16);
+  const rgb = Number.parseInt(getValue(name).slice(1), 16);
   return [(rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff, 0xff];
 }
 

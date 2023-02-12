@@ -23,11 +23,11 @@ export const toMatchBits = (expectedBits) => (actual) => {
   const actualParts = [];
   let p = 0;
   for (const part of expectedParts) {
-    actualParts.push(actualConv.substr(p, part.length));
+    actualParts.push(actualConv.slice(p, p + part.length));
     p += part.length;
   }
   if (p < actualConv.length) {
-    actualParts.push(actualConv.substring(p));
+    actualParts.push(actualConv.slice(p));
   }
 
   return toEqual(expectedParts.join(' '))(actualParts.join(' '));
@@ -37,5 +37,5 @@ function extractBitstring(o) {
   return [...o.bytes]
     .map((b) => b.toString(2).padStart(8, '0'))
     .join('')
-    .substring(0, o.bits);
+    .slice(0, o.bits);
 }

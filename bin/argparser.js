@@ -76,7 +76,7 @@ function parseArgs(flags, argv) {
       if (p === -1) {
         p = arg.length;
       }
-      const keyName = arg.substr(2, p - 2);
+      const keyName = arg.slice(2, p);
       const flag = flags.find(({ name }) => name === keyName);
       if (!flag) {
         throw new Error(`Unknown option ${keyName}`);
@@ -86,7 +86,7 @@ function parseArgs(flags, argv) {
       } else {
         result[flag.id] = parseArg(
           flag,
-          p < arg.length ? arg.substr(p) : argv[++i],
+          p < arg.length ? arg.slice(p) : argv[++i],
         );
       }
     } else if (arg.startsWith('-')) {
@@ -99,12 +99,12 @@ function parseArgs(flags, argv) {
         if (flag.type === 'presence') {
           result[flag.id] = true;
         } else if (arg[p + 1] === '=') {
-          result[flag.id] = parseArg(flag, arg.substr(p + 2));
+          result[flag.id] = parseArg(flag, arg.slice(p + 2));
           break;
         } else {
           result[flag.id] = parseArg(
             flag,
-            p < arg.length - 1 ? arg.substr(p + 1) : argv[++i],
+            p < arg.length - 1 ? arg.slice(p + 1) : argv[++i],
           );
           break;
         }
