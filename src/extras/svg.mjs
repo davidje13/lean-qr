@@ -12,7 +12,7 @@ const makeSrc = (tag, attrs, children = []) =>
   [
     `<${tag}`,
     ...Object.entries(attrs).map(
-      ([k, v]) => ` ${k}="${String(v).replaceAll(UNSAFE, '')}"`,
+      ([k, v]) => ` ${k}="${`${v}`.replaceAll(UNSAFE, '')}"`,
     ),
     '>',
     ...children,
@@ -33,33 +33,32 @@ export const toSvgPath = (code) => {
       const v5 = code.get(x, y);
       const v2 = code.get(x, y - 1);
       const v4 = code.get(x - 1, y);
-      if (v5 === v2 && v5 === v4) {
-        continue;
-      }
-
       const f = [
         v4 !== v5 && x + ' ' + (y + 1),
         x + ' ' + y,
         v2 !== v5 && x + 1 + ' ' + y,
       ].filter((v) => v);
-      if (!v5) {
-        f.reverse();
-      }
 
-      const end = f.pop();
-      const a = getAndDelete(anchors, f[0]) || [];
-      const b = getAndDelete(anchors, end);
-      a.push(...f);
-      if (a === b) {
-        paths.push(a);
-        continue;
+      if (f.length > 1) {
+        if (!v5) {
+          f.reverse();
+        }
+
+        const end = f.pop();
+        const a = getAndDelete(anchors, f[0]) || [];
+        const b = getAndDelete(anchors, end);
+        a.push(...f);
+        if (a === b) {
+          paths.push(a);
+        } else {
+          if (b) {
+            b.unshift(...a);
+          } else {
+            anchors.set(end, a);
+          }
+          anchors.set(a[0], b || a);
+        }
       }
-      if (b) {
-        b.unshift(...a);
-      } else {
-        anchors.set(end, a);
-      }
-      anchors.set(a[0], b || a);
     }
   }
 

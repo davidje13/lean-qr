@@ -1,8 +1,8 @@
 core:                      7699 bytes
 core compressed:           3938 bytes
 
-extras/svg:                1434 bytes
-extras/svg compressed:      990 bytes
+extras/svg:                1412 bytes
+extras/svg compressed:      978 bytes
 
 extras/jis:               20210 bytes
 extras/jis compressed:    15355 bytes
