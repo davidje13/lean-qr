@@ -60,10 +60,8 @@ function writeCompressed(mapping) {
       let du = compressNum(unicode - u - 1) || '#';
       if (du.length > 3) {
         throw new Error('large delta!');
-      } else if (du.length === 2) {
-        du = '#' + du;
       }
-      data += (du.length === 3 ? ' ' : '') + du + compressNum(target, 2);
+      data += ['', '', ' ', '  '][du.length] + du + compressNum(target, 2);
       rep = 1;
     }
     u = unicode;
