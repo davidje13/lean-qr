@@ -15,6 +15,25 @@ process.stdout.write(svgSource);
 const code3 = generate(shift_jis('123'), { minVersion: 3 });
 process.stdout.write(toSvgSource(code3, { padX: 2, xmlDeclaration: true }));
 
+mode.auto('', {
+  modes: [
+    mode.numeric,
+    mode.alphaNumeric,
+    mode.iso8859_1,
+    mode.utf8,
+    shift_jis,
+  ],
+});
+
+// @ts-expect-error
+mode.auto('', { modes: [mode.bytes] });
+
+// @ts-expect-error
+mode.auto('', { modes: [mode.eci] });
+
+// @ts-expect-error
+mode.auto('', { modes: [mode.auto] });
+
 // @ts-expect-error
 generate(7);
 

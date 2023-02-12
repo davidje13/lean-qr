@@ -130,7 +130,7 @@ declare module 'lean-qr/extras/svg' {
 }
 
 declare module 'lean-qr/extras/jis' {
-  import type { Mode } from 'lean-qr';
+  import type { ModeFactory } from 'lean-qr';
 
-  export const shift_jis: (value: string) => Mode;
+  export const shift_jis: ModeFactory;
 }
