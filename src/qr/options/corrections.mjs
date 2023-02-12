@@ -185,14 +185,14 @@ const calculate = (v) => {
   const g1n = (v >> 12) & 0b111111;
   const g1s = (v >> 5) & 0b1111111;
   return {
-    capBits: (g1n * g1s + g2n * (g1s + 1)) * 8,
-    groups: g2n
+    c: (g1n * g1s + g2n * (g1s + 1)) * 8, // total bit capacity
+    g: g2n
       ? [
           [g1n, g1s],
           [g2n, g1s + 1],
         ]
-      : [[g1n, g1s]],
-    ecsize: v & 0b11111,
+      : [[g1n, g1s]], // groups
+    s: v & 0b11111, // error correction size
   };
 };
 

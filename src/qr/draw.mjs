@@ -45,11 +45,11 @@ export const drawFrame = (code, version) => {
     code.set(6, i, !(i & 1));
   }
   if (version >= 2) {
-    const numAlignmentM = Math.floor(version / 7) + 1;
+    const numAlignmentM = ((version / 7) | 0) + 1;
     // alignment boxes must always be positioned on even pixels
     // and are spaced evenly from the bottom right (except top and left which are always 6)
-    // the -0.25 avoids a quirk in the spec for version 32
-    const stepAlignment = Math.ceil((size - 13) / numAlignmentM / 2 - 0.25) * 2;
+    // the 0.75 (1-0.25) avoids a quirk in the spec for version 32
+    const stepAlignment = (((size - 13) / numAlignmentM / 2 + 0.75) | 0) * 2;
     const positions = [6];
     for (let i = numAlignmentM; i-- > 0; ) {
       positions.push(size - 7 - i * stepAlignment);

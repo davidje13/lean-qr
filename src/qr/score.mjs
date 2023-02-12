@@ -63,9 +63,7 @@ export const scoreImbalance = (code) => {
       totalOn += code.get(x, y);
     }
   }
-  return (
-    Math.floor(20 * Math.abs(totalOn / (code.size * code.size) - 0.5)) * 10
-  );
+  return ((20 * Math.abs(totalOn / (code.size * code.size) - 0.5)) | 0) * 10;
 };
 
 export default (code) =>

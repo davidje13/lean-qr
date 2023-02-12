@@ -20,19 +20,19 @@ const interleave = (target, offset, blocks) => {
   return p;
 };
 
-export default (versionBytes, { groups, ecsize }) => {
+export default (versionBytes, o) => {
   const blocks = [];
   const eccs = [];
 
   let p = 0;
   let size = 0;
-  groups.forEach(([nBlocks, bytes]) => {
+  o.g.forEach(([nBlocks, bytes]) => {
     for (let b = 0; b < nBlocks; ++b, p += bytes) {
       const block = versionBytes.slice(p, p + bytes);
       blocks.push(block);
-      eccs.push(rem256Poly(block, generators[ecsize]));
+      eccs.push(rem256Poly(block, generators[o.s]));
     }
-    size += nBlocks * (bytes + ecsize);
+    size += nBlocks * (bytes + o.s);
   });
 
   const result = new Uint8Array(size);

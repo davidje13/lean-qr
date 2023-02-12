@@ -43,9 +43,7 @@ export default (
 
   let dataLengthBits = 0;
   for (let version = minVersion; version <= maxVersion; ++version) {
-    if (
-      correctionData[minCorrectionLevel].v[version - 1].capBits < dataLengthBits
-    ) {
+    if (correctionData[minCorrectionLevel].v[version - 1].c < dataLengthBits) {
       continue;
     }
 
@@ -56,12 +54,12 @@ export default (
     for (let cl = maxCorrectionLevel; cl >= minCorrectionLevel; --cl) {
       const correction = correctionData[cl];
       const versionedCorrection = correction.v[version - 1];
-      if (versionedCorrection.capBits < dataLengthBits) {
+      if (versionedCorrection.c < dataLengthBits) {
         continue;
       }
       data.push(0b0000, 4);
       data.bits = (data.bits + 7) & ~7; // pad with 0s to the next byte
-      while (data.bits < versionedCorrection.capBits) {
+      while (data.bits < versionedCorrection.c) {
         data.push(0b11101100_00010001, 16);
       }
       const [code, path] = getBase(version);

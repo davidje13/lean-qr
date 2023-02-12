@@ -24,10 +24,10 @@ describe('corrections', () => {
       for (let version = 1; version <= 40; ++version) {
         const item = data[i].v[version - 1];
         let total = 0;
-        item.groups.forEach((g) => {
+        item.g.forEach((g) => {
           total += g[0] * g[1];
         });
-        expect(total * 8).toEqual(item.capBits);
+        expect(total * 8).toEqual(item.c);
       }
     }
   });
@@ -36,8 +36,8 @@ describe('corrections', () => {
     for (let i = 0; i < data.length; ++i) {
       for (let version = 1; version <= 40; ++version) {
         const item = data[i].v[version - 1];
-        expect(item.groups.length).toBeGreaterThan(0);
-        item.groups.forEach((g) => {
+        expect(item.g.length).toBeGreaterThan(0);
+        item.g.forEach((g) => {
           expect(g[0]).toBeGreaterThan(0);
           expect(g[1]).toBeGreaterThan(0);
         });
@@ -47,9 +47,9 @@ describe('corrections', () => {
 
   it('stores more data in larger versions', () => {
     for (let i = 0; i < data.length; ++i) {
-      let last = data[i].v[0].capBits;
+      let last = data[i].v[0].c;
       for (let version = 2; version <= 40; ++version) {
-        const cur = data[i].v[version - 1].capBits;
+        const cur = data[i].v[version - 1].c;
         expect(cur).toBeGreaterThan(last);
         last = cur;
       }
@@ -58,9 +58,9 @@ describe('corrections', () => {
 
   it('stores less data with more robust correction levels', () => {
     for (let version = 1; version <= 40; ++version) {
-      let last = data[0].v[version - 1].capBits;
+      let last = data[0].v[version - 1].c;
       for (let i = 1; i < data.length; ++i) {
-        const cur = data[i].v[version - 1].capBits;
+        const cur = data[i].v[version - 1].c;
         expect(cur).toBeLessThan(last);
         last = cur;
       }
@@ -116,8 +116,8 @@ describe('corrections', () => {
     Object.entries(v).forEach(([level, [ecsize, ...groups]]) =>
       it(`${version}-${level}`, () => {
         const info = data[names[level]].v[version - 1];
-        expect(info.ecsize).toEqual(ecsize);
-        expect(info.groups).toEqual(groups);
+        expect(info.s).toEqual(ecsize);
+        expect(info.g).toEqual(groups);
       }),
     ),
   );
