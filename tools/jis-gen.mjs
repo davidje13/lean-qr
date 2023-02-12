@@ -1,16 +1,15 @@
 #!/usr/bin/env node
 
 import iconv from 'iconv-lite';
+import { p16, compressNum, quote } from './utils.mjs';
 
-// this is a dev tool for generating the compressed data used in jis.mjs
+// this is a dev tool for generating the compressed data used in src/extras/jis.mjs
 
 const map = new Map();
 populateMapping(map, 0x8140, 0x9ffd);
 populateMapping(map, 0xe040, 0xebc0);
-const data = writeCompressed(map)
-  .replaceAll('\\', '\\\\')
-  .replaceAll('"', '\\"');
-process.stdout.write(`const UNICODE_MAPPING_COMPRESSED =\n  "${data}";\n`);
+const data = quote(writeCompressed(map));
+process.stdout.write(`const UNICODE_MAPPING_COMPRESSED =\n  ${data};\n`);
 process.stderr.write(`${data.length} bytes\n`);
 
 function populateMapping(target, from, to) {
@@ -71,25 +70,4 @@ function writeCompressed(mapping) {
     data += '!' + compressNum(rep, 1);
   }
   return data;
-}
-
-function p16(v, l = 0) {
-  return v.toString(16).padStart(l, '0');
-}
-
-function compressNum(v, l = 0) {
-  // counterpart to decompressNum in jis.mjs
-  if (v < 0) {
-    throw new Error('negative value!');
-  }
-  const r = [];
-  const charsetSize = 92; // ASCII # -- ~ (reserve ' ', '!', '"' for control characters)
-  for (let i = 0; i < l || (!l && v); ++i) {
-    r.push(String.fromCharCode((v % charsetSize) + 35));
-    v = Math.floor(v / charsetSize);
-  }
-  if (v) {
-    throw new Error('value out of bounds!');
-  }
-  return r.reverse().join('');
 }

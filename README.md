@@ -3,7 +3,7 @@
 Minimal library for generating QR Codes in the browser and server-side.
 
 Optimised for code size while maintaining decent performance.
-Less than 10kB uncompressed (~4kB compressed).
+Less than 8kB uncompressed (~4kB compressed).
 
 You can see it in action at <https://qr.davidje13.com/>
 
