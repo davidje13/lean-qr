@@ -146,7 +146,7 @@ them alongside the built-in modes (see below for details).
 ### `shift_jis`
 
 This is not included in the main library to keep it small, but if you need
-Shift-JIS encoding, you can access it from a separate import (adds ~24kB):
+Shift-JIS encoding, you can access it from a separate import (adds ~20kB):
 
 ```javascript
 import { shift_jis } from 'lean-qr/extras/jis';

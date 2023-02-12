@@ -7,7 +7,9 @@ import iconv from 'iconv-lite';
 const map = new Map();
 populateMapping(map, 0x8140, 0x9ffd);
 populateMapping(map, 0xe040, 0xebc0);
-const data = writeCompressed(map);
+const data = writeCompressed(map)
+  .replaceAll('\\', '\\\\')
+  .replaceAll('"', '\\"');
 process.stdout.write(`const UNICODE_MAPPING_COMPRESSED =\n  "${data}";\n`);
 process.stderr.write(`${data.length} bytes\n`);
 
@@ -45,26 +47,32 @@ function writeCompressed(mapping) {
   // counterpart to readCompressed in jis.mjs
   let u = 0;
   let t = 0;
-  let rep = 0;
+  let rep = 1;
   let data = '';
   for (const unicode of [...mapping.keys()].sort((a, b) => a - b)) {
     const target = mapping.get(unicode);
     if (unicode === u + 1 && target === t + 1) {
       ++rep;
     } else {
-      if (rep) {
-        data += '!' + compressNum(rep - 1);
+      if (rep > 1) {
+        data += '!' + compressNum(rep, 1);
       }
-      data += ' ' + compressNum(unicode - u - 1) + compressNum(target, 2);
-      rep = 0;
+      let du = compressNum(unicode - u - 1) || '#';
+      if (du.length > 3) {
+        throw new Error('large delta!');
+      } else if (du.length === 2) {
+        du = '#' + du;
+      }
+      data += (du.length === 3 ? ' ' : '') + du + compressNum(target, 2);
+      rep = 1;
     }
     u = unicode;
     t = target;
   }
-  if (rep) {
-    data += '!' + compressNum(rep - 1);
+  if (rep > 1) {
+    data += '!' + compressNum(rep, 1);
   }
-  return data.substr(1).replaceAll('\\', '\\\\') + ' ';
+  return data;
 }
 
 function p16(v, l = 0) {
@@ -77,7 +85,7 @@ function compressNum(v, l = 0) {
     throw new Error('negative value!');
   }
   const r = [];
-  const charsetSize = 92; // ASCII # -- ~ (intentionally excludes " so the string can be quoted)
+  const charsetSize = 92; // ASCII # -- ~ (reserve ' ', '!', '"' for control characters)
   for (let i = 0; i < l || (!l && v); ++i) {
     r.push(String.fromCharCode((v % charsetSize) + 35));
     v = Math.floor(v / charsetSize);
