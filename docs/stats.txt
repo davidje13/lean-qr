@@ -1,5 +1,5 @@
-core:                      7788 bytes
-core compressed:           3970 bytes
+core:                      7699 bytes
+core compressed:           3938 bytes
 
 extras/svg:                1434 bytes
 extras/svg compressed:      990 bytes

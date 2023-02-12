@@ -7,36 +7,31 @@ for (let i = 1, last = generators[1]; i < 30; ++i) {
   last = next;
 }
 
-const interleave = (target, offset, blocks) => {
-  let p = offset;
-  const lim = Math.max(...blocks.map((block) => block.length));
-  for (let i = 0; i < lim; ++i) {
-    blocks.forEach((block) => {
-      if (i < block.length) {
-        target[p++] = block[i];
-      }
-    });
-  }
-  return p;
-};
-
 export default (versionBytes, o) => {
-  const blocks = [];
-  const eccs = [];
+  const blocks = [[], []];
 
   let p = 0;
   let size = 0;
-  o.g.forEach(([nBlocks, bytes]) => {
+  for (const [nBlocks, bytes] of o.g) {
     for (let b = 0; b < nBlocks; ++b, p += bytes) {
       const block = versionBytes.slice(p, p + bytes);
-      blocks.push(block);
-      eccs.push(rem256Poly(block, generators[o.s]));
+      blocks[0].push(block);
+      blocks[1].push(rem256Poly(block, generators[o.s]));
+      size += bytes + o.s;
     }
-    size += nBlocks * (bytes + o.s);
-  });
+  }
 
   const result = new Uint8Array(size);
-  const pos = interleave(result, 0, blocks);
-  interleave(result, pos, eccs);
+  let offset = 0;
+  for (const bs of blocks) {
+    for (let i = 0, prev; offset !== prev; ++i) {
+      prev = offset;
+      for (const block of bs) {
+        if (i < block.length) {
+          result[offset++] = block[i];
+        }
+      }
+    }
+  }
   return result;
 };

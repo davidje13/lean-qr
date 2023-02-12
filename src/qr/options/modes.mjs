@@ -10,12 +10,12 @@ const numeric = (value) => (data, version) => {
   data.push(value.length, version < 10 ? 10 : version < 27 ? 12 : 14);
   let i = 0;
   for (; i < value.length - 2; i += 3) {
-    data.push(Number(value.slice(i, i + 3)), 10);
+    data.push(+value.slice(i, i + 3), 10);
   }
   if (i < value.length - 1) {
-    data.push(Number(value.slice(i, i + 2)), 7);
+    data.push(+value.slice(i, i + 2), 7);
   } else if (i < value.length) {
-    data.push(Number(value[i]), 4);
+    data.push(+value[i], 4);
   }
 };
 
