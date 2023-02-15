@@ -23,110 +23,156 @@
     <article>
       <h1>Lean QR</h1>
       <form>
-        <textarea name="message" placeholder="enter a message"></textarea>
+        <textarea
+          name="message"
+          placeholder="Enter a message to be written as a QR Code"
+        ></textarea>
         <details class="options">
           <summary>Advanced options</summary>
-          <dl>
-            <dt>Version</dt>
-            <dd>
-              <label
-                >minimum
+          <fieldset>
+            <legend>Version</legend>
+            <div>
+              <label>
+                <span aria-hidden="true">minimum</span>
                 <input
                   type="number"
                   name="min-version"
                   min="1"
                   max="40"
                   value="1"
-              /></label>
-              <label
-                >maximum
+                  aria-label="Minimum version"
+                />
+              </label>
+              <label>
+                <span aria-hidden="true">maximum</span>
                 <input
                   type="number"
                   name="max-version"
                   min="1"
                   max="40"
                   value="40"
-              /></label>
-            </dd>
-            <dt>Error Correction</dt>
-            <dd>
-              <label
-                >minimum
-                <select name="min-correction">
+                  aria-label="Maximum version"
+                />
+              </label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Error Correction</legend>
+            <div>
+              <label>
+                <span aria-hidden="true">minimum</span>
+                <select
+                  name="min-correction"
+                  aria-label="Minimum error correction level"
+                >
                   <option value="L" selected>L (7%)</option>
                   <option value="M">M (15%)</option>
                   <option value="Q">Q (25%)</option>
                   <option value="H">H (30%)</option>
-                </select></label
-              >
-              <label
-                >maximum
-                <select name="max-correction">
+                </select>
+              </label>
+              <label>
+                <span aria-hidden="true">maximum</span>
+                <select
+                  name="max-correction"
+                  aria-label="Maximim error correction level"
+                >
                   <option value="L">L (7%)</option>
                   <option value="M">M (15%)</option>
                   <option value="Q">Q (25%)</option>
                   <option value="H" selected>H (30%)</option>
-                </select></label
+                </select>
+              </label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend><label for="mask">Mask</label></legend>
+            <div>
+              <select name="mask" id="mask">
+                <option value="auto" selected>Automatic</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+              </select>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Output</legend>
+            <div>
+              <label>
+                <span aria-hidden="true">front</span>
+                <input
+                  type="color"
+                  name="on"
+                  value="#000000"
+                  aria-label="Pattern colour"
+                />
+              </label>
+              <label>
+                <span aria-hidden="true">back</span>
+                <input
+                  type="color"
+                  name="off"
+                  value="#FFFFFF"
+                  aria-label="Background colour"
+                />
+              </label>
+              <button
+                type="button"
+                id="reverse-col"
+                title="Swap foreground and background colours"
+                aria-label="Swap foreground and background colours"
               >
-            </dd>
-            <dt>Mask</dt>
-            <dd>
-              <label
-                >mask
-                <select name="mask">
-                  <option value="auto" selected>Automatic</option>
-                  <option value="0">0</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="7">7</option>
-                </select></label
-              >
-            </dd>
-            <dt>Output</dt>
-            <dd>
-              <label
-                >front <input type="color" name="on" value="#000000"
-              /></label>
-              <label
-                >back <input type="color" name="off" value="#FFFFFF"
-              /></label>
-              <button type="button" id="reverse-col" title="Reverse">
                 &#x21CB;
               </button>
-              <label
-                >format
-                <select name="format">
+              <label>
+                <span aria-hidden="true">format</span>
+                <select name="format" aria-label="Preview format">
                   <option value="canvas" selected>Canvas</option>
                   <option value="text">Text</option>
                   <option value="svg">SVG</option>
-                </select></label
-              >
-            </dd>
-          </dl>
+                </select>
+              </label>
+            </div>
+          </fieldset>
         </details>
         <div id="download">
-          <a class="png" download="qr-code.png">Download as PNG</a>
-          <a class="svg" download="qr-code.svg">Download as SVG</a>
+          <a class="png" download="qr-code.png" aria-label="Download as PNG">
+            Download as PNG
+          </a>
+          <a class="svg" download="qr-code.svg" aria-label="Download as SVG">
+            Download as SVG
+          </a>
         </div>
         <p id="error">
-          <noscript
-            ><p>You must enable JavaScript to generate a code.</p></noscript
-          >
+          <noscript>
+            <p>You must enable JavaScript to generate a code.</p>
+          </noscript>
         </p>
         <div id="output">
-          <canvas class="qr" width="1" height="1"></canvas>
-          <pre class="qr"></pre>
-          <svg xmlns="http://www.w3.org/2000/svg" version="1.1"></svg>
+          <canvas class="qr" width="1" height="1" aria-label="QR Code"></canvas>
+          <pre class="qr" role="img" aria-label="QR Code"></pre>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            version="1.1"
+            aria-label="QR Code"
+          ></svg>
         </div>
       </form>
       <nav>
-        <a href="https://github.com/davidje13/lean-qr" target="_blank"
-          >GitHub</a
+        <a
+          href="https://github.com/davidje13/lean-qr"
+          target="_blank"
+          title="Go to source code on GitHub"
+          aria-label="Go to source code on GitHub"
         >
+          GitHub
+        </a>
       </nav>
     </article>
   </body>

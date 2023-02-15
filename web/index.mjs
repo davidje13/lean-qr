@@ -4,7 +4,14 @@ import { shift_jis } from '../src/extras/jis.mjs';
 
 const getInput = (name) => document.querySelector(`[name="${name}"]`);
 const getValue = (name) => getInput(name).value;
-const getInt = (name) => Math.round(Number.parseInt(getValue(name), 10));
+
+function getInt(name, min, max) {
+  const v = Number.parseInt(getValue(name), 10);
+  if (Number.isNaN(v)) {
+    return min;
+  }
+  return Math.max(min, Math.min(max, Math.round(v)));
+}
 
 function getColour(name) {
   const rgb = Number.parseInt(getValue(name).slice(1), 16);
@@ -49,8 +56,8 @@ function regenerate() {
 
   try {
     const code = generate(mode.auto(getValue('message'), MODE_CONFIG), {
-      minVersion: getInt('min-version'),
-      maxVersion: getInt('max-version'),
+      minVersion: getInt('min-version', 1, 40),
+      maxVersion: getInt('max-version', 1, 40),
       minCorrectionLevel: correction[getValue('min-correction')],
       maxCorrectionLevel: correction[getValue('max-correction')],
       mask: getMask(),
