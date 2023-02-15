@@ -112,13 +112,19 @@ describe('corrections', () => {
     40: { L: [30, [19,118], [ 6,119]], M: [28, [18, 47], [31, 48]], Q: [30, [34, 24], [34, 25]], H: [30, [20, 15], [61, 16]] },
   };
 
-  Object.entries(dataset).forEach(([version, v]) =>
-    Object.entries(v).forEach(([level, [ecsize, ...groups]]) =>
-      it(`${version}-${level}`, () => {
-        const info = data[names[level]].v[version - 1];
-        expect(info.s).toEqual(ecsize);
-        expect(info.g).toEqual(groups);
-      }),
-    ),
+  it(
+    'uses correct data for various sizes',
+    {
+      parameters: [
+        new Set(Object.keys(dataset)),
+        new Set(['L', 'M', 'Q', 'H']),
+      ],
+    },
+    (version, level) => {
+      const [ecsize, ...groups] = dataset[version][level];
+      const info = data[names[level]].v[version - 1];
+      expect(info.s).toEqual(ecsize);
+      expect(info.g).toEqual(groups);
+    },
   );
 });
