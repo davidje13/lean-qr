@@ -143,6 +143,15 @@ You can omit the `modes` argument to default to the standard modes.
 You can also provide your own custom modes, and `auto` will consider
 them alongside the built-in modes (see below for details).
 
+As a convenience, you can also pass `auto` configuration directly to
+`generate`:
+
+```javascript
+const code = generate('FOOBAR', {
+  modes: [mode.numeric, mode.iso8859_1],
+});
+```
+
 ### `shift_jis`
 
 This is not included in the main library to keep it small, but if you need
@@ -154,7 +163,15 @@ import { shift_jis } from 'lean-qr/extras/jis';
 const code = generate(shift_jis('漢字'));
 ```
 
-It can also be registered with `auto` mode:
+It can also be registered to be automatically considered alongside other
+possible modes:
+
+```javascript
+const myGenerate = generate.with(shift_jis);
+const code = myGenerate('漢字');
+```
+
+Or for more control you can specify all modes explicitly:
 
 ```javascript
 const code = generate(mode.auto('漢字', {

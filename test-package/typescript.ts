@@ -15,6 +15,9 @@ process.stdout.write(svgSource);
 const code3 = generate(shift_jis('123'), { minVersion: 3 });
 process.stdout.write(toSvgSource(code3, { padX: 2, xmlDeclaration: true }));
 
+const code4 = generate.with(shift_jis)('123');
+process.stdout.write(code4.get(0, 0) ? 'y' : 'n');
+
 mode.auto('', {
   modes: [
     mode.numeric,
@@ -39,6 +42,15 @@ generate(7);
 
 // @ts-expect-error
 generate('hello', { minVersion: '1' });
+
+// @ts-expect-error
+generate.with(shift_jis)(7);
+
+// @ts-expect-error
+generate.with(7)('hello');
+
+// @ts-expect-error
+generate.with(shift_jis).with(shift_jis)('hello');
 
 // @ts-expect-error
 code.toString({ on: 'red' });

@@ -62,15 +62,15 @@ iso88591.reg = /[\u0000-\u00FF]/;
 iso88591.est = (value, version) =>
   4 + (version < 10 ? 8 : 16) + value.length * 8;
 
+export const DEFAULT_AUTO_MODES = [numeric, alphaNumeric, iso88591, utf8];
+
 export default {
-  auto: (value, { modes = [numeric, alphaNumeric, iso88591, utf8] } = {}) => {
+  auto: (value, { modes = DEFAULT_AUTO_MODES } = {}) => {
     // UTF8 is special; we cannot mix it with iso88591 since it sets a global flag.
     // detect it, remove it as an option, and only use it if there is no other way.
     const m = new Set(modes);
     const allowUTF8 = m.delete(utf8);
-    if (allowUTF8) {
-      modes = [...m];
-    }
+    modes = [...m];
 
     return (data, version) => {
       /*

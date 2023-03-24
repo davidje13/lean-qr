@@ -1,6 +1,6 @@
 import Bitmap1D from '../structures/Bitmap1D.mjs';
 import Bitmap2D from '../structures/Bitmap2D.mjs';
-import modes from './options/modes.mjs';
+import modes, { DEFAULT_AUTO_MODES } from './options/modes.mjs';
 import masks from './options/masks.mjs';
 import {
   data as correctionData,
@@ -21,7 +21,7 @@ const getBase = (version) => {
   return [new Bitmap2D(cached[0]), cached[1]];
 };
 
-export default (
+const generate = (
   modeData,
   {
     minCorrectionLevel = correctionNames.min,
@@ -29,6 +29,7 @@ export default (
     minVersion = 1,
     maxVersion = 40,
     mask = null,
+    ...autoModeConfig
   } = {},
 ) => {
   if (maxCorrectionLevel < minCorrectionLevel) {
@@ -38,7 +39,7 @@ export default (
     throw new Error('Invalid version range');
   }
   if (typeof modeData === 'string') {
-    modeData = modes.auto(modeData);
+    modeData = modes.auto(modeData, autoModeConfig);
   }
 
   let dataLengthBits = 0;
@@ -82,3 +83,13 @@ export default (
   }
   throw new Error('Too much data');
 };
+
+generate.with =
+  (...extraModes) =>
+  (modeData, options) =>
+    generate(modeData, {
+      modes: [...DEFAULT_AUTO_MODES, ...extraModes],
+      ...options,
+    });
+
+export default generate;

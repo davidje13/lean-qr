@@ -58,7 +58,7 @@ declare module 'lean-qr' {
   export type Mode = (data: Bitmap1D, version: number) => void;
   export interface ModeFactory {
     (value: string): Mode;
-    reg: RegExp;
+    reg: { test(string: string): boolean };
     est(value: string, version: number): number;
   }
 
@@ -94,10 +94,14 @@ declare module 'lean-qr' {
     mask?: null | Mask;
   }
 
-  export const generate: (
+  type GenerateFn = (
     data: Mode | string,
     options?: GenerateOptions,
   ) => Bitmap2D;
+  interface Generate extends GenerateFn {
+    with(...modes: ModeFactory[]): GenerateFn;
+  }
+  export const generate: Generate;
 }
 
 declare module 'lean-qr/extras/svg' {
