@@ -8,7 +8,7 @@ import { shift_jis } from './jis.mjs';
 
 expect.extend({ toMatchBits, toMatchImage });
 
-const KANJI_STRING = '\u6f22\u5b57'; // 漢字 "Kanji"
+const KANJI_STRING = '\u6F22\u5B57'; // 漢字 "Kanji"
 const MODE_CONFIG = {
   modes: [
     mode.numeric,
@@ -42,12 +42,12 @@ describe('mode.auto', () => {
   });
 
   it('switches between shift-jis and other modes as required', () => {
-    const input = 'abc \u6f22\u5b57 def';
+    const input = 'abc \u6F22\u5B57 def';
     checkSame(
       mode.auto(input, MODE_CONFIG),
       mode.multi(
         mode.iso8859_1('abc '),
-        shift_jis('\u6f22\u5b57'),
+        shift_jis('\u6F22\u5B57'),
         mode.iso8859_1(' def'),
       ),
     );

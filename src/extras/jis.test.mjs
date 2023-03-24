@@ -26,7 +26,7 @@ describe('shift_jis', () => {
 
   it('encodes values in 13-bits', () => {
     const data = new Bitmap1D(10);
-    shift_jis('\uff41\uff42\uff43')(data, 1); // full-width "abc"
+    shift_jis('\uFF41\uFF42\uFF43')(data, 1); // full-width "abc"
     expect(data).toMatchBits(`
       1000
       00000011
@@ -51,7 +51,7 @@ describe('shift_jis', () => {
   it('converts all supported values (unicode range)', () => {
     const data = new Bitmap1D(10);
     // smallest unicode codepoint to largest codepoint:
-    shift_jis('\u00a7\uffe5')(data, 1); // section -- full-width yen sign
+    shift_jis('\u00A7\uFFE5')(data, 1); // section -- full-width yen sign
     expect(data).toMatchBits(`
       1000
       00000010

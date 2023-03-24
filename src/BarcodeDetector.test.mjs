@@ -17,7 +17,7 @@ it(
       'This is a simple test message',
       'Unicode \uD83D\uDE00',
       'ISO8859-compatible characters \u00A31.00',
-      'Kanji characters \u6f22\u5b57',
+      'Kanji characters \u6F22\u5B57',
       '012345678901234567890123456789',
     ],
   },
