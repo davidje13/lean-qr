@@ -39,6 +39,7 @@ const MODE_CONFIG = {
   modes: [
     mode.numeric,
     mode.alphaNumeric,
+    mode.ascii,
     mode.iso8859_1,
     shift_jis,
     mode.utf8,

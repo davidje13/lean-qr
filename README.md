@@ -85,6 +85,7 @@ const code = generate(mode.alphaNumeric('LEAN-QR LIBRARY'));
 |---------------------|------------:|-------------------|
 | `mode.numeric`      |      10 / 3 | `0-9`             |
 | `mode.alphaNumeric` |      11 / 2 | `0-9A-Z $%*+-./:` |
+| `mode.ascii`        |       8 / 1 | 7-bit ASCII       |
 | `mode.iso8859_1`    |       8 / 1 | ISO-8859-1        |
 | `shift_jis`         |      13 / 1 | See notes below   |
 | `mode.utf8`         |      varies | Unicode           |
@@ -117,15 +118,15 @@ message. After setting this, subsequent `mode.bytes` will be interpreted
 in the specified character set.
 [Wikipedia includes a list of possible values](https://en.wikipedia.org/wiki/Extended_Channel_Interpretation).
 
-Note that `iso8859_1` and `utf8` both use `bytes` for their data, so
-you cannot combine a custom `eci` with `iso8859_1` or `utf8`.
-
 ```javascript
 const code = generate(mode.multi(
   mode.eci(24), // Arabic (Windows-1256)
   mode.bytes([0xD3]), // Shin character
 ));
 ```
+
+`mode.eci` will avoid outputting additional switches if the ECI
+already matches the requested value.
 
 ### `auto`
 
@@ -178,6 +179,7 @@ const code = generate(mode.auto('漢字', {
   modes: [
     mode.numeric,
     mode.alphaNumeric,
+    mode.ascii,
     mode.iso8859_1,
     shift_jis,
     mode.utf8,
@@ -214,18 +216,18 @@ myMode.reg = /[0-9a-zA-Z]/;
 myMode.est = (value, version) => (12 + value.length * 8);
 ```
 
-For example the implementation of `iso8859_1`:
+For example the implementation of `ascii`:
 
 ```javascript
-const iso8859_1 = (value) => (data, version) => {
+const ascii = (value) => (data, version) => {
   data.push(0b0100, 4);
   data.push(value.length, version < 10 ? 8 : 16);
   for (let i = 0; i < value.length; ++i) {
     data.push(value.codePointAt(i), 8);
   }
 };
-iso8859_1.reg = /[\u0000-\u00FF]/;
-iso8859_1.est = (value, version) => (
+ascii.reg = /[\u0000-\u007F]/;
+ascii.est = (value, version) => (
   4 + (version < 10 ? 8 : 16) +
   value.length * 8
 );

@@ -13,6 +13,7 @@ const MODE_CONFIG = {
   modes: [
     mode.numeric,
     mode.alphaNumeric,
+    mode.ascii,
     mode.iso8859_1,
     shift_jis,
     mode.utf8,
@@ -46,9 +47,9 @@ describe('mode.auto', () => {
     checkSame(
       mode.auto(input, MODE_CONFIG),
       mode.multi(
-        mode.iso8859_1('abc '),
+        mode.ascii('abc '),
         shift_jis('\u6F22\u5B57'),
-        mode.iso8859_1(' def'),
+        mode.ascii(' def'),
       ),
     );
   });

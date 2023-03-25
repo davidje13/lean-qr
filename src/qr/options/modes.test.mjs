@@ -108,10 +108,10 @@ describe('mode.alphaNumeric', () => {
   });
 });
 
-describe('mode.iso8859_1', () => {
+describe('mode.ascii', () => {
   it('stores the identifier and length', () => {
     const data = new Bitmap1D(10);
-    mode.iso8859_1('')(data, 1);
+    mode.ascii('')(data, 1);
     expect(data).toMatchBits(`
       0100
       00000000
@@ -120,18 +120,60 @@ describe('mode.iso8859_1', () => {
 
   it('uses a larger length for higher versions', () => {
     const data10 = new Bitmap1D(10);
-    mode.iso8859_1('')(data10, 10);
+    mode.ascii('')(data10, 10);
     expect(data10.bits).toEqual(4 + 16);
 
     const data27 = new Bitmap1D(10);
-    mode.iso8859_1('')(data27, 27);
+    mode.ascii('')(data27, 27);
     expect(data27.bits).toEqual(4 + 16);
+  });
+
+  it('encodes values in 8 bit ISO-8859-1 encoding', () => {
+    const data = new Bitmap1D(10);
+    mode.ascii('ab')(data, 1);
+    expect(data).toMatchBits(`
+      0100
+      00000010
+      01100001
+      01100010
+    `);
+  });
+
+  it('returns a reusable encoding function', () => {
+    expectRepeatable(() => mode.ascii('abc123'));
+  });
+});
+
+describe('mode.iso8859_1', () => {
+  it('stores an ECI mode, the identifier and length', () => {
+    const data = new Bitmap1D(10);
+    mode.iso8859_1('')(data, 1);
+    expect(data).toMatchBits(`
+      0111
+      00000011
+
+      0100
+      00000000
+    `);
+  });
+
+  it('uses a larger length for higher versions', () => {
+    const data10 = new Bitmap1D(10);
+    mode.iso8859_1('')(data10, 10);
+    expect(data10.bits).toEqual(12 + 4 + 16);
+
+    const data27 = new Bitmap1D(10);
+    mode.iso8859_1('')(data27, 27);
+    expect(data27.bits).toEqual(12 + 4 + 16);
   });
 
   it('encodes values in 8 bit ISO-8859-1 encoding', () => {
     const data = new Bitmap1D(10);
     mode.iso8859_1('ab\u00A3\u00FF')(data, 1);
     expect(data).toMatchBits(`
+      0111
+      00000011
+
       0100
       00000100
       01100001
@@ -153,6 +195,19 @@ describe('mode.utf8', () => {
     expect(data).toMatchBits(`
       0111
       00011010
+      0100
+      00000000
+    `);
+  });
+
+  it('does not store the ECI mode if it is already correct', () => {
+    const data = new Bitmap1D(10);
+    mode.multi(mode.utf8(''), mode.utf8(''))(data, 1);
+    expect(data).toMatchBits(`
+      0111
+      00011010
+      0100
+      00000000
       0100
       00000000
     `);
@@ -220,7 +275,8 @@ describe('mode.auto', () => {
   });
 
   it('uses larger encodings if needed', () => {
-    checkSame(mode.auto('abc'), mode.iso8859_1('abc'));
+    checkSame(mode.auto('abc'), mode.ascii('abc'));
+    checkSame(mode.auto('iso \u00A3'), mode.iso8859_1('iso \u00A3'));
   });
 
   it('uses utf8 if nothing else will do', () => {
@@ -252,16 +308,33 @@ describe('mode.auto', () => {
     checkSame(
       mode.auto('abcabcabcabcabc12345678901234567890'),
       mode.multi(
-        mode.iso8859_1('abcabcabcabcabc'),
+        mode.ascii('abcabcabcabcabc'),
         mode.numeric('12345678901234567890'),
       ),
     );
   });
 
-  it('does not combine utf8 with other modes', () => {
+  it('can combine utf8 with other modes', () => {
     checkSame(
       mode.auto('\u2026 00000000000000000'),
-      mode.utf8('\u2026 00000000000000000'),
+      mode.multi(mode.utf8('\u2026 '), mode.numeric('00000000000000000')),
+    );
+  });
+
+  it('avoids combining utf8 with iso8859', () => {
+    checkSame(
+      mode.auto('lots of text which could be utf8 or iso8859 but then: \u2026'),
+      mode.utf8('lots of text which could be utf8 or iso8859 but then: \u2026'),
+    );
+  });
+
+  it('combines utf8 with iso8859 if beneficial', () => {
+    checkSame(
+      mode.auto('iso8859 \u00A3\u00A3\u00A3\u00A3\u00A3 then utf8 \u2026'),
+      mode.multi(
+        mode.iso8859_1('iso8859 \u00A3\u00A3\u00A3\u00A3\u00A3 then utf8 '),
+        mode.utf8('\u2026'),
+      ),
     );
   });
 
@@ -270,22 +343,22 @@ describe('mode.auto', () => {
   });
 
   it('does not switch encoding type for no benefit', () => {
-    checkSame(mode.auto('abc123'), mode.iso8859_1('abc123'));
+    checkSame(mode.auto('abc123'), mode.ascii('abc123'));
 
-    checkSame(mode.auto('123abc'), mode.iso8859_1('123abc'));
+    checkSame(mode.auto('123abc'), mode.ascii('123abc'));
   });
 
   it('can switch mode multiple times if beneficial', () => {
     checkSame(
       mode.auto('1&234567890&1234567890&ABCABCABCABCABCABCabc'),
       mode.multi(
-        mode.iso8859_1('1&'),
+        mode.ascii('1&'),
         mode.numeric('234567890'),
-        mode.iso8859_1('&'),
+        mode.ascii('&'),
         mode.numeric('1234567890'),
-        mode.iso8859_1('&'),
+        mode.ascii('&'),
         mode.alphaNumeric('ABCABCABCABCABCABC'),
-        mode.iso8859_1('abc'),
+        mode.ascii('abc'),
       ),
     );
   });

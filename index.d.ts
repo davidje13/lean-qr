@@ -73,6 +73,7 @@ declare module 'lean-qr' {
     numeric: ModeFactory;
     alphaNumeric: ModeFactory;
     bytes(data: Uint8Array | number[]): Mode;
+    ascii: ModeFactory;
     iso8859_1: ModeFactory;
     utf8: ModeFactory;
   };

@@ -22,6 +22,7 @@ mode.auto('', {
   modes: [
     mode.numeric,
     mode.alphaNumeric,
+    mode.ascii,
     mode.iso8859_1,
     mode.utf8,
     shift_jis,

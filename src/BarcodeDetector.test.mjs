@@ -19,6 +19,7 @@ it(
       'ISO8859-compatible characters \u00A31.00',
       'Kanji characters \u6F22\u5B57',
       '012345678901234567890123456789',
+      'iso8859 \u00A3\u00A3\u00A3\u00A3\u00A3 then utf8 \u2026',
     ],
   },
   async (message) => {
