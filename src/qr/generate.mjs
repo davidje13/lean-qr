@@ -21,10 +21,10 @@ export const generate = (
   } = {},
 ) => {
   if (maxCorrectionLevel < minCorrectionLevel) {
-    throw new Error('Invalid correction level range');
+    throw new Error('Bad correction range');
   }
   if (maxVersion < minVersion) {
-    throw new Error('Invalid version range');
+    throw new Error('Bad version range');
   }
   if (typeof modeData === 'string') {
     modeData = mode.auto(modeData, autoModeConfig);
