@@ -1,11 +1,11 @@
-import { data, correction } from './corrections.mjs';
+import { correctionData as data, correction } from './corrections.mjs';
 
 describe('corrections', () => {
   it('contains correction level IDs', () => {
-    expect(data[correction.L].id).toEqual(0b01);
-    expect(data[correction.M].id).toEqual(0b00);
-    expect(data[correction.Q].id).toEqual(0b11);
-    expect(data[correction.H].id).toEqual(0b10);
+    expect(data[correction.L][0].i).toEqual(0b01);
+    expect(data[correction.M][0].i).toEqual(0b00);
+    expect(data[correction.Q][0].i).toEqual(0b11);
+    expect(data[correction.H][0].i).toEqual(0b10);
   });
 
   it('stores data in increasing robustness', () => {
@@ -22,7 +22,7 @@ describe('corrections', () => {
   it('divides input data into groups', () => {
     for (let i = 0; i < data.length; ++i) {
       for (let version = 1; version <= 40; ++version) {
-        const item = data[i].v[version - 1];
+        const item = data[i][version - 1];
         let total = 0;
         item.g.forEach((g) => {
           total += g[0] * g[1];
@@ -35,7 +35,7 @@ describe('corrections', () => {
   it('contains no empty or 0-count groups', () => {
     for (let i = 0; i < data.length; ++i) {
       for (let version = 1; version <= 40; ++version) {
-        const item = data[i].v[version - 1];
+        const item = data[i][version - 1];
         expect(item.g.length).toBeGreaterThan(0);
         item.g.forEach((g) => {
           expect(g[0]).toBeGreaterThan(0);
@@ -47,9 +47,9 @@ describe('corrections', () => {
 
   it('stores more data in larger versions', () => {
     for (let i = 0; i < data.length; ++i) {
-      let last = data[i].v[0].c;
+      let last = data[i][0].c;
       for (let version = 2; version <= 40; ++version) {
-        const cur = data[i].v[version - 1].c;
+        const cur = data[i][version - 1].c;
         expect(cur).toBeGreaterThan(last);
         last = cur;
       }
@@ -58,9 +58,9 @@ describe('corrections', () => {
 
   it('stores less data with more robust correction levels', () => {
     for (let version = 1; version <= 40; ++version) {
-      let last = data[0].v[version - 1].c;
+      let last = data[0][version - 1].c;
       for (let i = 1; i < data.length; ++i) {
-        const cur = data[i].v[version - 1].c;
+        const cur = data[i][version - 1].c;
         expect(cur).toBeLessThan(last);
         last = cur;
       }
@@ -122,7 +122,7 @@ describe('corrections', () => {
     },
     (version, level) => {
       const [ecsize, ...groups] = dataset[version][level];
-      const info = data[correction[level]].v[version - 1];
+      const info = data[correction[level]][version - 1];
       expect(info.s).toEqual(ecsize);
       expect(info.g).toEqual(groups);
     },

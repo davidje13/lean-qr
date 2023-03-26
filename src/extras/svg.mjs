@@ -1,5 +1,5 @@
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const UNSAFE = /[^-a-zA-Z0-9 .:/#%]/g;
+const UNSAFE = /[^-a-zA-Z0-9 .,:/#%()]/g;
 
 const make = (
   d,
@@ -24,15 +24,14 @@ const makeSrc = (tag, attrs, children = []) =>
     `</${tag}>`,
   ].join('');
 
-const getAndDelete = (map, key) => {
-  const v = map.get(key);
-  map.delete(key);
-  return v;
-};
-
 export const toSvgPath = (code) => {
   const anchors = new Map();
   const paths = [];
+  const getAndDelete = (key) => {
+    const v = anchors.get(key);
+    anchors.delete(key);
+    return v;
+  };
   for (let y = 0; y <= code.size; ++y) {
     for (let x = 0; x <= code.size; ++x) {
       const v5 = code.get(x, y);
@@ -50,8 +49,8 @@ export const toSvgPath = (code) => {
         }
 
         const end = f.pop();
-        const a = getAndDelete(anchors, f[0]) || [];
-        const b = getAndDelete(anchors, end);
+        const a = getAndDelete(f[0]) || [];
+        const b = getAndDelete(end);
         a.push(...f);
         if (a === b) {
           paths.push(a);

@@ -43,7 +43,7 @@ function populateMapping(target, from, to) {
 }
 
 function writeCompressed(mapping) {
-  // counterpart to readCompressed in jis.mjs
+  // counterpart to decompression in jis.mjs
   let u = 0;
   let t = 0;
   let rep = 1;

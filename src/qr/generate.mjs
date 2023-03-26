@@ -2,7 +2,7 @@ import { Bitmap1D } from '../structures/Bitmap1D.mjs';
 import { Bitmap2D } from '../structures/Bitmap2D.mjs';
 import { mode, DEFAULT_AUTO_MODES } from './options/modes.mjs';
 import { masks } from './options/masks.mjs';
-import { data as correctionData, correction } from './options/corrections.mjs';
+import { correctionData, correction } from './options/corrections.mjs';
 import { calculateEC } from './errorCorrection.mjs';
 import { drawFrame, getPath, drawCode, applyMask } from './draw.mjs';
 import { scoreCode } from './score.mjs';
@@ -30,9 +30,12 @@ export const generate = (
     modeData = mode.auto(modeData, autoModeConfig);
   }
 
-  let dataLengthBits = 0;
-  for (let version = minVersion; version <= maxVersion; ++version) {
-    if (correctionData[minCorrectionLevel].v[version - 1].c < dataLengthBits) {
+  for (
+    let version = minVersion, dataLengthBits = 0;
+    version <= maxVersion;
+    ++version
+  ) {
+    if (correctionData[minCorrectionLevel][version - 1].c < dataLengthBits) {
       continue;
     }
 
@@ -41,35 +44,30 @@ export const generate = (
     dataLengthBits = data.bits;
 
     for (let cl = maxCorrectionLevel; cl >= minCorrectionLevel; --cl) {
-      const correction = correctionData[cl];
-      const versionedCorrection = correction.v[version - 1];
-      if (versionedCorrection.c < dataLengthBits) {
+      const correction = correctionData[cl][version - 1];
+      if (correction.c < dataLengthBits) {
         continue;
       }
       data.push(0b0000, 4);
       data.bits = (data.bits + 7) & ~7; // pad with 0s to the next byte
-      while (data.bits < versionedCorrection.c) {
+      while (data.bits < correction.c) {
         data.push(0b11101100_00010001, 16);
       }
 
-      if (!baseCache[version]) {
-        const c = new Bitmap2D({ size: version * 4 + 17 });
-        drawFrame(c, version);
-        c.p = getPath(c);
-        baseCache[version] = c;
+      let base = baseCache[version];
+      if (!base) {
+        baseCache[version] = base = new Bitmap2D({ size: version * 4 + 17 });
+        drawFrame(base, version);
+        base.p = getPath(base);
       }
-      const code = new Bitmap2D(baseCache[version]);
-      drawCode(
-        code,
-        baseCache[version].p,
-        calculateEC(data.bytes, versionedCorrection),
-      );
+      const code = new Bitmap2D(base);
+      drawCode(code, base.p, calculateEC(data.bytes, correction));
 
       // pick best mask
       return (masks[mask ?? -1] ? [masks[mask]] : masks)
         .map((m, maskId) => {
           const masked = new Bitmap2D(code);
-          applyMask(masked, m, mask ?? maskId, correction.id);
+          applyMask(masked, m, mask ?? maskId, correction.i);
           masked.s = scoreCode(masked);
           return masked;
         })

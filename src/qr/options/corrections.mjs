@@ -1,10 +1,11 @@
-const readCompressed = (data) =>
+const readCompressed = (id, data) =>
   data.match(/.{4}/g).map((v) => {
     const g2n = v.charCodeAt(0) - 35;
     const g1n = v.charCodeAt(1) - 35;
     const gs = v.charCodeAt(2) * 92 + v.charCodeAt(3) - 35 * 93;
     const g1s = gs >> 5;
     return {
+      i: id,
       c: (g1n * g1s + g2n * (g1s + 1)) * 8, // total bit capacity
       g: g2n
         ? [
@@ -27,11 +28,11 @@ const DATA_Q =
 const DATA_H =
   "#$&@#$(s#%'i#'&?%%')#'(S$''m%'(1'''K%)(S+&'K'*(3'/')(.'K*.'K0&(U4%(36%(33,'m-2(S)6(u#E'k13(U%A(u09(U'D(u?/(UB.(U=6(U<:(U?:(UF6(UQ.(U$^(uL9(Uc%(UQ;(UCM(Uf-(U`7(U";
 
-export const data = [
-  { id: 0b01, v: readCompressed(DATA_L) },
-  { id: 0b00, v: readCompressed(DATA_M) },
-  { id: 0b11, v: readCompressed(DATA_Q) },
-  { id: 0b10, v: readCompressed(DATA_H) },
+export const correctionData = [
+  readCompressed(0b01, DATA_L),
+  readCompressed(0b00, DATA_M),
+  readCompressed(0b11, DATA_Q),
+  readCompressed(0b10, DATA_H),
 ];
 
 export const correction = {
