@@ -15,6 +15,9 @@ Or try it from the commandline: `npx lean-qr 'MY MESSAGE HERE'`
 npm install --save lean-qr
 ```
 
+Updating from version 1.x?
+See the [notable changes](#notable-changes-in-version-2).
+
 ## Usage
 
 ### NodeJS
@@ -528,6 +531,34 @@ for (let y = 0; y < code.size; y++) {
 ```
 
 Requests outside the range `0 <= x < size, 0 <= y < size` will return `false`.
+
+## Notable Changes in Version 2
+
+For basic use, updating from version 1.x to 2.x should have no issues, but
+if you are using more advanced customisation options or relying on specific
+behaviours, you may need to update your code:
+
+- `.reg` (regular expression) properties of modes have been replaced with
+  `.test` (API compatible with `RegExp.test`). Custom modes will need
+  updating;
+- `iso8859_1` mode will now explicitly set the ECI to 3 for better
+  compatibility with some readers. If you only need 7-bit ASCII characters,
+  use `ascii` mode instead (which does not set the ECI, saving some space).
+  `auto` mode will handle this automatically;
+- `auto` mode is now able to mix `utf8` with other modes if it will save
+  space (some QR codes may change, but the meaning will be the same);
+- `shift_jis` mode (and custom modes) can now be registered more easily,
+  using `updatedGenerator = generator.with(shift_jis)`;
+- `toSvgSource` / `toSvgDataURL` now accept `rgb()` / `rgba()` syntax for
+  colours, matching `toSvg`;
+- `toCanvas` / `toImageData` / `toDataURL` no longer accept 32-bit
+  little-endian integer values for colours. If you were using this legacy
+  behaviour, update your code to pass colours as arrays instead:
+  `[red, green, blue, alpha?]` (for example, `[255, 0, 255, 255]` = purple);
+- some error message texts have changed;
+- internal properties and methods are now minified (documented methods are
+  not affected);
+- the library is smaller than ever!
 
 ## Resources
 
