@@ -2,8 +2,8 @@
 
 Minimal library for generating QR Codes in the browser and server-side.
 
-Optimised for code size while maintaining decent performance.
-Less than 8kB uncompressed (~4kB compressed).
+Optimised for code size while maintaining decent performance and supporting
+all QR features. Less than 8kB uncompressed (less than 4kB compressed).
 
 You can see it in action at <https://qr.davidje13.com/>
 
@@ -107,10 +107,6 @@ const code = generate(mode.multi(
 ));
 ```
 
-Note that you should not mix `utf8`, `iso8859_1`, or `eci`, as they all
-involve changing the global interpretation of the message and will
-conflict with each other.
-
 ### `eci` / `bytes`
 
 `mode.eci` lets you switch the Extended Channel Interpretation of the
@@ -127,6 +123,15 @@ const code = generate(mode.multi(
 
 `mode.eci` will avoid outputting additional switches if the ECI
 already matches the requested value.
+
+Note that `mode.iso8859_1` sets ECI 3 for its content, and `mode.utf8`
+sets ECI 26. `mode.ascii` does not set an explicit ECI mode, as readers
+are supposed to default to ECI 3, and even though some default to ECI 26
+instead, these share the same codepoints for all ASCII values.
+
+If you set an ECI which is not compatible with ASCII, do not follow it
+with a `mode.ascii` section (prefer `mode.iso8859_1` or `mode.utf8`, as
+these will explicitly set the ECI for their content).
 
 ### `auto`
 
