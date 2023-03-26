@@ -1,9 +1,3 @@
-const getCol = (v) =>
-  Array.isArray(v)
-    ? [...v, 255]
-    : // legacy: assume a little-endian colour (ABGR)
-      [v & 255, (v >>> 8) & 255, (v >>> 16) & 255, v >>> 24];
-
 export class Bitmap2D {
   constructor({ size, d }) {
     this.size = size;
@@ -36,15 +30,15 @@ export class Bitmap2D {
 
   toImageData(
     context,
-    { on = 0xff000000, off = 0x00000000, padX = 4, padY = 4 } = {},
+    { on = [0, 0, 0], off = [0, 0, 0, 0], padX = 4, padY = 4 } = {},
   ) {
     const fullX = this.size + padX * 2;
     const fullY = this.size + padY * 2;
     const target = context.createImageData(fullX, fullY);
     const abgr = new Uint32Array(target.data.buffer);
-    target.data.set(getCol(on));
+    target.data.set([...on, 255]);
     const cOn = abgr[0];
-    target.data.set(getCol(off));
+    target.data.set([...off, 255]);
     const cOff = abgr[0];
     for (let y = 0; y < fullY; ++y) {
       for (let x = 0; x < fullX; ++x) {
