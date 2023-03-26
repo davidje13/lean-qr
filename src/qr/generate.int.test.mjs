@@ -1,6 +1,6 @@
-import generate from './generate.mjs';
-import mode from './options/modes.mjs';
-import { names as correction } from './options/corrections.mjs';
+import { generate } from './generate.mjs';
+import { mode } from './options/modes.mjs';
+import { correction } from './options/corrections.mjs';
 import { loadImage, toMatchImage } from '../test-helpers/images.mjs';
 
 expect.extend({ toMatchImage });

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-const { mode, correction, generate } = require('../build/index.js');
-const { toSvgSource } = require('../build/extras/svg.js');
-const { shift_jis } = require('../build/extras/jis.js');
-const { printUsage, parseArgs } = require('./argparser.js');
+import { mode, correction, generate } from '../build/index.js';
+import { toSvgSource } from '../build/extras/svg.js';
+import { shift_jis } from '../build/extras/jis.js';
+import { printUsage, parseArgs } from './argparser.mjs';
 
 const MODE_CONFIG = {
   modes: [

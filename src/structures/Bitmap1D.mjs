@@ -1,4 +1,4 @@
-export default class Bitmap1D {
+export class Bitmap1D {
   constructor(capacityBytes) {
     this.bytes = new Uint8Array(capacityBytes);
     this.bits = 0;

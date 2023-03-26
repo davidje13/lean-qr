@@ -7,7 +7,7 @@ for (let i = 1, last = generators[1]; i < 30; ++i) {
   last = next;
 }
 
-export default (versionBytes, o) => {
+export const calculateEC = (versionBytes, o) => {
   const blocks = [[], []];
 
   let p = 0;

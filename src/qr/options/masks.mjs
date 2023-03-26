@@ -1,4 +1,4 @@
-export default [
+export const masks = [
   (x, y) => !((x ^ y) & 1),
   (x, y) => !(y & 1),
   (x) => !(x % 3),

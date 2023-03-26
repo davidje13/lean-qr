@@ -1,31 +1,19 @@
-function getCol(v) {
-  if (!Array.isArray(v)) {
-    // legacy: assume a little-endian colour (ABGR)
-    v = [v & 255, (v >>> 8) & 255, (v >>> 16) & 255, v >>> 24];
-  }
-  const b = new Uint8Array([...v, 255]);
-  return new Uint32Array(b.buffer, 0, 1)[0];
-}
+const getCol = (v) =>
+  Array.isArray(v)
+    ? [...v, 255]
+    : // legacy: assume a little-endian colour (ABGR)
+      [v & 255, (v >>> 8) & 255, (v >>> 16) & 255, v >>> 24];
 
-export default class Bitmap2D {
+export class Bitmap2D {
   constructor({ size, d }) {
     this.size = size;
     this.d = new Uint8Array(d || size * size);
   }
 
-  get(x, y) {
-    return (
-      x >= 0 &&
-      y >= 0 &&
-      x < this.size &&
-      y < this.size &&
-      !!(this.d[y * this.size + x] & 0b01)
-    );
-  }
+  get = (x, y) =>
+    x >= 0 && x < this.size && !!(this.d[y * this.size + x] & 0b01);
 
-  masked(x, y) {
-    return this.d[y * this.size + x] & 0b10;
-  }
+  masked = (x, y) => this.d[y * this.size + x] & 0b10;
 
   set(x, y, value, mask = 1) {
     this.d[y * this.size + x] = (mask * 0b10) | !!value;
@@ -54,8 +42,10 @@ export default class Bitmap2D {
     const fullY = this.size + padY * 2;
     const target = context.createImageData(fullX, fullY);
     const abgr = new Uint32Array(target.data.buffer);
-    const cOn = getCol(on);
-    const cOff = getCol(off);
+    target.data.set(getCol(on));
+    const cOn = abgr[0];
+    target.data.set(getCol(off));
+    const cOff = abgr[0];
     for (let y = 0; y < fullY; ++y) {
       for (let x = 0; x < fullX; ++x) {
         abgr[y * fullX + x] = this.get(x - padX, y - padY) ? cOn : cOff;

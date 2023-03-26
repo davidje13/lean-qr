@@ -2,15 +2,15 @@ const UNICODE_MAPPING = new Map();
 
 export const shift_jis = (value) => (data, version) => {
   data.push(0b1000, 4);
-  data.push(value.length, version < 10 ? 8 : version < 27 ? 10 : 12);
+  data.push(value.length, 8 + (version > 26) * 2 + (version > 9) * 2);
   for (const c of value) {
     data.push(UNICODE_MAPPING.get(c.charCodeAt(0)), 13);
   }
 };
 
-shift_jis.reg = { test: (c) => UNICODE_MAPPING.has(c.charCodeAt(0)) };
+shift_jis.test = (c) => UNICODE_MAPPING.has(c.charCodeAt(0));
 shift_jis.est = (value, version) =>
-  4 + (version < 10 ? 8 : version < 27 ? 10 : 12) + value.length * 13;
+  12 + (version > 26) * 2 + (version > 9) * 2 + value.length * 13;
 
 // There is no easy way to convert Unicode to Shift_JIS in the browser,
 // so we have to store a full mapping table.

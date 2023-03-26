@@ -17,8 +17,18 @@ export default [
   target('extras/svg'),
   target('extras/jis'),
   {
+    input: 'bin/cli.mjs',
+    output: {
+      banner: '#!/usr/bin/env node\n',
+      file: 'build/cli.mjs',
+      format: 'esm',
+    },
+    external: [/\/build\//],
+    plugins,
+  },
+  {
     input: 'web/index.mjs',
-    output: [{ file: 'web/build/index.min.mjs', format: 'esm' }],
+    output: { file: 'web/build/index.min.mjs', format: 'esm' },
     plugins,
   },
 ];

@@ -1,7 +1,7 @@
-import generate from '../qr/generate.mjs';
-import mode from '../qr/options/modes.mjs';
-import { names as correction } from '../qr/options/corrections.mjs';
-import Bitmap1D from '../structures/Bitmap1D.mjs';
+import { generate } from '../qr/generate.mjs';
+import { mode } from '../qr/options/modes.mjs';
+import { correction } from '../qr/options/corrections.mjs';
+import { Bitmap1D } from '../structures/Bitmap1D.mjs';
 import { loadImage, toMatchImage } from '../test-helpers/images.mjs';
 import { toMatchBits } from '../test-helpers/toMatchBits.mjs';
 import { shift_jis } from './jis.mjs';

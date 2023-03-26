@@ -1,5 +1,5 @@
 import { toSvgPath, toSvgSource, toSvgDataURL } from './svg.mjs';
-import Bitmap2D from '../structures/Bitmap2D.mjs';
+import { Bitmap2D } from '../structures/Bitmap2D.mjs';
 
 describe('toSvgPath', () => {
   it('identifies the outline around pixels', () => {

@@ -1,4 +1,4 @@
-import { correction, generate, mode } from '../src/index.mjs';
+import { correction, generate } from '../src/index.mjs';
 import { toSvg, toSvgDataURL } from '../src/extras/svg.mjs';
 import { shift_jis } from '../src/extras/jis.mjs';
 
@@ -35,16 +35,7 @@ const downloadSvg = document.querySelector('#download .svg');
 
 let latestCode = null;
 
-const MODE_CONFIG = {
-  modes: [
-    mode.numeric,
-    mode.alphaNumeric,
-    mode.ascii,
-    mode.iso8859_1,
-    shift_jis,
-    mode.utf8,
-  ],
-};
+const fullGenerate = generate.with(shift_jis);
 
 function regenerate() {
   latestCode = null;
@@ -56,7 +47,7 @@ function regenerate() {
   downloadSvg.removeAttribute('href');
 
   try {
-    const code = generate(mode.auto(getValue('message'), MODE_CONFIG), {
+    const code = fullGenerate(getValue('message'), {
       minVersion: getInt('min-version', 1, 40),
       maxVersion: getInt('max-version', 1, 40),
       minCorrectionLevel: correction[getValue('min-correction')],

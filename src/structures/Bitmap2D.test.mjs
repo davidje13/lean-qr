@@ -1,4 +1,4 @@
-import Bitmap2D from './Bitmap2D.mjs';
+import { Bitmap2D } from './Bitmap2D.mjs';
 
 describe('Bitmap2D', () => {
   it('begins with all pixels off and unmasked', () => {

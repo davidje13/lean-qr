@@ -1,8 +1,13 @@
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const UNSAFE = /[^-a-zA-Z0-9 .:/#%]/g;
 
-const make = (d, tag, attrs, children = [], existing) => {
-  const o = existing || d.createElementNS(SVG_NS, tag);
+const make = (
+  d,
+  tag,
+  attrs,
+  children = [],
+  o = d.createElementNS(SVG_NS, tag),
+) => {
   Object.entries(attrs).forEach(([k, v]) => o.setAttribute(k, v));
   o.replaceChildren(...children);
   return o;
@@ -101,8 +106,8 @@ const toSvgInternal = (
 
 export const toSvg = (code, svg, options = {}) =>
   svg.body
-    ? toSvgInternal(code, options, make.bind(null, svg))
-    : toSvgInternal(code, options, make.bind(null, svg.ownerDocument), svg);
+    ? toSvgInternal(code, options, make.bind(0, svg))
+    : toSvgInternal(code, options, make.bind(0, svg.ownerDocument), svg);
 
 export const toSvgSource = (code, options = {}) =>
   (options.xmlDeclaration ? '<?xml version="1.0" encoding="UTF-8" ?>' : '') +
@@ -110,4 +115,4 @@ export const toSvgSource = (code, options = {}) =>
 
 export const toSvgDataURL = (code, options) =>
   'data:image/svg;base64,' +
-  btoa(toSvgSource(code, { xmlDeclaration: true, ...options }));
+  btoa(toSvgSource(code, { xmlDeclaration: 1, ...options }));

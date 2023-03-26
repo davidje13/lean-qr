@@ -34,7 +34,7 @@ export const data = [
   { id: 0b10, v: readCompressed(DATA_H) },
 ];
 
-export const names = {
+export const correction = {
   min: 0,
   L: 0,
   M: 1,

@@ -1,4 +1,5 @@
 const alnum = (c) => '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:'.indexOf(c);
+const firstCharCode = (c) => c.charCodeAt(0);
 
 const multi =
   (...encodings) =>
@@ -15,63 +16,78 @@ const eci = (id) => (data) => {
 
 const bytes = (value) => (data, version) => {
   data.push(0b0100, 4);
-  data.push(value.length, version < 10 ? 8 : 16);
+  data.push(value.length, 8 + (version > 9) * 8);
   value.forEach((b) => data.push(b, 8));
 };
 
-const numeric = (value) => (data, version) => {
-  data.push(0b0001, 4);
-  data.push(value.length, version < 10 ? 10 : version < 27 ? 12 : 14);
-  let i = 0;
-  for (; i < value.length - 2; i += 3) {
-    data.push(+value.slice(i, i + 3), 10);
-  }
-  if (i < value.length - 1) {
-    data.push(+value.slice(i, i + 2), 7);
-  } else if (i < value.length) {
-    data.push(+value[i], 4);
-  }
+const makeMode = (fn, test, estimator, requiredECI) => {
+  const wrappedFn = requiredECI
+    ? (value) => multi(eci(requiredECI), fn(value))
+    : fn;
+  wrappedFn.test = test;
+  wrappedFn.est = estimator;
+  wrappedFn.eci = requiredECI;
+  return wrappedFn;
 };
 
-numeric.reg = /[0-9]/;
-numeric.est = (value, version) =>
-  4 + (version < 10 ? 10 : version < 27 ? 12 : 14) + (value.length * 10) / 3;
+const numeric = makeMode(
+  (value) => (data, version) => {
+    data.push(0b0001, 4);
+    data.push(value.length, 10 + (version > 26) * 2 + (version > 9) * 2);
+    let i = 0;
+    for (; i < value.length - 2; i += 3) {
+      data.push(+value.slice(i, i + 3), 10);
+    }
+    if (i < value.length - 1) {
+      data.push(+value.slice(i, i + 2), 7);
+    } else if (i < value.length) {
+      data.push(+value[i], 4);
+    }
+  },
+  /./.test.bind(/[0-9]/),
+  (value, version) =>
+    14 + (version > 26) * 2 + (version > 9) * 2 + (value.length * 10) / 3,
+);
 
-const alphaNumeric = (value) => (data, version) => {
-  data.push(0b0010, 4);
-  data.push(value.length, version < 10 ? 9 : version < 27 ? 11 : 13);
-  let i = 0;
-  for (; i < value.length - 1; i += 2) {
-    data.push(alnum(value[i]) * 45 + alnum(value[i + 1]), 11);
-  }
-  if (i < value.length) {
-    data.push(alnum(value[i]), 6);
-  }
-};
-
-alphaNumeric.reg = /[0-9A-Z $%*+./:-]/;
-alphaNumeric.est = (value, version) =>
-  4 + (version < 10 ? 9 : version < 27 ? 11 : 13) + value.length * 5.5;
+const alphaNumeric = makeMode(
+  (value) => (data, version) => {
+    data.push(0b0010, 4);
+    data.push(value.length, 9 + (version > 26) * 2 + (version > 9) * 2);
+    let i = 0;
+    for (; i < value.length - 1; i += 2) {
+      data.push(alnum(value[i]) * 45 + alnum(value[i + 1]), 11);
+    }
+    if (i < value.length) {
+      data.push(alnum(value[i]), 6);
+    }
+  },
+  (c) => alnum(c) >= 0,
+  (value, version) =>
+    13 + (version > 26) * 2 + (version > 9) * 2 + value.length * 5.5,
+);
 
 // Unicode codepoints and ISO-8859-1 overlap for first 256 chars
-const ascii = (value) => bytes([...value].map((c) => c.codePointAt(0)));
+const ascii = makeMode(
+  (value) => bytes([...value].map(firstCharCode)),
+  (c) => firstCharCode(c) < 0x80,
+  (value, version) => 12 + (version > 9) * 8 + value.length * 8,
+);
 
-ascii.reg = /[\u0000-\u007F]/;
-ascii.est = (value, version) => 4 + (version < 10 ? 8 : 16) + value.length * 8;
-
-const iso88591 = (value) => multi(eci(3), ascii(value));
-
-iso88591.reg = /[\u0000-\u00FF]/;
-iso88591.est = ascii.est;
-iso88591.eci = 3;
+const iso8859_1 = makeMode(
+  ascii,
+  (c) => firstCharCode(c) < 0x100,
+  ascii.est,
+  3,
+);
 
 const utf8Encoder = new TextEncoder();
-const utf8 = (value) => multi(eci(26), bytes(utf8Encoder.encode(value)));
-
-utf8.reg = /[^]/;
-utf8.est = (value, version) =>
-  4 + (version < 10 ? 8 : 16) + utf8Encoder.encode(value).length * 8;
-utf8.eci = 26;
+const utf8 = makeMode(
+  (value) => bytes(utf8Encoder.encode(value)),
+  () => 1,
+  (value, version) =>
+    12 + (version > 9) * 8 + utf8Encoder.encode(value).length * 8,
+  26,
+);
 
 const pickBest = (opts) =>
   opts.reduce((best, part) => (part.e < best.e ? part : best));
@@ -80,11 +96,11 @@ export const DEFAULT_AUTO_MODES = [
   numeric,
   alphaNumeric,
   ascii,
-  iso88591,
+  iso8859_1,
   utf8,
 ];
 
-export default {
+export const mode = {
   auto:
     (value, { modes = DEFAULT_AUTO_MODES } = {}) =>
     (data, version) => {
@@ -95,12 +111,16 @@ export default {
        * to determine this from the previous character's lowest-cost-so-far paths, making this
        * algorithm O(n * m^2) overall (n = characters in input, m = number of available modes),
        * assuming the mode estimator functions are O(1)
+       *
+       * This is not perfect, as it does not keep track of all possible ECI modes the state
+       * could have (so may choose e.g. 'iso8859 / numeric / utf8' over 'utf8 / numeric / utf8'
+       * even if the latter is better)
        */
 
       let cur = [{ e: 0 }];
       for (let i = 0; i < value.length; ++i) {
         cur = modes
-          .filter((mode) => mode.reg.test(value[i]))
+          .filter((mode) => mode.test(value[i]))
           .map((mode) =>
             pickBest(
               cur.map((p) => {
@@ -130,7 +150,7 @@ export default {
       for (let part = pickBest(cur); part.m; part = part.p) {
         parts.unshift(part.m(part.v));
       }
-      multi(...parts)(data, version);
+      parts.forEach((enc) => enc(data, version));
     },
   multi,
   eci,
@@ -138,6 +158,6 @@ export default {
   alphaNumeric,
   bytes,
   ascii,
-  iso8859_1: iso88591,
+  iso8859_1,
   utf8,
 };

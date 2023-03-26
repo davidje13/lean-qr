@@ -1,5 +1,5 @@
 import { drawFrame } from './draw.mjs';
-import Bitmap2D from '../structures/Bitmap2D.mjs';
+import { Bitmap2D } from '../structures/Bitmap2D.mjs';
 
 function read(code) {
   // ? = off, not masked (data)

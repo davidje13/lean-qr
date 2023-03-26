@@ -1,4 +1,4 @@
-import masks from './masks.mjs';
+import { masks } from './masks.mjs';
 
 /* prettier-ignore */
 const expectedPatterns = {

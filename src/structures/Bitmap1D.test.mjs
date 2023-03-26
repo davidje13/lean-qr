@@ -1,4 +1,4 @@
-import Bitmap1D from './Bitmap1D.mjs';
+import { Bitmap1D } from './Bitmap1D.mjs';
 
 describe('Bitmap1D', () => {
   it('stores bytes', () => {

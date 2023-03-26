@@ -4,10 +4,9 @@
   "description": "minimal QR code generation",
   "files": [
     "build/**/*",
-    "bin/**/*",
     "index.d.ts"
   ],
-  "bin": "./bin/cli.js",
+  "bin": "./build/cli.mjs",
   "main": "build/index.js",
   "exports": {
     ".": "./build/index.js",
@@ -18,7 +17,7 @@
   },
   "types": "index.d.ts",
   "scripts": {
-    "build": "rollup --config rollup.config.mjs",
+    "build": "rollup --config rollup.config.mjs && chmod +x build/cli.mjs",
     "format": "prettier --write .",
     "start": "static-server --index index.html --port 8080",
     "test:unit": "lean-test -x '**/*.int.*'",

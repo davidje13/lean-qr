@@ -29,7 +29,7 @@ function parseArg(flag, arg) {
   }
 }
 
-function printUsage(name, headline, flags, rest) {
+export function printUsage(name, headline, flags, rest) {
   process.stdout.write(`${headline}\n\n`);
   process.stdout.write(`Usage: ${name} [flags] [--] ${rest}\n\n`);
   flags.forEach((flag) => {
@@ -59,7 +59,7 @@ function printUsage(name, headline, flags, rest) {
   process.stdout.write('\n');
 }
 
-function parseArgs(flags, argv) {
+export function parseArgs(flags, argv) {
   let i = 2;
   const result = {};
   flags.forEach(({ id, def }) => {
@@ -116,8 +116,3 @@ function parseArgs(flags, argv) {
   result.rest = argv.slice(i).join(' ');
   return result;
 }
-
-module.exports = {
-  printUsage,
-  parseArgs,
-};

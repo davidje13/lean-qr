@@ -1,5 +1,5 @@
-import mode from './modes.mjs';
-import Bitmap1D from '../../structures/Bitmap1D.mjs';
+import { mode } from './modes.mjs';
+import { Bitmap1D } from '../../structures/Bitmap1D.mjs';
 import { toMatchBits } from '../../test-helpers/toMatchBits.mjs';
 
 expect.extend({ toMatchBits });
@@ -59,6 +59,22 @@ describe('mode.numeric', () => {
   it('returns a reusable encoding function', () => {
     expectRepeatable(() => mode.numeric('1234567890'));
   });
+
+  it('accepts digits', () => {
+    expect(mode.numeric.test('0')).isTruthy();
+    expect(mode.numeric.test('5')).isTruthy();
+    expect(mode.numeric.test('9')).isTruthy();
+    expect(mode.numeric.test('a')).isFalsy();
+    expect(mode.numeric.test('.')).isFalsy();
+    expect(mode.numeric.test(' ')).isFalsy();
+  });
+
+  it('estimates accurately', () => {
+    expectEstMatch(mode.numeric, '');
+    expectEstMatch(mode.numeric, '0000');
+    expectEstMatch(mode.numeric, '00000');
+    expectEstMatch(mode.numeric, '000000');
+  });
 });
 
 describe('mode.alphaNumeric', () => {
@@ -106,6 +122,22 @@ describe('mode.alphaNumeric', () => {
   it('returns a reusable encoding function', () => {
     expectRepeatable(() => mode.alphaNumeric('ABC123:'));
   });
+
+  it('accepts upper case characters, numbers, and some symbols', () => {
+    expect(mode.alphaNumeric.test('A')).isTruthy();
+    expect(mode.alphaNumeric.test('5')).isTruthy();
+    expect(mode.alphaNumeric.test(' ')).isTruthy();
+    expect(mode.alphaNumeric.test('.')).isTruthy();
+    expect(mode.alphaNumeric.test('a')).isFalsy();
+    expect(mode.alphaNumeric.test('\n')).isFalsy();
+    expect(mode.alphaNumeric.test('!')).isFalsy();
+  });
+
+  it('estimates accurately', () => {
+    expectEstMatch(mode.alphaNumeric, '');
+    expectEstMatch(mode.alphaNumeric, 'ABC');
+    expectEstMatch(mode.alphaNumeric, 'ABCD');
+  });
 });
 
 describe('mode.ascii', () => {
@@ -141,6 +173,21 @@ describe('mode.ascii', () => {
 
   it('returns a reusable encoding function', () => {
     expectRepeatable(() => mode.ascii('abc123'));
+  });
+
+  it('accepts 7-bit ascii characters', () => {
+    expect(mode.ascii.test('A')).isTruthy();
+    expect(mode.ascii.test('5')).isTruthy();
+    expect(mode.ascii.test(' ')).isTruthy();
+    expect(mode.ascii.test('\n')).isTruthy();
+    expect(mode.ascii.test('\u0000')).isTruthy();
+    expect(mode.ascii.test('\u007F')).isTruthy();
+    expect(mode.ascii.test('\u0080')).isFalsy();
+  });
+
+  it('estimates accurately', () => {
+    expectEstMatch(mode.ascii, '');
+    expectEstMatch(mode.ascii, 'abc123');
   });
 });
 
@@ -186,6 +233,21 @@ describe('mode.iso8859_1', () => {
   it('returns a reusable encoding function', () => {
     expectRepeatable(() => mode.iso8859_1('abc123'));
   });
+
+  it('accepts 8-bit characters', () => {
+    expect(mode.iso8859_1.test('A')).isTruthy();
+    expect(mode.iso8859_1.test('5')).isTruthy();
+    expect(mode.iso8859_1.test(' ')).isTruthy();
+    expect(mode.iso8859_1.test('\n')).isTruthy();
+    expect(mode.iso8859_1.test('\u0000')).isTruthy();
+    expect(mode.iso8859_1.test('\u00FF')).isTruthy();
+    expect(mode.iso8859_1.test('\u0100')).isFalsy();
+  });
+
+  it('estimates accurately', () => {
+    expectEstMatch(mode.iso8859_1, '');
+    expectEstMatch(mode.iso8859_1, 'abc123');
+  });
 });
 
 describe('mode.utf8', () => {
@@ -229,6 +291,21 @@ describe('mode.utf8', () => {
 
   it('returns a reusable encoding function', () => {
     expectRepeatable(() => mode.utf8('unicode\u2026'));
+  });
+
+  it('accepts all characters', () => {
+    expect(mode.utf8.test('A')).isTruthy();
+    expect(mode.utf8.test('5')).isTruthy();
+    expect(mode.utf8.test(' ')).isTruthy();
+    expect(mode.utf8.test('\n')).isTruthy();
+    expect(mode.utf8.test('\u0000')).isTruthy();
+    expect(mode.utf8.test('\uFFFF')).isTruthy();
+  });
+
+  it('estimates accurately', () => {
+    expectEstMatch(mode.utf8, '');
+    expectEstMatch(mode.utf8, 'abc123');
+    expectEstMatch(mode.utf8, '\uFFFF');
   });
 });
 
@@ -384,4 +461,16 @@ function expectRepeatable(encoderFactory) {
   encoder1(data3, 40);
   encoder2(data4, 40);
   expect(data3).toMatchBits(data4); // version change
+}
+
+function expectEstMatch(mode, value) {
+  const encoder = mode(value);
+
+  for (let version = 1; version <= 40; ++version) {
+    const data = new Bitmap1D(10);
+    data.eci = mode.eci; // do not include ECI changes
+    const est = mode.est(value, version);
+    encoder(data, version);
+    expect(Math.ceil(est)).equals(data.bits);
+  }
 }

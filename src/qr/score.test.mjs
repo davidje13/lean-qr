@@ -1,10 +1,11 @@
-import scoreCode, {
+import {
+  scoreCode,
   scoreLines,
   countBoxes,
   countPatterns,
   scoreImbalance,
 } from './score.mjs';
-import Bitmap2D from '../structures/Bitmap2D.mjs';
+import { Bitmap2D } from '../structures/Bitmap2D.mjs';
 
 function makeBitmap(lines) {
   const bmp = new Bitmap2D({ size: lines.length });

@@ -208,8 +208,10 @@ If you want your custom mode to be compatible with `auto`, you need to
 provide a pair of properties:
 
 ```javascript
-// a RegExp which matches all characters that your mode can encode
-myMode.reg = /[0-9a-zA-Z]/;
+// a function taking a character and returning true if it is suppoerted
+myMode.test = RegExp.prototype.test.bind(/[0-9a-zA-Z]/);
+// or
+myMode.test = (c) => /[0-9a-zA-Z]/.test(c);
 
 // a function which estimates the number of bits required for an input
 // (fractional results will be rounded up)
@@ -222,21 +224,14 @@ For example the implementation of `ascii`:
 const ascii = (value) => (data, version) => {
   data.push(0b0100, 4);
   data.push(value.length, version < 10 ? 8 : 16);
-  for (let i = 0; i < value.length; ++i) {
-    data.push(value.codePointAt(i), 8);
-  }
+  [...value].forEach((c) => data.push(c.codePointAt(0), 8));
 };
-ascii.reg = /[\u0000-\u007F]/;
+ascii.test = RegExp.prototype.test.bind(/[\u0000-\u007F]/);
 ascii.est = (value, version) => (
   4 + (version < 10 ? 8 : 16) +
   value.length * 8
 );
 ```
-
-The `.reg` property does not have to be a regular expression, as long as
-it is an object which conforms to the `RegExp.test` API (i.e. it is an
-object with a `test` method that accepts a character to check, returning
-`true` if the character is supported and `false` if not).
 
 ## Correction Levels
 
@@ -519,8 +514,8 @@ string, and the details could change in later versions.
 For other types of output, you can inspect the data directly:
 
 ```javascript
-for (let y = 0; y < code.size; ++y) {
-  for (let x = 0; x < code.size; ++x) {
+for (let y = 0; y < code.size; y++) {
+  for (let x = 0; x < code.size; x++) {
     process.stdout.write(code.get(x, y) ? '##' : '  ');
   }
   process.stdout.write('\n');

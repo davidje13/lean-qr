@@ -1,22 +1,22 @@
-import { data, names } from './corrections.mjs';
+import { data, correction } from './corrections.mjs';
 
 describe('corrections', () => {
   it('contains correction level IDs', () => {
-    expect(data[names.L].id).toEqual(0b01);
-    expect(data[names.M].id).toEqual(0b00);
-    expect(data[names.Q].id).toEqual(0b11);
-    expect(data[names.H].id).toEqual(0b10);
+    expect(data[correction.L].id).toEqual(0b01);
+    expect(data[correction.M].id).toEqual(0b00);
+    expect(data[correction.Q].id).toEqual(0b11);
+    expect(data[correction.H].id).toEqual(0b10);
   });
 
   it('stores data in increasing robustness', () => {
-    expect(names.M).toBeGreaterThan(names.L);
-    expect(names.Q).toBeGreaterThan(names.M);
-    expect(names.H).toBeGreaterThan(names.Q);
+    expect(correction.M).toBeGreaterThan(correction.L);
+    expect(correction.Q).toBeGreaterThan(correction.M);
+    expect(correction.H).toBeGreaterThan(correction.Q);
   });
 
   it('includes convenience max and min labels', () => {
-    expect(names.max).toEqual(names.H);
-    expect(names.min).toEqual(names.L);
+    expect(correction.max).toEqual(correction.H);
+    expect(correction.min).toEqual(correction.L);
   });
 
   it('divides input data into groups', () => {
@@ -122,7 +122,7 @@ describe('corrections', () => {
     },
     (version, level) => {
       const [ecsize, ...groups] = dataset[version][level];
-      const info = data[names[level]].v[version - 1];
+      const info = data[correction[level]].v[version - 1];
       expect(info.s).toEqual(ecsize);
       expect(info.g).toEqual(groups);
     },

@@ -47,7 +47,7 @@ export const countPatterns = (code) => {
   const pattern = 0b10111010000_00001011101;
   const matches = 0b00000000001_00000000001;
   hv(code, 0, (state, cur) => {
-    const next = ((state >>> 1) | initial) & (pattern ^ (cur ? 0 : -1));
+    const next = ((state >>> 1) | initial) & (pattern ^ (cur - 1));
     if (next & matches) {
       ++score;
     }
@@ -66,7 +66,7 @@ export const scoreImbalance = (code) => {
   return ((20 * Math.abs(totalOn / (code.size * code.size) - 0.5)) | 0) * 10;
 };
 
-export default (code) =>
+export const scoreCode = (code) =>
   scoreLines(code) +
   countBoxes(code) * 3 +
   countPatterns(code) * 40 +

@@ -58,7 +58,7 @@ declare module 'lean-qr' {
   export type Mode = (data: Bitmap1D, version: number) => void;
   export interface ModeFactory {
     (value: string): Mode;
-    reg: { test(string: string): boolean };
+    test(string: string): boolean;
     est(value: string, version: number): number;
   }
 
