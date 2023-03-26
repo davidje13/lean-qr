@@ -13,13 +13,13 @@ export class Bitmap2D {
   get = (x, y) =>
     x >= 0 && x < this.size && !!(this.d[y * this.size + x] & 0b01);
 
-  masked = (x, y) => this.d[y * this.size + x] & 0b10;
+  _masked = (x, y) => this.d[y * this.size + x] & 0b10;
 
-  set(x, y, value, mask = 1) {
+  _set(x, y, value, mask = 1) {
     this.d[y * this.size + x] = (mask * 0b10) | !!value;
   }
 
-  inv(x, y) {
+  _inv(x, y) {
     this.d[y * this.size + x] ^= 1;
   }
 

@@ -11,7 +11,7 @@ function makeBitmap(lines) {
   const bmp = new Bitmap2D({ size: lines.length });
   lines.forEach((line, y) => {
     for (let x = 0; x < line.length; ++x) {
-      bmp.set(x, y, line[x] !== ' ');
+      bmp._set(x, y, line[x] !== ' ');
     }
   });
   return bmp;
@@ -20,7 +20,7 @@ function makeBitmap(lines) {
 function makeBitmap1D(line, shift = 0, vert = false) {
   const bmp = new Bitmap2D({ size: line.length });
   for (let i = 0; i < line.length; ++i) {
-    bmp.set(vert ? shift : i, vert ? i : shift, line[i] !== ' ');
+    bmp._set(vert ? shift : i, vert ? i : shift, line[i] !== ' ');
   }
   return bmp;
 }

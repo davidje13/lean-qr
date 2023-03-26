@@ -1,8 +1,8 @@
 export const toMatchBits = (expectedBits) => (actual) => {
   if (
     typeof expectedBits === 'object' &&
-    expectedBits.bytes &&
-    typeof expectedBits.bits === 'number'
+    expectedBits._bytes &&
+    typeof expectedBits._bits === 'number'
   ) {
     expectedBits = extractBitstring(expectedBits);
   }
@@ -11,8 +11,8 @@ export const toMatchBits = (expectedBits) => (actual) => {
   }
   if (
     typeof actual !== 'object' ||
-    !actual.bytes ||
-    typeof actual.bits !== 'number'
+    !actual._bytes ||
+    typeof actual._bits !== 'number'
   ) {
     throw new Error(`Expected bits, got ${actual}`);
   }
@@ -34,8 +34,8 @@ export const toMatchBits = (expectedBits) => (actual) => {
 };
 
 function extractBitstring(o) {
-  return [...o.bytes]
+  return [...o._bytes]
     .map((b) => b.toString(2).padStart(8, '0'))
     .join('')
-    .slice(0, o.bits);
+    .slice(0, o._bits);
 }

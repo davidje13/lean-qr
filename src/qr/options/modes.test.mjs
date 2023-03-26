@@ -17,11 +17,11 @@ describe('mode.numeric', () => {
   it('uses a larger length for higher versions', () => {
     const data10 = new Bitmap1D(10);
     mode.numeric('')(data10, 10);
-    expect(data10.bits).toEqual(4 + 12);
+    expect(data10._bits).toEqual(4 + 12);
 
     const data27 = new Bitmap1D(10);
     mode.numeric('')(data27, 27);
-    expect(data27.bits).toEqual(4 + 14);
+    expect(data27._bits).toEqual(4 + 14);
   });
 
   it('encodes values in triplets', () => {
@@ -90,11 +90,11 @@ describe('mode.alphaNumeric', () => {
   it('uses a larger length for higher versions', () => {
     const data10 = new Bitmap1D(10);
     mode.alphaNumeric('')(data10, 10);
-    expect(data10.bits).toEqual(4 + 11);
+    expect(data10._bits).toEqual(4 + 11);
 
     const data27 = new Bitmap1D(10);
     mode.alphaNumeric('')(data27, 27);
-    expect(data27.bits).toEqual(4 + 13);
+    expect(data27._bits).toEqual(4 + 13);
   });
 
   it('encodes values in pairs', () => {
@@ -153,11 +153,11 @@ describe('mode.ascii', () => {
   it('uses a larger length for higher versions', () => {
     const data10 = new Bitmap1D(10);
     mode.ascii('')(data10, 10);
-    expect(data10.bits).toEqual(4 + 16);
+    expect(data10._bits).toEqual(4 + 16);
 
     const data27 = new Bitmap1D(10);
     mode.ascii('')(data27, 27);
-    expect(data27.bits).toEqual(4 + 16);
+    expect(data27._bits).toEqual(4 + 16);
   });
 
   it('encodes values in 8 bit ISO-8859-1 encoding', () => {
@@ -207,11 +207,11 @@ describe('mode.iso8859_1', () => {
   it('uses a larger length for higher versions', () => {
     const data10 = new Bitmap1D(10);
     mode.iso8859_1('')(data10, 10);
-    expect(data10.bits).toEqual(12 + 4 + 16);
+    expect(data10._bits).toEqual(12 + 4 + 16);
 
     const data27 = new Bitmap1D(10);
     mode.iso8859_1('')(data27, 27);
-    expect(data27.bits).toEqual(12 + 4 + 16);
+    expect(data27._bits).toEqual(12 + 4 + 16);
   });
 
   it('encodes values in 8 bit ISO-8859-1 encoding', () => {
@@ -327,7 +327,7 @@ describe('mode.multi', () => {
   it('passes version information down', () => {
     const data = new Bitmap1D(10);
     mode.multi(mode.numeric(''))(data, 40);
-    expect(data.bits).toEqual(4 + 14);
+    expect(data._bits).toEqual(4 + 14);
   });
 
   it('returns a reusable encoding function', () => {
@@ -471,6 +471,6 @@ function expectEstMatch(mode, value) {
     data.eci = mode.eci; // do not include ECI changes
     const est = mode.est(value, version);
     encoder(data, version);
-    expect(Math.ceil(est)).equals(data.bits);
+    expect(Math.ceil(est)).equals(data._bits);
   }
 }

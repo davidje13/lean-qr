@@ -11,7 +11,7 @@ const remBinPoly = (num, den, denBits) => {
 const drawRect = (code, x1, y1, x2, y2, value) => {
   for (let y = y1; y < y2; ++y) {
     for (let x = x1; x < x2; ++x) {
-      code.set(x, y, value);
+      code._set(x, y, value);
     }
   }
 };
@@ -25,7 +25,7 @@ const drawPlacement = (code, x, y) => {
 const drawAlignment = (code, x, y) => {
   drawRect(code, x - 2, y - 2, x + 3, y + 3, 1);
   drawRect(code, x - 1, y - 1, x + 2, y + 2, 0);
-  code.set(x, y, 1);
+  code._set(x, y, 1);
 };
 
 export const drawFrame = (code, version) => {
@@ -39,10 +39,10 @@ export const drawFrame = (code, version) => {
   drawRect(code, size - 8, 0, size - 7, 7, 0);
   drawRect(code, 7, size - 8, 9, size, 0);
   drawRect(code, 0, size - 8, 7, size - 7, 0);
-  code.set(8, size - 8, 1);
+  code._set(8, size - 8, 1);
   for (let i = 8; i < size - 8; ++i) {
-    code.set(i, 6, !(i & 1));
-    code.set(6, i, !(i & 1));
+    code._set(i, 6, !(i & 1));
+    code._set(6, i, !(i & 1));
   }
   if (version >= 2) {
     const numAlignmentM = ((version / 7) | 0) + 1;
@@ -75,8 +75,8 @@ export const drawFrame = (code, version) => {
       ++j
     ) {
       for (let i = 12; i-- > 9; dat >>>= 1) {
-        code.set(j, size - i, dat & 1);
-        code.set(size - i, j, dat & 1);
+        code._set(j, size - i, dat & 1);
+        code._set(size - i, j, dat & 1);
       }
     }
   }
@@ -91,10 +91,10 @@ export const getPath = (code) => {
       xB = 4;
     }
     while (((y += dirY), y !== -1 && y !== s)) {
-      if (!code.masked(xB + 1, y)) {
+      if (!code._masked(xB + 1, y)) {
         result.push([xB + 1, y]);
       }
-      if (!code.masked(xB, y)) {
+      if (!code._masked(xB, y)) {
         result.push([xB, y]);
       }
     }
@@ -103,18 +103,18 @@ export const getPath = (code) => {
   return result;
 };
 
-export const drawCode = (target, path, data) => {
+export const drawCode = (code, path, data) => {
   path.forEach(([x, y], bit) =>
-    target.set(x, y, (data[bit >> 3] << (bit & 7)) & 0x80, 0),
+    code._set(x, y, (data[bit >> 3] << (bit & 7)) & 0x80, 0),
   );
 };
 
-export const applyMask = (target, mask, maskId, ecId) => {
-  const s = target.size;
+export const applyMask = (code, mask, maskId, ecId) => {
+  const s = code.size;
   for (let y = 0; y < s; ++y) {
     for (let x = 0; x < s; ++x) {
-      if (mask(x, y) && !target.masked(x, y)) {
-        target.inv(x, y);
+      if (mask(x, y) && !code._masked(x, y)) {
+        code._inv(x, y);
       }
     }
   }
@@ -122,11 +122,11 @@ export const applyMask = (target, mask, maskId, ecId) => {
   let pattern =
     0b101010000010010 ^ ((info << 10) | remBinPoly(info, 0b10100110111, 11));
   for (let i = 8; i-- > 0; pattern >>= 1) {
-    target.set(8, (i > 1 ? 7 : 8) - i, pattern & 1);
-    target.set(s - 8 + i, 8, pattern & 1);
+    code._set(8, (i > 1 ? 7 : 8) - i, pattern & 1);
+    code._set(s - 8 + i, 8, pattern & 1);
   }
   for (let i = 7; i-- > 0; pattern >>= 1) {
-    target.set(i > 5 ? 7 : i, 8, pattern & 1);
-    target.set(8, s - i - 1, pattern & 1);
+    code._set(i > 5 ? 7 : i, 8, pattern & 1);
+    code._set(8, s - i - 1, pattern & 1);
   }
 };

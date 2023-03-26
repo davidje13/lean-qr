@@ -41,7 +41,7 @@ export const generate = (
 
     const data = new Bitmap1D(2956); // max capacity of any code
     modeData(data, version);
-    dataLengthBits = data.bits;
+    dataLengthBits = data._bits;
 
     for (let cl = maxCorrectionLevel; cl >= minCorrectionLevel; --cl) {
       const correction = correctionData[cl][version - 1];
@@ -49,8 +49,8 @@ export const generate = (
         continue;
       }
       data.push(0b0000, 4);
-      data.bits = (data.bits + 7) & ~7; // pad with 0s to the next byte
-      while (data.bits < correction.c) {
+      data._bits = (data._bits + 7) & ~7; // pad with 0s to the next byte
+      while (data._bits < correction.c) {
         data.push(0b11101100_00010001, 16);
       }
 
@@ -61,7 +61,7 @@ export const generate = (
         base.p = getPath(base);
       }
       const code = new Bitmap2D(base);
-      drawCode(code, base.p, calculateEC(data.bytes, correction));
+      drawCode(code, base.p, calculateEC(data._bytes, correction));
 
       // pick best mask
       return (masks[mask ?? -1] ? [masks[mask]] : masks)

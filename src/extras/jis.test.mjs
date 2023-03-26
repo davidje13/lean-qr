@@ -17,11 +17,11 @@ describe('shift_jis', () => {
   it('uses a larger length for higher versions', () => {
     const data10 = new Bitmap1D(10);
     shift_jis('')(data10, 10);
-    expect(data10.bits).toEqual(4 + 10);
+    expect(data10._bits).toEqual(4 + 10);
 
     const data27 = new Bitmap1D(10);
     shift_jis('')(data27, 27);
-    expect(data27.bits).toEqual(4 + 12);
+    expect(data27._bits).toEqual(4 + 12);
   });
 
   it('encodes values in 13-bits', () => {
@@ -86,6 +86,6 @@ function expectEstMatch(mode, value) {
     data.eci = mode.eci; // do not include ECI changes
     const est = mode.est(value, version);
     encoder(data, version);
-    expect(Math.ceil(est)).equals(data.bits);
+    expect(Math.ceil(est)).equals(data._bits);
   }
 }

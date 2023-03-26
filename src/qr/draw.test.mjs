@@ -11,7 +11,7 @@ function read(code) {
     let ln = '';
     for (let x = 0; x < code.size; ++x) {
       const v = code.get(x, y);
-      const m = code.masked(x, y);
+      const m = code._masked(x, y);
       ln += '? %#'[Boolean(v) * 2 + Boolean(m)];
     }
     r.push(ln);

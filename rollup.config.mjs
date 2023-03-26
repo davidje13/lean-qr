@@ -3,7 +3,10 @@ import { babel } from '@rollup/plugin-babel';
 
 const plugins = [
   babel({ babelHelpers: 'bundled' }),
-  terser({ format: { ascii_only: true } }),
+  terser({
+    format: { ascii_only: true },
+    mangle: { properties: { regex: /^_/ } },
+  }),
 ];
 
 const target = (path) => ({
