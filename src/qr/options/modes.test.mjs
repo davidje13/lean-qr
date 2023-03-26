@@ -67,6 +67,7 @@ describe('mode.numeric', () => {
     expect(mode.numeric.test('a')).isFalsy();
     expect(mode.numeric.test('.')).isFalsy();
     expect(mode.numeric.test(' ')).isFalsy();
+    expect(mode.numeric.test('\uFFFD')).isFalsy();
   });
 
   it('estimates accurately', () => {
@@ -131,6 +132,7 @@ describe('mode.alphaNumeric', () => {
     expect(mode.alphaNumeric.test('a')).isFalsy();
     expect(mode.alphaNumeric.test('\n')).isFalsy();
     expect(mode.alphaNumeric.test('!')).isFalsy();
+    expect(mode.alphaNumeric.test('\uFFFD')).isFalsy();
   });
 
   it('estimates accurately', () => {
@@ -183,6 +185,7 @@ describe('mode.ascii', () => {
     expect(mode.ascii.test('\u0000')).isTruthy();
     expect(mode.ascii.test('\u007F')).isTruthy();
     expect(mode.ascii.test('\u0080')).isFalsy();
+    expect(mode.ascii.test('\uFFFD')).isFalsy();
   });
 
   it('estimates accurately', () => {
@@ -242,6 +245,7 @@ describe('mode.iso8859_1', () => {
     expect(mode.iso8859_1.test('\u0000')).isTruthy();
     expect(mode.iso8859_1.test('\u00FF')).isTruthy();
     expect(mode.iso8859_1.test('\u0100')).isFalsy();
+    expect(mode.iso8859_1.test('\uFFFD')).isFalsy();
   });
 
   it('estimates accurately', () => {

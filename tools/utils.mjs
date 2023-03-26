@@ -1,5 +1,3 @@
-export const p16 = (v, l = 0) => v.toString(16).padStart(l, '0');
-
 export function compressNum(v, l = 0) {
   // counterpart to decompressNum in jis.mjs
   if (v < 0) {

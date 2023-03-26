@@ -70,6 +70,7 @@ describe('shift_jis', () => {
     expect(shift_jis.test('a')).isFalsy();
     expect(shift_jis.test('\u0000')).isFalsy();
     expect(shift_jis.test('\uFFFF')).isFalsy();
+    expect(shift_jis.test('\uFFFD')).isFalsy();
   });
 
   it('estimates accurately', () => {
