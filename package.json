@@ -11,9 +11,7 @@
   "exports": {
     ".": "./build/index.js",
     "./extras/svg": "./build/extras/svg.js",
-    "./extras/svg.js": "./build/extras/svg.js",
-    "./extras/jis": "./build/extras/jis.js",
-    "./extras/jis.js": "./build/extras/jis.js"
+    "./extras/svg.js": "./build/extras/svg.js"
   },
   "types": "index.d.ts",
   "scripts": {

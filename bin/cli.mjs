@@ -2,26 +2,15 @@
 
 import { mode, correction, generate } from '../build/index.js';
 import { toSvgSource } from '../build/extras/svg.js';
-import { shift_jis } from '../build/extras/jis.js';
 import { printUsage, parseArgs } from './argparser.mjs';
 
-const MODE_CONFIG = {
-  modes: [
-    mode.numeric,
-    mode.alphaNumeric,
-    mode.ascii,
-    mode.iso8859_1,
-    shift_jis,
-    mode.utf8,
-  ],
-};
 const ENCODINGS = new Map();
-ENCODINGS.set('auto', (v) => mode.auto(v, MODE_CONFIG));
+ENCODINGS.set('auto', mode.auto);
 ENCODINGS.set('numeric', mode.numeric);
 ENCODINGS.set('alphanumeric', mode.alphaNumeric);
 ENCODINGS.set('ascii', mode.ascii);
 ENCODINGS.set('iso-8859-1', mode.iso8859_1);
-ENCODINGS.set('shift-jis', shift_jis);
+ENCODINGS.set('shift-jis', mode.shift_jis);
 ENCODINGS.set('utf8', mode.utf8);
 
 const TEXT_FORMATS = new Map();

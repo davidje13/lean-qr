@@ -18,7 +18,6 @@ const target = (path) => ({
 export default [
   target('index'),
   target('extras/svg'),
-  target('extras/jis'),
   {
     input: 'bin/cli.mjs',
     output: {

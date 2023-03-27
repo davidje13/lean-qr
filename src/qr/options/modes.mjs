@@ -89,6 +89,41 @@ const utf8 = makeMode(
   26,
 );
 
+let shiftJISMap = () => {
+  const map = new Map();
+  const decoder = new TextDecoder('sjis');
+  const b = new Uint8Array(2);
+  for (const [from, to, shift] of [
+    [0x8140, 0x9ffd, 0x8140],
+    [0xe040, 0xebc0, 0xc140],
+  ]) {
+    for (let c = from; c < to; ++c) {
+      b[0] = c >> 8;
+      b[1] = c & 0xff;
+      map.set(
+        decoder.decode(b),
+        ((c - shift) >> 8) * 0xc0 + ((c - shift) & 0xff),
+      );
+    }
+  }
+  map.delete('\uFFFD');
+  shiftJISMap = () => map;
+  return map;
+};
+
+const shift_jis = makeMode(
+  (value) => (data, version) => {
+    data.push(0b1000, 4);
+    data.push(value.length, 8 + (version > 26) * 2 + (version > 9) * 2);
+    for (const c of value) {
+      data.push(shiftJISMap().get(c), 13);
+    }
+  },
+  (c) => shiftJISMap().has(c),
+  (value, version) =>
+    12 + (version > 26) * 2 + (version > 9) * 2 + value.length * 13,
+);
+
 const pickBest = (opts) =>
   opts.reduce((best, part) => (part.e < best.e ? part : best));
 
@@ -97,6 +132,7 @@ export const DEFAULT_AUTO_MODES = [
   alphaNumeric,
   ascii,
   iso8859_1,
+  shift_jis,
   utf8,
 ];
 
@@ -159,5 +195,6 @@ export const mode = {
   bytes,
   ascii,
   iso8859_1,
+  shift_jis,
   utf8,
 };

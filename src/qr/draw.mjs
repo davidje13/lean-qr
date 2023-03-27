@@ -8,43 +8,43 @@ const remBinPoly = (num, den, denBits) => {
   return remainder;
 };
 
-const drawRect = (code, x1, y1, x2, y2, value) => {
-  for (let y = y1; y < y2; ++y) {
-    for (let x = x1; x < x2; ++x) {
-      code._set(x, y, value);
-    }
-  }
-};
-
-const drawPlacement = (code, x, y) => {
-  drawRect(code, x - 3, y - 3, x + 4, y + 4, 1);
-  drawRect(code, x - 2, y - 2, x + 3, y + 3, 0);
-  drawRect(code, x - 1, y - 1, x + 2, y + 2, 1);
-};
-
-const drawAlignment = (code, x, y) => {
-  drawRect(code, x - 2, y - 2, x + 3, y + 3, 1);
-  drawRect(code, x - 1, y - 1, x + 2, y + 2, 0);
-  code._set(x, y, 1);
-};
-
 export const drawFrame = (code, version) => {
+  const drawRect = (x1, y1, w, h, value) => {
+    for (; h-- > 0; ) {
+      for (let x = w; x-- > 0; ) {
+        code._set(x1 + x, y1 + h, value);
+      }
+    }
+  };
+
+  const drawPlacement = (x, y) => {
+    drawRect(x - 3, y - 3, 7, 7, 1);
+    drawRect(x - 2, y - 2, 5, 5, 0);
+    drawRect(x - 1, y - 1, 3, 3, 1);
+  };
+
+  const drawAlignment = (x, y) => {
+    drawRect(x - 2, y - 2, 5, 5, 1);
+    drawRect(x - 1, y - 1, 3, 3, 0);
+    code._set(x, y, 1);
+  };
+
   const size = version * 4 + 17;
-  drawPlacement(code, 3, 3);
-  drawPlacement(code, size - 4, 3);
-  drawPlacement(code, 3, size - 4);
-  drawRect(code, 0, 7, 9, 9, 0);
-  drawRect(code, 7, 0, 9, 7, 0);
-  drawRect(code, size - 8, 7, size, 9, 0);
-  drawRect(code, size - 8, 0, size - 7, 7, 0);
-  drawRect(code, 7, size - 8, 9, size, 0);
-  drawRect(code, 0, size - 8, 7, size - 7, 0);
+  drawPlacement(3, 3);
+  drawPlacement(size - 4, 3);
+  drawPlacement(3, size - 4);
+  drawRect(0, 7, 9, 2, 0);
+  drawRect(7, 0, 2, 7, 0);
+  drawRect(size - 8, 7, 8, 2, 0);
+  drawRect(size - 8, 0, 1, 7, 0);
+  drawRect(7, size - 8, 2, 8, 0);
+  drawRect(0, size - 8, 7, 1, 0);
   code._set(8, size - 8, 1);
   for (let i = 8; i < size - 8; ++i) {
     code._set(i, 6, !(i & 1));
     code._set(6, i, !(i & 1));
   }
-  if (version >= 2) {
+  if (version > 1) {
     const numAlignmentM = ((version / 7) | 0) + 1;
     // alignment boxes must always be positioned on even pixels
     // and are spaced evenly from the bottom right (except top and left which are always 6)
@@ -56,18 +56,13 @@ export const drawFrame = (code, version) => {
     }
     for (let i = 0; i <= numAlignmentM; ++i) {
       for (let j = 0; j <= numAlignmentM; ++j) {
-        if (
-          (!i && !j) ||
-          (!i && j === numAlignmentM) ||
-          (i === numAlignmentM && !j)
-        ) {
-          continue;
+        if (i * j || (i + j && i + j < numAlignmentM)) {
+          drawAlignment(positions[i], positions[j]);
         }
-        drawAlignment(code, positions[i], positions[j]);
       }
     }
   }
-  if (version >= 7) {
+  if (version > 6) {
     for (
       let dat = (version << 12) | remBinPoly(version, 0b1111100100101, 13),
         j = 0;

@@ -62,12 +62,9 @@ There is also a small commandline tool included for testing:
 
 ```shell
 npx lean-qr 'MY MESSAGE HERE'
-```
 
-The commandline tool includes all extras by default (SVG output and Shift-JIS mode):
-
-```shell
 npx lean-qr '漢字'
+
 npx lean-qr --format svg 'hello'
 ```
 
@@ -90,13 +87,16 @@ const code = generate(mode.alphaNumeric('LEAN-QR LIBRARY'));
 | `mode.alphaNumeric` |      11 / 2 | `0-9A-Z $%*+-./:` |
 | `mode.ascii`        |       8 / 1 | 7-bit ASCII       |
 | `mode.iso8859_1`    |       8 / 1 | ISO-8859-1        |
-| `shift_jis`         |      13 / 1 | See notes below   |
+| `mode.shift_jis`    |      13 / 1 | See notes below   |
 | `mode.utf8`         |      varies | Unicode           |
 
 Note that if you specify a mode explicitly, it is your responsibility to
 ensure the content you are encoding conforms to the accepted character
 set. If you provide mismatched content, the resulting QR Code will likely
 be malformed.
+
+`shift_jis` supports all double-byte Shift-JIS characters in the ranges:
+[0x8140 &ndash; 0x9FFC], [0xE040 &ndash; 0xEBBF].
 
 ### `multi`
 
@@ -161,43 +161,6 @@ const code = generate('FOOBAR', {
 });
 ```
 
-### `shift_jis`
-
-This is not included in the main library to keep it small, but if you need
-Shift-JIS encoding, you can access it from a separate import (adds ~20kB):
-
-```javascript
-import { shift_jis } from 'lean-qr/extras/jis';
-
-const code = generate(shift_jis('漢字'));
-```
-
-It can also be registered to be automatically considered alongside other
-possible modes:
-
-```javascript
-const myGenerate = generate.with(shift_jis);
-const code = myGenerate('漢字');
-```
-
-Or for more control you can specify all modes explicitly:
-
-```javascript
-const code = generate(mode.auto('漢字', {
-  modes: [
-    mode.numeric,
-    mode.alphaNumeric,
-    mode.ascii,
-    mode.iso8859_1,
-    shift_jis,
-    mode.utf8,
-  ],
-}));
-```
-
-The supported character set is all double-byte Shift-JIS characters in the
-ranges: [0x8140 &ndash; 0x9FFC], [0xE040 &ndash; 0xEBBF].
-
 ### Custom modes
 
 Other modes are not currently supported, but it is possible to write
@@ -226,7 +189,33 @@ myMode.test = (c) => /[0-9a-zA-Z]/.test(c);
 myMode.est = (value, version) => (12 + value.length * 8);
 ```
 
-For example the implementation of `ascii`:
+You can then register it using `.with` to be automatically considered
+alongside other possible modes:
+
+```javascript
+const myGenerate = generate.with(myCustomMode);
+const code = myGenerate('text');
+```
+
+Or for more control you can specify all modes explicitly:
+
+```javascript
+const code = generate('text', {
+  modes: [
+    myCustomMode,
+    mode.numeric,
+    mode.alphaNumeric,
+    mode.ascii,
+    mode.iso8859_1,
+    mode.shift_jis,
+    mode.utf8,
+  ],
+});
+```
+
+#### Example
+
+The implementation of `ascii`:
 
 ```javascript
 const ascii = (value) => (data, version) => {
@@ -547,8 +536,11 @@ behaviours, you may need to update your code:
   `auto` mode will handle this automatically;
 - `auto` mode is now able to mix `utf8` with other modes if it will save
   space (some QR codes may change, but the meaning will be the same);
-- `shift_jis` mode (and custom modes) can now be registered more easily,
-  using `updatedGenerator = generator.with(shift_jis)`;
+- `shift_jis` mode is now available by default (the `extras/jis` export
+  has been removed);
+- custom modes can now be registered using
+  `updatedGenerator = generator.with(myCustomMode)`, avoiding the need to
+  specify all the default modes;
 - `toSvgSource` / `toSvgDataURL` now accept `rgb()` / `rgba()` syntax for
   colours, matching `toSvg`;
 - `toCanvas` / `toImageData` / `toDataURL` no longer accept 32-bit

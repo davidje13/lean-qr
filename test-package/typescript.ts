@@ -1,6 +1,5 @@
 import { generate, mode } from 'lean-qr';
 import { toSvgSource } from 'lean-qr/extras/svg';
-import { shift_jis } from 'lean-qr/extras/jis';
 
 // this file just checks types; the code is not executed
 
@@ -12,10 +11,15 @@ const code2 = generate(mode.numeric('123'), { minVersion: 3 });
 const svgSource = toSvgSource(code2);
 process.stdout.write(svgSource);
 
-const code3 = generate(shift_jis('123'), { minVersion: 3 });
+const customMode = Object.assign(() => () => null, {
+  test: () => true,
+  est: () => 0,
+});
+
+const code3 = generate(mode.shift_jis('123'), { minVersion: 3 });
 process.stdout.write(toSvgSource(code3, { padX: 2, xmlDeclaration: true }));
 
-const code4 = generate.with(shift_jis)('123');
+const code4 = generate.with(customMode)('123');
 process.stdout.write(code4.get(0, 0) ? 'y' : 'n');
 
 mode.auto('', {
@@ -25,7 +29,8 @@ mode.auto('', {
     mode.ascii,
     mode.iso8859_1,
     mode.utf8,
-    shift_jis,
+    mode.shift_jis,
+    customMode,
   ],
 });
 
@@ -44,14 +49,21 @@ generate(7);
 // @ts-expect-error
 generate('hello', { minVersion: '1' });
 
+const badCustomMode = Object.assign(() => () => null, {
+  test: () => true,
+});
+
 // @ts-expect-error
-generate.with(shift_jis)(7);
+generate.with(badCustomMode);
+
+// @ts-expect-error
+generate.with(customMode)(7);
 
 // @ts-expect-error
 generate.with(7)('hello');
 
 // @ts-expect-error
-generate.with(shift_jis).with(shift_jis)('hello');
+generate.with(customMode).with(customMode)('hello');
 
 // @ts-expect-error
 code.toString({ on: 'red' });
@@ -60,4 +72,4 @@ code.toString({ on: 'red' });
 toSvgSource('123');
 
 // @ts-expect-error
-shift_jis(1);
+mode.shift_jis(1);

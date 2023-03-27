@@ -201,4 +201,16 @@ describe('known examples', () => {
     );
     expect(code).toMatchImage(loadImage('v40.png'));
   });
+
+  it('Kanji', () => {
+    const kanji = '\u6F22\u5B57'; // 漢字 "Kanji"
+    const code = generate(mode.shift_jis(kanji), {
+      minCorrectionLevel: correction.H,
+      maxCorrectionLevel: correction.H,
+      minVersion: 1,
+      maxVersion: 1,
+      mask: 1,
+    });
+    expect(code).toMatchImage(loadImage('kanji.png'));
+  });
 });

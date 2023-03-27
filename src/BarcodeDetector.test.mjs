@@ -1,7 +1,5 @@
-import { generate as rawGenerate } from './index.mjs';
-import { shift_jis } from './extras/jis.mjs';
+import { generate } from './index.mjs';
 
-const generate = rawGenerate.with(shift_jis);
 const IMAGE_OPTIONS = { on: [0, 0, 0], off: [255, 255, 255] };
 const VIRTUAL_CANVAS = { createImageData: (w, h) => new ImageData(w, h) };
 

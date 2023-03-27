@@ -75,6 +75,7 @@ declare module 'lean-qr' {
     bytes(data: Uint8Array | number[]): Mode;
     ascii: ModeFactory;
     iso8859_1: ModeFactory;
+    shift_jis: ModeFactory;
     utf8: ModeFactory;
   };
 
@@ -132,10 +133,4 @@ declare module 'lean-qr/extras/svg' {
   ) => string;
 
   export const toSvgDataURL: (code: Bitmap2D, options?: SVGOptions) => string;
-}
-
-declare module 'lean-qr/extras/jis' {
-  import type { ModeFactory } from 'lean-qr';
-
-  export const shift_jis: ModeFactory;
 }

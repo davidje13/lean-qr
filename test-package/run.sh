@@ -14,9 +14,6 @@ npm run build;
   printf "\n";
   printf "extras/svg:            $(wc -c < build/extras/svg.js) bytes\n";
   printf "extras/svg compressed: $(zip -jqX9 - build/extras/svg.js | wc -c) bytes\n";
-  printf "\n";
-  printf "extras/jis:            $(wc -c < build/extras/jis.js) bytes\n";
-  printf "extras/jis compressed: $(zip -jqX9 - build/extras/jis.js | wc -c) bytes\n";
 } > docs/stats.txt;
 
 echo "Running package test...";

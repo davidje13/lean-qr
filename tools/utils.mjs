@@ -1,5 +1,5 @@
 export function compressNum(v, l = 0) {
-  // counterpart to decompressNum in jis.mjs
+  // counterpart to number decompression in readCompressed in corrections.mjs
   if (v < 0) {
     throw new Error('negative value!');
   }

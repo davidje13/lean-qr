@@ -1,6 +1,5 @@
 import { correction, generate } from '../src/index.mjs';
 import { toSvg, toSvgDataURL } from '../src/extras/svg.mjs';
-import { shift_jis } from '../src/extras/jis.mjs';
 
 const getInput = (name) => document.querySelector(`[name="${name}"]`);
 const getValue = (name) => getInput(name).value;
@@ -35,8 +34,6 @@ const downloadSvg = document.querySelector('#download .svg');
 
 let latestCode = null;
 
-const fullGenerate = generate.with(shift_jis);
-
 function regenerate() {
   latestCode = null;
   outputCanvas.style.display = 'none';
@@ -47,7 +44,7 @@ function regenerate() {
   downloadSvg.removeAttribute('href');
 
   try {
-    const code = fullGenerate(getValue('message'), {
+    const code = generate(getValue('message'), {
       minVersion: getInt('min-version', 1, 40),
       maxVersion: getInt('max-version', 1, 40),
       minCorrectionLevel: correction[getValue('min-correction')],
