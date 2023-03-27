@@ -2,7 +2,7 @@ import { Bitmap2D } from './Bitmap2D.mjs';
 
 describe('Bitmap2D', () => {
   it('begins with all pixels off and unmasked', () => {
-    const bmp = new Bitmap2D({ size: 10 });
+    const bmp = Bitmap2D(10);
     expect(bmp.size).toEqual(10);
     expect(bmp.get(0, 0)).toEqual(false);
     expect(bmp.get(9, 9)).toEqual(false);
@@ -11,7 +11,7 @@ describe('Bitmap2D', () => {
   });
 
   it('stores pixels', () => {
-    const bmp = new Bitmap2D({ size: 10 });
+    const bmp = Bitmap2D(10);
     bmp._set(5, 7, true);
     bmp._set(9, 1, false);
     bmp._set(8, 2, true, false);
@@ -23,7 +23,7 @@ describe('Bitmap2D', () => {
   });
 
   it('stores mask status pixels', () => {
-    const bmp = new Bitmap2D({ size: 10 });
+    const bmp = Bitmap2D(10);
     bmp._set(5, 7, true);
     bmp._set(9, 1, false);
     bmp._set(8, 2, true, false);
@@ -35,7 +35,7 @@ describe('Bitmap2D', () => {
   });
 
   it('inverts pixels', () => {
-    const bmp = new Bitmap2D({ size: 10 });
+    const bmp = Bitmap2D(10);
     bmp._set(5, 7, true);
     bmp._set(9, 1, false);
     bmp._set(8, 2, true, false);
@@ -55,9 +55,9 @@ describe('Bitmap2D', () => {
   });
 
   it('copies an existing bitmap', () => {
-    const bmp1 = new Bitmap2D({ size: 3 });
+    const bmp1 = Bitmap2D(3);
     bmp1._set(0, 1, true);
-    const bmp2 = new Bitmap2D(bmp1);
+    const bmp2 = bmp1._copy();
 
     expect(bmp2.size).toEqual(3);
     expect(bmp2.get(0, 0)).toEqual(false);
@@ -261,7 +261,7 @@ describe('Bitmap2D', () => {
   });
 });
 
-const TEST_IMAGE = new Bitmap2D({ size: 3 });
+const TEST_IMAGE = Bitmap2D(3);
 TEST_IMAGE._set(0, 0, true);
 TEST_IMAGE._set(0, 1, true);
 TEST_IMAGE._set(0, 2, true);

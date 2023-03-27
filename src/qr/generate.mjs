@@ -6,6 +6,7 @@ import { correctionData, correction } from './options/corrections.mjs';
 import { calculateEC } from './errorCorrection.mjs';
 import { drawFrame, getPath, drawCode, applyMask } from './draw.mjs';
 import { scoreCode } from './score.mjs';
+import { fail } from '../util.mjs';
 
 const baseCache = [];
 
@@ -21,10 +22,10 @@ export const generate = (
   } = {},
 ) => {
   if (maxCorrectionLevel < minCorrectionLevel) {
-    throw new Error('Bad correction range');
+    fail('Bad correction range');
   }
   if (maxVersion < minVersion) {
-    throw new Error('Bad version range');
+    fail('Bad version range');
   }
   if (typeof modeData === 'string') {
     modeData = mode.auto(modeData, autoModeConfig);
@@ -42,7 +43,7 @@ export const generate = (
       continue;
     }
 
-    const data = new Bitmap1D(2956); // max capacity of any code
+    const data = Bitmap1D(2956); // max capacity of any code
     modeData(data, version);
     dataLengthBits = data._bits;
 
@@ -59,17 +60,17 @@ export const generate = (
 
       let base = baseCache[version];
       if (!base) {
-        baseCache[version] = base = new Bitmap2D({ size: version * 4 + 17 });
+        baseCache[version] = base = Bitmap2D(version * 4 + 17);
         drawFrame(base, version);
         base.p = getPath(base);
       }
-      const code = new Bitmap2D(base);
+      const code = base._copy();
       drawCode(code, base.p, calculateEC(data._bytes, correction));
 
       // pick best mask
       return (masks[mask ?? -1] ? [masks[mask]] : masks)
         .map((m, maskId) => {
-          const masked = new Bitmap2D(code);
+          const masked = code._copy();
           applyMask(masked, m, mask ?? maskId, correction._id);
           masked.s = scoreCode(masked);
           return masked;
@@ -77,7 +78,7 @@ export const generate = (
         .reduce((best, masked) => (masked.s < best.s ? masked : best));
     }
   }
-  throw new Error('Too much data');
+  fail('Too much data');
 };
 
 generate.with =

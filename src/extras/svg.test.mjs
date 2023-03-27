@@ -3,27 +3,27 @@ import { Bitmap2D } from '../structures/Bitmap2D.mjs';
 
 describe('toSvgPath', () => {
   it('identifies the outline around pixels', () => {
-    const bitmap = new Bitmap2D({ size: 3 });
+    const bitmap = Bitmap2D(3);
     bitmap._set(1, 1, true);
 
     expect(toSvgPath(bitmap)).toEqual('M1 2L1 1L2 1L2 2Z');
   });
 
   it('identifies outlines at the limits of the image', () => {
-    const bitmap = new Bitmap2D({ size: 1 });
+    const bitmap = Bitmap2D(1);
     bitmap._set(0, 0, true);
 
     expect(toSvgPath(bitmap)).toEqual('M0 1L0 0L1 0L1 1Z');
   });
 
   it('returns blank for a blank input', () => {
-    const bitmap = new Bitmap2D({ size: 3 });
+    const bitmap = Bitmap2D(3);
 
     expect(toSvgPath(bitmap)).toEqual('');
   });
 
   it('does not include lines between pixels in the same state', () => {
-    const bitmap = new Bitmap2D({ size: 4 });
+    const bitmap = Bitmap2D(4);
     bitmap._set(1, 1, true);
     bitmap._set(2, 1, true);
     bitmap._set(1, 2, true);
@@ -33,7 +33,7 @@ describe('toSvgPath', () => {
   });
 
   it('creates separate paths for unconnected regions', () => {
-    const bitmap = new Bitmap2D({ size: 5 });
+    const bitmap = Bitmap2D(5);
     bitmap._set(1, 1, true);
     bitmap._set(3, 2, true);
 
@@ -41,7 +41,7 @@ describe('toSvgPath', () => {
   });
 
   it('creates reversed paths for inner holes', () => {
-    const bitmap = new Bitmap2D({ size: 5 });
+    const bitmap = Bitmap2D(5);
     bitmap._set(1, 1, true);
     bitmap._set(2, 1, true);
     bitmap._set(3, 1, true);
@@ -59,7 +59,7 @@ describe('toSvgPath', () => {
 
 describe('toSvgSource', () => {
   it('generates full SVG source for an image', () => {
-    const bitmap = new Bitmap2D({ size: 3 });
+    const bitmap = Bitmap2D(3);
     bitmap._set(1, 1, true);
 
     expect(toSvgSource(bitmap)).toEqual(
@@ -68,7 +68,7 @@ describe('toSvgSource', () => {
   });
 
   it('adds a background rectangle if off colour is specified', () => {
-    const bitmap = new Bitmap2D({ size: 3 });
+    const bitmap = Bitmap2D(3);
     bitmap._set(1, 1, true);
 
     expect(toSvgSource(bitmap, { off: 'red' })).toEqual(
@@ -77,7 +77,7 @@ describe('toSvgSource', () => {
   });
 
   it('can include XML declaration', () => {
-    const bitmap = new Bitmap2D({ size: 1 });
+    const bitmap = Bitmap2D(1);
 
     const source = toSvgSource(bitmap, {
       xmlDeclaration: true,
@@ -93,7 +93,7 @@ describe('toSvgSource', () => {
 
 describe('toSvgDataURL', () => {
   it('generates a data:image/svg URL for the code', () => {
-    const bitmap = new Bitmap2D({ size: 3 });
+    const bitmap = Bitmap2D(3);
     bitmap._set(1, 1, true);
 
     const data = toSvgDataURL(bitmap);

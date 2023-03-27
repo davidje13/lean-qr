@@ -1,4 +1,5 @@
 import { mult256PolyLn, rem256Poly } from './galoisPolynomial.mjs';
+import { makeUint8Array } from '../util.mjs';
 
 const generators = [[0], [0, 0]];
 for (let i = 1, last = generators[1]; i < 30; ++i) {
@@ -21,7 +22,7 @@ export const calculateEC = (versionBytes, correction) => {
     }
   }
 
-  const result = new Uint8Array(size);
+  const result = makeUint8Array(size);
   let offset = 0;
   for (const bs of blocks) {
     for (let i = 0, prev; offset !== prev; ++i) {

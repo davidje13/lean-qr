@@ -20,7 +20,7 @@ function read(code) {
 }
 
 function draw(version) {
-  const code = new Bitmap2D({ size: version * 4 + 17 });
+  const code = Bitmap2D(version * 4 + 17);
   drawFrame(code, version);
   return read(code);
 }

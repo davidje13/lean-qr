@@ -6,7 +6,7 @@ expect.extend({ toMatchBits });
 
 describe('mode.numeric', () => {
   it('stores the identifier and length', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     mode.numeric('')(data, 1);
     expect(data).toMatchBits(`
       0001
@@ -15,17 +15,17 @@ describe('mode.numeric', () => {
   });
 
   it('uses a larger length for higher versions', () => {
-    const data10 = new Bitmap1D(10);
+    const data10 = Bitmap1D(10);
     mode.numeric('')(data10, 10);
     expect(data10._bits).toEqual(4 + 12);
 
-    const data27 = new Bitmap1D(10);
+    const data27 = Bitmap1D(10);
     mode.numeric('')(data27, 27);
     expect(data27._bits).toEqual(4 + 14);
   });
 
   it('encodes values in triplets', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     mode.numeric('123000999')(data, 1);
     expect(data).toMatchBits(`
       0001
@@ -37,7 +37,7 @@ describe('mode.numeric', () => {
   });
 
   it('encodes 2 final characters in 7 bits', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     mode.numeric('99')(data, 1);
     expect(data).toMatchBits(`
       0001
@@ -47,7 +47,7 @@ describe('mode.numeric', () => {
   });
 
   it('encodes 1 final character in 4 bits', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     mode.numeric('9')(data, 1);
     expect(data).toMatchBits(`
       0001
@@ -80,7 +80,7 @@ describe('mode.numeric', () => {
 
 describe('mode.alphaNumeric', () => {
   it('stores the identifier and length', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     mode.alphaNumeric('')(data, 1);
     expect(data).toMatchBits(`
       0010
@@ -89,17 +89,17 @@ describe('mode.alphaNumeric', () => {
   });
 
   it('uses a larger length for higher versions', () => {
-    const data10 = new Bitmap1D(10);
+    const data10 = Bitmap1D(10);
     mode.alphaNumeric('')(data10, 10);
     expect(data10._bits).toEqual(4 + 11);
 
-    const data27 = new Bitmap1D(10);
+    const data27 = Bitmap1D(10);
     mode.alphaNumeric('')(data27, 27);
     expect(data27._bits).toEqual(4 + 13);
   });
 
   it('encodes values in pairs', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     mode.alphaNumeric('AB00::')(data, 1);
     expect(data).toMatchBits(`
       0010
@@ -111,7 +111,7 @@ describe('mode.alphaNumeric', () => {
   });
 
   it('encodes 1 final character in 6 bits', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     mode.alphaNumeric(':')(data, 1);
     expect(data).toMatchBits(`
       0010
@@ -144,7 +144,7 @@ describe('mode.alphaNumeric', () => {
 
 describe('mode.ascii', () => {
   it('stores the identifier and length', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     mode.ascii('')(data, 1);
     expect(data).toMatchBits(`
       0100
@@ -153,17 +153,17 @@ describe('mode.ascii', () => {
   });
 
   it('uses a larger length for higher versions', () => {
-    const data10 = new Bitmap1D(10);
+    const data10 = Bitmap1D(10);
     mode.ascii('')(data10, 10);
     expect(data10._bits).toEqual(4 + 16);
 
-    const data27 = new Bitmap1D(10);
+    const data27 = Bitmap1D(10);
     mode.ascii('')(data27, 27);
     expect(data27._bits).toEqual(4 + 16);
   });
 
   it('encodes values in 8 bit ISO-8859-1 encoding', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     mode.ascii('ab')(data, 1);
     expect(data).toMatchBits(`
       0100
@@ -196,7 +196,7 @@ describe('mode.ascii', () => {
 
 describe('mode.iso8859_1', () => {
   it('stores an ECI mode, the identifier and length', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     mode.iso8859_1('')(data, 1);
     expect(data).toMatchBits(`
       0111
@@ -208,17 +208,17 @@ describe('mode.iso8859_1', () => {
   });
 
   it('uses a larger length for higher versions', () => {
-    const data10 = new Bitmap1D(10);
+    const data10 = Bitmap1D(10);
     mode.iso8859_1('')(data10, 10);
     expect(data10._bits).toEqual(12 + 4 + 16);
 
-    const data27 = new Bitmap1D(10);
+    const data27 = Bitmap1D(10);
     mode.iso8859_1('')(data27, 27);
     expect(data27._bits).toEqual(12 + 4 + 16);
   });
 
   it('encodes values in 8 bit ISO-8859-1 encoding', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     mode.iso8859_1('ab\u00A3\u00FF')(data, 1);
     expect(data).toMatchBits(`
       0111
@@ -256,7 +256,7 @@ describe('mode.iso8859_1', () => {
 
 describe('mode.shift_jis', () => {
   it('stores the identifier and length', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     mode.shift_jis('')(data, 1);
     expect(data).toMatchBits(`
       1000
@@ -265,17 +265,17 @@ describe('mode.shift_jis', () => {
   });
 
   it('uses a larger length for higher versions', () => {
-    const data10 = new Bitmap1D(10);
+    const data10 = Bitmap1D(10);
     mode.shift_jis('')(data10, 10);
     expect(data10._bits).toEqual(4 + 10);
 
-    const data27 = new Bitmap1D(10);
+    const data27 = Bitmap1D(10);
     mode.shift_jis('')(data27, 27);
     expect(data27._bits).toEqual(4 + 12);
   });
 
   it('encodes values in 13-bits', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     mode.shift_jis('\uFF41\uFF42\uFF43')(data, 1); // full-width "abc"
     expect(data).toMatchBits(`
       1000
@@ -287,7 +287,7 @@ describe('mode.shift_jis', () => {
   });
 
   it('converts all supported values (shift-jis range)', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     // smallest shift-jis codepoint to largest codepoint:
     mode.shift_jis('\u3000\u7199')(data, 1); // ideographic space -- 'bright, splendid, glorious'
     expect(data).toMatchBits(`
@@ -299,7 +299,7 @@ describe('mode.shift_jis', () => {
   });
 
   it('converts all supported values (unicode range)', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     // smallest unicode codepoint to largest codepoint:
     mode.shift_jis('\u00A7\uFFE5')(data, 1); // section -- full-width yen sign
     expect(data).toMatchBits(`
@@ -335,7 +335,7 @@ describe('mode.shift_jis', () => {
 
 describe('mode.utf8', () => {
   it('stores the ECI mode, identifier and length', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     mode.utf8('')(data, 1);
     expect(data).toMatchBits(`
       0111
@@ -346,7 +346,7 @@ describe('mode.utf8', () => {
   });
 
   it('does not store the ECI mode if it is already correct', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     mode.multi(mode.utf8(''), mode.utf8(''))(data, 1);
     expect(data).toMatchBits(`
       0111
@@ -359,7 +359,7 @@ describe('mode.utf8', () => {
   });
 
   it('encodes values in 8 bit UTF8 encoding', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     mode.utf8('\u2026')(data, 1);
     expect(data).toMatchBits(`
       0111
@@ -394,7 +394,7 @@ describe('mode.utf8', () => {
 
 describe('mode.multi', () => {
   it('appends multiple modes in succession', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     mode.multi(mode.numeric('0'), mode.numeric('9'))(data, 1);
     expect(data).toMatchBits(`
       0001
@@ -408,7 +408,7 @@ describe('mode.multi', () => {
   });
 
   it('passes version information down', () => {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     mode.multi(mode.numeric(''))(data, 40);
     expect(data._bits).toEqual(4 + 14);
   });
@@ -422,8 +422,8 @@ describe('mode.multi', () => {
 
 describe('mode.auto', () => {
   function checkSame(actual, expected, version = 20) {
-    const actualData = new Bitmap1D(1000);
-    const expectedData = new Bitmap1D(1000);
+    const actualData = Bitmap1D(1000);
+    const expectedData = Bitmap1D(1000);
     actual(actualData, version);
     expected(expectedData, version);
 
@@ -454,14 +454,14 @@ describe('mode.auto', () => {
   });
 
   it('rejects impossible input', () => {
-    const data = new Bitmap1D(1000);
+    const data = Bitmap1D(1000);
     expect(() =>
       mode.auto('nope', { modes: [mode.alphaNumeric] })(data, 10),
     ).toThrow('Unencodable');
   });
 
   it('rejects impossible iso8859_1 input', () => {
-    const data = new Bitmap1D(1000);
+    const data = Bitmap1D(1000);
     expect(() =>
       mode.auto('nah\u2026', { modes: [mode.iso8859_1] })(data, 10),
     ).toThrow('Unencodable');
@@ -563,15 +563,15 @@ describe('mode.auto', () => {
 function expectRepeatable(encoderFactory) {
   const encoder1 = encoderFactory();
   const encoder2 = encoderFactory();
-  const data1 = new Bitmap1D(10);
-  const data2 = new Bitmap1D(10);
+  const data1 = Bitmap1D(10);
+  const data2 = Bitmap1D(10);
 
   encoder1(data1, 1);
   encoder1(data2, 1);
   expect(data2).toMatchBits(data1); // exact repeat
 
-  const data3 = new Bitmap1D(10);
-  const data4 = new Bitmap1D(10);
+  const data3 = Bitmap1D(10);
+  const data4 = Bitmap1D(10);
   encoder1(data3, 40);
   encoder2(data4, 40);
   expect(data3).toMatchBits(data4); // version change
@@ -581,7 +581,7 @@ function expectEstMatch(mode, value) {
   const encoder = mode(value);
 
   for (let version = 1; version <= 40; ++version) {
-    const data = new Bitmap1D(10);
+    const data = Bitmap1D(10);
     data.eci = mode.eci; // do not include ECI changes
     const est = mode.est(value, version);
     encoder(data, version);

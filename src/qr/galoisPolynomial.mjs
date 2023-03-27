@@ -1,4 +1,6 @@
-const LOG = new Uint8Array(512);
+import { makeUint8Array } from '../util.mjs';
+
+const LOG = makeUint8Array(512);
 LOG[0] = 1;
 for (let i = 0, v = 1; i < 255; LOG[++i] = v) {
   LOG[v + 256] = i;
@@ -11,7 +13,7 @@ const e = (x) => LOG[x % 255]; // assume x is never negative
 const ln = (x) => LOG[x + 256];
 
 export const mult256PolyLn = (p1Ln, p2Ln) => {
-  const result = new Uint8Array(p1Ln.length + p2Ln.length - 1);
+  const result = makeUint8Array(p1Ln.length + p2Ln.length - 1);
   for (let i = 0; i < p1Ln.length; ++i) {
     for (let j = 0; j < p2Ln.length; ++j) {
       result[i + j] ^= e(p1Ln[i] + p2Ln[j]);
@@ -21,7 +23,7 @@ export const mult256PolyLn = (p1Ln, p2Ln) => {
 };
 
 export const rem256Poly = (num, denLn) => {
-  const remainder = new Uint8Array(num.length + denLn.length - 1);
+  const remainder = makeUint8Array(num.length + denLn.length - 1);
   remainder.set(num, 0);
   for (let i = 0; i < num.length; ++i) {
     if (remainder[i]) {

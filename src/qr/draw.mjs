@@ -70,7 +70,7 @@ export const drawFrame = (code, version) => {
   }
   for (let y = 0; y < size; ++y) {
     for (let x = y; x < size; ++x) {
-      code.d[x * size + y] = code.d[y * size + x];
+      code._data[x * size + y] = code._data[y * size + x];
     }
   }
   code._set(8, size - 8, 1);

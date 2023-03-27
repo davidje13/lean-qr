@@ -1,39 +1,44 @@
-export class Bitmap2D {
-  constructor({ size, d }) {
-    this.size = size;
-    this.d = new Uint8Array(d || size * size);
-  }
+import { makeUint8Array } from '../util.mjs';
 
-  get = (x, y) =>
-    x >= 0 && x < this.size && !!(this.d[y * this.size + x] & 0b01);
+export const Bitmap2D = (
+  size,
+  _dataSource = size * size,
+  _data = makeUint8Array(_dataSource),
+) => ({
+  size,
+  _data,
 
-  _masked = (x, y) => this.d[y * this.size + x] & 0b10;
+  _copy: () => Bitmap2D(size, _data),
+
+  get: (x, y) => x >= 0 && x < size && !!(_data[y * size + x] & 0b01),
+
+  _masked: (x, y) => _data[y * size + x] & 0b10,
 
   _set(x, y, value, mask = 1) {
-    this.d[y * this.size + x] = (mask * 0b10) | !!value;
-  }
+    _data[y * size + x] = (mask * 0b10) | !!value;
+  },
 
   _inv(x, y) {
-    this.d[y * this.size + x] ^= 1;
-  }
+    _data[y * size + x] ^= 1;
+  },
 
   toString({ on = '##', off = '  ', lf = '\n', padX = 4, padY = 4 } = {}) {
     let r = '';
-    for (let y = -padY; y < this.size + padY; ++y) {
-      for (let x = -padX; x < this.size + padX; ++x) {
+    for (let y = -padY; y < size + padY; ++y) {
+      for (let x = -padX; x < size + padX; ++x) {
         r += this.get(x, y) ? on : off;
       }
       r += lf;
     }
     return r;
-  }
+  },
 
   toImageData(
     context,
     { on = [0, 0, 0], off = [0, 0, 0, 0], padX = 4, padY = 4 } = {},
   ) {
-    const fullX = this.size + padX * 2;
-    const fullY = this.size + padY * 2;
+    const fullX = size + padX * 2;
+    const fullY = size + padY * 2;
     const target = context.createImageData(fullX, fullY);
     const abgr = new Uint32Array(target.data.buffer);
     target.data.set([...on, 255]);
@@ -46,7 +51,7 @@ export class Bitmap2D {
       }
     }
     return target;
-  }
+  },
 
   toCanvas(canvas, options) {
     const ctx = canvas.getContext('2d');
@@ -54,7 +59,7 @@ export class Bitmap2D {
     canvas.width = data.width;
     canvas.height = data.height;
     ctx.putImageData(data, 0, 0);
-  }
+  },
 
   toDataURL({ type = 'image/png', scale = 1, ...options } = {}) {
     const canvas = document.createElement('canvas');
@@ -77,5 +82,5 @@ export class Bitmap2D {
       canvas.height,
     );
     return canvas.toDataURL(type, 1);
-  }
-}
+  },
+});

@@ -1,3 +1,5 @@
+import { makeUint8Array, fail } from '../../util.mjs';
+
 const alnum = (c) => '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:'.indexOf(c);
 const firstCharCode = (c) => c.charCodeAt(0);
 
@@ -20,10 +22,13 @@ const bytes = (value) => (data, version) => {
   value.forEach((b) => data.push(b, 8));
 };
 
-const makeMode = (fn, test, estimator, requiredECI) => {
-  const wrappedFn = requiredECI
-    ? (value) => multi(eci(requiredECI), fn(value))
-    : fn;
+const makeMode = (
+  fn,
+  test,
+  estimator,
+  requiredECI,
+  wrappedFn = requiredECI ? (value) => multi(eci(requiredECI), fn(value)) : fn,
+) => {
   wrappedFn.test = test;
   wrappedFn.est = estimator;
   wrappedFn.eci = requiredECI;
@@ -92,7 +97,7 @@ const utf8 = makeMode(
 let shiftJISMap = () => {
   const map = new Map();
   const decoder = new TextDecoder('sjis');
-  const b = new Uint8Array(2);
+  const b = makeUint8Array(2);
   for (const [from, to, shift] of [
     [0x8140, 0x9ffd, 0x8140],
     [0xe040, 0xebc0, 0xc140],
@@ -125,7 +130,7 @@ const shift_jis = makeMode(
 );
 
 const pickBest = (opts) =>
-  opts.reduce((best, part) => (part.e < best.e ? part : best));
+  opts.reduce((best, part) => (part._cost < best._cost ? part : best));
 
 export const DEFAULT_AUTO_MODES = [
   numeric,
@@ -153,38 +158,38 @@ export const mode = {
        * even if the latter is better)
        */
 
-      let cur = [{ e: 0 }];
+      let cur = [{ _cost: 0 }];
       for (let i = 0; i < value.length; ++i) {
         cur = modes
           .filter((mode) => mode.test(value[i]))
           .map((mode) =>
             pickBest(
               cur.map((p) => {
-                const start = p.m === mode ? p.s : i;
-                const previous = p.m === mode ? p.p : p;
+                const start = p._mode === mode ? p._start : i;
+                const previous = p._mode === mode ? p._previous : p;
                 const fragment = value.slice(start, i + 1);
-                const curECI = mode.eci ?? previous.i;
+                const curECI = mode.eci ?? previous._eci;
                 return {
-                  m: mode,
-                  p: previous,
-                  s: start,
-                  v: fragment,
-                  e:
-                    previous.e +
+                  _mode: mode,
+                  _previous: previous,
+                  _start: start,
+                  _text: fragment,
+                  _cost:
+                    previous._cost +
                     (curECI !== previous.i) * 12 +
                     Math.ceil(mode.est(fragment, version)),
-                  i: curECI,
+                  _eci: curECI,
                 };
               }),
             ),
           );
         if (!cur.length) {
-          throw new Error('Unencodable');
+          fail('Unencodable');
         }
       }
       const parts = [];
-      for (let part = pickBest(cur); part.m; part = part.p) {
-        parts.unshift(part.m(part.v));
+      for (let part = pickBest(cur); part._mode; part = part._previous) {
+        parts.unshift(part._mode(part._text));
       }
       parts.forEach((enc) => enc(data, version));
     },
