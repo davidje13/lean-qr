@@ -205,7 +205,7 @@ describe('scoreImbalance', () => {
     ).toEqual(0);
   });
 
-  it('returns 100 for highly imbalanced grids', () => {
+  it('returns 10 for highly imbalanced grids', () => {
     expect(
       scoreImbalance(
         makeBitmap([
@@ -217,7 +217,7 @@ describe('scoreImbalance', () => {
           '######',
         ]),
       ),
-    ).toEqual(100);
+    ).toEqual(10);
 
     expect(
       scoreImbalance(
@@ -230,10 +230,10 @@ describe('scoreImbalance', () => {
           '      ',
         ]),
       ),
-    ).toEqual(100);
+    ).toEqual(10);
   });
 
-  it('returns multiples of 10', () => {
+  it('returns integers', () => {
     expect(
       scoreImbalance(
         makeBitmap([
@@ -245,7 +245,7 @@ describe('scoreImbalance', () => {
           '######',
         ]),
       ),
-    ).toEqual(90);
+    ).toEqual(9);
   });
 
   it('produces the expected result for the sample code', () => {

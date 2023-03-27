@@ -35,7 +35,10 @@ export const generate = (
     version <= maxVersion;
     ++version
   ) {
-    if (correctionData[minCorrectionLevel][version - 1].c < dataLengthBits) {
+    if (
+      correctionData[minCorrectionLevel][version - 1]._capacityBits <
+      dataLengthBits
+    ) {
       continue;
     }
 
@@ -45,12 +48,12 @@ export const generate = (
 
     for (let cl = maxCorrectionLevel; cl >= minCorrectionLevel; --cl) {
       const correction = correctionData[cl][version - 1];
-      if (correction.c < dataLengthBits) {
+      if (correction._capacityBits < dataLengthBits) {
         continue;
       }
       data.push(0b0000, 4);
       data._bits = (data._bits + 7) & ~7; // pad with 0s to the next byte
-      while (data._bits < correction.c) {
+      while (data._bits < correction._capacityBits) {
         data.push(0b11101100_00010001, 16);
       }
 
@@ -67,7 +70,7 @@ export const generate = (
       return (masks[mask ?? -1] ? [masks[mask]] : masks)
         .map((m, maskId) => {
           const masked = new Bitmap2D(code);
-          applyMask(masked, m, mask ?? maskId, correction.i);
+          applyMask(masked, m, mask ?? maskId, correction._id);
           masked.s = scoreCode(masked);
           return masked;
         })

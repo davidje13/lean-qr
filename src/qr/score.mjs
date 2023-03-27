@@ -58,16 +58,12 @@ export const countPatterns = (code) => {
 
 export const scoreImbalance = (code) => {
   let totalOn = 0;
-  for (let y = 0; y < code.size; ++y) {
-    for (let x = 0; x < code.size; ++x) {
-      totalOn += code.get(x, y);
-    }
-  }
-  return ((20 * Math.abs(totalOn / (code.size * code.size) - 0.5)) | 0) * 10;
+  hv(code, 0, (_, cur) => (totalOn += cur));
+  return (20 * Math.abs(totalOn / (code.size * code.size * 2) - 0.5)) | 0;
 };
 
 export const scoreCode = (code) =>
   scoreLines(code) +
   countBoxes(code) * 3 +
   countPatterns(code) * 40 +
-  scoreImbalance(code);
+  scoreImbalance(code) * 10;

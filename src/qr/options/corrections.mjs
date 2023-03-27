@@ -5,15 +5,15 @@ const readCompressed = (id, data) =>
     const gs = v.charCodeAt(2) * 92 + v.charCodeAt(3) - 35 * 93;
     const g1s = gs >> 5;
     return {
-      i: id,
-      c: (g1n * g1s + g2n * (g1s + 1)) * 8, // total bit capacity
-      g: g2n
+      _id: id,
+      _capacityBits: (g1n * g1s + g2n * (g1s + 1)) * 8,
+      _groups: g2n
         ? [
             [g1n, g1s],
             [g2n, g1s + 1],
           ]
-        : [[g1n, g1s]], // groups
-      s: gs & 0b11111, // error correction size
+        : [[g1n, g1s]],
+      _ecSize: gs & 0b11111,
     };
   });
 

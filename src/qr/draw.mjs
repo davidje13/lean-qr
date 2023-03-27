@@ -30,35 +30,29 @@ export const drawFrame = (code, version) => {
   };
 
   const size = version * 4 + 17;
+  drawRect(7, 0, 2, 9, 0);
+  drawRect(size - 8, 0, 8, 9, 0);
+  for (let i = 0; i < size; ++i) {
+    code._set(i, 6, !(i & 1));
+  }
   drawPlacement(3, 3);
   drawPlacement(size - 4, 3);
-  drawPlacement(3, size - 4);
-  drawRect(0, 7, 9, 2, 0);
-  drawRect(7, 0, 2, 7, 0);
-  drawRect(size - 8, 7, 8, 2, 0);
-  drawRect(size - 8, 0, 1, 7, 0);
-  drawRect(7, size - 8, 2, 8, 0);
-  drawRect(0, size - 8, 7, 1, 0);
-  code._set(8, size - 8, 1);
-  for (let i = 8; i < size - 8; ++i) {
-    code._set(i, 6, !(i & 1));
-    code._set(6, i, !(i & 1));
-  }
   if (version > 1) {
     const numAlignmentM = ((version / 7) | 0) + 1;
     // alignment boxes must always be positioned on even pixels
     // and are spaced evenly from the bottom right (except top and left which are always 6)
     // the 0.75 (1-0.25) avoids a quirk in the spec for version 32
     const stepAlignment = (((size - 13) / numAlignmentM / 2 + 0.75) | 0) * 2;
-    const positions = [6];
-    for (let i = numAlignmentM; i-- > 0; ) {
+    const positions = [];
+    for (let i = 0; i < numAlignmentM; ++i) {
       positions.push(size - 7 - i * stepAlignment);
+      if (i) {
+        drawAlignment(positions[i], 6);
+      }
     }
-    for (let i = 0; i <= numAlignmentM; ++i) {
-      for (let j = 0; j <= numAlignmentM; ++j) {
-        if (i * j || (i + j && i + j < numAlignmentM)) {
-          drawAlignment(positions[i], positions[j]);
-        }
+    for (let i = 0; i < numAlignmentM; ++i) {
+      for (let j = 0; j < numAlignmentM; ++j) {
+        drawAlignment(positions[i], positions[j]);
       }
     }
   }
@@ -70,11 +64,16 @@ export const drawFrame = (code, version) => {
       ++j
     ) {
       for (let i = 12; i-- > 9; dat >>>= 1) {
-        code._set(j, size - i, dat & 1);
         code._set(size - i, j, dat & 1);
       }
     }
   }
+  for (let y = 0; y < size; ++y) {
+    for (let x = y; x < size; ++x) {
+      code.d[x * size + y] = code.d[y * size + x];
+    }
+  }
+  code._set(8, size - 8, 1);
 };
 
 export const getPath = (code) => {

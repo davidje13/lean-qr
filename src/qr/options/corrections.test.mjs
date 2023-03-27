@@ -1,11 +1,11 @@
-import { correctionData as data, correction } from './corrections.mjs';
+import { correctionData, correction } from './corrections.mjs';
 
 describe('corrections', () => {
   it('contains correction level IDs', () => {
-    expect(data[correction.L][0].i).toEqual(0b01);
-    expect(data[correction.M][0].i).toEqual(0b00);
-    expect(data[correction.Q][0].i).toEqual(0b11);
-    expect(data[correction.H][0].i).toEqual(0b10);
+    expect(correctionData[correction.L][0]._id).toEqual(0b01);
+    expect(correctionData[correction.M][0]._id).toEqual(0b00);
+    expect(correctionData[correction.Q][0]._id).toEqual(0b11);
+    expect(correctionData[correction.H][0]._id).toEqual(0b10);
   });
 
   it('stores data in increasing robustness', () => {
@@ -20,24 +20,24 @@ describe('corrections', () => {
   });
 
   it('divides input data into groups', () => {
-    for (let i = 0; i < data.length; ++i) {
+    for (let i = 0; i < correctionData.length; ++i) {
       for (let version = 1; version <= 40; ++version) {
-        const item = data[i][version - 1];
+        const item = correctionData[i][version - 1];
         let total = 0;
-        item.g.forEach((g) => {
+        item._groups.forEach((g) => {
           total += g[0] * g[1];
         });
-        expect(total * 8).toEqual(item.c);
+        expect(total * 8).toEqual(item._capacityBits);
       }
     }
   });
 
   it('contains no empty or 0-count groups', () => {
-    for (let i = 0; i < data.length; ++i) {
+    for (let i = 0; i < correctionData.length; ++i) {
       for (let version = 1; version <= 40; ++version) {
-        const item = data[i][version - 1];
-        expect(item.g.length).toBeGreaterThan(0);
-        item.g.forEach((g) => {
+        const item = correctionData[i][version - 1];
+        expect(item._groups.length).toBeGreaterThan(0);
+        item._groups.forEach((g) => {
           expect(g[0]).toBeGreaterThan(0);
           expect(g[1]).toBeGreaterThan(0);
         });
@@ -46,10 +46,10 @@ describe('corrections', () => {
   });
 
   it('stores more data in larger versions', () => {
-    for (let i = 0; i < data.length; ++i) {
-      let last = data[i][0].c;
+    for (let i = 0; i < correctionData.length; ++i) {
+      let last = correctionData[i][0]._capacityBits;
       for (let version = 2; version <= 40; ++version) {
-        const cur = data[i][version - 1].c;
+        const cur = correctionData[i][version - 1]._capacityBits;
         expect(cur).toBeGreaterThan(last);
         last = cur;
       }
@@ -58,9 +58,9 @@ describe('corrections', () => {
 
   it('stores less data with more robust correction levels', () => {
     for (let version = 1; version <= 40; ++version) {
-      let last = data[0][version - 1].c;
-      for (let i = 1; i < data.length; ++i) {
-        const cur = data[i][version - 1].c;
+      let last = correctionData[0][version - 1]._capacityBits;
+      for (let i = 1; i < correctionData.length; ++i) {
+        const cur = correctionData[i][version - 1]._capacityBits;
         expect(cur).toBeLessThan(last);
         last = cur;
       }
@@ -121,10 +121,10 @@ describe('corrections', () => {
       ],
     },
     (version, level) => {
-      const [ecsize, ...groups] = dataset[version][level];
-      const info = data[correction[level]][version - 1];
-      expect(info.s).toEqual(ecsize);
-      expect(info.g).toEqual(groups);
+      const [ecSize, ...groups] = dataset[version][level];
+      const info = correctionData[correction[level]][version - 1];
+      expect(info._ecSize).toEqual(ecSize);
+      expect(info._groups).toEqual(groups);
     },
   );
 });
