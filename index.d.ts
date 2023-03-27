@@ -20,37 +20,36 @@ declare module 'lean-qr' {
     push(value: number, bits: number): void;
   }
 
+  export interface StringOptions {
+    on?: string;
+    off?: string;
+    lf?: string;
+    padX?: number;
+    padY?: number;
+  }
+
+  export interface ImageDataOptions {
+    on?: RGBA;
+    off?: RGBA;
+    padX?: number;
+    padY?: number;
+  }
+
   export interface Bitmap2D {
     readonly size: number;
 
     get(x: number, y: number): boolean;
 
-    toString(options?: {
-      on?: RGBA;
-      off?: RGBA;
-      lf?: string;
-      padX?: number;
-      padY?: number;
-    }): string;
+    toString(options?: StringOptions): string;
 
     toImageData<DataT extends ImageDataLike>(
       context: Context2DLike<DataT>,
-      options?: {
-        on?: RGBA;
-        off?: RGBA;
-        padX?: number;
-        padY?: number;
-      },
+      options?: ImageDataOptions,
     ): DataT;
 
     toCanvas(
       canvas: CanvasLike<ImageDataLike>,
-      options?: {
-        on?: RGBA;
-        off?: RGBA;
-        padX?: number;
-        padY?: number;
-      },
+      options?: ImageDataOptions,
     ): void;
   }
 
@@ -88,7 +87,7 @@ declare module 'lean-qr' {
     max = 3,
   }
 
-  interface GenerateOptions {
+  export interface GenerateOptions extends ModeAutoOptions {
     minCorrectionLevel?: correction;
     maxCorrectionLevel?: correction;
     minVersion?: number;
@@ -96,7 +95,7 @@ declare module 'lean-qr' {
     mask?: null | Mask;
   }
 
-  type GenerateFn = (
+  export type GenerateFn = (
     data: Mode | string,
     options?: GenerateOptions,
   ) => Bitmap2D;
@@ -133,4 +132,26 @@ declare module 'lean-qr/extras/svg' {
   ) => string;
 
   export const toSvgDataURL: (code: Bitmap2D, options?: SVGOptions) => string;
+}
+
+declare module 'lean-qr/extras/react' {
+  import type { ImageDataOptions, GenerateOptions, GenerateFn } from 'lean-qr';
+
+  export interface Framework<T> {
+    createElement: (type: string, props: any) => T;
+    useRef<T>(initialValue: T | null): { readonly current: T | null };
+    useState<S>(initialState: S | (() => S)): [S, (value: S) => void];
+    useEffect(fn: () => void | (() => void), deps: unknown[]): void;
+  }
+
+  export interface QRComponentProps extends ImageDataOptions, GenerateOptions {
+    content: string;
+  }
+
+  export type QRComponent<T> = (props: QRComponentProps) => T;
+
+  export const makeComponent: <T>(
+    framework: Framework<T>,
+    generate: GenerateFn,
+  ) => QRComponent<T>;
 }

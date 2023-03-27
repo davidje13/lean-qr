@@ -4,7 +4,11 @@ import { toSvgSource } from 'lean-qr/extras/svg';
 // this file just checks types; the code is not executed
 
 const code = generate('foo');
-const str = code.toString({ on: [0, 0, 0], off: [0, 0, 0, 0] });
+
+const canvas = document.createElement('canvas');
+code.toCanvas(canvas, { on: [0, 0, 0], off: [255, 255, 255, 0] });
+
+const str = code.toString({ on: 'y', off: 'n' });
 process.stdout.write(str);
 
 const code2 = generate(mode.numeric('123'), { minVersion: 3 });
@@ -66,7 +70,13 @@ generate.with(7)('hello');
 generate.with(customMode).with(customMode)('hello');
 
 // @ts-expect-error
-code.toString({ on: 'red' });
+code.toCanvas(canvas, { on: [0, 0], off: [255, 255, 255, 0] });
+
+// @ts-expect-error
+code.toCanvas({}, { on: [0, 0, 0], off: [255, 255, 255, 0] });
+
+// @ts-expect-error
+code.toString({ on: [0, 0, 0] });
 
 // @ts-expect-error
 toSvgSource('123');

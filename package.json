@@ -11,7 +11,9 @@
   "exports": {
     ".": "./build/index.js",
     "./extras/svg": "./build/extras/svg.js",
-    "./extras/svg.js": "./build/extras/svg.js"
+    "./extras/svg.js": "./build/extras/svg.js",
+    "./extras/react": "./build/extras/react.js",
+    "./extras/react.js": "./build/extras/react.js"
   },
   "types": "index.d.ts",
   "scripts": {

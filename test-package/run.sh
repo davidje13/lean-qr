@@ -9,11 +9,14 @@ echo;
 npm run build;
 
 {
-  printf "core:                  $(wc -c < build/index.js) bytes\n";
-  printf "core compressed:       $(zip -jqX9 - build/index.js | wc -c) bytes\n";
+  printf "core:                    $(wc -c < build/index.js) bytes\n";
+  printf "core compressed:         $(zip -jqX9 - build/index.js | wc -c) bytes\n";
   printf "\n";
-  printf "extras/svg:            $(wc -c < build/extras/svg.js) bytes\n";
-  printf "extras/svg compressed: $(zip -jqX9 - build/extras/svg.js | wc -c) bytes\n";
+  printf "extras/svg:              $(wc -c < build/extras/svg.js) bytes\n";
+  printf "extras/svg compressed:   $(zip -jqX9 - build/extras/svg.js | wc -c) bytes\n";
+  printf "\n";
+  printf "extras/react:            $(wc -c < build/extras/react.js) bytes\n";
+  printf "extras/react compressed: $(zip -jqX9 - build/extras/react.js | wc -c) bytes\n";
 } > docs/stats.txt;
 
 echo "Running package test...";

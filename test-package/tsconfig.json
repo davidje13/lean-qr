@@ -1,8 +1,11 @@
 {
   "compilerOptions": {
     "strict": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "jsx": "preserve",
+    "jsxFactory": "preact.h",
+    "noEmit": true
   },
-  "include": ["**/*"],
+  "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }
