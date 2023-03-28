@@ -1,8 +1,6 @@
 import terser from '@rollup/plugin-terser';
-import { babel } from '@rollup/plugin-babel';
 
 const plugins = [
-  babel({ babelHelpers: 'bundled' }),
   terser({
     format: { ascii_only: true },
     mangle: { properties: { regex: /^_/ } },

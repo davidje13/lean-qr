@@ -3,7 +3,6 @@
     "strict": true,
     "noImplicitAny": true,
     "jsx": "preserve",
-    "jsxFactory": "preact.h",
     "noEmit": true
   },
   "include": ["**/*.ts", "**/*.tsx"],
