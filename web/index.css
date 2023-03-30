@@ -176,6 +176,10 @@ nav {
   background: #f8f8f8;
 }
 
+nav a {
+  margin-left: 10px;
+}
+
 nav a:link,
 nav a:visited {
   text-decoration: none;
