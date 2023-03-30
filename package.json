@@ -9,11 +9,18 @@
   "bin": "./build/cli.mjs",
   "main": "build/index.js",
   "exports": {
-    ".": "./build/index.js",
-    "./extras/svg": "./build/extras/svg.js",
-    "./extras/svg.js": "./build/extras/svg.js",
-    "./extras/react": "./build/extras/react.js",
-    "./extras/react.js": "./build/extras/react.js"
+    ".": {
+      "require": "./build/index.js",
+      "import": "./build/index.mjs"
+    },
+    "./extras/svg": {
+      "require": "./build/extras/svg.js",
+      "import": "./build/extras/svg.mjs"
+    },
+    "./extras/react": {
+      "require": "./build/extras/react.js",
+      "import": "./build/extras/react.mjs"
+    }
   },
   "types": "index.d.ts",
   "scripts": {

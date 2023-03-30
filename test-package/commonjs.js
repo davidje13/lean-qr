@@ -1,5 +1,11 @@
 const { generate } = require('lean-qr');
-const { toSvgSource } = require('lean-qr/extras/svg');
+const { toSvgSource, toSvgDataURL } = require('lean-qr/extras/svg');
+const {
+  makeAsyncComponent,
+  makeSyncComponent,
+} = require('lean-qr/extras/react');
+const { h } = require('preact');
+const hooks = require('preact/hooks');
 
 if (typeof generate !== 'function') {
   throw new Error("require('lean-qr') did not return generate function");
@@ -10,6 +16,9 @@ if (typeof toSvgSource !== 'function') {
     "require('lean-qr/extras/svg') did not return toSvgSource function",
   );
 }
+
+makeAsyncComponent({ createElement: h, ...hooks }, generate);
+makeSyncComponent({ createElement: h, ...hooks }, generate, toSvgDataURL);
 
 const expected = `-----------------------------
 -----------------------------

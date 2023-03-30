@@ -1,5 +1,8 @@
 import { generate } from 'lean-qr';
-import { toSvgSource } from 'lean-qr/extras/svg';
+import { toSvgSource, toSvgDataURL } from 'lean-qr/extras/svg';
+import { makeAsyncComponent, makeSyncComponent } from 'lean-qr/extras/react';
+import { h } from 'preact';
+import * as hooks from 'preact/hooks';
 
 if (typeof generate !== 'function') {
   throw new Error("import 'lean-qr' did not return generate function");
@@ -10,6 +13,9 @@ if (typeof toSvgSource !== 'function') {
     "import 'lean-qr/extras/svg' did not return toSvgSource function",
   );
 }
+
+makeAsyncComponent({ createElement: h, ...hooks }, generate);
+makeSyncComponent({ createElement: h, ...hooks }, generate, toSvgDataURL);
 
 const expected = `-----------------------------
 -----------------------------

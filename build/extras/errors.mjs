@@ -1,0 +1,1 @@
+const o={1:"No data",2:"Bad version range",3:"Bad error correction range",4:"Too much data",5:"Data cannot be encoded using requested modes",6:"Bad framework",7:"Bad generate function",8:"Bad toSvgDataURL function"},e=e=>"object"!=typeof e?`${e}`||"Unknown error":o[e.code]||e.message||"Unknown error";export{e as readError};
