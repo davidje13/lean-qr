@@ -87,7 +87,7 @@ describe('makeSyncComponent', () => {
 
     const img = container.querySelector('img');
     expect(img).isTruthy();
-    expect(img.src).startsWith('data:image/svg;base64,');
+    expect(img.src).startsWith('data:image/svg+xml;base64,');
   });
 
   it('handles errors without exploding', () => {

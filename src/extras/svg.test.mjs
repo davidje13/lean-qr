@@ -92,14 +92,14 @@ describe('toSvgSource', () => {
 });
 
 describe('toSvgDataURL', () => {
-  it('generates a data:image/svg URL for the code', () => {
+  it('generates a data:image/svg+xml URL for the code', () => {
     const bitmap = Bitmap2D(3);
     bitmap._set(1, 1, true);
 
     const data = toSvgDataURL(bitmap);
     const [type, content] = data.split(';');
 
-    expect(type).toEqual('data:image/svg');
+    expect(type).toEqual('data:image/svg+xml');
     expect(content).toEqual(
       'base64,' +
         'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiID8+PHN2ZyB4bWxu' +

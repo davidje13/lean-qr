@@ -517,7 +517,7 @@ the source with `<?xml version="1.0" encoding="UTF-8" ?>`).
 
 ### `toSvgDataURL(code[, options])`
 
-Like `toSvg` but returns a `data:image/svg` URL containing the image data,
+Like `toSvg` but returns a `data:image/svg+xml` URL containing the image data,
 suitable for displaying in an `img` tag or downloading from an `a` tag.
 Can be called inside NodeJS.
 

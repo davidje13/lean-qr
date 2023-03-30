@@ -113,5 +113,5 @@ export const toSvgSource = (code, options = {}) =>
   toSvgInternal(code, options, makeSrc);
 
 export const toSvgDataURL = (code, options) =>
-  'data:image/svg;base64,' +
+  'data:image/svg+xml;base64,' +
   btoa(toSvgSource(code, { xmlDeclaration: 1, ...options }));
