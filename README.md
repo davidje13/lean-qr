@@ -1,6 +1,7 @@
 # Lean QR
 
 Minimal library for generating QR Codes in the browser and server-side.
+Includes a convenience wrapper for React / Preact.
 
 Optimised for code size while maintaining decent performance and supporting
 all QR features. Less than 8kB uncompressed (less than 4kB compressed).
@@ -19,20 +20,6 @@ Updating from version 1.x?
 See the [notable changes](#notable-changes-in-version-2).
 
 ## Usage
-
-### NodeJS
-
-```javascript
-import { generate } from 'lean-qr';
-
-const code = generate('LEAN-QR LIBRARY');
-
-process.stdout.write(code.toString({
-  on: '\u001B[7m  \u001B[0m', // ANSI escape: inverted
-}));
-```
-
-<img src="docs/example.png" alt="Example output QR Code" width="300" />
 
 ### Browser
 
@@ -55,6 +42,67 @@ code.toCanvas(document.getElementById('my-canvas'));
 }
 </style>
 ```
+
+### React / Preact
+
+A wrapper is available which is compatible with React and Preact (and
+any other library which offers `createElement` and React-style hooks)
+
+#### React
+
+```javascript
+import { generate } from 'lean-qr';
+import { makeDynamicComponent } from 'lean-qr/extras/react';
+import * as React from 'react';
+
+const QR = makeDynamicComponent(React, generate);
+
+const MyComponent = () => (
+  <section>
+    Scan this QR Code!
+    <QR content="LEAN-QR LIBRARY" className="qr-code" />
+  </section>
+);
+```
+
+```css
+.qr-code {
+  width: 300px;
+}
+```
+
+See below for an alternative if you need
+[server-side rendering](#server-side-rendering).
+
+#### Preact
+
+```javascript
+import { generate } from 'lean-qr';
+import { makeDynamicComponent } from 'lean-qr/extras/react';
+import { createElement } from 'preact';
+import * as hooks from 'preact/hooks';
+
+const QR = makeDynamicComponent({ createElement, ...hooks }, generate);
+```
+
+If you want to reduce the build size further, you can provide just
+the `useRef` and `useEffect` hooks rather than all hooks to enable
+tree shaking optimisations during the build. Note that the set of
+required hooks may change in future versions.
+
+### NodeJS
+
+```javascript
+import { generate } from 'lean-qr';
+
+const code = generate('LEAN-QR LIBRARY');
+
+process.stdout.write(code.toString({
+  on: '\u001B[7m  \u001B[0m', // ANSI escape: inverted
+}));
+```
+
+<img src="docs/example.png" alt="Example output QR Code" width="300" />
 
 ### Shell
 
@@ -520,6 +568,81 @@ for (let y = 0; y < code.size; y++) {
 ```
 
 Requests outside the range `0 <= x < size, 0 <= y < size` will return `false`.
+
+## React / Preact API
+
+Call `makeDynamicComponent` from the global scope (not inside a
+render method) to generate a component which can be rendered later:
+
+```javascript
+import { generate } from 'lean-qr';
+import { makeDynamicComponent } from 'lean-qr/extras/react';
+import * as React from 'react';
+
+const QR = makeDynamicComponent(React, generate);
+```
+
+All the configuration options documented above can be passed to the
+wrapper component, plus a `className` for the rendered `canvas`:
+
+```javascript
+<QR
+  content="Hello!"
+  minVersion={1}
+  maxVersion={40}
+  minCorrectionLevel={correction.L}
+  maxCorrectionLevel={correction.H}
+  mask={null}
+  padX={4}
+  padY={4}
+  on={[0, 0, 0, 255]}
+  off={[0, 0, 0, 0]}
+  className=""
+/>
+```
+
+All properties are optional except `content`.
+The property values shown above are the defaults.
+
+### Server-side Rendering
+
+The `makeDynamicComponent` helper will render to a `<canvas>` from a
+`useEffect` hook (this is the most performant option if the code will
+change dynamically), but this cannot be server-side rendered.
+
+If you need server-side rendering, you can use `makeStaticComponent`
+instead, which will render an `<img>` tag with an SVG data source
+calculated in a `useMemo` hook:
+
+```javascript
+import { generate } from 'lean-qr';
+import { makeStaticComponent } from 'lean-qr/extras/react';
+import { toSvgDataURL } from 'lean-qr/extras/svg';
+import * as React from 'react';
+
+const QR = makeStaticComponent(React, generate, toSvgDataURL);
+
+const MyComponent = () => (
+  <section>
+    Scan this QR Code!
+    <QR content="LEAN-QR LIBRARY" className="qr-code" />
+  </section>
+);
+```
+
+The API for this is slightly different: `on` and `off` take `string`
+values for the colour, rather than arrays:
+
+```javascript
+<QR content="Hello!" on="black" off="rgba(0,0,0,0)" />
+```
+
+This version may also be preferable to avoid the code "flickering"
+when it first appears, but note that it causes the QR code to be
+calculated synchronously during the render, which may introduce some
+lag if the code changes (especially if it changes in response to live
+user input). For this reason, `makeStaticComponent` is only
+recommended for relatively static codes (hence the name).
 
 ## Notable Changes in Version 2
 
