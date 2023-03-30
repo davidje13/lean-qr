@@ -1,31 +1,28 @@
 import { correction, generate } from 'lean-qr';
-import {
-  makeDynamicComponent,
-  makeStaticComponent,
-} from 'lean-qr/extras/react';
+import { makeAsyncComponent, makeSyncComponent } from 'lean-qr/extras/react';
 import { toSvgDataURL } from 'lean-qr/extras/svg';
 import { createElement, render } from 'preact';
 import * as hooks from 'preact/hooks';
 
 // this file just checks types; the code is not executed
 
-const DynamicQRComponent = makeDynamicComponent(
+const AsyncQRComponent = makeAsyncComponent(
   { createElement, ...hooks },
   generate,
 );
 
-const StaticQRComponent = makeStaticComponent(
+const SyncQRComponent = makeSyncComponent(
   { createElement, ...hooks },
   generate,
   toSvgDataURL,
 );
 
-render(<DynamicQRComponent content="Hello!" />, document.body);
+render(<AsyncQRComponent content="Hello!" />, document.body);
 
-render(<StaticQRComponent content="Hello!" />, document.body);
+render(<SyncQRComponent content="Hello!" />, document.body);
 
 render(
-  <DynamicQRComponent
+  <AsyncQRComponent
     content="Hello!"
     minVersion={1}
     maxVersion={40}
@@ -41,7 +38,7 @@ render(
 );
 
 render(
-  <StaticQRComponent
+  <SyncQRComponent
     content="Hello!"
     minVersion={1}
     maxVersion={40}
@@ -57,19 +54,19 @@ render(
 );
 
 // @ts-expect-error
-makeDynamicComponent(hooks, generate);
+makeAsyncComponent(hooks, generate);
 
 // @ts-expect-error
-makeDynamicComponent({ createElement }, generate);
+makeAsyncComponent({ createElement }, generate);
 
 // @ts-expect-error
-makeDynamicComponent({ createElement, ...hooks }, 'hello');
+makeAsyncComponent({ createElement, ...hooks }, 'hello');
 
 // @ts-expect-error
-render(<DynamicQRComponent />, document.body);
+render(<AsyncQRComponent />, document.body);
 
 render(
   // @ts-expect-error
-  <DynamicQRComponent content="Hello" minCorrectionLevel={-1} />,
+  <AsyncQRComponent content="Hello" minCorrectionLevel={-1} />,
   document.body,
 );

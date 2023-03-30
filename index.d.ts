@@ -144,7 +144,7 @@ declare module 'lean-qr/extras/react' {
   import type { ImageDataOptions, GenerateOptions, GenerateFn } from 'lean-qr';
   import type { SVGOptions, toSvgDataURLFn } from 'lean-qr/extras/svg';
 
-  export interface DynamicFramework<T> {
+  export interface AsyncFramework<T> {
     createElement: (type: string, props: any) => T;
     useRef<T>(initialValue: T | null): { readonly current: T | null };
     useEffect(fn: () => void | (() => void), deps: unknown[]): void;
@@ -155,37 +155,39 @@ declare module 'lean-qr/extras/react' {
     className?: string;
   }
 
-  export interface DynamicQRComponentProps
+  export interface AsyncQRComponentProps
     extends ImageDataOptions,
       GenerateOptions,
       QRComponentProps {}
 
-  export type DynamicQRComponent<T> = (
-    props: Readonly<DynamicQRComponentProps>,
+  export type AsyncQRComponent<T> = (
+    props: Readonly<AsyncQRComponentProps>,
   ) => T;
 
-  export const makeDynamicComponent: <T>(
-    framework: Readonly<DynamicFramework<T>>,
+  export const makeAsyncComponent: <T>(
+    framework: Readonly<AsyncFramework<T>>,
     generate: GenerateFn,
-  ) => DynamicQRComponent<T>;
+  ) => AsyncQRComponent<T>;
 
-  export interface StaticFramework<T> {
+  export interface SyncFramework<T> {
     createElement: (type: string, props: any) => T;
     useMemo<T>(fn: () => T, deps: unknown[]): T;
   }
 
-  export interface StaticQRComponentProps
+  export interface SyncQRComponentProps
     extends SVGOptions,
       GenerateOptions,
       QRComponentProps {}
 
-  export type StaticQRComponent<T> = (
-    props: Readonly<StaticQRComponentProps>,
-  ) => T;
+  export type SyncQRComponent<T> = (props: Readonly<SyncQRComponentProps>) => T;
 
-  export const makeStaticComponent: <T>(
-    framework: Readonly<StaticFramework<T>>,
+  export const makeSyncComponent: <T>(
+    framework: Readonly<SyncFramework<T>>,
     generate: GenerateFn,
     toSvgDataURL: toSvgDataURLFn,
-  ) => StaticQRComponent<T>;
+  ) => SyncQRComponent<T>;
+}
+
+declare module 'lean-qr/extras/errors' {
+  export const readError: (error: unknown) => string;
 }

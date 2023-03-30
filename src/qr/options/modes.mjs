@@ -1,4 +1,4 @@
-import { makeUint8Array, fail } from '../../util.mjs';
+import { makeUint8Array, fail, ERROR_UNENCODABLE } from '../../util.mjs';
 
 const alnum = (c) => '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:'.indexOf(c);
 const firstCharCode = (c) => c.charCodeAt(0);
@@ -184,7 +184,7 @@ export const mode = {
             ),
           );
         if (!cur.length) {
-          fail('Unencodable');
+          fail(ERROR_UNENCODABLE);
         }
       }
       const parts = [];

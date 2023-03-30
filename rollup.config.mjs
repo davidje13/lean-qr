@@ -19,6 +19,7 @@ export default [
   target('index'),
   target('extras/svg'),
   target('extras/react'),
+  target('extras/errors'),
   {
     input: 'bin/cli.mjs',
     output: {

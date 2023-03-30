@@ -2,6 +2,7 @@
 
 import { mode, correction, generate } from '../build/index.js';
 import { toSvgSource } from '../build/extras/svg.js';
+import { readError } from '../build/extras/errors.mjs';
 import { printUsage, parseArgs } from './argparser.mjs';
 
 const ENCODINGS = new Map();
@@ -172,7 +173,7 @@ try {
     process.stderr.write(`  format: ${tm2 - tm1}ms\n`);
   }
 } catch (e) {
-  process.stderr.write(`${e.message}\n\n`);
+  process.stderr.write(`${readError(e)}\n\n`);
   process.exit(1);
 }
 

@@ -6,12 +6,18 @@ import { correctionData, correction } from './options/corrections.mjs';
 import { calculateEC } from './errorCorrection.mjs';
 import { drawFrame, getPath, drawCode, applyMask } from './draw.mjs';
 import { scoreCode } from './score.mjs';
-import { fail } from '../util.mjs';
+import {
+  fail,
+  ERROR_NO_DATA,
+  ERROR_INVALID_VERSION_RANGE,
+  ERROR_INVALID_ERROR_CORRECTION_RANGE,
+  ERROR_TOO_MUCH_DATA,
+} from '../util.mjs';
 
 const baseCache = [];
 
 export const generate = (
-  modeData,
+  modeData = fail(ERROR_NO_DATA),
   {
     minCorrectionLevel = correction.min,
     maxCorrectionLevel = correction.max,
@@ -22,10 +28,10 @@ export const generate = (
   } = {},
 ) => {
   if (maxCorrectionLevel < minCorrectionLevel) {
-    fail('Bad correction range');
+    fail(ERROR_INVALID_ERROR_CORRECTION_RANGE);
   }
   if (maxVersion < minVersion) {
-    fail('Bad version range');
+    fail(ERROR_INVALID_VERSION_RANGE);
   }
   if (typeof modeData === 'string') {
     modeData = mode.auto(modeData, autoModeConfig);
@@ -78,7 +84,7 @@ export const generate = (
         .reduce((best, masked) => (masked.s < best.s ? masked : best));
     }
   }
-  fail('Too much data');
+  fail(ERROR_TOO_MUCH_DATA);
 };
 
 generate.with =

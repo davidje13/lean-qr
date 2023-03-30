@@ -1,3 +1,10 @@
+import {
+  fail,
+  ERROR_BAD_FRAMEWORK,
+  ERROR_BAD_GENERATE,
+  ERROR_BAD_TO_SVG_DATA_URL,
+} from '../util.mjs';
+
 const hasChange = (a, b, props) => props.some((prop) => a[prop] !== b[prop]);
 const explode = (o, props) => props.map((prop) => o[prop]);
 
@@ -12,66 +19,69 @@ const GENERATE_OPTS = [
 ];
 
 const ALL_OPTS = [...GENERATE_OPTS, 'on', 'off', 'padX', 'padY'];
+const STYLES = { 'image-rendering': 'pixelated' };
 
-export const makeDynamicComponent = (framework, generate) => {
-  if (!framework.createElement || !framework.useEffect || !framework.useRef) {
-    throw new Error('bad framework');
-  }
-  if (typeof generate !== 'function') {
-    throw new Error('bad generate function');
-  }
-  return (props) => {
-    const canvasRef = framework.useRef(null);
-    const codeRef = framework.useRef([null, {}]);
-    framework.useEffect(() => {
-      if (hasChange(props, codeRef.current[1], GENERATE_OPTS)) {
-        codeRef.current = [generate(props.content ?? '', props), props];
-      }
-      if (canvasRef.current) {
+export const makeAsyncComponent =
+  (
+    { createElement, useEffect, useRef } = fail(ERROR_BAD_FRAMEWORK),
+    generate = fail(ERROR_BAD_GENERATE),
+  ) =>
+  (props) => {
+    const canvasRef = useRef(null);
+    const codeRef = useRef([null, {}]);
+    useEffect(() => {
+      try {
+        if (hasChange(props, codeRef.current[1], GENERATE_OPTS)) {
+          codeRef.current[0] = generate(props.content, props);
+        }
         codeRef.current[0].toCanvas(canvasRef.current, props);
+        canvasRef.current.hidden = false;
+      } catch (e) {
+        console.warn(e.message);
+        canvasRef.current.hidden = true;
       }
+      codeRef.current[1] = props;
     }, explode(props, ALL_OPTS));
 
-    if (props.content === undefined) {
-      return null;
-    }
-
-    return framework.createElement('canvas', {
+    return createElement('canvas', {
       ref: canvasRef,
-      style: { 'image-rendering': 'pixelated' },
+      style: STYLES,
       className: props.className,
     });
   };
+
+const dataOrError = (fn) => {
+  try {
+    return fn();
+  } catch (e) {
+    console.warn(e.message);
+    return undefined;
+  }
 };
 
-export const makeStaticComponent = (framework, generate, toSvgDataURL) => {
-  if (!framework.createElement || !framework.useMemo) {
-    throw new Error('bad framework');
-  }
-  if (typeof generate !== 'function') {
-    throw new Error('bad generate function');
-  }
-  if (typeof toSvgDataURL !== 'function') {
-    throw new Error('bad toSvgDataURL function');
-  }
-  return (props) => {
-    const code = framework.useMemo(
-      () => generate(props.content ?? '', props),
+export const makeSyncComponent =
+  (
+    { createElement, useMemo } = fail(ERROR_BAD_FRAMEWORK),
+    generate = fail(ERROR_BAD_GENERATE),
+    toSvgDataURL = fail(ERROR_BAD_TO_SVG_DATA_URL),
+  ) =>
+  (props) => {
+    const code = useMemo(
+      () => dataOrError(() => generate(props.content, props)),
       explode(props, GENERATE_OPTS),
     );
-    const data = framework.useMemo(
-      () => toSvgDataURL(code, props),
+    const data = useMemo(
+      () => code && dataOrError(() => toSvgDataURL(code, props)),
       [code, ...explode(props, ALL_OPTS)],
     );
 
-    if (props.content === undefined) {
+    if (!data) {
       return null;
     }
 
-    return framework.createElement('img', {
+    return createElement('img', {
       src: data,
-      style: { 'image-rendering': 'pixelated' },
+      style: STYLES,
       className: props.className,
     });
   };
-};

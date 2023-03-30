@@ -457,14 +457,14 @@ describe('mode.auto', () => {
     const data = Bitmap1D(1000);
     expect(() =>
       mode.auto('nope', { modes: [mode.alphaNumeric] })(data, 10),
-    ).toThrow('Unencodable');
+    ).toThrow('lean-qr error 5');
   });
 
   it('rejects impossible iso8859_1 input', () => {
     const data = Bitmap1D(1000);
     expect(() =>
       mode.auto('nah\u2026', { modes: [mode.iso8859_1] })(data, 10),
-    ).toThrow('Unencodable');
+    ).toThrow('lean-qr error 5');
   });
 
   it('picks the best combination of modes to minimise the resulting size', () => {

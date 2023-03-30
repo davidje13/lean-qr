@@ -82,7 +82,7 @@ describe('generate', () => {
       generate(mode.ascii(LONG_MESSAGE), {
         maxVersion: 2,
       }),
-    ).toThrow('Too much data');
+    ).toThrow('lean-qr error 4');
   });
 
   it('picks a version depending on the message length', () => {

@@ -1,5 +1,6 @@
 import { correction, generate } from '../src/index.mjs';
 import { toSvg, toSvgDataURL } from '../src/extras/svg.mjs';
+import { readError } from '../src/extras/errors.mjs';
 
 const getInput = (name) => document.querySelector(`[name="${name}"]`);
 const getValue = (name) => getInput(name).value;
@@ -76,7 +77,7 @@ function regenerate() {
         break;
     }
   } catch (e) {
-    err.innerText = e.message;
+    err.innerText = readError(e);
     err.style.display = 'block';
   }
 }

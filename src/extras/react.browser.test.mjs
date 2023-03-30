@@ -1,4 +1,4 @@
-import { makeDynamicComponent, makeStaticComponent } from './react.mjs';
+import { makeAsyncComponent, makeSyncComponent } from './react.mjs';
 import { generate } from '../index.mjs';
 import { toSvgDataURL } from './svg.mjs';
 import { h, render } from 'preact';
@@ -6,9 +6,9 @@ import * as hooks from 'preact/hooks';
 
 const framework = { createElement: h, ...hooks };
 
-describe('makeDynamicComponent', () => {
+describe('makeAsyncComponent', () => {
   it('creates a preact-compatible component', async () => {
-    const Component = makeDynamicComponent(framework, generate);
+    const Component = makeAsyncComponent(framework, generate);
 
     render(h(Component, { content: 'TEST' }), container);
 
@@ -21,7 +21,7 @@ describe('makeDynamicComponent', () => {
 
   it('updates if content changes', async () => {
     const spyGenerate = mock(generate);
-    const Component = makeDynamicComponent(framework, spyGenerate);
+    const Component = makeAsyncComponent(framework, spyGenerate);
 
     render(h(Component, { content: 'TEST' }), container);
 
@@ -39,7 +39,7 @@ describe('makeDynamicComponent', () => {
 
   it('accepts generate config and updates if changed', async () => {
     const spyGenerate = mock(generate);
-    const Component = makeDynamicComponent(framework, spyGenerate);
+    const Component = makeAsyncComponent(framework, spyGenerate);
 
     render(h(Component, { content: 'TEST', minVersion: 10 }), container);
 
@@ -54,7 +54,7 @@ describe('makeDynamicComponent', () => {
 
   it('accepts toCanvas config and updates if changed', async () => {
     const spyGenerate = mock(generate);
-    const Component = makeDynamicComponent(framework, spyGenerate);
+    const Component = makeAsyncComponent(framework, spyGenerate);
 
     render(h(Component, { content: 'TEST', padX: 2 }), container);
 
@@ -67,25 +67,38 @@ describe('makeDynamicComponent', () => {
     expect(spyGenerate).toHaveBeenCalled({ times: 1 });
   });
 
-  it('returns no code if content is omitted', async () => {
-    const Component = makeDynamicComponent(framework, generate);
+  it('handles errors without exploding', async () => {
+    mock(console, 'warn');
+    const Component = makeAsyncComponent(framework, generate);
 
-    render(h(Component, {}), container);
+    render(h(Component, { content: 'TEST', minVersion: 42 }), container);
 
     const canvas = container.querySelector('canvas');
-    expect(canvas).isFalsy();
+    await expect.poll(() => canvas.hidden, isTrue());
+    expect(console.warn).toHaveBeenCalledWith('lean-qr error 2');
   });
 });
 
-describe('makeStaticComponent', () => {
+describe('makeSyncComponent', () => {
   it('creates a preact-compatible component', () => {
-    const Component = makeStaticComponent(framework, generate, toSvgDataURL);
+    const Component = makeSyncComponent(framework, generate, toSvgDataURL);
 
     render(h(Component, { content: 'TEST' }), container);
 
     const img = container.querySelector('img');
     expect(img).isTruthy();
     expect(img.src).startsWith('data:image/svg;base64,');
+  });
+
+  it('handles errors without exploding', () => {
+    mock(console, 'warn');
+    const Component = makeSyncComponent(framework, generate, toSvgDataURL);
+
+    render(h(Component, { content: 'TEST', minVersion: 42 }), container);
+
+    const img = container.querySelector('img');
+    expect(img).isFalsy();
+    expect(console.warn).toHaveBeenCalledWith('lean-qr error 2');
   });
 });
 

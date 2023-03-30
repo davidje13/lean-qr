@@ -1,8 +1,8 @@
-core:                        7508 bytes
-core compressed:             3997 bytes
+core:                        7486 bytes
+core compressed:             3987 bytes
 
 extras/svg:                  1382 bytes
 extras/svg compressed:        968 bytes
 
-extras/react:                1167 bytes
+extras/react:                 981 bytes
 extras/react compressed:      640 bytes

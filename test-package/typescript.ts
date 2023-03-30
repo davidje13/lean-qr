@@ -1,5 +1,6 @@
 import { generate, mode } from 'lean-qr';
 import { toSvgSource } from 'lean-qr/extras/svg';
+import { readError } from 'lean-qr/extras/errors';
 
 // this file just checks types; the code is not executed
 
@@ -23,8 +24,12 @@ const customMode = Object.assign(() => () => null, {
 const code3 = generate(mode.shift_jis('123'), { minVersion: 3 });
 process.stdout.write(toSvgSource(code3, { padX: 2, xmlDeclaration: true }));
 
-const code4 = generate.with(customMode)('123');
-process.stdout.write(code4.get(0, 0) ? 'y' : 'n');
+try {
+  const code4 = generate.with(customMode)('123');
+  process.stdout.write(code4.get(0, 0) ? 'y' : 'n');
+} catch (e) {
+  process.stderr.write(readError(e));
+}
 
 mode.auto('', {
   modes: [
@@ -83,3 +88,6 @@ toSvgSource('123');
 
 // @ts-expect-error
 mode.shift_jis(1);
+
+// @ts-expect-error
+readError();

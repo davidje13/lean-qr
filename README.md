@@ -52,10 +52,10 @@ any other library which offers `createElement` and React-style hooks)
 
 ```javascript
 import { generate } from 'lean-qr';
-import { makeDynamicComponent } from 'lean-qr/extras/react';
+import { makeAsyncComponent } from 'lean-qr/extras/react';
 import * as React from 'react';
 
-const QR = makeDynamicComponent(React, generate);
+const QR = makeAsyncComponent(React, generate);
 
 const MyComponent = () => (
   <section>
@@ -78,11 +78,11 @@ See below for an alternative if you need
 
 ```javascript
 import { generate } from 'lean-qr';
-import { makeDynamicComponent } from 'lean-qr/extras/react';
+import { makeAsyncComponent } from 'lean-qr/extras/react';
 import { createElement } from 'preact';
 import * as hooks from 'preact/hooks';
 
-const QR = makeDynamicComponent({ createElement, ...hooks }, generate);
+const QR = makeAsyncComponent({ createElement, ...hooks }, generate);
 ```
 
 If you want to reduce the build size further, you can provide just
@@ -571,15 +571,15 @@ Requests outside the range `0 <= x < size, 0 <= y < size` will return `false`.
 
 ## React / Preact API
 
-Call `makeDynamicComponent` from the global scope (not inside a
+Call `makeAsyncComponent` from the global scope (not inside a
 render method) to generate a component which can be rendered later:
 
 ```javascript
 import { generate } from 'lean-qr';
-import { makeDynamicComponent } from 'lean-qr/extras/react';
+import { makeAsyncComponent } from 'lean-qr/extras/react';
 import * as React from 'react';
 
-const QR = makeDynamicComponent(React, generate);
+const QR = makeAsyncComponent(React, generate);
 ```
 
 All the configuration options documented above can be passed to the
@@ -606,21 +606,21 @@ The property values shown above are the defaults.
 
 ### Server-side Rendering
 
-The `makeDynamicComponent` helper will render to a `<canvas>` from a
+The `makeAsyncComponent` helper will render to a `<canvas>` from a
 `useEffect` hook (this is the most performant option if the code will
 change dynamically), but this cannot be server-side rendered.
 
-If you need server-side rendering, you can use `makeStaticComponent`
+If you need server-side rendering, you can use `makeSyncComponent`
 instead, which will render an `<img>` tag with an SVG data source
 calculated in a `useMemo` hook:
 
 ```javascript
 import { generate } from 'lean-qr';
-import { makeStaticComponent } from 'lean-qr/extras/react';
+import { makeSyncComponent } from 'lean-qr/extras/react';
 import { toSvgDataURL } from 'lean-qr/extras/svg';
 import * as React from 'react';
 
-const QR = makeStaticComponent(React, generate, toSvgDataURL);
+const QR = makeSyncComponent(React, generate, toSvgDataURL);
 
 const MyComponent = () => (
   <section>
@@ -641,8 +641,38 @@ This version may also be preferable to avoid the code "flickering"
 when it first appears, but note that it causes the QR code to be
 calculated synchronously during the render, which may introduce some
 lag if the code changes (especially if it changes in response to live
-user input). For this reason, `makeStaticComponent` is only
-recommended for relatively static codes (hence the name).
+user input). For this reason, `makeSyncComponent` is only recommended
+for relatively static codes.
+
+## Errors
+
+Errors are reported as numbers to save space. Errors contain a stable
+`code` property which can be used to look up the type of error:
+
+| code | message           | meaning                                |
+|------|-------------------|----------------------------------------|
+| `1`  | `lean-qr error 1` | No `data` provided                     |
+| `2`  | `lean-qr error 2` | `maxVersion` must be >= `minVersion`   |
+| `3`  | `lean-qr error 3` | `maxCorrectionLevel` must be >= `minCorrectionLevel` |
+| `4`  | `lean-qr error 4` | `data` exceeds maximum capacity of `maxVersion` |
+| `5`  | `lean-qr error 5` | `data` cannot be encoded using the chosen `modes` |
+| `6`  | `lean-qr error 6` | Invalid `framework` provided to the React wrapper |
+| `7`  | `lean-qr error 7` | Invalid `generate` function provided to the React wrapper |
+| `8`  | `lean-qr error 8` | Invalid `toSvgDataURL` function provided to the React wrapper |
+
+If you want to display errors in a moderately human-readable way, you
+can import the `errors` extra:
+
+```javascript
+import { readError } from 'lean-qr/extras/errors';
+
+try {
+  const code = generate('LEAN-QR LIBRARY');
+} catch (e) {
+  const message = readError(e);
+  window.alert(message);
+}
+```
 
 ## Notable Changes in Version 2
 
@@ -670,7 +700,8 @@ behaviours, you may need to update your code:
   little-endian integer values for colours. If you were using this legacy
   behaviour, update your code to pass colours as arrays instead:
   `[red, green, blue, alpha?]` (for example, `[255, 0, 255, 255]` = purple);
-- some error message texts have changed;
+- errors are now reported as codes to save space. If you want to present
+  errors in a human-readable way, you can use `extras/errors` to convert;
 - internal properties and methods are now minified (documented methods are
   not affected);
 - the library is smaller than ever!
