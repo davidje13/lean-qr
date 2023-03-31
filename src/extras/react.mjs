@@ -25,28 +25,30 @@ export const makeAsyncComponent =
   (
     { createElement, useEffect, useRef } = fail(ERROR_BAD_FRAMEWORK),
     generate = fail(ERROR_BAD_GENERATE),
+    defaultOptions = {},
   ) =>
   (props) => {
+    const options = { ...defaultOptions, ...props };
     const canvasRef = useRef(null);
     const codeRef = useRef([null, {}]);
     useEffect(() => {
       try {
-        if (hasChange(props, codeRef.current[1], GENERATE_OPTS)) {
-          codeRef.current[0] = generate(props.content, props);
+        if (hasChange(options, codeRef.current[1], GENERATE_OPTS)) {
+          codeRef.current[0] = generate(options.content, options);
         }
-        codeRef.current[0].toCanvas(canvasRef.current, props);
+        codeRef.current[0].toCanvas(canvasRef.current, options);
         canvasRef.current.hidden = false;
       } catch (e) {
         console.warn(e.message);
         canvasRef.current.hidden = true;
       }
-      codeRef.current[1] = props;
-    }, explode(props, ALL_OPTS));
+      codeRef.current[1] = options;
+    }, explode(options, ALL_OPTS));
 
     return createElement('canvas', {
       ref: canvasRef,
       style: STYLES,
-      className: props.className,
+      className: options.className,
     });
   };
 
@@ -64,15 +66,17 @@ export const makeSyncComponent =
     { createElement, useMemo } = fail(ERROR_BAD_FRAMEWORK),
     generate = fail(ERROR_BAD_GENERATE),
     toSvgDataURL = fail(ERROR_BAD_TO_SVG_DATA_URL),
+    defaultOptions = {},
   ) =>
   (props) => {
+    const options = { ...defaultOptions, ...props };
     const code = useMemo(
-      () => dataOrError(() => generate(props.content, props)),
-      explode(props, GENERATE_OPTS),
+      () => dataOrError(() => generate(options.content, options)),
+      explode(options, GENERATE_OPTS),
     );
     const data = useMemo(
-      () => code && dataOrError(() => toSvgDataURL(code, props)),
-      [code, ...explode(props, ALL_OPTS)],
+      () => code && dataOrError(() => toSvgDataURL(code, options)),
+      [code, ...explode(options, ALL_OPTS)],
     );
 
     if (!data) {
@@ -82,6 +86,6 @@ export const makeSyncComponent =
     return createElement('img', {
       src: data,
       style: STYLES,
-      className: props.className,
+      className: options.className,
     });
   };

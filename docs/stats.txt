@@ -8,7 +8,7 @@ extras/svg cjs:                  1386 bytes
 extras/svg esm compressed:        973 bytes
 extras/svg cjs compressed:        971 bytes
 
-extras/react esm:                 974 bytes
-extras/react cjs:                 981 bytes
-extras/react esm compressed:      640 bytes
-extras/react cjs compressed:      640 bytes
+extras/react esm:                1012 bytes
+extras/react cjs:                1019 bytes
+extras/react esm compressed:      668 bytes
+extras/react cjs compressed:      668 bytes

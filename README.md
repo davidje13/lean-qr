@@ -604,6 +604,16 @@ wrapper component, plus a `className` for the rendered `canvas`:
 All properties are optional except `content`.
 The property values shown above are the defaults.
 
+You can also change the default values for the component by passing
+an extra argument to the `make` function. For example, if you want
+all QR codes to use at least correction level H:
+
+```javascript
+const QR = makeAsyncComponent(React, generate, {
+  minCorrectionLevel: correction.H,
+});
+```
+
 ### Server-side Rendering
 
 The `makeAsyncComponent` helper will render to a `<canvas>` from a

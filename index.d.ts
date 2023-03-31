@@ -167,6 +167,7 @@ declare module 'lean-qr/extras/react' {
   export const makeAsyncComponent: <T>(
     framework: Readonly<AsyncFramework<T>>,
     generate: GenerateFn,
+    defaultProps?: Readonly<Partial<AsyncQRComponentProps>>,
   ) => AsyncQRComponent<T>;
 
   export interface SyncFramework<T> {
@@ -185,6 +186,7 @@ declare module 'lean-qr/extras/react' {
     framework: Readonly<SyncFramework<T>>,
     generate: GenerateFn,
     toSvgDataURL: toSvgDataURLFn,
+    defaultProps?: Readonly<Partial<SyncQRComponentProps>>,
   ) => SyncQRComponent<T>;
 }
 

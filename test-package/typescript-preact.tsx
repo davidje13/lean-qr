@@ -6,20 +6,16 @@ import * as hooks from 'preact/hooks';
 
 // this file just checks types; the code is not executed
 
-const AsyncQRComponent = makeAsyncComponent(
-  { createElement, ...hooks },
-  generate,
-);
+const framework = { createElement, ...hooks };
 
-const SyncQRComponent = makeSyncComponent(
-  { createElement, ...hooks },
-  generate,
-  toSvgDataURL,
-);
-
+const AsyncQRComponent = makeAsyncComponent(framework, generate);
 render(<AsyncQRComponent content="Hello!" />, document.body);
 
+const SyncQRComponent = makeSyncComponent(framework, generate, toSvgDataURL);
 render(<SyncQRComponent content="Hello!" />, document.body);
+
+makeAsyncComponent(framework, generate, { minVersion: 2 });
+makeSyncComponent(framework, generate, toSvgDataURL, { minVersion: 2 });
 
 render(
   <AsyncQRComponent
@@ -60,7 +56,10 @@ makeAsyncComponent(hooks, generate);
 makeAsyncComponent({ createElement }, generate);
 
 // @ts-expect-error
-makeAsyncComponent({ createElement, ...hooks }, 'hello');
+makeAsyncComponent(framework, 'hello');
+
+// @ts-expect-error
+makeAsyncComponent(framework, generate, { foo: 2 });
 
 // @ts-expect-error
 render(<AsyncQRComponent />, document.body);
