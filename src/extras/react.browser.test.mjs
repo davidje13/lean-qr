@@ -146,22 +146,6 @@ describe('makeSyncComponent', () => {
   });
 });
 
-expect.poll = async (expr, matcher) => {
-  // TODO: promote this to lean-test core
-  for (let r = 0; r < 10; ++r) {
-    try {
-      return await expect(expr(), matcher);
-    } catch (e) {
-      await new Promise((resolve) => setTimeout(resolve, 50));
-    }
-  }
-  try {
-    return await expect(expr(), matcher);
-  } catch (e) {
-    fail(`Timed out waiting for expectation\n${e}`);
-  }
-};
-
 let container;
 
 beforeEach(() => {

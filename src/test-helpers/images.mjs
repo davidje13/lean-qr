@@ -1,6 +1,6 @@
-import fs from 'fs';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import fs from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { PNG } from 'pngjs';
 
 const SELF_DIR = dirname(fileURLToPath(import.meta.url));

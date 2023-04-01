@@ -27,8 +27,7 @@
     "build": "rollup --config rollup.config.mjs && chmod +x build/cli.mjs",
     "format": "prettier --write .",
     "start": "static-server --index index.html --port 8080",
-    "test:unit": "lean-test -x '**/*.int.*' -x '**/*.browser.*'",
-    "test": "lean-test --target=node,chrome,firefox -x '**/*.int.*' -x '**/*.browser.*' && lean-test -i '**/*.int.test.*' && lean-test --target=chrome,firefox --preprocess=rollup -i '**/*.browser.test.*' && ./test-package/run.sh && prettier --check ."
+    "test": "lean-test --target=node,chrome,firefox -x '**/*.node.*' -x '**/*.browser.*' && lean-test -i '**/*.node.test.*' && lean-test --target=chrome,firefox --preprocess=rollup -i '**/*.browser.test.*' && ./test-package/run.sh && prettier --check ."
   },
   "repository": {
     "type": "git",
