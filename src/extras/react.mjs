@@ -15,6 +15,7 @@ const GENERATE_OPTS = [
   'minVersion',
   'maxVersion',
   'mask',
+  'trailer',
   'modes',
 ];
 

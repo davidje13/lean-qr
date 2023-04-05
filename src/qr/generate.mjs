@@ -24,6 +24,7 @@ export const generate = (
     minVersion = 1,
     maxVersion = 40,
     mask,
+    trailer = 0b11101100_00010001,
     ...autoModeConfig
   } = {},
 ) => {
@@ -61,7 +62,7 @@ export const generate = (
       data.push(0b0000, 4);
       data._bits = (data._bits + 7) & ~7; // pad with 0s to the next byte
       while (data._bits < correction._capacityBits) {
-        data.push(0b11101100_00010001, 16);
+        data.push(trailer, 16);
       }
 
       let base = baseCache[version];

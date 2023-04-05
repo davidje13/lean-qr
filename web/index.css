@@ -108,6 +108,11 @@ textarea {
   vertical-align: middle;
 }
 
+.options input#trailer {
+  width: 80px;
+  font-family: monospace;
+}
+
 #download {
   text-align: center;
 }

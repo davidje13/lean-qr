@@ -96,6 +96,17 @@ const FLAGS = [
     info: 'Set the masking type (advanced usage)',
   },
   {
+    id: 'trailer',
+    name: 'trailer',
+    short: 't',
+    type: 'hex',
+    length: 4,
+    min: 0x0000,
+    max: 0xffff,
+    def: 0xec11,
+    info: 'Set the trailer data (advanced usage)',
+  },
+  {
     id: 'format',
     name: 'format',
     short: 'f',
@@ -142,6 +153,7 @@ try {
     minVersion: args.minVer,
     maxVersion: args.maxVer,
     mask: args.mask === 'auto' ? null : Number(args.mask),
+    trailer: args.trailer,
   });
   const tm1 = Date.now();
   let tm2;

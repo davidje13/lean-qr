@@ -1,3 +1,7 @@
+function hex(value, flag) {
+  return '0x' + value.toString(16).padStart(flag.length, '0').toUpperCase();
+}
+
 function parseArg(flag, arg) {
   switch (flag.type) {
     case 'string':
@@ -12,7 +16,7 @@ function parseArg(flag, arg) {
       }
       return arg;
     case 'int': {
-      const v = Math.round(Number(arg));
+      const v = Number.parseInt(arg, 10);
       if (String(v) !== arg) {
         throw new Error(`Value for ${flag.name} must be an integer`);
       }
@@ -21,6 +25,39 @@ function parseArg(flag, arg) {
       }
       if (flag.max !== undefined && v > flag.max) {
         throw new Error(`Value for ${flag.name} must be <= ${flag.max}`);
+      }
+      return v;
+    }
+    case 'hex': {
+      let base = 16;
+      if (arg.startsWith('0b')) {
+        base = 2;
+        arg = arg.substring(2);
+      } else if (arg.startsWith('0x')) {
+        arg = arg.substring(2);
+      } else if (arg.length === flag.length * 4) {
+        base = 2;
+      }
+      const v = Number.parseInt(arg, base);
+      const restringed = v
+        .toString(base)
+        .padStart(flag.length * (base === 2 ? 4 : 1), '0');
+      if (restringed !== arg.toLowerCase()) {
+        throw new Error(
+          `Value for ${flag.name} must be a ${
+            flag.length * 4
+          }-bit integer in base 2 or 16`,
+        );
+      }
+      if (flag.min !== undefined && v < flag.min) {
+        throw new Error(
+          `Value for ${flag.name} must be >= ${hex(flag.min, flag)}`,
+        );
+      }
+      if (flag.max !== undefined && v > flag.max) {
+        throw new Error(
+          `Value for ${flag.name} must be <= ${hex(flag.max, flag)}`,
+        );
       }
       return v;
     }
@@ -49,10 +86,24 @@ export function printUsage(name, headline, flags, rest) {
         }
         process.stdout.write('\n');
         break;
+      case 'hex':
+        process.stdout.write('\n  Hexadecimal value');
+        if (flag.min !== undefined) {
+          process.stdout.write(` >=${hex(flag.min, flag)}`);
+        }
+        if (flag.max !== undefined) {
+          process.stdout.write(` <=${hex(flag.max, flag)}`);
+        }
+        process.stdout.write('\n');
+        break;
       default:
     }
     if (flag.def !== undefined) {
-      process.stdout.write(`  Default: ${flag.def}\n`);
+      if (flag.type === 'hex') {
+        process.stdout.write(`  Default: ${hex(flag.def, flag)}\n`);
+      } else {
+        process.stdout.write(`  Default: ${flag.def}\n`);
+      }
     }
     process.stdout.write('\n\n');
   });

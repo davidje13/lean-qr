@@ -332,6 +332,21 @@ const code = generate(mode.alphaNumeric('LEAN-QR LIBRARY'), {
 
 Valid masks are integers in the range 0 &ndash; 7 (inclusive).
 
+## Trailer
+
+ISO 18004 requires `0b11101100_00010001` (`0xEC11` / `60433`) be used as
+padding bytes at the end of a message, but you can customise this otherwise
+dead space with any 16-bit value (`0x0000` &ndash; `0xFFFF`).
+
+```javascript
+const code = generate(mode.alphaNumeric('LEAN-QR LIBRARY'), {
+  trailer: 0x0000,
+});
+```
+
+Combining a large minimum version with a trailer of `0x0000` will reveal the
+pattern of the chosen `mask`.
+
 ## Output
 
 The output can be displayed in several ways.
@@ -593,6 +608,7 @@ wrapper component, plus a `className` for the rendered `canvas`:
   minCorrectionLevel={correction.L}
   maxCorrectionLevel={correction.H}
   mask={null}
+  trailer={0xEC11}
   padX={4}
   padY={4}
   on={[0, 0, 0, 255]}

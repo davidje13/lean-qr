@@ -10,7 +10,18 @@ function getInt(name, min, max) {
   if (Number.isNaN(v)) {
     return min;
   }
-  return Math.max(min, Math.min(max, Math.round(v)));
+  return Math.max(min, Math.min(max, v));
+}
+
+function getData(name, min, max) {
+  const raw = getValue(name)
+    .toLowerCase()
+    .replace(/[^0-9a-f]/g, '');
+  const v = Number.parseInt(raw, 16);
+  if (Number.isNaN(v)) {
+    return min;
+  }
+  return Math.max(min, Math.min(max, v));
 }
 
 function getColour(name) {
@@ -51,6 +62,7 @@ function regenerate() {
       minCorrectionLevel: correction[getValue('min-correction')],
       maxCorrectionLevel: correction[getValue('max-correction')],
       mask: getMask(),
+      trailer: getData('trailer', 0x0000, 0xffff),
     });
     latestCode = code;
     downloadPng.setAttribute('href', '#');

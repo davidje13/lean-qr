@@ -95,6 +95,7 @@ declare module 'lean-qr' {
     minVersion?: number;
     maxVersion?: number;
     mask?: null | Mask;
+    trailer?: number;
   }
 
   export type GenerateFn = (
