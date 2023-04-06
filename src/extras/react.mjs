@@ -22,6 +22,15 @@ const GENERATE_OPTS = [
 const ALL_OPTS = [...GENERATE_OPTS, 'on', 'off', 'padX', 'padY'];
 const STYLES = { 'image-rendering': 'pixelated' };
 
+const dataOrError = (fn) => {
+  try {
+    return fn();
+  } catch (e) {
+    console.warn(e.message);
+    return undefined;
+  }
+};
+
 export const makeAsyncComponent =
   (
     { createElement, useEffect, useRef } = fail(ERROR_BAD_FRAMEWORK),
@@ -33,16 +42,13 @@ export const makeAsyncComponent =
     const canvasRef = useRef(null);
     const codeRef = useRef([null, {}]);
     useEffect(() => {
-      try {
+      canvasRef.current.hidden = !dataOrError(() => {
         if (hasChange(options, codeRef.current[1], GENERATE_OPTS)) {
           codeRef.current[0] = generate(options.content, options);
         }
         codeRef.current[0].toCanvas(canvasRef.current, options);
-        canvasRef.current.hidden = false;
-      } catch (e) {
-        console.warn(e.message);
-        canvasRef.current.hidden = true;
-      }
+        return 1;
+      });
       codeRef.current[1] = options;
     }, explode(options, ALL_OPTS));
 
@@ -52,15 +58,6 @@ export const makeAsyncComponent =
       className: options.className,
     });
   };
-
-const dataOrError = (fn) => {
-  try {
-    return fn();
-  } catch (e) {
-    console.warn(e.message);
-    return undefined;
-  }
-};
 
 export const makeSyncComponent =
   (

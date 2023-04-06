@@ -43,16 +43,13 @@ export const drawFrame = (code, version) => {
     // and are spaced evenly from the bottom right (except top and left which are always 6)
     // the 0.75 (1-0.25) avoids a quirk in the spec for version 32
     const stepAlignment = (((size - 13) / numAlignmentM / 2 + 0.75) | 0) * 2;
-    const positions = [];
     for (let i = 0; i < numAlignmentM; ++i) {
-      positions.push(size - 7 - i * stepAlignment);
+      const p = size - 7 - i * stepAlignment;
       if (i) {
-        drawAlignment(positions[i], 6);
+        drawAlignment(p, 6);
       }
-    }
-    for (let i = 0; i < numAlignmentM; ++i) {
       for (let j = 0; j < numAlignmentM; ++j) {
-        drawAlignment(positions[i], positions[j]);
+        drawAlignment(p, size - 7 - j * stepAlignment);
       }
     }
   }
