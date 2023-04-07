@@ -13,7 +13,7 @@ build_and_test:
   services:
     - name: selenium/standalone-firefox
       alias: firefox
-    - name: selenium/standalone-chrome
+    - name: selenium/standalone-chrome:110.0
       alias: chrome
   variables:
     WEBDRIVER_HOST_CHROME: chrome:4444
