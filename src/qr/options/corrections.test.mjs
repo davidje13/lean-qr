@@ -1,11 +1,20 @@
+import { Bitmap2D } from '../../structures/Bitmap2D.mjs';
+import { drawFrame, getPath } from '../draw.mjs';
 import { correctionData, correction } from './corrections.mjs';
+
+function getData(version) {
+  const code = Bitmap2D(version * 4 + 17);
+  drawFrame(code, version);
+  return correctionData(version, getPath(code).length >> 3);
+}
 
 describe('corrections', () => {
   it('contains correction level IDs', () => {
-    expect(correctionData[correction.L][0]._id).toEqual(0b01);
-    expect(correctionData[correction.M][0]._id).toEqual(0b00);
-    expect(correctionData[correction.Q][0]._id).toEqual(0b11);
-    expect(correctionData[correction.H][0]._id).toEqual(0b10);
+    const v1 = getData(1);
+    expect(v1(correction.L)._id).toEqual(0b01);
+    expect(v1(correction.M)._id).toEqual(0b00);
+    expect(v1(correction.Q)._id).toEqual(0b11);
+    expect(v1(correction.H)._id).toEqual(0b10);
   });
 
   it('stores data in increasing robustness', () => {
@@ -20,9 +29,10 @@ describe('corrections', () => {
   });
 
   it('divides input data into groups', () => {
-    for (let i = 0; i < correctionData.length; ++i) {
-      for (let version = 1; version <= 40; ++version) {
-        const item = correctionData[i][version - 1];
+    for (let version = 1; version <= 40; ++version) {
+      const versionData = getData(version);
+      for (let level = 0; level < 4; ++level) {
+        const item = versionData(level);
         let total = 0;
         item._groups.forEach((g) => {
           total += g[0] * g[1];
@@ -33,9 +43,10 @@ describe('corrections', () => {
   });
 
   it('contains no empty or 0-count groups', () => {
-    for (let i = 0; i < correctionData.length; ++i) {
-      for (let version = 1; version <= 40; ++version) {
-        const item = correctionData[i][version - 1];
+    for (let version = 1; version <= 40; ++version) {
+      const versionData = getData(version);
+      for (let level = 0; level < 4; ++level) {
+        const item = versionData(level);
         expect(item._groups.length).toBeGreaterThan(0);
         item._groups.forEach((g) => {
           expect(g[0]).toBeGreaterThan(0);
@@ -46,10 +57,10 @@ describe('corrections', () => {
   });
 
   it('stores more data in larger versions', () => {
-    for (let i = 0; i < correctionData.length; ++i) {
-      let last = correctionData[i][0]._capacityBits;
+    for (let level = 0; level < 4; ++level) {
+      let last = getData(1)(level)._capacityBits;
       for (let version = 2; version <= 40; ++version) {
-        const cur = correctionData[i][version - 1]._capacityBits;
+        const cur = getData(version)(level)._capacityBits;
         expect(cur).toBeGreaterThan(last);
         last = cur;
       }
@@ -58,9 +69,10 @@ describe('corrections', () => {
 
   it('stores less data with more robust correction levels', () => {
     for (let version = 1; version <= 40; ++version) {
-      let last = correctionData[0][version - 1]._capacityBits;
-      for (let i = 1; i < correctionData.length; ++i) {
-        const cur = correctionData[i][version - 1]._capacityBits;
+      const versionData = getData(version);
+      let last = versionData(0)._capacityBits;
+      for (let level = 1; level < 4; ++level) {
+        const cur = versionData(level)._capacityBits;
         expect(cur).toBeLessThan(last);
         last = cur;
       }
@@ -122,7 +134,7 @@ describe('corrections', () => {
     },
     (version, level) => {
       const [ecSize, ...groups] = dataset[version][level];
-      const info = correctionData[correction[level]][version - 1];
+      const info = getData(version)(correction[level]);
       expect(info._ecSize).toEqual(ecSize);
       expect(info._groups).toEqual(groups);
     },

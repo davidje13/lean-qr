@@ -1,39 +1,30 @@
-const readCompressed = (id, data) =>
-  data.match(/.{4}/g).map((v) => {
-    const g2n = v.charCodeAt(0) - 35;
-    const g1n = v.charCodeAt(1) - 35;
-    const gs = v.charCodeAt(2) * 92 + v.charCodeAt(3) - 35 * 93;
-    const g1s = gs >> 5;
-    return {
-      _id: id,
-      _capacityBits: (g1n * g1s + g2n * (g1s + 1)) * 8,
-      _groups: g2n
-        ? [
-            [g1n, g1s],
-            [g2n, g1s + 1],
-          ]
-        : [[g1n, g1s]],
-      _ecSize: gs & 0b11111,
-    };
-  });
+const CORRECTION_IDS = [0b01, 0b00, 0b11, 0b10];
 
-// This was generated using tools/corrections-gen.mjs: it compresses the group 1 and
-// group 2 values for each of the 40 QR code versions at each error correction level
-const DATA_L =
-  "#$)b#$.y#$6>#$?'#$Hq#%:q#%>C#%E##%Ka%%:q#'?G%%C;#'HQ$&KA$(AQ$(EC($HS$(M)'&J[(&HS''K_*%Iw('MI')L%'+H1%-J{'+Mi-&L%**Ka-(KA&0KA#4KA$4KA)0KA*/MI1)MI'4Mi5'Mi'7L%)6LE";
-const DATA_M =
-  "#$(a#$,w#$2Y#%.A#%27#',W#'-}%%0M%&/i$'29'$4e%)/i$+0-('13((1S&*2{$-3?',29.&2Y0&1U#41u#43?1'3_1)2{0+3_'63?&92{:&2{*82{-63_@%3?:-3?813?:13?=/3_E)3_1@3?C03?*K3_B53_";
-const DATA_Q =
-  "#$'`#$*u#%)-#%+]%%(I#')s'%()%')Q''(k%))s''*{)'*9'+*7(.(k*(+a%2)s2$*{$4*{'4*Y(2+a)4*{3*+a1.+a3.+a9*+a)?*{=++AB'+aH$+A<2+a$M+aF-+a6@+a*O+a1J+a-Q+a-T+a1S+a9N+aEE+a";
-const DATA_H =
-  "#$&@#$(s#%'i#'&?%%')#'(S$''m%'(1'''K%)(S+&'K'*(3'/')(.'K*.'K0&(U4%(36%(33,'m-2(S)6(u#E'k13(U%A(u09(U'D(u?/(UB.(U=6(U<:(U?:(UF6(UQ.(U$^(uL9(Uc%(UQ;(UCM(Uf-(U`7(U";
+// This was generated using tools/corrections-gen.mjs
+const CORRECTION_DATA =
+  "$*$-$0$4$-$3$9$?$2$=%5%9$7%5%='3$=%;'5'9%5'3';'?%7'5)5(=%;'9)9)=%A(9+7+;'5(=+;+?'7(A+?.;';+9-=.?'=,9/;39'A,;373;)9-;/A5;);-?4;3A)?.?3?6?)A0=5?8?*?1=8=<=+?3=7A<?+?4=:?<A,?4?:AE;,A5?<AAA-A7?>ACA/=8?@AFA/?:?E?HA/A<?EAKA0A=?FAMA1A??IAPA2A@?KASA3AB?NAVA4AD?PAYA5AF?SA\\A6AH?VA_A6AI?XAbA7AK?[AeA8AN?^AiA9AP?aAmA;AR?dApA<AT?gAtA";
 
-export const correctionData = [
-  readCompressed(0b01, DATA_L),
-  readCompressed(0b00, DATA_M),
-  readCompressed(0b11, DATA_Q),
-  readCompressed(0b10, DATA_H),
-];
+export const correctionData = (version, totalBytes) => (correctionIndex) => {
+  const p = version * 8 + correctionIndex * 2 - 8;
+  const totalGroups = CORRECTION_DATA.charCodeAt(p) - 35;
+  const ecs = CORRECTION_DATA.charCodeAt(p + 1) - 35;
+
+  const g1s = (totalBytes / totalGroups - ecs) | 0;
+  const g2n = totalBytes % totalGroups;
+  const g1n = totalGroups - g2n;
+
+  return {
+    _id: CORRECTION_IDS[correctionIndex],
+    _capacityBits: (g1n * g1s + g2n * (g1s + 1)) * 8,
+    _groups: g2n
+      ? [
+          [g1n, g1s],
+          [g2n, g1s + 1],
+        ]
+      : [[g1n, g1s]],
+    _ecSize: ecs,
+  };
+};
 
 export const correction = {
   min: 0,

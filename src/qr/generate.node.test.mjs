@@ -1,7 +1,8 @@
 import { generate } from './generate.mjs';
 import { mode } from './options/modes.mjs';
 import { correction } from './options/corrections.mjs';
-import { loadImage, toMatchImage } from '../test-helpers/images.mjs';
+import { loadImage } from '../test-helpers/loadImage.mjs';
+import { toMatchImage } from '../test-helpers/toMatchImage.mjs';
 
 expect.extend({ toMatchImage });
 

@@ -8,8 +8,6 @@ export const Bitmap2D = (
   size,
   _data,
 
-  _copy: () => Bitmap2D(size, _data),
-
   get: (x, y) => x >= 0 && x < size && !!(_data[y * size + x] & 0b01),
 
   _masked: (x, y) => _data[y * size + x] & 0b10,

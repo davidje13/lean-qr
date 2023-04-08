@@ -1,8 +1,8 @@
 const remBinPoly = (num, den, denBits) => {
   let remainder = num << (denBits - 1);
-  for (let i = 0x8000000; i; i >>>= 1) {
+  for (let i = 0x8000000; i; i >>= 1) {
     if (remainder & i) {
-      remainder ^= den * (i >>> (denBits - 1));
+      remainder ^= den * (i >> (denBits - 1));
     }
   }
   return remainder;
@@ -60,7 +60,7 @@ export const drawFrame = (code, version) => {
       j < 6;
       ++j
     ) {
-      for (let i = 12; i-- > 9; dat >>>= 1) {
+      for (let i = 12; i-- > 9; dat >>= 1) {
         code._set(size - i, j, dat & 1);
       }
     }

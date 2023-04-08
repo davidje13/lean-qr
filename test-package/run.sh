@@ -8,21 +8,20 @@ echo "Building library...";
 echo;
 npm run build;
 
+measure() {
+  printf "$(wc -c < "$1") bytes";
+  if which zip >/dev/null; then
+    printf " / $(zip -jqX9 - "$1" | wc -c) bytes (compressed)";
+  fi;
+}
+
 {
-  printf "core esm:                    $(wc -c < build/index.mjs) bytes\n";
-  printf "core cjs:                    $(wc -c < build/index.js) bytes\n";
-  printf "core esm compressed:         $(zip -jqX9 - build/index.mjs | wc -c) bytes\n";
-  printf "core cjs compressed:         $(zip -jqX9 - build/index.js | wc -c) bytes\n";
-  printf "\n";
-  printf "extras/svg esm:              $(wc -c < build/extras/svg.mjs) bytes\n";
-  printf "extras/svg cjs:              $(wc -c < build/extras/svg.js) bytes\n";
-  printf "extras/svg esm compressed:   $(zip -jqX9 - build/extras/svg.mjs | wc -c) bytes\n";
-  printf "extras/svg cjs compressed:   $(zip -jqX9 - build/extras/svg.js | wc -c) bytes\n";
-  printf "\n";
-  printf "extras/react esm:            $(wc -c < build/extras/react.mjs) bytes\n";
-  printf "extras/react cjs:            $(wc -c < build/extras/react.js) bytes\n";
-  printf "extras/react esm compressed: $(zip -jqX9 - build/extras/react.mjs | wc -c) bytes\n";
-  printf "extras/react cjs compressed: $(zip -jqX9 - build/extras/react.js | wc -c) bytes\n";
+  printf "core esm:           $(measure build/index.mjs)\n";
+  printf "core cjs:           $(measure build/index.js)\n";
+  printf "extras/svg esm:     $(measure build/extras/svg.mjs)\n";
+  printf "extras/svg cjs:     $(measure build/extras/svg.js)\n";
+  printf "extras/react esm:   $(measure build/extras/react.mjs)\n";
+  printf "extras/react cjs:   $(measure build/extras/react.js)\n";
 } > docs/stats.txt;
 
 echo "Running package test...";

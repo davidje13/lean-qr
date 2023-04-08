@@ -45,7 +45,7 @@ const matches = 0b00000000001_00000000001;
 
 export const countPatterns = (code, score = 0) => {
   hv(code, 0, (state, cur) => {
-    const next = ((state >>> 1) | initial) & (pattern ^ (cur - 1));
+    const next = ((state >> 1) | initial) & (pattern ^ (cur - 1));
     if (next & matches) {
       ++score;
     }

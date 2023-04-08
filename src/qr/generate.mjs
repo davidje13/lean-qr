@@ -43,19 +43,23 @@ export const generate = (
     version <= maxVersion;
     ++version
   ) {
-    if (
-      correctionData[minCorrectionLevel][version - 1]._capacityBits <
-      dataLengthBits
-    ) {
+    let base = baseCache[version];
+    if (!base) {
+      baseCache[version] = base = Bitmap2D(version * 4 + 17);
+      drawFrame(base, version);
+      base.p = getPath(base);
+    }
+    const versionCorrection = correctionData(version, base.p.length >> 3);
+    if (versionCorrection(minCorrectionLevel)._capacityBits < dataLengthBits) {
       continue;
     }
 
-    const data = Bitmap1D(2956); // max capacity of any code
+    const data = Bitmap1D();
     modeData(data, version);
     dataLengthBits = data._bits;
 
     for (let cl = maxCorrectionLevel; cl >= minCorrectionLevel; --cl) {
-      const correction = correctionData[cl][version - 1];
+      const correction = versionCorrection(cl);
       if (correction._capacityBits < dataLengthBits) {
         continue;
       }
@@ -65,19 +69,13 @@ export const generate = (
         data.push(trailer, 16);
       }
 
-      let base = baseCache[version];
-      if (!base) {
-        baseCache[version] = base = Bitmap2D(version * 4 + 17);
-        drawFrame(base, version);
-        base.p = getPath(base);
-      }
-      const code = base._copy();
+      const code = Bitmap2D(base.size, base._data);
       drawCode(code, base.p, calculateEC(data._bytes, correction));
 
       // pick best mask
       return (masks[mask ?? -1] ? [masks[mask]] : masks)
         .map((m, maskId) => {
-          const masked = code._copy();
+          const masked = Bitmap2D(code.size, code._data);
           applyMask(masked, m, mask ?? maskId, correction._id);
           masked.s = scoreCode(masked);
           return masked;

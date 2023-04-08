@@ -57,7 +57,7 @@ describe('Bitmap2D', () => {
   it('copies an existing bitmap', () => {
     const bmp1 = Bitmap2D(3);
     bmp1._set(0, 1, true);
-    const bmp2 = bmp1._copy();
+    const bmp2 = Bitmap2D(bmp1.size, bmp1._data);
 
     expect(bmp2.size).toEqual(3);
     expect(bmp2.get(0, 0)).toEqual(false);
