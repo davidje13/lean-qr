@@ -8,16 +8,10 @@ export const Bitmap2D = (
   size,
   _data,
 
-  get: (x, y) => x >= 0 && x < size && !!(_data[y * size + x] & 0b01),
+  get: (x, y) => x >= 0 && x < size && !!(_data[y * size + x] & 1),
 
-  _masked: (x, y) => _data[y * size + x] & 0b10,
-
-  _set(x, y, value, mask = 1) {
-    _data[y * size + x] = (mask * 0b10) | !!value;
-  },
-
-  _inv(x, y) {
-    _data[y * size + x] ^= 1;
+  _set(x, y, value) {
+    _data[y * size + x] = value;
   },
 
   toString({ on = '##', off = '  ', lf = '\n', padX = 4, padY = 4 } = {}) {

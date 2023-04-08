@@ -8,32 +8,30 @@ const remBinPoly = (num, den, denBits) => {
   return remainder;
 };
 
-export const drawFrame = (code, version) => {
+export const drawFrame = ({ size, _data, _set }, version) => {
   const drawRect = (x1, y1, w, h, value) => {
     for (; h-- > 0; ) {
-      for (let x = w; x-- > 0; ) {
-        code._set(x1 + x, y1 + h, value);
-      }
+      const p = (y1 + h) * size + x1;
+      _data.fill(value, p, p + w);
     }
   };
 
   const drawPlacement = (x, y) => {
-    drawRect(x - 3, y - 3, 7, 7, 1);
-    drawRect(x - 2, y - 2, 5, 5, 0);
-    drawRect(x - 1, y - 1, 3, 3, 1);
+    drawRect(x - 3, y - 3, 7, 7, 3);
+    drawRect(x - 2, y - 2, 5, 5, 2);
+    drawRect(x - 1, y - 1, 3, 3, 3);
   };
 
   const drawAlignment = (x, y) => {
-    drawRect(x - 2, y - 2, 5, 5, 1);
-    drawRect(x - 1, y - 1, 3, 3, 0);
-    code._set(x, y, 1);
+    drawRect(x - 2, y - 2, 5, 5, 3);
+    drawRect(x - 1, y - 1, 3, 3, 2);
+    _set(x, y, 3);
   };
 
-  const size = version * 4 + 17;
-  drawRect(7, 0, 2, 9, 0);
-  drawRect(size - 8, 0, 8, 9, 0);
+  drawRect(7, 0, 2, 9, 2);
+  drawRect(size - 8, 0, 8, 9, 2);
   for (let i = 0; i < size; ++i) {
-    code._set(i, 6, !(i & 1));
+    _set(i, 6, 3 ^ (i & 1));
   }
   drawPlacement(3, 3);
   drawPlacement(size - 4, 3);
@@ -61,32 +59,32 @@ export const drawFrame = (code, version) => {
       ++j
     ) {
       for (let i = 12; i-- > 9; dat >>= 1) {
-        code._set(size - i, j, dat & 1);
+        _set(size - i, j, 2 | (dat & 1));
       }
     }
   }
   for (let y = 0; y < size; ++y) {
     for (let x = y; x < size; ++x) {
-      code._data[x * size + y] = code._data[y * size + x];
+      _data[x * size + y] = _data[y * size + x];
     }
   }
-  code._set(8, size - 8, 1);
+  _set(8, size - 8, 3);
 };
 
-export const getPath = (code) => {
-  const s = code.size;
+export const getPath = ({ size, _data }) => {
   const result = [];
-  for (let xB = s - 2, y = s, dirY = -1; xB >= 0; xB -= 2) {
+  for (let xB = size - 2, y = size, dirY = -1; xB >= 0; xB -= 2) {
     if (xB === 5) {
       // special case: skip vertical timing pattern line
       xB = 4;
     }
-    while (((y += dirY), y !== -1 && y !== s)) {
-      if (!code._masked(xB + 1, y)) {
-        result.push([xB + 1, y]);
+    while (((y += dirY), y !== -1 && y !== size)) {
+      const p = y * size + xB;
+      if (_data[p + 1] < 2) {
+        result.push(p + 1);
       }
-      if (!code._masked(xB, y)) {
-        result.push([xB, y]);
+      if (_data[p] < 2) {
+        result.push(p);
       }
     }
     dirY *= -1;
@@ -94,30 +92,27 @@ export const getPath = (code) => {
   return result;
 };
 
-export const drawCode = (code, path, data) => {
-  path.forEach(([x, y], bit) =>
-    code._set(x, y, (data[bit >> 3] << (bit & 7)) & 0x80, 0),
+export const drawCode = ({ _data }, path, data) =>
+  path.forEach(
+    (p, bit) => (_data[p] = (data[bit >> 3] >> (7 - (bit & 7))) & 1),
   );
-};
 
-export const applyMask = (code, mask, maskId, ecLevel) => {
-  const s = code.size;
-  for (let y = 0; y < s; ++y) {
-    for (let x = 0; x < s; ++x) {
-      if (mask(x, y) && !code._masked(x, y)) {
-        code._inv(x, y);
-      }
+export const applyMask = ({ size, _data, _set }, mask, maskId, ecLevel) => {
+  for (let y = 0; y < size; ++y) {
+    for (let x = 0; x < size; ++x) {
+      const p = y * size + x;
+      _data[p] ^= mask(x, y) & ((_data[p] >> 1) ^ 1);
     }
   }
   const info = ((ecLevel ^ 1) << 3) | maskId;
   let pattern =
     0b101010000010010 ^ ((info << 10) | remBinPoly(info, 0b10100110111, 11));
   for (let i = 8; i-- > 0; pattern >>= 1) {
-    code._set(8, (i > 1 ? 7 : 8) - i, pattern & 1);
-    code._set(s - 8 + i, 8, pattern & 1);
+    _set(8, (i > 1 ? 7 : 8) - i, pattern);
+    _set(size - 8 + i, 8, pattern);
   }
   for (let i = 7; i-- > 0; pattern >>= 1) {
-    code._set(i > 5 ? 7 : i, 8, pattern & 1);
-    code._set(8, s - i - 1, pattern & 1);
+    _set(i > 5 ? 7 : i, 8, pattern);
+    _set(8, size - i - 1, pattern);
   }
 };

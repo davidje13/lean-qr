@@ -6,16 +6,16 @@ describe('Bitmap2D', () => {
     expect(bmp.size).toEqual(10);
     expect(bmp.get(0, 0)).toEqual(false);
     expect(bmp.get(9, 9)).toEqual(false);
-    expect(bmp._masked(0, 0)).toBeFalsy();
-    expect(bmp._masked(9, 9)).toBeFalsy();
+    expect(bmp._data[0]).toEqual(0);
+    expect(bmp._data[99]).toEqual(0);
   });
 
   it('stores pixels', () => {
     const bmp = Bitmap2D(10);
-    bmp._set(5, 7, true);
-    bmp._set(9, 1, false);
-    bmp._set(8, 2, true, false);
-    bmp._set(4, 3, false, false);
+    bmp._set(5, 7, 3);
+    bmp._set(9, 1, 2);
+    bmp._set(8, 2, 1);
+    bmp._set(4, 3, 0);
     expect(bmp.get(5, 7)).toEqual(true);
     expect(bmp.get(9, 1)).toEqual(false);
     expect(bmp.get(8, 2)).toEqual(true);
@@ -24,34 +24,14 @@ describe('Bitmap2D', () => {
 
   it('stores mask status pixels', () => {
     const bmp = Bitmap2D(10);
-    bmp._set(5, 7, true);
-    bmp._set(9, 1, false);
-    bmp._set(8, 2, true, false);
-    bmp._set(4, 3, false, false);
-    expect(bmp._masked(5, 7)).toBeTruthy();
-    expect(bmp._masked(9, 1)).toBeTruthy();
-    expect(bmp._masked(8, 2)).toBeFalsy();
-    expect(bmp._masked(4, 3)).toBeFalsy();
-  });
-
-  it('inverts pixels', () => {
-    const bmp = Bitmap2D(10);
-    bmp._set(5, 7, true);
-    bmp._set(9, 1, false);
-    bmp._set(8, 2, true, false);
-    bmp._set(4, 3, false, false);
-    bmp._inv(5, 7);
-    bmp._inv(9, 1);
-    bmp._inv(8, 2);
-    bmp._inv(4, 3);
-    expect(bmp.get(5, 7)).toEqual(false);
-    expect(bmp.get(9, 1)).toEqual(true);
-    expect(bmp.get(8, 2)).toEqual(false);
-    expect(bmp.get(4, 3)).toEqual(true);
-    expect(bmp._masked(5, 7)).toBeTruthy();
-    expect(bmp._masked(9, 1)).toBeTruthy();
-    expect(bmp._masked(8, 2)).toBeFalsy();
-    expect(bmp._masked(4, 3)).toBeFalsy();
+    bmp._set(5, 7, 3);
+    bmp._set(9, 1, 2);
+    bmp._set(8, 2, 1);
+    bmp._set(4, 3, 0);
+    expect(bmp._data[75]).toEqual(3);
+    expect(bmp._data[19]).toEqual(2);
+    expect(bmp._data[28]).toEqual(1);
+    expect(bmp._data[34]).toEqual(0);
   });
 
   it('copies an existing bitmap', () => {
