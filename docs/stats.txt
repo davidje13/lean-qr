@@ -1,5 +1,5 @@
-core esm:               7091 bytes /     3717 bytes (compressed)
-core cjs:               7111 bytes /     3722 bytes (compressed)
+core esm:               7078 bytes /     3707 bytes (compressed)
+core cjs:               7098 bytes /     3711 bytes (compressed)
 extras/svg esm:         1369 bytes /      973 bytes (compressed)
 extras/svg cjs:         1386 bytes /      971 bytes (compressed)
 extras/react esm:        976 bytes /      655 bytes (compressed)

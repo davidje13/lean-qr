@@ -1,5 +1,3 @@
-const CORRECTION_IDS = [0b01, 0b00, 0b11, 0b10];
-
 // This was generated using tools/corrections-gen.mjs
 const CORRECTION_DATA =
   "$*$-$0$4$-$3$9$?$2$=%5%9$7%5%='3$=%;'5'9%5'3';'?%7'5)5(=%;'9)9)=%A(9+7+;'5(=+;+?'7(A+?.;';+9-=.?'=,9/;39'A,;373;)9-;/A5;);-?4;3A)?.?3?6?)A0=5?8?*?1=8=<=+?3=7A<?+?4=:?<A,?4?:AE;,A5?<AAA-A7?>ACA/=8?@AFA/?:?E?HA/A<?EAKA0A=?FAMA1A??IAPA2A@?KASA3AB?NAVA4AD?PAYA5AF?SA\\A6AH?VA_A6AI?XAbA7AK?[AeA8AN?^AiA9AP?aAmA;AR?dApA<AT?gAtA";
@@ -14,7 +12,7 @@ export const correctionData = (version, totalBytes) => (correctionIndex) => {
   const g1n = totalGroups - g2n;
 
   return {
-    _id: CORRECTION_IDS[correctionIndex],
+    _id: correctionIndex ^ 1,
     _capacityBits: (g1n * g1s + g2n * (g1s + 1)) * 8,
     _groups: g2n
       ? [

@@ -37,7 +37,7 @@ cd "$BASE_DIR/test-package";
 rm -rf node_modules/lean-qr || true;
 npm install --audit=false;
 rm lean-qr.tgz || true;
-npm test --ignore-scripts=false; # ignore-scripts is over-zealous on Node 14
+npm test;
 cd - >/dev/null;
 
 echo;
