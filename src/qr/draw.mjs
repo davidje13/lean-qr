@@ -100,7 +100,7 @@ export const drawCode = (code, path, data) => {
   );
 };
 
-export const applyMask = (code, mask, maskId, ecId) => {
+export const applyMask = (code, mask, maskId, ecLevel) => {
   const s = code.size;
   for (let y = 0; y < s; ++y) {
     for (let x = 0; x < s; ++x) {
@@ -109,7 +109,7 @@ export const applyMask = (code, mask, maskId, ecId) => {
       }
     }
   }
-  const info = (ecId << 3) | maskId;
+  const info = ((ecLevel ^ 1) << 3) | maskId;
   let pattern =
     0b101010000010010 ^ ((info << 10) | remBinPoly(info, 0b10100110111, 11));
   for (let i = 8; i-- > 0; pattern >>= 1) {

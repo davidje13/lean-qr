@@ -1,18 +1,21 @@
 // This was generated using tools/corrections-gen.mjs
 const CORRECTION_DATA =
-  "$*$-$0$4$-$3$9$?$2$=%5%9$7%5%='3$=%;'5'9%5'3';'?%7'5)5(=%;'9)9)=%A(9+7+;'5(=+;+?'7(A+?.;';+9-=.?'=,9/;39'A,;373;)9-;/A5;);-?4;3A)?.?3?6?)A0=5?8?*?1=8=<=+?3=7A<?+?4=:?<A,?4?:AE;,A5?<AAA-A7?>ACA/=8?@AFA/?:?E?HA/A<?EAKA0A=?FAMA1A??IAPA2A@?KASA3AB?NAVA4AD?PAYA5AF?SA\\A6AH?VA_A6AI?XAbA7AK?[AeA8AN?^AiA9AP?aAmA;AR?dApA<AT?gAtA";
+  "*-04-39?2$%%$%%'$%''%'''%')(%'))%(++'(++'(+.'+-.',/3',33)-/5)-43).36)058*18<+37<+4:<,4:E,5<A-7>C/8@F/:EH/<EK0=FM1?IP2@KS3BNV4DPY5FS\\6HV_6IXb7K[e8N^i9Pam;Rdp<Tgt";
+
+const ECS_RATIO = [1 / 5, 3 / 8, 5 / 9, 2 / 3];
 
 export const correctionData = (version, totalBytes) => (correctionIndex) => {
-  const p = version * 8 + correctionIndex * 2 - 8;
-  const totalGroups = CORRECTION_DATA.charCodeAt(p) - 35;
-  const ecs = CORRECTION_DATA.charCodeAt(p + 1) - 35;
-
-  const g1s = (totalBytes / totalGroups - ecs) | 0;
+  const p = version * 4 + correctionIndex - 4;
+  const d = CORRECTION_DATA.charCodeAt(p) - 35;
+  const totalGroups = p > 8 ? d : 1;
+  const gs = (totalBytes / totalGroups) | 0;
   const g2n = totalBytes % totalGroups;
   const g1n = totalGroups - g2n;
+  const ecs =
+    p > 8 ? (gs * ECS_RATIO[correctionIndex] + (version > 5)) & ~1 : d;
+  const g1s = gs - ecs;
 
   return {
-    _id: correctionIndex ^ 1,
     _capacityBits: (g1n * g1s + g2n * (g1s + 1)) * 8,
     _groups: g2n
       ? [

@@ -9,14 +9,6 @@ function getData(version) {
 }
 
 describe('corrections', () => {
-  it('contains correction level IDs', () => {
-    const v1 = getData(1);
-    expect(v1(correction.L)._id).toEqual(0b01);
-    expect(v1(correction.M)._id).toEqual(0b00);
-    expect(v1(correction.Q)._id).toEqual(0b11);
-    expect(v1(correction.H)._id).toEqual(0b10);
-  });
-
   it('stores data in increasing robustness', () => {
     expect(correction.M).toBeGreaterThan(correction.L);
     expect(correction.Q).toBeGreaterThan(correction.M);

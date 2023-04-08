@@ -76,7 +76,7 @@ export const generate = (
       return (masks[mask ?? -1] ? [masks[mask]] : masks)
         .map((m, maskId) => {
           const masked = Bitmap2D(code.size, code._data);
-          applyMask(masked, m, mask ?? maskId, correction._id);
+          applyMask(masked, m, mask ?? maskId, cl);
           masked.s = scoreCode(masked);
           return masked;
         })
