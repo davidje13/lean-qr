@@ -141,6 +141,7 @@ textarea {
 }
 
 #error {
+  display: none;
   font-size: 1.5em;
   color: #cc0000;
   margin: 100px 0;

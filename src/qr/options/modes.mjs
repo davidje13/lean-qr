@@ -99,7 +99,7 @@ let shiftJISMap = () => {
   const decoder = new TextDecoder('sjis');
   const b = makeUint8Array(2);
   for (let code = 0; code < 0x1f25; ++code) {
-    b[0] = code / 0xc0 + 0x81 + (code >= 0x1740) * 0x40;
+    b[0] = code / 0xc0 + 0x81 + (code > 0x173f) * 0x40;
     b[1] = (code % 0xc0) + 0x40;
     map.set(decoder.decode(b), code);
   }
