@@ -98,18 +98,10 @@ let shiftJISMap = () => {
   const map = new Map();
   const decoder = new TextDecoder('sjis');
   const b = makeUint8Array(2);
-  for (const [from, to, shift] of [
-    [0x8140, 0x9ffd, 0x8140],
-    [0xe040, 0xebc0, 0xc140],
-  ]) {
-    for (let c = from; c < to; ++c) {
-      b[0] = c >> 8;
-      b[1] = c & 0xff;
-      map.set(
-        decoder.decode(b),
-        ((c - shift) >> 8) * 0xc0 + ((c - shift) & 0xff),
-      );
-    }
+  for (let code = 0; code < 0x1f25; ++code) {
+    b[0] = code / 0xc0 + 0x81 + (code >= 0x1740) * 0x40;
+    b[1] = (code % 0xc0) + 0x40;
+    map.set(decoder.decode(b), code);
   }
   map.delete('\uFFFD');
   shiftJISMap = () => map;
