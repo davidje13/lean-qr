@@ -25,13 +25,15 @@ const bytes = (value) => (data, version) => {
 const makeMode = (
   fn,
   test,
-  estimator,
+  estimatorLen,
   requiredECI,
+  estimator = (value, version) => estimatorLen(value.length, version),
   wrappedFn = requiredECI ? (value) => multi(eci(requiredECI), fn(value)) : fn,
 ) => {
   wrappedFn.test = test;
+  wrappedFn._estimateByLength = estimatorLen;
   wrappedFn.est = estimator;
-  wrappedFn.eci = requiredECI;
+  wrappedFn.eci = requiredECI && [requiredECI];
   return wrappedFn;
 };
 
@@ -50,8 +52,8 @@ const numeric = makeMode(
     }
   },
   /./.test.bind(/[0-9]/),
-  (value, version) =>
-    14 + (version > 26) * 2 + (version > 9) * 2 + (value.length * 10) / 3,
+  (count, version) =>
+    14 + (version > 26) * 2 + (version > 9) * 2 + (count * 10) / 3,
 );
 
 const alphaNumeric = makeMode(
@@ -67,32 +69,35 @@ const alphaNumeric = makeMode(
     }
   },
   (c) => alnum(c) >= 0,
-  (value, version) =>
-    13 + (version > 26) * 2 + (version > 9) * 2 + value.length * 5.5,
+  (count, version) => 13 + (version > 26) * 2 + (version > 9) * 2 + count * 5.5,
 );
 
 // Unicode codepoints and ISO-8859-1 overlap for first 256 chars
 const ascii = makeMode(
   (value) => bytes([...value].map(firstCharCode)),
   (c) => firstCharCode(c) < 0x80,
-  (value, version) => 12 + (version > 9) * 8 + value.length * 8,
+  (count, version) => 12 + (version > 9) * 8 + count * 8,
 );
+ascii._composable = true;
 
 const iso8859_1 = makeMode(
   ascii,
   (c) => firstCharCode(c) < 0x100,
-  ascii.est,
+  ascii._estimateByLength,
   3,
 );
+iso8859_1._composable = true;
 
 const utf8Encoder = new TextEncoder();
 const utf8 = makeMode(
   (value) => bytes(utf8Encoder.encode(value)),
   () => 1,
+  0,
+  26,
   (value, version) =>
     12 + (version > 9) * 8 + utf8Encoder.encode(value).length * 8,
-  26,
 );
+utf8._composable = true;
 
 let shiftJISMap = () => {
   const map = new Map();
@@ -117,12 +122,9 @@ const shift_jis = makeMode(
     }
   },
   (c) => shiftJISMap().has(c),
-  (value, version) =>
-    12 + (version > 26) * 2 + (version > 9) * 2 + value.length * 13,
+  (count, version) => 12 + (version > 26) * 2 + (version > 9) * 2 + count * 13,
 );
-
-const pickBest = (opts) =>
-  opts.reduce((best, part) => (part._cost < best._cost ? part : best));
+shift_jis._composable = true;
 
 export const DEFAULT_AUTO_MODES = [
   numeric,
@@ -138,50 +140,118 @@ export const mode = {
     (value, { modes = DEFAULT_AUTO_MODES } = {}) =>
     (data, version) => {
       /*
-       * The algorithm used here assumes that no mode can encode longer strings in less space.
-       * It progresses character by character through the input string, tracking the single
-       * lowest-cost-so-far path for each of the currently possible modes. It is possible
-       * to determine this from the previous character's lowest-cost-so-far paths, making this
-       * algorithm O(n * m^2) overall (n = characters in input, m = number of available modes),
-       * assuming the mode estimator functions are O(1)
+       * The algorithm used here assumes that no mode can encode longer strings in less space,
+       * and that it is only beneficial to switch modes when the supported character sets
+       * change.
        *
-       * This is not perfect, as it does not keep track of all possible ECI modes the state
-       * could have (so may choose e.g. 'iso8859 / numeric / utf8' over 'utf8 / numeric / utf8'
-       * even if the latter is better)
+       * It breaks the string into chunks according to which combination of modes can encode
+       * the characters, then progresses block by block, tracking the single lowest-cost-so-far
+       * path for each of the currently possible mode/eci combinations. It is possible to
+       * determine this from the previous character's lowest-cost-so-far paths, making this
+       * algorithm O(n * m^2) overall (n = number of blocks, m = number of available modes *
+       * possible ECI states), assuming the mode estimator functions are O(1)
+       *
+       * Since this is the most CPU-intensive part of the process, it has been optimised for
+       * speed rather than code size.
        */
 
-      let cur = [{ _cost: 0 }];
-      for (let i = 0; i < value.length; ++i) {
-        cur = modes
-          .filter((mode) => mode.test(value[i]))
-          .map((mode) =>
-            pickBest(
-              cur.map((p) => {
-                const start = p._mode === mode ? p._start : i;
-                const previous = p._mode === mode ? p._previous : p;
-                const fragment = value.slice(start, i + 1);
-                const curECI = mode.eci ?? previous._eci;
-                return {
-                  _mode: mode,
-                  _previous: previous,
-                  _start: start,
-                  _text: fragment,
-                  _cost:
-                    previous._cost +
-                    (curECI !== previous.i) * 12 +
-                    Math.ceil(mode.est(fragment, version)),
-                  _eci: curECI,
-                };
-              }),
-            ),
-          );
-        if (!cur.length) {
-          fail(ERROR_UNENCODABLE);
-        }
+      let id = 1;
+      for (const mode of modes) {
+        const cache = new Map();
+        mode._id = id <<= 1;
+        mode._switchCost = mode.est('', version);
+        mode._est = mode._estimateByLength
+          ? (start, end) => {
+              const l = end - start;
+              const n = cache.get(l) ?? mode._estimateByLength(l, version);
+              cache.set(l, n);
+              return n;
+            }
+          : (start, end) => {
+              const s = value.slice(start, end);
+              const n = cache.get(s) ?? mode.est(s, version);
+              cache.set(s, n);
+              return n;
+            };
       }
+
+      let cur = [{ _cost: 0 }];
+      let start = 0;
+      let end = 0;
+      let prevActive = -1;
+      for (const c of [...value, '']) {
+        let active = 0;
+        if (c) {
+          for (const mode of modes) {
+            if (mode.test(c)) {
+              active |= mode._id;
+            }
+          }
+        }
+        if (!c || active !== prevActive) {
+          if (prevActive !== -1) {
+            const ecis = new Set(cur.map((p) => p._eci));
+            const next = [];
+            for (const mode of modes.filter((m) => prevActive & m._id)) {
+              const fragCost = mode._est(start, end);
+              for (const eci of mode.eci ?? ecis) {
+                if (mode === ascii && eci) {
+                  // bespoke optimisation: ascii is never better if ECI has already been set
+                  continue;
+                }
+                let best;
+                for (const p of cur) {
+                  if (p._eci === eci || mode.eci) {
+                    const join = p._mode === mode && p._eci === eci;
+                    const prev = join ? p._prev : p;
+                    const joinedStart = join ? p._start : start;
+
+                    let cost;
+                    if (mode._composable && join) {
+                      cost = p._cost + fragCost - mode._switchCost;
+                    } else {
+                      cost =
+                        prev._cost +
+                        (prev._eci !== eci) * 12 +
+                        (joinedStart === start
+                          ? fragCost
+                          : mode._est(joinedStart, end));
+                    }
+                    if (!best || cost < best._cost) {
+                      best = {
+                        _start: joinedStart,
+                        _prev: prev,
+                        _mode: mode,
+                        _eci: eci,
+                        _end: end,
+                        _cost: cost,
+                      };
+                    }
+                  }
+                }
+                if (best) {
+                  next.push(best);
+                }
+              }
+            }
+            if (!next.length) {
+              fail(ERROR_UNENCODABLE);
+            }
+            cur = next;
+          }
+          prevActive = active;
+          start = end;
+        }
+        end += c.length;
+      }
+
       const parts = [];
-      for (let part = pickBest(cur); part._mode; part = part._previous) {
-        parts.unshift(part._mode(part._text));
+      for (
+        let part = cur.reduce((a, b) => (b._cost < a._cost ? b : a));
+        part._mode;
+        part = part._prev
+      ) {
+        parts.unshift(part._mode(value.slice(part._start, part._end)));
       }
       parts.forEach((enc) => enc(data, version));
     },

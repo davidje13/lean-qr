@@ -4,7 +4,7 @@ Minimal library for generating QR Codes in the browser and server-side.
 Includes a convenience wrapper for React / Preact.
 
 Optimised for code size while maintaining decent performance and supporting
-all QR features. Less than 7kB uncompressed (less than 4kB compressed).
+all QR features. ~7kB uncompressed (less than 4kB compressed).
 
 You can see it in action at <https://qr.davidje13.com/>
 

@@ -80,18 +80,18 @@ export const scoreCode = ({ size, _data }, score = 0, totalOn = 0) => {
         }
       }
     }
-  }
-  for (let x = 1; x < size; ++x) {
-    for (
-      let y = 1, lastV = _data[x - 1] & 1, lastM = (_data[x] & 1) === lastV;
-      y < size;
-      ++y
-    ) {
-      const curV = _data[y * size + x - 1] & 1;
-      const curM = (_data[y * size + x] & 1) === curV;
-      score += (lastM && curM && lastV === curV) * 3;
-      lastV = curV;
-      lastM = curM;
+    if (i) {
+      for (
+        let y = 1, lastV = _data[i - 1] & 1, lastM = (_data[i] & 1) === lastV;
+        y < size;
+        ++y
+      ) {
+        const curV = _data[y * size + i - 1] & 1;
+        const curM = (_data[y * size + i] & 1) === curV;
+        score += (lastM && curM && lastV === curV) * 3;
+        lastV = curV;
+        lastM = curM;
+      }
     }
   }
   return score + ((20 * Math.abs(totalOn / (size * size * 2) - 0.5)) | 0) * 10;

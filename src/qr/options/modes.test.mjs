@@ -507,6 +507,18 @@ describe('mode.auto', () => {
     );
   });
 
+  it('uses utf8 for earlier parts if it will reduce the overall size', () => {
+    checkSame(
+      mode.auto('iso8859 \u00A3 THEN ALPHANUMERIC then utf8 \uD83D\uDE00'),
+
+      mode.multi(
+        mode.utf8('iso8859 \u00A3'),
+        mode.alphaNumeric(' THEN ALPHANUMERIC '),
+        mode.utf8('then utf8 \uD83D\uDE00'),
+      ),
+    );
+  });
+
   it('handles the trivial case of empty input', () => {
     checkSame(mode.auto(''), mode.multi());
   });
@@ -582,7 +594,7 @@ function expectEstMatch(mode, value) {
 
   for (let version = 1; version <= 40; ++version) {
     const data = Bitmap1D();
-    data.eci = mode.eci; // do not include ECI changes
+    data.eci = mode.eci?.[0]; // do not include ECI changes
     const est = mode.est(value, version);
     encoder(data, version);
     expect(Math.ceil(est)).equals(data._bits);
