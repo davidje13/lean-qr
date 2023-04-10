@@ -62,37 +62,33 @@ export const scoreImbalance = (code, totalOn = 0) => {
   return (20 * Math.abs(totalOn / (code.size * code.size * 2) - 0.5)) | 0;
 };
 
-export const scoreCode = ({ size, get }, score = 0, totalOn = 0) => {
-  const state0 = [0, 0];
-  const fn = ([state, consec, last], cur) => {
-    totalOn += cur;
-    state = ((state >> 1) | initial) & (pattern ^ (cur - 1));
-    if (state & matches) {
-      score += 40;
-    }
-    if (cur !== last) {
-      consec = 0;
-    } else if (consec === 4) {
-      score += 3;
-    } else if (consec > 4) {
-      ++score;
-    }
-    return [state, consec + 1, cur];
-  };
+export const scoreCode = ({ size, _data }, score = 0, totalOn = 0) => {
   for (let i = 0; i < size; ++i) {
-    for (let j = 0, stateX = state0, stateY = state0; j < size; ++j) {
-      stateX = fn(stateX, get(j, i));
-      stateY = fn(stateY, get(i, j));
+    for (let n = 0; n < 2; ++n) {
+      for (let j = 0, state = 0, consec = 0, last; j < size; ++j) {
+        const cur = _data[n ? i * size + j : j * size + i] & 1;
+        totalOn += cur;
+        state = ((state >> 1) | initial) & (pattern ^ (cur - 1));
+        if (state & matches) {
+          score += 40;
+        }
+        if (cur !== last) {
+          consec = 1;
+          last = cur;
+        } else if (++consec > 4) {
+          score += consec < 6 ? 3 : 1;
+        }
+      }
     }
   }
   for (let x = 1; x < size; ++x) {
     for (
-      let y = 1, lastV = get(x - 1, 0), lastM = get(x, 0) === lastV;
+      let y = 1, lastV = _data[x - 1] & 1, lastM = (_data[x] & 1) === lastV;
       y < size;
       ++y
     ) {
-      const curV = get(x - 1, y);
-      const curM = get(x, y) === curV;
+      const curV = _data[y * size + x - 1] & 1;
+      const curM = (_data[y * size + x] & 1) === curV;
       score += (lastM && curM && lastV === curV) * 3;
       lastV = curV;
       lastM = curM;
