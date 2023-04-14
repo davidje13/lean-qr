@@ -37,7 +37,6 @@ code.toCanvas(document.getElementById('my-canvas'));
 <style>
 #my-canvas {
   width: 100%;
-  image-rendering: crisp-edges; /* for firefox */
   image-rendering: pixelated;
 }
 </style>
@@ -413,7 +412,6 @@ recommended that you use the following CSS:
 ```css
 .myTargetCanvas {
   width: 100%;
-  image-rendering: crisp-edges; /* for firefox */
   image-rendering: pixelated;
 }
 ```

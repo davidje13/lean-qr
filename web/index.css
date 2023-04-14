@@ -165,7 +165,6 @@ textarea {
 }
 
 canvas.qr {
-  image-rendering: crisp-edges; /* for firefox */
   image-rendering: pixelated;
 }
 
