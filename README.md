@@ -442,9 +442,6 @@ myContext.putImageData(imageData, 200, 100);
 `myContext` must be a 2D context (i.e. the result of calling
 `myCanvas.getContext('2d')`) on a canvas element.
 
-Note that until version 1.4.0, `toImageData` did not include padding. To get
-the same behaviour in 1.4.0+, set `padX` and `padY` to 0.
-
 ### `toDataURL([options])`
 
 Returns a string which can be used as a `href`, e.g. for downloading;
