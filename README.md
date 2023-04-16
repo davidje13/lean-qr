@@ -9,9 +9,13 @@ for React and Preact. Under 4kB compressed.
 - ISO 18004 compliant;
 - Lightweight (less than 4kB compressed, ~7kB uncompressed);
 - Simple yet flexible API, with sensible defaults for all configuration;
-- Supports all standard encodings out-of-the box (including Unicode and Shift-JIS);
+- Supports all standard encodings out-of-the box:
+  - including Unicode 😎;
+  - and Shift-JIS 漢字;
+  - and supports custom modes for special requirements;
 - Automatic encoding to minimise output size;
 - Fast enough for lag-free live editing;
+- Comprehensive automated testing;
 - Multiple output formats (canvas / PNG / SVG / text).
 
 You can [see it in action online](https://qr.davidje13.com/), or try it from the terminal:
