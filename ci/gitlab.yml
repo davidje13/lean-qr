@@ -27,6 +27,8 @@ pages:
   stage: package
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
+  script:
+    - mv web public
   artifacts:
     paths:
-      - web
+      - public
