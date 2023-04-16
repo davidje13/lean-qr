@@ -22,6 +22,10 @@ npx lean-qr 'MY MESSAGE HERE'
 
 ## Basic Usage
 
+```shell
+npm install --save lean-qr
+```
+
 ```html
 <canvas id="my-qr-code" />
 <a href="#" download="qr.png" id="download-link">Download</a>
