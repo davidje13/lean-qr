@@ -19,7 +19,16 @@ const GENERATE_OPTS = [
   'modes',
 ];
 
-const ALL_OPTS = [...GENERATE_OPTS, 'on', 'off', 'padX', 'padY'];
+const ALL_OPTS = [
+  ...GENERATE_OPTS,
+  'on',
+  'off',
+  'padX',
+  'padY',
+  'width',
+  'height',
+  'scale',
+];
 const STYLES = { 'image-rendering': 'pixelated' };
 
 const dataOrError = (fn) => {

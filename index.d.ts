@@ -116,8 +116,8 @@ declare module 'lean-qr/extras/svg' {
     off?: string;
     padX?: number;
     padY?: number;
-    width?: number;
-    height?: number;
+    width?: number | null;
+    height?: number | null;
     scale?: number;
   }
 
