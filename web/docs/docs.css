@@ -1,0 +1,379 @@
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+ul,
+ol,
+li,
+pre,
+div,
+article,
+section,
+figure,
+figcaption,
+table,
+thead,
+tbody,
+tr,
+th,
+td {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font: inherit;
+}
+
+body {
+  font: 0.9em sans-serif;
+  margin-bottom: 200px;
+  line-height: 1.7;
+  background: #dddddd;
+}
+
+article {
+  margin: 0 auto;
+  max-width: 900px;
+  background: #f8f8f8;
+  padding: 40px 40px 80px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+h1 {
+  margin: -40px -40px 0;
+}
+
+h1 img {
+  width: 100%;
+}
+
+h2,
+h3,
+h4,
+h5 {
+  padding: 0.3rem 40px 0;
+  margin: 0 -40px;
+  position: sticky;
+  background: #f8f8f8;
+  border-bottom: 1px solid #cccccc;
+}
+
+h2 {
+  margin-top: 60px;
+  font: 1.8rem Vollkorn, Palatino, Georgia, serif;
+  border-color: #cccccc;
+  height: 2.6rem;
+  top: 0;
+  z-index: 6;
+}
+h2 + a {
+  position: relative;
+  top: -2.6rem;
+}
+
+h3 {
+  margin-top: 50px;
+  font: 1.3rem Vollkorn, Palatino, Georgia, serif;
+  border-color: #dddddd;
+  height: 2.1rem;
+  top: 2.5rem;
+  z-index: 5;
+}
+h3 + a {
+  position: relative;
+  top: -4.6rem;
+}
+
+h4 {
+  margin-top: 40px;
+  font: 1.1rem Vollkorn, Palatino, Georgia, serif;
+  border-color: #eeeeee;
+  height: 1.9rem;
+  top: 4.5rem;
+  z-index: 4;
+}
+h4 + a {
+  position: relative;
+  top: -6.4rem;
+}
+
+h5 {
+  margin-top: 30px;
+  font: 1rem Vollkorn, Palatino, Georgia, serif;
+  top: 6.3rem;
+  height: 1.8rem;
+  border-color: #f4f4f4;
+  z-index: 3;
+}
+h5 + a {
+  position: relative;
+  top: -8.1rem;
+}
+
+p {
+  margin-top: 10px;
+}
+
+pre {
+  font: 1rem monospace;
+  line-height: 1.5;
+  border: 1px solid #dddddd;
+  border-left-width: 5px;
+  padding: 10px;
+  background: #fafafa;
+  margin: 10px 10px 20px;
+  overflow-x: auto;
+}
+
+pre .keyword {
+  color: #0000cc;
+}
+pre .string {
+  color: #800000;
+}
+pre .property {
+  color: #000080;
+}
+pre .method {
+  color: #008080;
+}
+pre .comment {
+  color: #408040;
+}
+pre .value {
+  color: #008040;
+}
+
+code {
+  display: inline-block;
+  font: 1.1em monospace;
+  padding: 1px 5px;
+  margin: -2px 0;
+  position: relative;
+  top: -1px;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+}
+
+table {
+  margin: 20px;
+  border-collapse: collapse;
+}
+
+th {
+  font-weight: bold;
+  border-bottom: 1px solid #000000;
+  text-align: left;
+  padding: 0 20px 5px 10px;
+}
+
+tbody tr:hover td {
+  background: #ffffff;
+}
+
+td {
+  padding: 5px 20px 0 10px;
+  vertical-align: top;
+}
+
+td.R {
+  text-align: right;
+}
+
+ul,
+ol {
+  margin-top: 10px;
+}
+
+li {
+  margin-top: 10px;
+  margin-left: 40px;
+}
+
+ul ul {
+  margin-top: 0;
+}
+
+.toc,
+.toc ul {
+  list-style: none;
+}
+
+.toc li {
+  margin-top: 2px;
+  margin-left: 20px;
+}
+.toc > li {
+  margin-left: 10px;
+}
+
+.toc code {
+  font-size: 1.2em;
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code {
+  font-size: 1em;
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+figure {
+  display: inline-block;
+  margin: 10px;
+}
+
+figure img {
+  display: block;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+figcaption {
+  margin-top: 5px;
+  text-align: center;
+}
+
+.masks {
+  margin: 20px 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.masks figure {
+  max-width: 120px;
+}
+
+.masks img {
+  image-rendering: pixelated;
+  width: 100%;
+}
+
+a:link,
+a:visited {
+  text-decoration: none;
+  color: #333399;
+}
+
+a:active,
+a:hover {
+  text-decoration: underline;
+  color: #2222aa;
+}
+
+pre a:link,
+pre a:visited {
+  text-decoration: dotted underline #4080cc;
+}
+
+pre a:active,
+pre a:hover {
+  text-decoration: underline #0040cc;
+}
+
+@media (max-width: 900px) {
+  body {
+    background: #f8f8f8;
+  }
+  article {
+    max-width: 830px;
+    padding: 5px;
+    box-shadow: none;
+  }
+
+  h1 {
+    margin: 0;
+  }
+}
+
+/* tab control */
+
+.tabbox {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.tabbox > input {
+  position: absolute;
+  left: -100px;
+  opacity: 0;
+}
+
+.tabbox > label:first-of-type {
+  margin-left: 0.5rem;
+}
+
+.tabbox > label {
+  position: relative;
+  padding: 0.6rem 1rem 0.5rem;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-bottom: none;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  z-index: 1;
+}
+
+.tabbox > input:checked + label {
+  background: white;
+  border-color: #ccccdd;
+  padding: 0.5rem 1rem 0.6rem;
+}
+
+.tabbox > input:focus + label::after {
+  content: '';
+  position: absolute;
+  top: 0.3rem;
+  left: 0.3rem;
+  right: 0.3rem;
+  bottom: 0.4rem;
+  border: 2px solid #0080ff;
+  border-radius: 5px;
+}
+
+.tabbox > .tabcontent {
+  display: none;
+  flex: 100%;
+  margin-top: -2px;
+  border: 2px solid #ccccdd;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 3px;
+  width: 100%;
+}
+
+.tabcontent > :first-child {
+  margin-top: 0;
+}
+
+.tabcontent h2,
+.tabcontent h3,
+.tabcontent h4,
+.tabcontent h5 {
+  background: #ffffff;
+  margin-left: -1.5rem;
+  margin-right: -1.5rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+#t1:checked ~ .tabcontent[data-for='t1'],
+#t2:checked ~ .tabcontent[data-for='t2'],
+#t3:checked ~ .tabcontent[data-for='t3'],
+#t4:checked ~ .tabcontent[data-for='t4'],
+#t5:checked ~ .tabcontent[data-for='t5'] {
+  display: block;
+}

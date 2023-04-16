@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="content-security-policy"
+      content="base-uri 'self'; default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; form-action 'none';"
+    />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, minimal-ui" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>Lean QR Library</title>
+    <link rel="icon" href="/resources/favicon.png" />
+    <link rel="stylesheet" href="/docs/docs.css" />
+  </head>
+  <body>
+    <article>
+      <h1><img src="/resources/logo.png" alt="Lean QR Library" /></h1>
+      <p>Lean QR is a lightweight yet fully-featured library for generating QR Codes.</p>
+      <section>
+        <h2>Quickstart</h2>
+        <a id="quickstart"></a>
+        <p>Choose your platform:</p>
+        <section class="tabbox">
+          <input type="radio" name="tab" id="t1" value="node" /><label for="t1">NodeJS</label>
+          <input type="radio" name="tab" id="t2" value="browser" checked /><label for="t2">Browser Native</label>
+          <input type="radio" name="tab" id="t3" value="react" /><label for="t3">React</label>
+          <input type="radio" name="tab" id="t4" value="preact" /><label for="t4">Preact</label>
+          <input type="radio" name="tab" id="t5" value="cli" /><label for="t5">Shell (CLI)</label>
+          <div class="tabcontent" data-for="t1">
+            <h3>NodeJS</h3>
+            <p>Install the dependency:</p>
+            <pre>npm install --save <span class="string">lean-qr</span></pre>
+            <section>
+              <h4>Display QR Code in terminal output:</h4>
+              <pre>
+<span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+
+<span class="keyword">const</span> code = <a href="#generate"><span class="method">generate</span></a>(<span class="string">'LEAN-QR LIBRARY'</span>);
+
+process.<span class="property">stdout</span>.<span class="method">write</span>(code.<a href="#Bitmap2D_toString"><span class="method">toString</span></a>({
+  <span class="property">on</span>: <span class="string">'\u001B[7m  \u001B[0m'</span>, <span class="comment">// ANSI escape: inverted</span>
+}));</pre>
+            </section>
+            <section>
+              <h4>Generate SVG source for serving from a webserver:</h4>
+              <pre>
+<span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+<span class="keyword">import</span> { toSvgSource } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
+
+<span class="keyword">const</span> code = <a href="#generate"><span class="method">generate</span></a>(<span class="string">'LEAN-QR LIBRARY'</span>);
+
+<span class="keyword">const</span> svg = <a href="#toSvgSource"><span class="method">toSvgSource</span></a>(code, {
+  <span class="comment">// set to false if you want to embed the QR Code inside a HTML document</span>
+  <span class="property">xmlDeclaration</span>: <span class="value">true</span>,
+});</pre>
+            </section>
+          </div>
+          <div class="tabcontent" data-for="t2">
+            <h3>Browser Native</h3>
+            <p>Install the dependency:</p>
+            <pre>npm install --save <span class="string">lean-qr</span></pre>
+            <p>
+              The recommended in-browser approach is to render directly to a <code>canvas</code> element, and size it
+              using CSS:
+            </p>
+            <pre>
+&lt;<span class="value">canvas</span> <span class="property">id</span>=<span class="string">"my-canvas"</span> /&gt;
+
+&lt;<span class="value">script</span> <span class="property">type</span>=<span class="string">"module"</span>&gt;
+  <span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+
+  <span class="keyword">const</span> code = <a href="#generate"><span class="method">generate</span></a>(<span class="string">'LEAN-QR LIBRARY'</span>);
+  code.<a href="#Bitmap2D_toCanvas"><span class="method">toCanvas</span></a>(document.<span class="method">getElementById</span>(<span class="string">'my-canvas'</span>));
+&lt;/<span class="value">script</span>&gt;
+
+&lt;<span class="value">style</span>&gt;
+  <span class="string">#my-canvas</span> {
+    <span class="property">width</span>: <span class="value">100%</span>;
+    <span class="property">image-rendering</span>: <span class="value">pixelated</span>;
+  }
+&lt;/<span class="value">style</span>&gt;</pre>
+          </div>
+          <div class="tabcontent" data-for="t3">
+            <h3>React</h3>
+            <p>Install the dependency:</p>
+            <pre>npm install --save <span class="string">lean-qr</span></pre>
+            <p>A convenience wrapper component is provided for React:</p>
+            <pre>
+<span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+<span class="keyword">import</span> { makeAsyncComponent } <span class="keyword">from</span> <span class="string">'lean-qr/extras/react'</span>;
+<span class="keyword">import</span> <span class="keyword">* as</span> React <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="comment">// creates a react component (do this at the top-level)</span>
+<span class="keyword">const</span> QR = <a href="#makeAsyncComponent"><span class="method">makeAsyncComponent</span></a>(React, generate);
+
+<span class="comment">// example usage:</span>
+<span class="keyword">const</span> MyComponent = () =&gt; (
+  &lt;<span class="value">section</span>&gt;
+    Scan this QR Code!
+    &lt;<span class="value">QR</span> <span class="property">content</span>=<span class="string">"LEAN-QR LIBRARY"</span> <span class="property">className</span>=<span class="string">"qr-code"</span> /&gt;
+  &lt;/<span class="value">section</span>&gt;
+);</pre>
+            <p>You should apply some styling to the QR Code to set its size:</p>
+            <pre>
+<span class="string">.qr-code</span> {
+  <span class="property">width</span>: <span class="value">300px;</span>
+}</pre>
+            <p>
+              Note that this uses <code>canvas</code> rendering, which is optimal on the client-side, but will not work
+              if you want to perform server-side rendering (the QR Code will not be visible until client-side hydration
+              has completed). If you need server-side rendering, use
+              <a href="#makeSyncComponent"><code>makeSyncComponent</code></a>
+              instead:
+            </p>
+            <pre>
+<span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+<span class="keyword">import</span> { toSvgDataURL } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
+<span class="keyword">import</span> { makeSyncComponent } <span class="keyword">from</span> <span class="string">'lean-qr/extras/react'</span>;
+<span class="keyword">import</span> <span class="keyword">* as</span> React <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">const</span> QR = <a href="#makeSyncComponent"><span class="method">makeSyncComponent</span></a>(React, generate, toSvgDataURL);
+
+<span class="keyword">const</span> MyComponent = () =&gt; (
+  &lt;<span class="value">section</span>&gt;
+    Scan this QR Code!
+    &lt;<span class="value">QR</span> <span class="property">content</span>=<span class="string">"LEAN-QR LIBRARY"</span> <span class="property">className</span>=<span class="string">"qr-code"</span> /&gt;
+  &lt;/<span class="value">section</span>&gt;
+);</pre>
+          </div>
+          <div class="tabcontent" data-for="t4">
+            <h3>Preact</h3>
+            <p>Install the dependency:</p>
+            <pre>npm install --save <span class="string">lean-qr</span></pre>
+            <p>A convenience wrapper component is provided for Preact:</p>
+            <pre>
+<span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+<span class="keyword">import</span> { makeAsyncComponent } <span class="keyword">from</span> <span class="string">'lean-qr/extras/react'</span>;
+<span class="keyword">import</span> { createElement } <span class="keyword">from</span> <span class="string">'preact'</span>;
+<span class="keyword">import</span> <span class="keyword">* as</span> hooks <span class="keyword">from</span> <span class="string">'preact/hooks'</span>;
+
+<span class="comment">// creates a preact component (do this at the top-level)</span>
+<span class="keyword">const</span> QR = <a href="#makeAsyncComponent"><span class="method">makeAsyncComponent</span></a>({ createElement, ...hooks }, generate);
+
+<span class="comment">// example usage:</span>
+<span class="keyword">const</span> MyComponent = () =&gt; (
+  &lt;<span class="value">section</span>&gt;
+    Scan this QR Code!
+    &lt;<span class="value">QR</span> <span class="property">content</span>=<span class="string">"LEAN-QR LIBRARY"</span> <span class="property">class</span>=<span class="string">"qr-code"</span> /&gt;
+  &lt;/<span class="value">section</span>&gt;
+);</pre>
+            <p>You should apply some styling to the QR Code to set its size:</p>
+            <pre>
+<span class="string">.qr-code</span> {
+  <span class="property">width</span>: <span class="value">300px;</span>
+}</pre>
+            <p>
+              If you want to reduce the build size further, you can provide just the <code>useRef</code> and
+              <code>useEffect</code> hooks rather than all hooks to enable tree shaking optimisations during the build.
+              Note that the set of required hooks may change in future versions.
+            </p>
+          </div>
+          <div class="tabcontent" data-for="t5">
+            <h3>Shell (CLI)</h3>
+            <p>
+              Though not recommended for production use, it is possible to use the built-in commandline interface to
+              generate QR Codes from shell scripts:
+            </p>
+            <pre>npx lean-qr <span class="string">'MY MESSAGE HERE'</span></pre>
+            <p>
+              By default this will print the QR Code to <code>stdout</code> using ANSI escape sequences, so it is
+              recommended that you set a maximum version to ensure the QR Code does not exceed the width of the screen
+              (the output width will be <code>(17 + version * 4) * 2</code> characters):
+            </p>
+            <pre>npx lean-qr --max-version 5 <span class="string">'MY MESSAGE HERE'</span></pre>
+            <p>You can also customise the output format (e.g. to generate a file):</p>
+            <pre>npx lean-qr --format svg <span class="string">'漢字'</span> <span class="keyword">&gt;</span> my-qr-code.svg</pre>
+            <p>For full documentation, run:</p>
+            <pre>npx lean-qr --help</pre>
+          </div>
+        </section>
+      </section>
+      <section>
+        <h2>API Reference</h2>
+        <a id="api"></a>
+        <ul class="toc">
+          <li>
+            <a href="#generate"><code>generate(content[, options])</code></a>
+            <ul>
+              <li>
+                <a href="#version">Versions (<code>minVersion</code> / <code>maxVersion</code>)</a>
+              </li>
+              <li>
+                <a href="#correction"
+                  >Correction Levels (<code>minCorrectionLevel</code> / <code>maxCorrectionLevel</code>)</a
+                >
+              </li>
+              <li><a href="#mask">Masks (<code>mask</code>)</a></li>
+              <li><a href="#mode">Modes (<code>modes</code>)</a></li>
+              <li><a href="#trailer">Trailer (<code>trailer</code>)</a></li>
+              <li>
+                <a href="#generate_with"><code>.with</code></a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#Bitmap2D">Bitmap2D</a>
+            <ul>
+              <li>
+                <a href="#Bitmap2D_toString"><code>.toString([options])</code></a>
+              </li>
+              <li>
+                <a href="#Bitmap2D_toCanvas"><code>.toCanvas(canvas[, options])</code></a>
+              </li>
+              <li>
+                <a href="#Bitmap2D_toImageData"><code>.toImageData(context[, options])</code></a>
+              </li>
+              <li>
+                <a href="#Bitmap2D_toDataURL"><code>.toDataURL([options])</code></a>
+              </li>
+              <li>
+                <a href="#Bitmap2D_get"><code>.get(x, y)</code></a>
+              </li>
+              <li>
+                <a href="#Bitmap2D_size"><code>.size</code></a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#extras_svg">extras/svg</a>
+            <ul>
+              <li>
+                <a href="#toSvg"><code>toSvg(code, target[, options])</code></a>
+              </li>
+              <li>
+                <a href="#toSvgSource"><code>toSvgSource(code[, options])</code></a>
+              </li>
+              <li>
+                <a href="#toSvgDataURL"><code>toSvgDataURL(code[, options])</code></a>
+              </li>
+              <li>
+                <a href="#toSvgPath"><code>toSvgPath(code)</code></a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#extras_react">extras/react</a>
+            <ul>
+              <li>
+                <a href="#makeAsyncComponent"><code>makeAsyncComponent(framework, generate)</code></a>
+              </li>
+              <li>
+                <a href="#makeSyncComponent"><code>makeSyncComponent(framework, generate, toSvgDataURL)</code></a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#extras_errors">extras/errors</a>
+            <ul>
+              <li>
+                <a href="#readError"><code>readError(error)</code></a>
+              </li>
+            </ul>
+          </li>
+          <li><a href="#errors">Error Reference</a></li>
+          <li><a href="#custom-modes">Custom Modes</a></li>
+        </ul>
+        <section>
+          <h3><code>generate(content[, options])</code></h3>
+          <a id="generate"></a>
+          <pre>
+<span class="keyword">import</span> { generate, correction, mode } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+
+<span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
+  <a href="#version"><span class="property">minVersion</span></a>: <span class="value">1</span>,
+  <a href="#version"><span class="property">maxVersion</span></a>: <span class="value">40</span>,
+  <a href="#correction"><span class="property">minCorrectionLevel</span></a>: correction.<span class="property">L</span>,
+  <a href="#correction"><span class="property">maxCorrectionLevel</span></a>: correction.<span class="property">H</span>,
+  <a href="#mask"><span class="property">mask</span></a>: <span class="value">null</span>,
+  <a href="#trailer"><span class="property">trailer</span></a>: <span class="value">0xEC11</span>,
+  <a href="#mode"><span class="property">modes</span></a>: [
+    mode.<span class="property">numeric</span>,
+    mode.<span class="property">alphaNumeric</span>,
+    mode.<span class="property">ascii</span>,
+    mode.<span class="property">iso8859_1</span>,
+    mode.<span class="property">shift_jis</span>,
+    mode.<span class="property">utf8</span>,
+  ],
+});</pre>
+          <p>The options shown are the defaults. See the following sections for details on their meaning.</p>
+          <p>
+            Returns a <a href="#Bitmap2D"><code>Bitmap2D</code></a> containing the generated QR Code, or
+            <a href="#errors">throws an error</a> if it is not possible to generate a QR Code with the requested content
+            / options.
+          </p>
+          <section>
+            <h4>Versions (<code>minVersion</code> / <code>maxVersion</code>)</h4>
+            <a id="version"></a>
+            <p>
+              QR Code versions refer to the size of the output (the size will be <code>17 + version * 4</code>, plus
+              outer padding).
+            </p>
+            <p>
+              By default, all versions can be used. To restrict this, you can specify a minimum and/or maximum version:
+            </p>
+            <pre>
+<span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
+  <span class="property">minVersion</span>: <span class="value">10</span>,
+  <span class="property">maxVersion</span>: <span class="value">20</span>,
+});</pre>
+            <p>Versions must be integers in the range 1&ndash;40 (inclusive).</p>
+            <p>
+              If there is too much data for the <code>maxVersion</code> size, an
+              <a href="#errors">error will be thrown</a>.
+            </p>
+          </section>
+          <section>
+            <h4>Correction Levels (<code>minCorrectionLevel</code> / <code>maxCorrectionLevel</code>)</h4>
+            <a id="correction"></a>
+            <p>
+              QR Code correction levels control the amount of damage the QR Code can sustain before it becomes
+              unreadable.
+            </p>
+            <p>You can specify minimum and maximum correction levels:</p>
+            <pre>
+<span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
+  <span class="property">minCorrectionLevel</span>: correction.<span class="property">M</span>,
+  <span class="property">maxCorrectionLevel</span>: correction.<span class="property">Q</span>,
+});</pre>
+            <table>
+              <thead>
+                <tr>
+                  <th>correction level</th>
+                  <th>error tolerance</th>
+                  <th>data overhead</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>correction.L</code></td>
+                  <td class="R">~7.5%</td>
+                  <td class="R">~25%</td>
+                </tr>
+                <tr>
+                  <td><code>correction.M</code></td>
+                  <td class="R">~15.0%</td>
+                  <td class="R">~60%</td>
+                </tr>
+                <tr>
+                  <td><code>correction.Q</code></td>
+                  <td class="R">~22.5%</td>
+                  <td class="R">~120%</td>
+                </tr>
+                <tr>
+                  <td><code>correction.H</code></td>
+                  <td class="R">~30.0%</td>
+                  <td class="R">~190%</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>
+              <a href="#generate"><code>generate</code></a> will pick the smallest
+              <a href="#version">version (size)</a> which supports the <code>minCorrectionLevel</code>, then within this
+              version will use the highest possible correction level up to <code>maxCorrectionLevel</code>.
+            </p>
+            <p>
+              Generally it does not make sense to customise the <code>maxCorrectionLevel</code> unless you are
+              targetting a reader which does not support a particular correction level, or you are forcing a particular
+              level for stylistic purposes.
+            </p>
+          </section>
+          <section>
+            <h4>Masks (<code>mask</code>)</h4>
+            <a id="mask"></a>
+            <p>
+              QR Code masks are patterns which are applied to the resulting QR Code in an effort to maximise readability
+              for scanners (e.g. by avoiding data sections that look like a locator pattern, or large areas of the same
+              colour). To achieve this, ISO 18004 requires that the mask is chosen according to a specific algorithm
+              (and this is the default behaviour), but it is also possible to explicitly specify a non-optimal mask:
+            </p>
+            <pre>
+<span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
+  <span class="property">mask</span>: <span class="value">5</span>,
+});</pre>
+            <p>Valid masks are integers in the range 0&ndash;7 (inclusive).</p>
+            <p>
+              Note that this may make your QR Code more difficult to scan, and should generally be left as the default
+              (<code>null</code>).
+            </p>
+            <div class="masks">
+              <figure>
+                <img src="/resources/mask0.png" alt="checkerboard pattern" />
+                <figcaption>Mask 0</figcaption>
+              </figure>
+              <figure>
+                <img src="/resources/mask1.png" alt="checkerboard pattern" />
+                <figcaption>Mask 1</figcaption>
+              </figure>
+              <figure>
+                <img src="/resources/mask2.png" alt="checkerboard pattern" />
+                <figcaption>Mask 2</figcaption>
+              </figure>
+              <figure>
+                <img src="/resources/mask3.png" alt="checkerboard pattern" />
+                <figcaption>Mask 3</figcaption>
+              </figure>
+              <figure>
+                <img src="/resources/mask4.png" alt="checkerboard pattern" />
+                <figcaption>Mask 4</figcaption>
+              </figure>
+              <figure>
+                <img src="/resources/mask5.png" alt="checkerboard pattern" />
+                <figcaption>Mask 5</figcaption>
+              </figure>
+              <figure>
+                <img src="/resources/mask6.png" alt="checkerboard pattern" />
+                <figcaption>Mask 6</figcaption>
+              </figure>
+              <figure>
+                <img src="/resources/mask7.png" alt="checkerboard pattern" />
+                <figcaption>Mask 7</figcaption>
+              </figure>
+            </div>
+          </section>
+          <section>
+            <h4>Modes</h4>
+            <a id="mode"></a>
+            <p>
+              The content you are encoding into a QR Code can be represented using a variety of "modes" (character
+              encodings). These can be combined to achieve some amount of compression, allowing more content to fit in a
+              smaller space.
+            </p>
+            <p>
+              By default, the optimal encoding mode is chosen to minimise the resulting QR Code size (this includes
+              switching modes part way through a message if it reduces the size).
+            </p>
+            <p>
+              If you want to change the modes considered during this optimisation (perhaps if you are targeting a reader
+              which does not support certain modes, or if you want to support a non-standard mode), you can specify a
+              list of options:
+            </p>
+            <pre>
+<span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
+  <span class="property">modes</span>: [
+    mode.<span class="property">numeric</span>,
+    mode.<span class="property">alphaNumeric</span>,
+    mode.<span class="property">ascii</span>,
+    mode.<span class="property">iso8859_1</span>,
+    <span class="comment">// mode.shift_jis, - example: exclude Shift-JIS</span>
+    mode.<span class="property">utf8</span>,
+    myCustomMode, <span class="comment">// see <a href="#custom-modes">Custom Modes</a> below</span>
+  ],
+});</pre>
+            <p>
+              Or for full control, you can define the modes before passing the content in, avoiding the automatic
+              optimisation entirely:
+            </p>
+            <pre>
+<span class="keyword">import</span> { generate, mode } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+
+<span class="keyword">const</span> code = <span class="method">generate</span>(mode.<span class="method">alphaNumeric</span>(<span class="string">'LEAN-QR LIBRARY'</span>));</pre>
+            <p>
+              Note that if you specify a mode explicitly, it is your responsibility to ensure the content you are
+              encoding conforms to the accepted character set. If you provide mismatched content, the resulting QR Code
+              will likely be malformed. The available modes and their supported character sets are:
+            </p>
+            <table>
+              <thead>
+                <tr>
+                  <th>mode</th>
+                  <th>bits / char</th>
+                  <th>charset</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>mode.numeric</code></td>
+                  <td class="R">10 / 3</td>
+                  <td><code>0-9</code></td>
+                </tr>
+                <tr>
+                  <td><code>mode.alphaNumeric</code></td>
+                  <td class="R">11 / 2</td>
+                  <td><code>0-9A-Z $%*+-./:</code></td>
+                </tr>
+                <tr>
+                  <td><code>mode.ascii</code></td>
+                  <td class="R">8 / 1</td>
+                  <td>7-bit ASCII</td>
+                </tr>
+                <tr>
+                  <td><code>mode.iso8859_1</code></td>
+                  <td class="R">8 / 1</td>
+                  <td>ISO-8859-1</td>
+                </tr>
+                <tr>
+                  <td><code>mode.shift_jis</code></td>
+                  <td class="R">13 / 1</td>
+                  <td>Double-byte Shift-JIS characters</td>
+                </tr>
+                <tr>
+                  <td><code>mode.utf8</code></td>
+                  <td class="R">varies</td>
+                  <td>Unicode</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>There are also some meta-modes:</p>
+            <section>
+              <h5><code>multi(...modes)</code></h5>
+              <a id="mode_multi"></a>
+              <p><code>mode.multi</code> enables switching modes during a message:</p>
+              <pre>
+<span class="keyword">const</span> code = <span class="method">generate</span>(mode.<span class="method">multi</span>(
+  mode.<span class="method">iso8859_1</span>(<span class="string">'https://example.com/'</span>),
+  mode.<span class="method">numeric</span>(<span class="string">'123456789012345678901234567890'</span>),
+  mode.<span class="method">alphaNumeric</span>(<span class="string">'/LOOKUP'</span>),
+));</pre>
+            </section>
+            <section>
+              <h5><code>eci(value)</code> / <code>bytes(data)</code></h5>
+              <a id="mode_eci"></a>
+              <p>
+                <code>mode.eci</code> lets you switch the Extended Channel Interpretation of the message (<a
+                  href="https://en.wikipedia.org/wiki/Extended_Channel_Interpretation"
+                  target="_blank"
+                  >Wikipedia includes a list of recognised values</a
+                >). After setting this, subsequent <code>mode.bytes</code> will be interpreted in the specified
+                character set.
+              </p>
+              <pre>
+<span class="keyword">const</span> code = <span class="method">generate</span>(mode.<span class="method">multi</span>(
+  mode.<span class="method">eci</span>(<span class="value">24</span>), <span class="comment">// Arabic (Windows-1256)</span>
+  mode.<span class="method">bytes</span>([<span class="value">0xD3</span>]), <span class="comment">// Shin character</span>
+));</pre>
+              <p>
+                <code>mode.eci</code> will avoid outputting additional switches if the ECI already matches the requested
+                value.
+              </p>
+              <p>
+                Note that <code>mode.iso8859_1</code> sets ECI 3 for its content, and <code>mode.utf8</code> sets ECI
+                26. <code>mode.ascii</code> does not set an explicit ECI mode, as readers are supposed to default to ECI
+                3 (and even though some default to ECI 26 instead, these share the same codepoints for all ASCII
+                values).
+              </p>
+              <p>
+                If you set an ECI which is not compatible with ASCII, do not follow it with a
+                <code>mode.ascii</code> section (prefer <code>mode.iso8859_1</code> or <code>mode.utf8</code>, as these
+                will explicitly set the ECI for their content).
+              </p>
+            </section>
+            <section>
+              <h5><code>auto(text[, options])</code></h5>
+              <a id="mode_auto"></a>
+              <p>
+                <code>mode.auto</code> will pick the optimal combination of modes for the message. This is used by
+                default if you provide a plain string to <code>generate</code>, but you can also use it explicitly (e.g.
+                if you want to control part of a message but still have automatic compression for other parts):
+              </p>
+              <pre>
+<span class="keyword">const</span> code = <span class="method">generate</span>(mode.<span class="method">multi</span>(
+  mode.<span class="method">auto</span>(<span class="string">'FOOBAR'</span>, {
+    <span class="property">modes</span>: [mode.<span class="property">numeric</span>, mode.<span class="property">iso8859_1</span>], <span class="comment">// disallowing alphaNumeric mode</span>
+  }),
+  mode.<span class="method">bytes</span>([<span class="value">0x12</span>, <span class="value">0x34</span>]), <span class="comment">// finish message with non-standard custom data</span>
+));</pre>
+            </section>
+          </section>
+          <section>
+            <h4>Trailer</h4>
+            <a id="trailer"></a>
+            <p>
+              ISO 18004 requires <code>0b11101100_00010001</code> (<code>0xEC11</code>) be used as padding bytes at the
+              end of a message, but you can customise this otherwise dead space with any 16-bit value (<code
+                >0x0000</code
+              >
+              &ndash; <code>0xFFFF</code>).
+            </p>
+            <pre>
+<span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
+  <span class="property">trailer</span>: <span class="value">0x0000</span>,
+});</pre>
+            <p>
+              Combining a large <a href="#version"><code>minVersion</code></a> with a trailer of
+              <code>0x0000</code> will reveal the pattern of the chosen <a href="#mask"><code>mask</code></a
+              >, which may be desirable for artistic reasons. In general, this should be left as the default value to
+              maximise readability.
+            </p>
+          </section>
+          <section>
+            <h4><code>.with(...modes)</code></h4>
+            <a id="generate_with"></a>
+            <p>Adds one or more <a href="#custom-modes">custom modes</a> to the list of default modes.</p>
+            <pre>
+<span class="keyword">const</span> myGenerate = generate.<span class="method">with</span>(myCustomMode);
+<span class="keyword">const</span> code = <span class="method">myGenerate</span>(<span class="string">'text'</span>);</pre>
+            <p>
+              This is equivalent to adding the custom mode(s) to the <a href="#mode"><code>modes</code></a> argument in
+              all calls:
+            </p>
+            <pre>
+<span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
+  <span class="property">modes</span>: [
+    mode.<span class="property">numeric</span>,
+    mode.<span class="property">alphaNumeric</span>,
+    mode.<span class="property">ascii</span>,
+    mode.<span class="property">iso8859_1</span>,
+    mode.<span class="property">shift_jis</span>,
+    mode.<span class="property">utf8</span>,
+    myCustomMode,
+  ],
+});</pre>
+            <p>
+              Note that you only need to register custom modes if you want to use automatic encoding. There is no need
+              to register a custom mode if you call it explicitly:
+            </p>
+            <pre>
+<span class="keyword">const</span> code = <span class="method">generate</span>(<span class="method">myCustomMode</span>(<span class="string">'FOOBAR'</span>));</pre>
+          </section>
+        </section>
+        <section>
+          <h3>Bitmap2D</h3>
+          <a id="Bitmap2D"></a>
+          <p>
+            This class is returned by
+            <a href="#generate"><code>generate</code></a> and allows you to display the output in several ways:
+          </p>
+          <section>
+            <h4><code>.toString([options])</code></h4>
+            <a id="Bitmap2D_toString"></a>
+            <p>Converts the QR Code to a string (e.g. for printing to the terminal)</p>
+            <pre>
+console.<span class="method">log</span>(code.<span class="method">toString</span>({
+  <span class="property">on</span>: <span class="string">'##'</span>,
+  <span class="property">off</span>: <span class="string">'  '</span>, <span class="comment">// note: this is 2 spaces</span>
+  <span class="property">lf</span>: <span class="string">'\n'</span>,
+  <span class="property">padX</span>: <span class="value">4</span>,
+  <span class="property">padY</span>: <span class="value">4</span>,
+}));</pre>
+            <p>
+              The options shown are the defaults. Note that for portability, the defaults only use ASCII characters, but
+              this will not result in a successful read (QR Code scanners require well-defined edges between cells). As
+              such, if you want to print a scannable QR Code, you will need to replace at least <code>on</code> with an
+              alternative value for your environment (see below).
+            </p>
+            <p>
+              ISO 18004 requires 4-cell padding to guarantee a successful read, but you can change it to any value if
+              you want.
+            </p>
+            <section>
+              <h5>Customising <code>on</code> and <code>off</code></h5>
+              <p>
+                If you are printing to a terminal which supports
+                <a href="https://en.wikipedia.org/wiki/ANSI_escape_code" target="_blank">ANSI escape codes</a>, you can
+                use them to define the cell colour:
+              </p>
+              <pre>
+<span class="comment">// Inverted "on" cells:</span>
+console.<span class="method">log</span>(code.<span class="method">toString</span>({
+  <span class="property">on</span>: <span class="string">'\u001B[7m  \u001B[0m'</span>, <span class="comment">// ANSI escape: inverted</span>
+}));
+
+<span class="comment">// Or explicit black / white cells:</span>
+console.<span class="method">log</span>(code.<span class="method">toString</span>({
+  <span class="property">on</span>: <span class="string">'\u001B[40m  '</span>,   <span class="comment">// ANSI escape: black background</span>
+  <span class="property">off</span>: '<span class="string">\u001B[107m  '</span>, <span class="comment">// ANSI escape: white background</span>
+  <span class="property">lf</span>: <span class="string">'\u001B[0m\n'</span>,    <span class="comment">// ANSI escape: default</span>
+}));</pre>
+              <p>
+                Ensure the <code>on</code> and <code>off</code> strings have the same printed length or the resulting QR
+                Code will be misaligned.
+              </p>
+              <p>
+                For displays which do not support ANSI escapes, but do have a line height equal to the character height,
+                you could use Unicode box drawing characters instead:
+              </p>
+              <pre>
+<span class="comment">// Unicode box drawing characters: (not recommended)</span>
+console.<span class="method">log</span>(code.<span class="method">toString</span>({
+  <span class="property">on</span>: <span class="string">'\u2588\u2588'</span>,
+}));</pre>
+            </section>
+          </section>
+          <section>
+            <h4><code>.toCanvas(canvas[, options])</code></h4>
+            <a id="Bitmap2D_toCanvas"></a>
+            <p>Renders the QR Code inside an existing canvas on the page.</p>
+            <pre>
+<span class="keyword">const</span> targetCanvas = document.<span class="method">getElementById</span>(<span class="string">'my-canvas'</span>);
+code.<span class="method">toCanvas</span>(targetCanvas, {
+  <span class="property">on</span>: [<span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0xFF</span>], <span class="comment">// black</span>
+  <span class="property">off</span>: [<span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>], <span class="comment">// transparent</span>
+  <span class="property">padX</span>: <span class="value">4</span>,
+  <span class="property">padY</span>: <span class="value">4</span>,
+});</pre>
+            <p>The options shown are the defaults.</p>
+            <p>
+              This will replace the image in <code>targetCanvas</code> (which must be a
+              <code>&lt;canvas&gt;</code> element) with a copy of the current QR Code. The result is always at a scale
+              of 1 pixel per module (the <code>canvas</code> will be resized to the correct size automatically). To
+              display this image at a reasonable size, it is recommended that you use the following CSS:
+            </p>
+            <pre>
+<span class="string">#my-canvas</span> {
+  <span class="property">width</span>: <span class="value">100%</span>;
+  <span class="property">image-rendering</span>: <span class="value">pixelated</span>;
+}</pre>
+            <p>
+              The values of <code>on</code> and <code>off</code> should be arrays in
+              <code>[red, green, blue, alpha?]</code> format. If <code>alpha</code> is omitted, 255 is assumed.
+            </p>
+          </section>
+          <section>
+            <h4><code>.toImageData(context[, options])</code></h4>
+            <a id="Bitmap2D_toImageData"></a>
+            <p>
+              If you do not want to replace the entire content of a canvas, you can can use
+              <code>toImageData</code> instead. This returns an <code>ImageData</code> representation of the QR Code
+              (created using <code>context.createImageData</code>).
+            </p>
+            <pre>
+<span class="keyword">const</span> myContext = myCanvas.<span class="method">getContext</span>(<span class="string">'2d'</span>);
+
+<span class="keyword">const</span> imageData = code.<span class="method">toImageData</span>(myContext, {
+  <span class="property">on</span>: [<span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0xFF</span>], <span class="comment">// black</span>
+  <span class="property">off</span>: [<span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>], <span class="comment">// transparent</span>
+  <span class="property">padX</span>: <span class="value">4</span>,
+  <span class="property">padY</span>: <span class="value">4</span>,
+});
+
+<span class="comment">// later</span>
+myContext.<span class="method">putImageData</span>(imageData, 200, 100);</pre>
+            <p>The options shown are the defaults.</p>
+          </section>
+          <section>
+            <h4><code>.toDataURL([options])</code></h4>
+            <a id="Bitmap2D_toDataURL"></a>
+            <p>Returns a string which can be used as a <code>href</code>, e.g. for downloading;</p>
+            <pre>
+<span class="keyword">const</span> url = code.<span class="method">toDataURL</span>({
+  <span class="property">type</span>: <span class="string">'image/png'</span>,
+  <span class="property">on</span>: [<span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0xFF</span>], <span class="comment">// black</span>
+  <span class="property">off</span>: [<span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>], <span class="comment">// transparent</span>
+  <span class="property">padX</span>: <span class="value">4</span>,
+  <span class="property">padY</span>: <span class="value">4</span>,
+  <span class="property">scale</span>: <span class="value">1</span>,
+});
+
+<span class="keyword">const</span> link = document.<span class="method">createElement</span>(<span class="string">'a'</span>);
+link.<span class="method">setAttribute</span>(<span class="string">'href'</span>, url);
+link.<span class="method">setAttribute</span>(<span class="string">'download'</span>, <span class="string">'my-qr.png'</span>);
+document.<span class="property">body</span>.<span class="method">append</span>(link);</pre>
+            <p>
+              The options shown are the defaults. You will probably want to set <code>scale</code> to a larger integer
+              as a convenience to your users.
+            </p>
+            <p>
+              This URL can also be used as an <code>img</code> source, but this is not recommended (for best results use
+              <a href="#Bitmap2D_toCanvas"><code>toCanvas</code></a> &mdash; this will avoid blurry edges on high
+              resolution displays and if the user zooms in).
+            </p>
+            <p>Note that this is only available in-browser; it will fail if called in NodeJS.</p>
+          </section>
+          <section>
+            <h4><code>.get(x, y)</code></h4>
+            <a id="Bitmap2D_get"></a>
+            <p>For custom output formats, you can inspect the data directly:</p>
+            <pre>
+<span class="keyword">for</span> (<span class="keyword">let</span> y = 0; y &lt; code.<a href="#Bitmap2D_size"><span class="property">size</span></a>; y++) {
+  <span class="keyword">for</span> (<span class="keyword">let</span> x = 0; x &lt; code.<a href="#Bitmap2D_size"><span class="property">size</span></a>; x++) {
+    process.<span class="property">stdout</span>.<span class="method">write</span>(code.<span class="method">get</span>(x, y) ? <span class="string">'##'</span> : <span class="string">'  '</span>);
+  }
+  process.<span class="property">stdout</span>.<span class="method">write</span>(<span class="string">'\n'</span>);
+}</pre>
+            <p>
+              Requests outside the range
+              <code
+                >0 &leq; x &lt; <a href="#Bitmap2D_size">size</a>, 0 &leq; y &lt;
+                <a href="#Bitmap2D_size">size</a></code
+              >
+              will return <code>false</code>.
+            </p>
+          </section>
+          <section>
+            <h4><code>.size</code></h4>
+            <a id="Bitmap2D_size"></a>
+            <p>
+              An integer representing the size of the QR Code, excluding any padding. This is equal to
+              <code>17 + version * 4</code>.
+            </p>
+          </section>
+        </section>
+        <section>
+          <h3>extras/svg</h3>
+          <a id="extras_svg"></a>
+          <p>
+            This is not included in the main library to keep it small, but if you need SVG output, you can access it
+            from a separate import (adds ~2kB).
+          </p>
+          <section>
+            <h4><code>toSvg(code, target[, options])</code></h4>
+            <a id="toSvg"></a>
+            <p>Creates or replaces an <code>svg</code> element with the current QR Code</p>
+            <pre>
+<span class="keyword">import</span> { toSvg } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
+
+<span class="keyword">const</span> mySvg = document.<span class="method">getElementById</span>(<span class="string">'my-svg'</span>);
+<span class="method">toSvg</span>(code, mySvg, {
+  <span class="property">on</span>: <span class="string">'black'</span>,
+  <span class="property">off</span>: <span class="string">'transparent'</span>,
+  <span class="property">padX</span>: <span class="value">4</span>,
+  <span class="property">padY</span>: <span class="value">4</span>,
+  <span class="property">width</span>: <span class="value">null</span>,
+  <span class="property">height</span>: <span class="value">null</span>,
+  <span class="property">scale</span>: <span class="value">1</span>,
+});</pre>
+            <p>The options shown are the defaults.</p>
+            <p>
+              This will replace the image in <code>mySvg</code> (which must be an <code>svg</code> element) with a copy
+              of the current QR Code. The result is always at a scale of 1 SVG unit per module (the viewBox will be
+              resized to the correct size automatically). You can define a different size for the SVG element to scale
+              the image.
+            </p>
+            <p>
+              If <code>target</code> is the <code>document</code> object, this will create and return a new SVG entity
+              associated with the document (but not attached to it):
+            </p>
+            <pre>
+<span class="keyword">const</span> mySvg = <span class="method">toSvg</span>(code, document, {<span class="comment">/* options */</span>});
+
+document.<span class="property">body</span>.<span class="method">append</span>(mySvg);</pre>
+            <p>
+              If <code>width</code> / <code>height</code> is given, the root SVG element will have the explicit size
+              applied. If these are not specified, they will be auto-calculated by multiplying the QR Code size +
+              padding by <code>scale</code>. You can override this for display by setting CSS properties (e.g.
+              <code>mySvg.style.width = '100%'; mySvg.style.height = 'auto';</code>).
+            </p>
+          </section>
+          <section>
+            <h4><code>toSvgSource(code[, options])</code></h4>
+            <a id="toSvgSource"></a>
+            <p>
+              Like <a href="#toSvg"><code>toSvg</code></a> but returns the source code for an SVG, rather than
+              manipulating DOM nodes (can be called inside NodeJS).
+            </p>
+            <pre>
+<span class="keyword">import</span> { toSvgSource } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
+
+<span class="keyword">const</span> svgSource = <span class="method">toSvgSource</span>(code, {
+  <span class="property">on</span>: <span class="string">'black'</span>,
+  <span class="property">off</span>: <span class="string">'transparent'</span>,
+  <span class="property">padX</span>: <span class="value">4</span>,
+  <span class="property">padY</span>: <span class="value">4</span>,
+  <span class="property">width</span>: <span class="value">null</span>,
+  <span class="property">height</span>: <span class="value">null</span>,
+  <span class="property">xmlDeclaration</span>: <span class="value">false</span>,
+  <span class="property">scale</span>: <span class="value">1</span>,
+});</pre>
+            <p>
+              The options shown are the defaults, and match <a href="#toSvg"><code>toSvg</code></a
+              >.
+            </p>
+            <p>
+              Returns a complete SVG document which can be written to a standalone file or included inside a HTML
+              document.
+            </p>
+            <p>
+              If writing to a file, you should set <code>xmlDeclaration</code> to <code>true</code> (this prefixes the
+              source with <code>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</code>).
+            </p>
+          </section>
+          <section>
+            <h4><code>toSvgDataURL(code[, options])</code></h4>
+            <a id="toSvgDataURL"></a>
+            <p>
+              Like <a href="#toSvg"><code>toSvg</code></a> but returns a <code>data:image/svg+xml</code> URL containing
+              the image data, suitable for displaying in an <code>img</code> tag or downloading from an
+              <code>a</code> tag. Can be called inside NodeJS.
+            </p>
+            <pre>
+<span class="keyword">import</span> { toSvgDataURL } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
+
+<span class="keyword">const</span> dataURL = <span class="method">toSvgDataURL</span>(code, {
+  <span class="property">on</span>: <span class="string">'black'</span>,
+  <span class="property">off</span>: <span class="string">'transparent'</span>,
+  <span class="property">padX</span>: <span class="value">4</span>,
+  <span class="property">padY</span>: <span class="value">4</span>,
+  <span class="property">width</span>: <span class="value">null</span>,
+  <span class="property">height</span>: <span class="value">null</span>,
+  <span class="property">scale</span>: <span class="value">1</span>,
+});</pre>
+            <p>
+              The options shown are the defaults, and match <a href="#toSvg"><code>toSvg</code></a
+              >.
+            </p>
+          </section>
+          <section>
+            <h4><code>toSvgPath(code)</code></h4>
+            <a id="toSvgPath"></a>
+            <p>
+              A raw SVG path definition for the QR Code. Used by <a href="#toSvg"><code>toSvg</code></a> and
+              <a href="#toSvgSource"><code>toSvgSource</code></a
+              >.
+            </p>
+            <pre>
+<span class="keyword">import</span> { toSvgPath } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
+
+<span class="keyword">const</span> svgPath = <span class="method">toSvgPath</span>(code);
+<span class="comment">// e.g. "M1 2L1 1L2 1L2 2ZM3 3L3 2L4 2L4 3Z"</span></pre>
+            <p>
+              The returned path is always at a scale of 1 SVG unit to 1 module, with no padding. The path will define
+              the whole QR Code in a single string suitable for use inside <code>&lt;path d="[path here]"&gt;</code>,
+              and can be used with <code>fill-rule</code> of either <code>evenodd</code> or <code>nonzero</code>. The
+              path is optimised to ensure only true edges are defined; it will not include overlapping edges (and will
+              not have "cracks" between pixels). No other guarantees are made about the structure of this string, and
+              the details could change in later versions.
+            </p>
+          </section>
+        </section>
+        <section>
+          <h3>extras/react</h3>
+          <a id="extras_react"></a>
+          <p>This import provides convenience wrapper components for React and Preact.</p>
+          <section>
+            <h4><code>makeAsyncComponent(framework, generate)</code></h4>
+            <a id="makeAsyncComponent"></a>
+            <p>
+              Call <code>makeAsyncComponent</code> from the global scope (not inside a render method) to generate a
+              component which can be rendered later:
+            </p>
+            <pre>
+<span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+<span class="keyword">import</span> { makeAsyncComponent } <span class="keyword">from</span> <span class="string">'lean-qr/extras/react'</span>;
+<span class="keyword">import</span> <span class="keyword">* as</span> React <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">export const</span> QR = <span class="method">makeAsyncComponent</span>(React, generate);</pre>
+            <p>
+              All the configuration options documented for <a href="#generate"><code>generate</code></a> and
+              <a href="#Bitmap2D_toCanvas"><code>toCanvas</code></a> can be passed to the wrapper component, plus a
+              <code>className</code> for the rendered <code>canvas</code>:
+            </p>
+            <pre>
+&lt;<span class="method">QR</span>
+  <span class="property">content</span>=<span class="string">"Hello!"</span>
+  <a href="#version"><span class="property">minVersion</span></a>={<span class="value">1</span>}
+  <a href="#version"><span class="property">maxVersion</span></a>={<span class="value">40</span>}
+  <a href="#correction"><span class="property">minCorrectionLevel</span></a>={correction.<span class="property">L</span>}
+  <a href="#correction"><span class="property">maxCorrectionLevel</span></a>={correction.<span class="property">H</span>}
+  <a href="#mask"><span class="property">mask</span></a>={<span class="value">null</span>}
+  <a href="#trailer"><span class="property">trailer</span></a>={<span class="value">0xEC11</span>}
+  <a href="#Bitmap2D_toCanvas"><span class="property">padX</span></a>={<span class="value">4</span>}
+  <a href="#Bitmap2D_toCanvas"><span class="property">padY</span></a>={<span class="value">4</span>}
+  <a href="#Bitmap2D_toCanvas"><span class="property">on</span></a>={[<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">255</span>]}
+  <a href="#Bitmap2D_toCanvas"><span class="property">off</span></a>={[<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>]}
+  <span class="property">className</span>=<span class="string">""</span>
+/&gt;</pre>
+            <p>The options shown are the defaults. All properties are optional except <code>content</code>.</p>
+            <p>
+              The component will render to a <code>&lt;canvas&gt;</code> from a <code>useEffect</code> hook (this is the
+              most performant option if the QR Code will change dynamically), but this cannot be server-side rendered
+              (nothing will appear on the client until hydration completes). If server-side or synchronous rendering is
+              important to you (at the expense of some performance), use
+              <a href="#makeSyncComponent"><code>makeSyncComponent</code></a> instead.
+            </p>
+            <p>
+              You can also change the default values for the component by passing an extra argument to
+              <code>makeAsyncComponent</code>. For example, if you want all QR Codes to use at least correction level H:
+            </p>
+            <pre>
+<span class="keyword">const</span> QR = <span class="method">makeAsyncComponent</span>(React, generate, {
+  <span class="property">minCorrectionLevel</span>: correction.<span class="property">H</span>,
+});</pre>
+          </section>
+          <section>
+            <h4><code>makeSyncComponent(framework, generate, toSvgDataURL)</code></h4>
+            <a id="makeSyncComponent"></a>
+            <p>
+              Call <code>makeSyncComponent</code> from the global scope (not inside a render method) to generate a
+              component which can be rendered later:
+            </p>
+            <pre>
+<span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+<span class="keyword">import</span> { makeSyncComponent } <span class="keyword">from</span> <span class="string">'lean-qr/extras/react'</span>;
+<span class="keyword">import</span> { toSvgDataURL } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
+<span class="keyword">import</span> * as React <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">export const</span> QR = makeSyncComponent(React, generate, toSvgDataURL);</pre>
+            <p>
+              All the configuration options documented for <a href="#generate"><code>generate</code></a> and
+              <a href="#toSvgDataURL"><code>toSvgDataURL</code></a> can be passed to the wrapper component, plus a
+              <code>className</code> for the rendered <code>img</code>:
+            </p>
+            <pre>
+&lt;<span class="method">QR</span>
+  <span class="property">content</span>=<span class="string">"Hello!"</span>
+  <a href="#version"><span class="property">minVersion</span></a>={<span class="value">1</span>}
+  <a href="#version"><span class="property">maxVersion</span></a>={<span class="value">40</span>}
+  <a href="#correction"><span class="property">minCorrectionLevel</span></a>={correction.<span class="property">L</span>}
+  <a href="#correction"><span class="property">maxCorrectionLevel</span></a>={correction.<span class="property">H</span>}
+  <a href="#mask"><span class="property">mask</span></a>={<span class="value">null</span>}
+  <a href="#trailer"><span class="property">trailer</span></a>={<span class="value">0xEC11</span>}
+  <a href="#toSvgDataURL"><span class="property">padX</span></a>={<span class="value">4</span>}
+  <a href="#toSvgDataURL"><span class="property">padY</span></a>={<span class="value">4</span>}
+  <a href="#toSvgDataURL"><span class="property">on</span></a>=<span class="string">"black"</span>
+  <a href="#toSvgDataURL"><span class="property">off</span></a>=<span class="string">"transparent"</span>
+  <span class="property">className</span>=<span class="string">""</span>
+/&gt;</pre>
+            <p>
+              Note: the API for this has some differences compared to
+              <a href="#makeAsyncComponent"><code>makeAsyncComponent</code></a
+              >: <code>on</code> and <code>off</code> take <code>string</code> values for the colour, rather than
+              arrays:
+            </p>
+            <pre>&lt;<span class="method">QR</span> <span class="property">content</span>=<span class="string">"Hello!"</span> <span class="property">on</span>=<span class="string">"black"</span> <span class="property">off</span>=<span class="string">"rgba(0,0,0,0)"</span> /&gt;</pre>
+            <p>
+              The component will render to an <code>&lt;img&gt;</code> synchronously, using <code>useMemo</code> as an
+              optimisation. This is not the most performant option if the code will change frequently (use
+              <a href="#makeAsyncComponent"><code>makeAsyncComponent</code></a> instead if that is your use-case, to
+              avoid rendering lag), but supports server-side rendering and avoids the QR Code "flickering" when it first
+              appears.
+            </p>
+          </section>
+        </section>
+        <section>
+          <h3>extras/errors</h3>
+          <a id="extras_errors"></a>
+          <p>
+            All errors reported by the library use codes rather than messages to keep the library size small. You can
+            check the meaning of these codes in the <a href="#errors">Error Reference</a>. If you want to display the
+            errors to users, this import provides a convenience mapping into English error messages.
+          </p>
+          <section>
+            <h4><code>readError(error)</code></h4>
+            <a id="readError"></a>
+            <p>
+              Converts errors into human-readable messages. If the error is a lean-qr library error, it will return a
+              description rather than the code. If the error is from another library, this will extract the
+              <code>message</code> property.
+            </p>
+            <pre>
+<span class="keyword">import</span> { readError } <span class="keyword">from</span> <span class="string">'lean-qr/extras/errors'</span>;
+
+<span class="keyword">try</span> {
+  <span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>);
+} <span class="keyword">catch</span> (e) {
+  <span class="keyword">const</span> message = <span class="method">readError</span>(e);
+  window.<span class="method">alert</span>(message);
+}</pre>
+          </section>
+        </section>
+        <section>
+          <h3>Error Reference</h3>
+          <a id="errors"></a>
+          <p>
+            Errors are reported as numbers to save space. Errors contain a stable <code>code</code> property which can
+            be used to look up the type of error:
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>code</th>
+                <th>message</th>
+                <th>meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>lean-qr error 1</td>
+                <td>No <code>content</code> provided</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>lean-qr error 2</td>
+                <td><code>maxVersion</code> must be &geq; <code>minVersion</code></td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>lean-qr error 3</td>
+                <td><code>maxCorrectionLevel</code> must be &geq; <code>minCorrectionLevel</code></td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>lean-qr error 4</td>
+                <td><code>content</code> exceeds maximum capacity of <code>maxVersion</code></td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>lean-qr error 5</td>
+                <td><code>content</code> cannot be encoded using the chosen <code>modes</code></td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td>lean-qr error 6</td>
+                <td>Invalid <code>framework</code> provided to the React wrapper</td>
+              </tr>
+              <tr>
+                <td>7</td>
+                <td>lean-qr error 7</td>
+                <td>Invalid <code>generate</code> function provided to the React wrapper</td>
+              </tr>
+              <tr>
+                <td>8</td>
+                <td>lean-qr error 8</td>
+                <td>Invalid <code>toSvgDataURL</code> function provided to the React wrapper</td>
+              </tr>
+              <tr></tr>
+            </tbody>
+          </table>
+          <p>
+            If you want to display errors in a moderately human-readable way, you can
+            <a href="#readError">use the <code>readError</code> extra</a>.
+          </p>
+        </section>
+        <section>
+          <h3>Custom Modes</h3>
+          <a id="custom-modes"></a>
+          <p>If you want to support a non-standard data format, you can write a custom mode:</p>
+          <pre>
+<span class="keyword">const</span> myMode = (value) =&gt; (data, version) =&gt; {
+  <span class="comment">// call data.push zero or more times to encode the value:</span>
+  data.<span class="method">push</span>(<span class="value">0b101010</span>, <span class="value">6</span>); <span class="comment">// value, bits (supports up to 24-bits)</span>
+};
+
+<span class="keyword">const</span> code = <a href="#generate"><span class="method">generate</span></a>(myMode(<span class="string">'foobar'</span>));</pre>
+          <p>
+            If you want your custom mode to be compatible with <a href="#mode_auto"><code>auto</code></a
+            >, you need to provide a pair of properties:
+          </p>
+          <pre>
+<span class="comment">// a function taking a character and returning true if it is suppoerted</span>
+myMode.<span class="property">test</span> = RegExp.<span class="property">prototype</span>.<span class="property">test</span>.<span class="method">bind</span>(<span class="value">/[0-9a-zA-Z]/</span>);
+<span class="comment">// or</span>
+myMode.<span class="property">test</span> = (c) =&gt; <span class="value">/[0-9a-zA-Z]/</span>.<span class="method">test</span>(c);
+
+<span class="comment">// a function which estimates the number of bits required for an input</span>
+<span class="comment">// (fractional results will be rounded up)</span>
+myMode.<span class="property">est</span> = (value, version) =&gt; (<span class="value">12</span> + value.<span class="property">length</span> * <span class="value">8</span>);</pre>
+          <p>For example, the implementation of <code>ascii</code>:</p>
+          <pre>
+<span class="keyword">const</span> ascii = (value) =&gt; (data, version) =&gt; {
+  data.<span class="method">push</span>(<span class="value">0b0100</span>, <span class="value">4</span>);
+  data.<span class="method">push</span>(value.<span class="property">length</span>, version &lt; <span class="value">10</span> ? <span class="value">8</span> : <span class="value">16</span>);
+  [...value].<span class="method">forEach</span>((c) =&gt; data.<span class="method">push</span>(c.<span class="method">codePointAt</span>(<span class="value">0</span>), <span class="value">8</span>));
+};
+ascii.<span class="property">test</span> = RegExp.<span class="property">prototype</span>.<span class="property">test</span>.<span class="method">bind</span>(<span class="value">/[\u0000-\u007F]/</span>);
+ascii.<span class="property">est</span> = (value, version) =&gt; (
+  <span class="value">4</span> + (version &lt; <span class="value">10</span> ? <span class="value">8</span> : <span class="value">16</span>) +
+  value.<span class="property">length</span> * <span class="value">8</span>
+);</pre>
+          <p>See <a href="#mode">modes</a> for details on how to register your custom mode.</p>
+        </section>
+      </section>
+      <section>
+        <h2>Version 2 Migration Guide</h2>
+        <a id="v2"></a>
+        <p>
+          Version 2 brings many advantages, including better support for QR features, faster performance, and reduced
+          code size. For basic use, updating from version 1.x to 2.x should have no issues, but if you are using more
+          advanced customisation options or relying on specific behaviours, you may need to update your code:
+        </p>
+        <ul>
+          <li>
+            <code>.reg</code> (regular expression) properties of modes have been replaced with <code>.test</code> (API
+            compatible with <code>RegExp.test</code>). Custom modes which integrate with <code>auto</code> will need
+            updating;
+          </li>
+          <li>
+            <code>iso8859_1</code> mode will now explicitly set the ECI to 3 for better compatibility with some readers.
+            If you only need 7-bit ASCII characters, use <code>ascii</code> mode instead (which does not set the ECI,
+            saving some space). <code>auto</code> mode will handle this automatically;
+          </li>
+          <li>
+            <code>auto</code> mode is now able to mix <code>utf8</code> with other modes if it will save space (some QR
+            Codes may change, but the meaning will be the same);
+          </li>
+          <li>
+            <code>shift_jis</code> mode is now available by default (the <code>extras/jis</code> export has been
+            removed);
+          </li>
+          <li>
+            custom modes can now be registered using <code>updatedGenerator = generator.with(myCustomMode)</code>,
+            avoiding the need to specify all the default modes;
+          </li>
+          <li>
+            <code>toSvgSource</code> / <code>toSvgDataURL</code> now accept <code>rgb()</code> /
+            <code>rgba()</code> syntax for colours, matching <code>toSvg</code>;
+          </li>
+          <li>
+            <code>toCanvas</code> / <code>toImageData</code> / <code>toDataURL</code> no longer accept 32-bit
+            little-endian integer values for colours. If you were using this legacy behaviour, update your code to pass
+            colours as arrays instead: <code>[red, green, blue, alpha?]</code> (for example,
+            <code>[255, 0, 255, 255]</code> = purple);
+          </li>
+          <li>
+            errors are now reported as codes to save space. If you want to present errors in a human-readable way, you
+            can use <code>extras/errors</code> to convert;
+          </li>
+          <li>internal properties and methods are now minified (documented methods are not affected).</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Useful Resources</h2>
+        <a id="resources"></a>
+        <ul>
+          <li>
+            <a href="https://www.thonky.com/qr-code-tutorial/" target="_blank"
+              >https://www.thonky.com/qr-code-tutorial/</a
+            >
+          </li>
+          <li>
+            <a href="https://en.wikipedia.org/wiki/QR_code" target="_blank">https://en.wikipedia.org/wiki/QR_code</a>
+          </li>
+          <li>
+            <a href="https://en.wikipedia.org/wiki/Extended_Channel_Interpretation" target="_blank"
+              >https://en.wikipedia.org/wiki/Extended_Channel_Interpretation</a
+            >
+          </li>
+        </ul>
+      </section>
+    </article>
+  </body>
+</html>

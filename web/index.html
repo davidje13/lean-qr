@@ -6,27 +6,21 @@
       http-equiv="content-security-policy"
       content="base-uri 'self'; default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; form-action 'none';"
     />
-    <meta
-      name="viewport"
-      content="initial-scale=1.0, user-scalable=no, minimal-ui"
-    />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, minimal-ui" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="format-detection" content="telephone=no" />
     <title>Lean QR</title>
-    <link rel="icon" href="web/resources/favicon.png" />
-    <link rel="apple-touch-icon" href="web/resources/apple-touch-icon.png" />
-    <link rel="stylesheet" href="web/index.css" />
-    <script type="module" src="web/build/index.min.mjs"></script>
+    <link rel="icon" href="/resources/favicon.png" />
+    <link rel="apple-touch-icon" href="/resources/apple-touch-icon.png" />
+    <link rel="stylesheet" href="/index.css" />
+    <script type="module" src="/build/index.min.mjs"></script>
   </head>
   <body>
     <article>
       <h1>Lean QR</h1>
       <form>
-        <textarea
-          name="message"
-          placeholder="Enter a message to be written as a QR Code"
-        ></textarea>
+        <textarea name="message" placeholder="Enter a message to be written as a QR Code"></textarea>
         <details class="options">
           <summary>Advanced options</summary>
           <fieldset>
@@ -34,25 +28,11 @@
             <div>
               <label>
                 <span aria-hidden="true">minimum</span>
-                <input
-                  type="number"
-                  name="min-version"
-                  min="1"
-                  max="40"
-                  value="1"
-                  aria-label="Minimum version"
-                />
+                <input type="number" name="min-version" min="1" max="40" value="1" aria-label="Minimum version" />
               </label>
               <label>
                 <span aria-hidden="true">maximum</span>
-                <input
-                  type="number"
-                  name="max-version"
-                  min="1"
-                  max="40"
-                  value="40"
-                  aria-label="Maximum version"
-                />
+                <input type="number" name="max-version" min="1" max="40" value="40" aria-label="Maximum version" />
               </label>
             </div>
           </fieldset>
@@ -61,10 +41,7 @@
             <div>
               <label>
                 <span aria-hidden="true">minimum</span>
-                <select
-                  name="min-correction"
-                  aria-label="Minimum error correction level"
-                >
+                <select name="min-correction" aria-label="Minimum error correction level">
                   <option value="L" selected>L (7%)</option>
                   <option value="M">M (15%)</option>
                   <option value="Q">Q (25%)</option>
@@ -73,10 +50,7 @@
               </label>
               <label>
                 <span aria-hidden="true">maximum</span>
-                <select
-                  name="max-correction"
-                  aria-label="Maximim error correction level"
-                >
+                <select name="max-correction" aria-label="Maximim error correction level">
                   <option value="L">L (7%)</option>
                   <option value="M">M (15%)</option>
                   <option value="Q">Q (25%)</option>
@@ -113,13 +87,7 @@
                 <option value="AAAA" />
                 <option value="FFFF" />
               </datalist>
-              <input
-                type="text"
-                id="trailer"
-                name="trailer"
-                list="trailer-common"
-                value="EC11"
-              />
+              <input type="text" id="trailer" name="trailer" list="trailer-common" value="EC11" />
             </div>
           </fieldset>
           <fieldset>
@@ -127,21 +95,11 @@
             <div>
               <label>
                 <span aria-hidden="true">front</span>
-                <input
-                  type="color"
-                  name="on"
-                  value="#000000"
-                  aria-label="Pattern colour"
-                />
+                <input type="color" name="on" value="#000000" aria-label="Pattern colour" />
               </label>
               <label>
                 <span aria-hidden="true">back</span>
-                <input
-                  type="color"
-                  name="off"
-                  value="#FFFFFF"
-                  aria-label="Background colour"
-                />
+                <input type="color" name="off" value="#FFFFFF" aria-label="Background colour" />
               </label>
               <button
                 type="button"
@@ -163,12 +121,8 @@
           </fieldset>
         </details>
         <div id="download">
-          <a class="png" download="qr-code.png" aria-label="Download as PNG">
-            Download as PNG
-          </a>
-          <a class="svg" download="qr-code.svg" aria-label="Download as SVG">
-            Download as SVG
-          </a>
+          <a class="png" download="qr-code.png" aria-label="Download as PNG"> Download as PNG </a>
+          <a class="svg" download="qr-code.svg" aria-label="Download as SVG"> Download as SVG </a>
         </div>
         <p id="error">
           <noscript>
@@ -178,14 +132,11 @@
         <div id="output">
           <canvas class="qr" width="1" height="1" aria-label="QR Code"></canvas>
           <pre class="qr" role="img" aria-label="QR Code"></pre>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            version="1.1"
-            aria-label="QR Code"
-          ></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" aria-label="QR Code"></svg>
         </div>
       </form>
       <nav>
+        <a href="/docs" target="_blank" title="Library documentation" aria-label="Library documentation">Docs</a>
         <a
           href="https://www.npmjs.com/package/lean-qr"
           target="_blank"
