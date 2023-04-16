@@ -22,26 +22,33 @@ npx lean-qr 'MY MESSAGE HERE'
 
 ## Basic Usage
 
+```html
+<canvas id="my-qr-code" />
+<a href="#" download="qr.png" id="download-link">Download</a>
+
+<style>
+#my-qr-code {
+  image-rendering: pixelated;
+  width: 100%;
+}
+</style>
+```
+
 ```javascript
 import { generate } from 'lean-qr';
 
 const qrCode = generate('LEAN-QR LIBRARY');
 
-// display in a <canvas id="my-qr-code" /> element:
+// display in canvas:
 qrCode.toCanvas(document.getElementById('my-qr-code'));
 
-// or display as text:
+// provide a download link:
+const dataUrl = qrCode.toDataURL({ scale: 10 });
+document.getElementById('download-link')
+  .setAttribute('href', dataUrl);
+
+// display as text:
 console.log(qrCode.toString());
-
-// or provide a download link:
-myLink.href = qrCode.toDataURL({ scale: 10 });
-```
-
-```css
-#my-qr-code {
-  image-rendering: pixelated;
-  width: 100%;
-}
 ```
 
 ## Full Documentation
