@@ -46,7 +46,7 @@ myLink.href = qrCode.toDataURL({ scale: 10 });
 
 ## Full Documentation
 
-- [Quickstart](https://qr.davidje13.com/docs#quickstart)
-- [API Reference](https://qr.davidje13.com/docs#api)
-- [Migrating from Version 1.x to 2.x](https://qr.davidje13.com/docs#v2)
+- [Quickstart](https://qr.davidje13.com/docs/#quickstart)
+- [API Reference](https://qr.davidje13.com/docs/#api)
+- [Migrating from Version 1.x to 2.x](https://qr.davidje13.com/docs/#v2)
 - [Source Code](https://github.com/davidje13/lean-qr)
