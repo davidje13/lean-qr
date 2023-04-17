@@ -526,6 +526,7 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
                 <code>mode.eci</code> lets you switch the Extended Channel Interpretation of the message (<a
                   href="https://en.wikipedia.org/wiki/Extended_Channel_Interpretation"
                   target="_blank"
+                  rel="noopener"
                   >Wikipedia includes a list of recognised values</a
                 >). After setting this, subsequent <code>mode.bytes</code> will be interpreted in the specified
                 character set.
@@ -653,8 +654,9 @@ console.<span class="method">log</span>(code.<span class="method">toString</span
               <h5>Customising <code>on</code> and <code>off</code></h5>
               <p>
                 If you are printing to a terminal which supports
-                <a href="https://en.wikipedia.org/wiki/ANSI_escape_code" target="_blank">ANSI escape codes</a>, you can
-                use them to define the cell colour:
+                <a href="https://en.wikipedia.org/wiki/ANSI_escape_code" target="_blank" rel="noopener"
+                  >ANSI escape codes</a
+                >, you can use them to define the cell colour:
               </p>
               <pre>
 <span class="comment">// Inverted "on" cells:</span>
@@ -1202,19 +1204,253 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
         </ul>
       </section>
       <section>
+        <h2>Comparison With Other Libraries</h2>
+        <a id="comparison"></a>
+        <p>
+          Many other QR Code generating libraries exist, with some offering additional out-of-the-box visual features
+          over lean-qr:
+        </p>
+        <div class="wide">
+          <table>
+            <thead>
+              <tr>
+                <th rowspan="2">library</th>
+                <th rowspan="2">size / compressed</th>
+                <th rowspan="2">performance<sup>1</sup><br />(codes per second)</th>
+                <th colspan="6">supported encodings</th>
+                <th colspan="6">supported outputs</th>
+              </tr>
+              <tr>
+                <th>num</th>
+                <th>alnum</th>
+                <th>latin-1</th>
+                <th>utf-8</th>
+                <th>SJIS</th>
+                <th>automatic</th>
+                <th>text</th>
+                <th><code>canvas</code></th>
+                <th>SVG</th>
+                <th>PNG</th>
+                <th>API</th>
+                <th>other</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <a href="https://www.npmjs.com/package/lean-qr" target="_blank" rel="noopener">lean-qr</a>
+                  <small>(<a href="https://qr.davidje13.com/" target="_blank" rel="noopener">demo</a>)</small>
+                </td>
+                <td class="R"><strong>7.2kB</strong> / <strong>3.7kB</strong></td>
+                <td>2800 / <strong>66</strong> / <strong>35</strong></td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="with plugin">&#x2705;<sup>2</sup></td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td><a href="https://www.npmjs.com/package/qrcode" target="_blank" rel="noopener">qrcode</a></td>
+                <td class="R">23.4kB / 9.0kB</td>
+                <td><strong>3200</strong> / 59 / 23 <sup>3</sup></td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>4</sup></td>
+                <td class="C" title="with plugin">&#x2705;<sup>5</sup></td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td><a href="https://www.npmjs.com/package/qr.js" target="_blank" rel="noopener">qr.js</a></td>
+                <td class="R">25.9kB / 6.5kB</td>
+                <td>730 / &#x274C; / &#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://www.npmjs.com/package/qrcode-generator" target="_blank" rel="noopener"
+                    >qrcode-generator</a
+                  >
+                  <small
+                    >(<a href="https://kazuhikoarase.github.io/qrcode-generator/js/demo/" target="_blank" rel="noopener"
+                      >demo</a
+                    >)</small
+                  >
+                </td>
+                <td class="R">56.7kB / 11.7kB</td>
+                <td>950 / &#x274C; / 17</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>4</sup></td>
+                <td class="C" title="with plugin">&#x2705;<sup>6</sup></td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="in-browser">&#x26A0;&#xFE0F;<sup>7</sup></td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td><code>img</code></td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://www.npmjs.com/package/qr-creator" target="_blank" rel="noopener">qr-creator</a>
+                  <small
+                    >(<a href="https://nimiq.github.io/qr-creator/demo/" target="_blank" rel="noopener">demo</a>)</small
+                  >
+                </td>
+                <td class="R">12.1kB / 5.1kB</td>
+                <td>670 / &#x274C; / &#x274C; <sup>8</sup></td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>4</sup></td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td>Styling: Rounded edges</td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://www.npmjs.com/package/awesome-qr" target="_blank" rel="noopener">awesome-qr</a>
+                </td>
+                <td class="R">45.8kB / 16.0kB</td>
+                <td>untested</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>4</sup></td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td>Styling: Background image, animated GIF</td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://github.com/nayuki/QR-Code-generator/tree/master" target="_blank" rel="noopener"
+                    >QR-Code-Generator</a
+                  >
+                  <small
+                    >(<a href="https://www.nayuki.io/page/qr-code-generator-library" target="_blank" rel="noopener"
+                      >demo</a
+                    >)</small
+                  >
+                </td>
+                <td class="R">45.4kB / 13.3kB</td>
+                <td>620 / &#x274C; / 21 <sup>10</sup></td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>4</sup></td>
+                <td class="C" title="no">&#x274C;<sup>9</sup></td>
+                <td class="C" title="partial">&#x26A0;&#xFE0F;<sup>11</sup></td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;<sup>12</sup></td>
+                <td class="C" title="no">&#x274C;<sup>12</sup></td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td>-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p><sup>1</sup> Measured in codes per second (higher is better). See <a href="#performance">methodology</a>.</p>
+        <p><sup>2</sup> Requires extra import, adds 1.3kB.</p>
+        <p><sup>3</sup> Takes ~13ms to initialise when imported.</p>
+        <p><sup>4</sup> Non-standard: does not set ECI 26.</p>
+        <p><sup>5</sup> Requires extra import, adds 21kB.</p>
+        <p><sup>6</sup> Requires extra import, adds 39kB.</p>
+        <p><sup>7</sup> In-browser only.</p>
+        <p>
+          <sup>8</sup> Tested in Chrome, as this library does not support NodeJS. Takes ~10ms to initialise when
+          imported.
+        </p>
+        <p><sup>9</sup> Only available in Java version.</p>
+        <p><sup>10</sup> Crudely measured using online demo.</p>
+        <p><sup>11</sup> Automatic mixed modes only available in Java version.</p>
+        <p><sup>12</sup> Source code contains an example of this output, but it is not part of the library.</p>
+        <section>
+          <h3>Performance Methodology</h3>
+          <a id="performance"></a>
+          <p>
+            The performance of each library has been evaluated by running in NodeJS 18.14.0 on a "2.5 GHz Quad-Core
+            Intel Core i7" by repeatedly generating codes (including the output of a string or image, but not including
+            displaying or saving) for each test message with 8 random digits on the end (running "hot" but avoiding
+            caching), and using as much default configuration as possible. Timings have been averaged over a number of
+            samples, with the reported number of codes per second being calculated from the average time. Values are
+            listed to 2 significant figures.
+          </p>
+          <p>
+            Load / startup time has also been checked, and is noted in a footnote for libraries where it is &gt; 5ms.
+          </p>
+          <p>The test messages used:</p>
+          <ul>
+            <li><q>THIS IS MY MESSAGE</q> (18 characters + 8 random digits)</li>
+            <li>
+              <q
+                >The value of &pi; is
+                3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214&hellip;
+                (accoring to https://oeis.org/A000796). Having so many digits means it will probably be advantageous to
+                encode it using numeric mode, even though it has Unicode characters around it. WE CAN ALSO USE BLOCK
+                CAPITALS FOR PARTS OF THE MESSAGE, WHICH WILL PROBABLY BE BEST ENCODED AS ALPHANUMERIC. Finally we can
+                use some &pound; characters which are best encoded in ISO8859-1, though the cost of switching ECI from
+                Unicode means we will need quite a few of them to make it worthwhile
+                &pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;.</q
+              >
+              repeated 5 times (3155 characters + 8 random digits)
+            </li>
+            <li><q>A1</q> repeated 2100 times (4200 characters + 8 random digits)</li>
+          </ul>
+        </section>
+      </section>
+      <section>
         <h2>Useful Resources</h2>
         <a id="resources"></a>
         <ul>
           <li>
-            <a href="https://www.thonky.com/qr-code-tutorial/" target="_blank"
+            <a href="https://www.thonky.com/qr-code-tutorial/" target="_blank" rel="noopener"
               >https://www.thonky.com/qr-code-tutorial/</a
             >
           </li>
           <li>
-            <a href="https://en.wikipedia.org/wiki/QR_code" target="_blank">https://en.wikipedia.org/wiki/QR_code</a>
+            <a href="https://en.wikipedia.org/wiki/QR_code" target="_blank" rel="noopener"
+              >https://en.wikipedia.org/wiki/QR_code</a
+            >
           </li>
           <li>
-            <a href="https://en.wikipedia.org/wiki/Extended_Channel_Interpretation" target="_blank"
+            <a href="https://en.wikipedia.org/wiki/Extended_Channel_Interpretation" target="_blank" rel="noopener"
               >https://en.wikipedia.org/wiki/Extended_Channel_Interpretation</a
             >
           </li>

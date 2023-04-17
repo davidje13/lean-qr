@@ -165,13 +165,16 @@ table {
 
 th {
   font-weight: bold;
-  border-bottom: 1px solid #000000;
   text-align: left;
   padding: 0 20px 5px 10px;
 }
 
+thead {
+  border-bottom: 1px solid #000000;
+}
+
 tbody tr:hover td {
-  background: #ffffff;
+  background: #ffffff !important;
 }
 
 td {
@@ -181,6 +184,37 @@ td {
 
 td.R {
   text-align: right;
+}
+
+td.C {
+  text-align: center;
+}
+
+.wide {
+  overflow-x: auto;
+  margin: 10px 0;
+  padding: 10px 0;
+}
+
+.wide table {
+  white-space: nowrap;
+  margin: 0;
+}
+.wide th {
+  font-size: 0.8em;
+  vertical-align: bottom;
+}
+.wide td {
+  height: 50px;
+  padding-top: 0;
+  vertical-align: middle;
+}
+.wide td:first-child,
+.wide tr:first-child th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: #f8f8f8;
 }
 
 ul,
@@ -260,6 +294,11 @@ figcaption {
   width: 100%;
 }
 
+q {
+  font-size: 0.8em;
+  overflow-wrap: break-word;
+}
+
 a:link,
 a:visited {
   text-decoration: none;
@@ -294,6 +333,16 @@ pre a:hover {
 
   h1 {
     margin: 0;
+  }
+
+  h2,
+  h3,
+  h4,
+  h5 {
+    margin-left: -5px;
+    margin-right: -5px;
+    padding-left: 5px;
+    padding-right: 5px;
   }
 }
 

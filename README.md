@@ -7,7 +7,7 @@ for React and Preact. Under 4kB compressed.
 ## Features
 
 - ISO 18004 compliant;
-- Lightweight (less than 4kB compressed, ~7kB uncompressed);
+- Lightweight (less than 4kB compressed, ~7kB uncompressed, no dependencies);
 - Simple yet flexible API, with sensible defaults for all configuration;
 - Supports all standard encodings out-of-the box:
   - including Unicode 😎;
@@ -65,3 +65,4 @@ console.log(qrCode.toString());
 - [API Reference](https://qr.davidje13.com/docs/#api)
 - [Migrating from Version 1.x to 2.x](https://qr.davidje13.com/docs/#v2)
 - [Source Code](https://github.com/davidje13/lean-qr)
+- [Comparison With Other Libraries](https://qr.davidje13.com/docs/#comparison)
