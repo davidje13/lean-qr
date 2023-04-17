@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="module">
+      import { out, runPerformanceTest } from './common.mjs';
+
+      const tm0 = performance.now();
+      const module = await import('../node_modules/qr-creator/dist/qr-creator.es6.min.js');
+      const tm1 = performance.now();
+      out(`Load / init time: ${(tm1 - tm0).toFixed(1)}ms\n`);
+
+      const target = document.getElementById('out');
+      // this API provides no way to know if it was successful or failed.
+      // from manual testing, we see it only succeeds for the simple message.
+      await runPerformanceTest((message) => module.default.render({ text: message }, target));
+    </script>
+  </head>
+  <body>
+    <canvas id="out" />
+  </body>
+</html>

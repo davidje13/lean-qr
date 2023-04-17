@@ -1,0 +1,70 @@
+lean-qr
+size:     7209 bytes /     3742 bytes (compressed)
+Load / init time: 2.1ms
+Short:
+  first:      16.67ms
+  average:     0.35ms = 2824/s
+  best:        0.25ms = 3947/s
+  worst:      16.67ms = 60/s
+Long:
+  first:      41.68ms
+  average:    14.83ms = 67/s
+  best:       13.88ms = 72/s
+  worst:      41.68ms = 24/s
+Pathological:
+  first:      33.90ms
+  average:    30.63ms = 33/s
+  best:       28.74ms = 35/s
+  worst:      88.86ms = 11/s
+
+qrcode
+size:    23468 bytes /     8997 bytes (compressed)
+shift-jis plugin size:    21057 bytes /    15809 bytes (compressed)
+Load / init time: 13.8ms
+Short:
+  first:       9.34ms
+  average:     0.31ms = 3180/s
+  best:        0.24ms = 4228/s
+  worst:       9.34ms = 107/s
+Long:
+  first:      29.42ms
+  average:    17.08ms = 59/s
+  best:       15.58ms = 64/s
+  worst:      29.42ms = 34/s
+Pathological:
+  first:      49.93ms
+  average:    43.40ms = 23/s
+  best:       39.43ms = 25/s
+  worst:      54.97ms = 18/s
+
+qr.js
+size:    25959 bytes /     6557 bytes (compressed)
+Load / init time: 2.1ms
+Short:
+  first:      14.75ms
+  average:     1.38ms = 725/s
+  best:        1.24ms = 803/s
+  worst:      14.75ms = 68/s
+Long:
+  Error: code length overflow. (25340>10208)
+Pathological:
+  Error: code length overflow. (33700>10208)
+
+qrcode-generator
+size:    56694 bytes /    11767 bytes (compressed)
+Load / init time: 11.3ms
+Short:
+  first:       9.14ms
+  average:     1.06ms = 944/s
+  best:        0.89ms = 1123/s
+  worst:       9.14ms = 109/s
+Long:
+  code length overflow. (25340>23648)
+Pathological:
+  first:     102.90ms
+  average:    59.27ms = 17/s
+  best:       55.88ms = 18/s
+  worst:     102.90ms = 10/s
+
+qr-creator
+size:    12073 bytes /     5156 bytes (compressed)

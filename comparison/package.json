@@ -1,0 +1,17 @@
+{
+  "name": "test",
+  "private": true,
+  "scripts": {
+    "build": "rollup --config rollup.config.mjs",
+    "start": "static-server --port 8081"
+  },
+  "dependencies": {
+    "qr-creator": "1.0.0",
+    "qr.js": "0.0.0",
+    "qrcode": "1.5.1",
+    "qrcode-generator": "1.4.4"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "24.x"
+  }
+}
