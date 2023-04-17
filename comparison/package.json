@@ -1,0 +1,20 @@
+{
+  "name": "test",
+  "private": true,
+  "scripts": {
+    "build": "rollup --config rollup.config.mjs",
+    "performance": "lean-test --colour=false --random-seed=random -i '**/*.perf.mjs' --target=node,chrome,firefox"
+  },
+  "dependencies": {
+    "awesome-qr": "2.1.5-rc.0",
+    "lean-qr": "file:lean-qr.tgz",
+    "qr-creator": "1.0.0",
+    "qr.js": "0.0.0",
+    "qrcode": "1.5.4",
+    "qrcode-generator": "1.4.4",
+    "qrjs2": "0.1.12"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "28.x"
+  }
+}

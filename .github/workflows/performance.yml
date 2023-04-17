@@ -1,0 +1,22 @@
+name: Performance Test
+
+on: workflow_dispatch
+
+jobs:
+  performance_test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Run comparison
+        run: npm install && comparison/run.sh
+      - name: Raw Results
+        if: always()
+        run: tail -n +1 comparison/results/performance-*.txt
+      - name: Result
+        run: tail -n +1 comparison/results/sizes.txt comparison/results/performance.txt
