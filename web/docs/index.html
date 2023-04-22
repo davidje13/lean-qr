@@ -57,6 +57,20 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
   <span class="property">xmlDeclaration</span>: <span class="value">true</span>,
 });</pre>
             </section>
+            <section>
+              <h4>Generate PNG for serving from a webserver:</h4>
+              <pre>
+<span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+<span class="keyword">import</span> { toPngBuffer } <span class="keyword">from</span> <span class="string">'lean-qr/extras/node_export'</span>;
+
+<span class="keyword">const</span> code = <a href="#generate"><span class="method">generate</span></a>(<span class="string">'LEAN-QR LIBRARY'</span>);
+
+<span class="keyword">const</span> png = <a href="#toPngBuffer"><span class="method">toPngBuffer</span></a>(code, { <span class="property">scale</span>: <span class="value">8</span> });</pre>
+              <p>
+                Note: SVG is the recommended file export format as it will automatically scale without blurring, but you
+                can also render PNGs using the CSS: <code>image-rendering: pixelated</code>.
+              </p>
+            </section>
           </div>
           <div class="tabcontent" data-for="t2">
             <h3>Browser Native</h3>
@@ -242,6 +256,17 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               </li>
               <li>
                 <a href="#toSvgPath"><code>toSvgPath(code)</code></a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#extras_node_export">extras/node_export</a>
+            <ul>
+              <li>
+                <a href="#toPngBuffer"><code>toPngBuffer(code[, options])</code></a>
+              </li>
+              <li>
+                <a href="#toPngDataURL"><code>toPngDataURL(code[, options])</code></a>
               </li>
             </ul>
           </li>
@@ -922,6 +947,54 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
           </section>
         </section>
         <section>
+          <h3>extras/node_export</h3>
+          <a id="extras_node_export"></a>
+          <p>
+            This is not included in the main library as it only applies to NodeJS, but if you need PNG output from
+            NodeJS, you can access it from a separate import (adds ~1kB).
+          </p>
+          <section>
+            <h4><code>toPngBuffer(code[, options])</code></h4>
+            <a id="toPngBuffer"></a>
+            <p>Returns a <code>Buffer</code> containing a PNG file for the QR Code.</p>
+            <pre>
+<span class="keyword">import</span> { toPngBuffer } <span class="keyword">from</span> <span class="string">'lean-qr/extras/node_export'</span>;
+
+<span class="keyword">const</span> pngBuffer = <span class="method">toPngBuffer</span>(code, {
+  <span class="property">on</span>: [<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">255</span>],
+  <span class="property">off</span>: [<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>],
+  <span class="property">padX</span>: <span class="value">4</span>,
+  <span class="property">padY</span>: <span class="value">4</span>,
+  <span class="property">scale</span>: <span class="value">1</span>,
+});</pre>
+            <p>The options shown are the defaults.</p>
+            <p>Returns a complete PNG Buffer which can be written to a standalone file.</p>
+          </section>
+          <section>
+            <h4><code>toPngDataURL(code[, options])</code></h4>
+            <a id="toPngDataURL"></a>
+            <p>
+              Like <a href="#toPngBuffer"><code>toPngBuffer</code></a> but returns a <code>data:image/png</code> URL
+              containing the image data, suitable for displaying in an <code>img</code> tag or downloading from an
+              <code>a</code> tag.
+            </p>
+            <pre>
+<span class="keyword">import</span> { toPngDataURL } <span class="keyword">from</span> <span class="string">'lean-qr/extras/node_export'</span>;
+
+<span class="keyword">const</span> dataURL = <span class="method">toPngDataURL</span>(code, {
+  <span class="property">on</span>: [<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">255</span>],
+  <span class="property">off</span>: [<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>],
+  <span class="property">padX</span>: <span class="value">4</span>,
+  <span class="property">padY</span>: <span class="value">4</span>,
+  <span class="property">scale</span>: <span class="value">1</span>,
+});</pre>
+            <p>
+              The options shown are the defaults, and match <a href="#toPngBuffer"><code>toPngBuffer</code></a
+              >.
+            </p>
+          </section>
+        </section>
+        <section>
           <h3>extras/react</h3>
           <a id="extras_react"></a>
           <p>This import provides convenience wrapper components for React and Preact.</p>
@@ -1252,19 +1325,19 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="with plugin">&#x2705;<sup>2</sup></td>
-                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="with plugin">&#x2705;<sup>3</sup></td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td>-</td>
               </tr>
               <tr>
                 <td><a href="https://www.npmjs.com/package/qrcode" target="_blank" rel="noopener">qrcode</a></td>
                 <td class="R">23.4kB / 9.0kB</td>
-                <td><strong>3200</strong> / 59 / 23 <sup>3</sup></td>
+                <td><strong>3200</strong> / 59 / 23 <sup>4</sup></td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="no">&#x274C;</td>
-                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>4</sup></td>
-                <td class="C" title="with plugin">&#x2705;<sup>5</sup></td>
+                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>5</sup></td>
+                <td class="C" title="with plugin">&#x2705;<sup>6</sup></td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
@@ -1306,12 +1379,12 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
-                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>4</sup></td>
-                <td class="C" title="with plugin">&#x2705;<sup>6</sup></td>
+                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>5</sup></td>
+                <td class="C" title="with plugin">&#x2705;<sup>7</sup></td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
-                <td class="C" title="in-browser">&#x26A0;&#xFE0F;<sup>7</sup></td>
+                <td class="C" title="in-browser">&#x26A0;&#xFE0F;<sup>8</sup></td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
                 <td><code>img</code></td>
@@ -1324,11 +1397,11 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                   >
                 </td>
                 <td class="R">12.1kB / 5.1kB</td>
-                <td>670 / &#x274C; / &#x274C; <sup>8</sup></td>
+                <td>670 / &#x274C; / &#x274C; <sup>9</sup></td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
-                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>4</sup></td>
+                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>5</sup></td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
@@ -1347,7 +1420,7 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
-                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>4</sup></td>
+                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>5</sup></td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
@@ -1369,16 +1442,16 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                   >
                 </td>
                 <td class="R">45.4kB / 13.3kB</td>
-                <td>620 / &#x274C; / 21 <sup>10</sup></td>
+                <td>620 / &#x274C; / 21 <sup>11</sup></td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="no">&#x274C;</td>
-                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>4</sup></td>
-                <td class="C" title="no">&#x274C;<sup>9</sup></td>
-                <td class="C" title="partial">&#x26A0;&#xFE0F;<sup>11</sup></td>
+                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>5</sup></td>
+                <td class="C" title="no">&#x274C;<sup>10</sup></td>
+                <td class="C" title="partial">&#x26A0;&#xFE0F;<sup>12</sup></td>
                 <td class="C" title="no">&#x274C;</td>
-                <td class="C" title="no">&#x274C;<sup>12</sup></td>
-                <td class="C" title="no">&#x274C;<sup>12</sup></td>
+                <td class="C" title="no">&#x274C;<sup>13</sup></td>
+                <td class="C" title="no">&#x274C;<sup>13</sup></td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td>-</td>
@@ -1388,19 +1461,20 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
         </div>
         <p><sup>1</sup> Measured in codes per second (higher is better). See <a href="#performance">methodology</a>.</p>
         <p><sup>2</sup> Requires extra import, adds 1.3kB.</p>
-        <p><sup>3</sup> Takes ~13ms to initialise when imported.</p>
-        <p><sup>4</sup> Non-standard: does not set ECI 26.</p>
-        <p><sup>5</sup> Requires extra import, adds 21kB.</p>
-        <p><sup>6</sup> Requires extra import, adds 39kB.</p>
-        <p><sup>7</sup> In-browser only.</p>
+        <p><sup>3</sup> Requires extra import, adds 1.1kB.</p>
+        <p><sup>4</sup> Takes ~13ms to initialise when imported.</p>
+        <p><sup>5</sup> Non-standard: does not set ECI 26.</p>
+        <p><sup>6</sup> Requires extra import, adds 21kB.</p>
+        <p><sup>7</sup> Requires extra import, adds 39kB.</p>
+        <p><sup>8</sup> In-browser only.</p>
         <p>
-          <sup>8</sup> Tested in Chrome, as this library does not support NodeJS. Takes ~10ms to initialise when
+          <sup>9</sup> Tested in Chrome, as this library does not support NodeJS. Takes ~10ms to initialise when
           imported.
         </p>
-        <p><sup>9</sup> Only available in Java version.</p>
-        <p><sup>10</sup> Crudely measured using online demo.</p>
-        <p><sup>11</sup> Automatic mixed modes only available in Java version.</p>
-        <p><sup>12</sup> Source code contains an example of this output, but it is not part of the library.</p>
+        <p><sup>10</sup> Only available in Java version.</p>
+        <p><sup>11</sup> Crudely measured using online demo.</p>
+        <p><sup>12</sup> Automatic mixed modes only available in Java version.</p>
+        <p><sup>13</sup> Source code contains an example of this output, but it is not part of the library.</p>
         <section>
           <h3>Performance Methodology</h3>
           <a id="performance"></a>

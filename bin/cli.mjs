@@ -2,6 +2,7 @@
 
 import { mode, correction, generate } from '../build/index.js';
 import { toSvgSource } from '../build/extras/svg.js';
+import { toPngBuffer } from '../build/extras/node_export.mjs';
 import { readError } from '../build/extras/errors.mjs';
 import { printUsage, parseArgs } from './argparser.mjs';
 
@@ -111,7 +112,7 @@ const FLAGS = [
     name: 'format',
     short: 'f',
     type: 'enum',
-    values: [...TEXT_FORMATS.keys(), 'svg'],
+    values: [...TEXT_FORMATS.keys(), 'svg', 'png'],
     def: 'text-ansi-invert',
     info: 'Set the output format',
   },
@@ -167,6 +168,16 @@ try {
     });
     tm2 = Date.now();
     process.stdout.write(result + '\n');
+  } else if (args.format === 'png') {
+    const result = toPngBuffer(code, {
+      on: [0, 0, 0],
+      off: [255, 255, 255],
+      scale: 8,
+      padX: args.padding,
+      padY: args.padding,
+    });
+    tm2 = Date.now();
+    process.stdout.write(result);
   } else if (TEXT_FORMATS.has(args.format)) {
     const result = code.toString({
       ...TEXT_FORMATS.get(args.format),

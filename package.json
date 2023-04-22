@@ -17,6 +17,10 @@
       "require": "./build/extras/svg.js",
       "import": "./build/extras/svg.mjs"
     },
+    "./extras/node_export": {
+      "require": "./build/extras/node_export.js",
+      "import": "./build/extras/node_export.mjs"
+    },
     "./extras/react": {
       "require": "./build/extras/react.js",
       "import": "./build/extras/react.mjs"

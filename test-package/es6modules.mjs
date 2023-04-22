@@ -1,5 +1,6 @@
 import { generate } from 'lean-qr';
 import { toSvgSource, toSvgDataURL } from 'lean-qr/extras/svg';
+import { toPngBuffer } from 'lean-qr/extras/node_export';
 import { makeAsyncComponent, makeSyncComponent } from 'lean-qr/extras/react';
 import { h } from 'preact';
 import * as hooks from 'preact/hooks';
@@ -11,6 +12,12 @@ if (typeof generate !== 'function') {
 if (typeof toSvgSource !== 'function') {
   throw new Error(
     "import 'lean-qr/extras/svg' did not return toSvgSource function",
+  );
+}
+
+if (typeof toPngBuffer !== 'function') {
+  throw new Error(
+    "import 'lean-qr/extras/node_export' did not return toPngBuffer function",
   );
 }
 

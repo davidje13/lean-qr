@@ -1,5 +1,6 @@
 import { generate, mode } from 'lean-qr';
 import { toSvgSource } from 'lean-qr/extras/svg';
+import { toPngBuffer } from 'lean-qr/extras/node_export';
 import { readError } from 'lean-qr/extras/errors';
 
 // this file just checks types; the code is not executed
@@ -15,6 +16,8 @@ process.stdout.write(str);
 const code2 = generate(mode.numeric('123'), { minVersion: 3 });
 const svgSource = toSvgSource(code2);
 process.stdout.write(svgSource);
+const pngBuffer = toPngBuffer(code);
+process.stdout.write(pngBuffer.BYTES_PER_ELEMENT.toString());
 
 const customMode = Object.assign(() => () => null, {
   test: () => true,
@@ -23,6 +26,7 @@ const customMode = Object.assign(() => () => null, {
 
 const code3 = generate(mode.shift_jis('123'), { minVersion: 3 });
 process.stdout.write(toSvgSource(code3, { padX: 2, xmlDeclaration: true }));
+process.stdout.write(toPngBuffer(code3, { padX: 2, scale: 10 }).toString());
 
 try {
   const code4 = generate.with(customMode)('123');
@@ -85,6 +89,9 @@ code.toString({ on: [0, 0, 0] });
 
 // @ts-expect-error
 toSvgSource('123');
+
+// @ts-expect-error
+toPngBuffer('123');
 
 // @ts-expect-error
 mode.shift_jis(1);

@@ -141,6 +141,28 @@ declare module 'lean-qr/extras/svg' {
   export const toSvgDataURL: toSvgDataURLFn;
 }
 
+declare module 'lean-qr/extras/node_export' {
+  import type { RGBA, Bitmap2D } from 'lean-qr';
+
+  export interface PNGOptions {
+    on?: RGBA;
+    off?: RGBA;
+    padX?: number;
+    padY?: number;
+    scale?: number;
+  }
+
+  export const toPngBuffer: (
+    code: Bitmap2D,
+    options?: Readonly<PNGOptions>,
+  ) => Uint8Array;
+
+  export const toPngDataURL: (
+    code: Bitmap2D,
+    options?: Readonly<PNGOptions>,
+  ) => string;
+}
+
 declare module 'lean-qr/extras/react' {
   import type { ImageDataOptions, GenerateOptions, GenerateFn } from 'lean-qr';
   import type { SVGOptions, toSvgDataURLFn } from 'lean-qr/extras/svg';

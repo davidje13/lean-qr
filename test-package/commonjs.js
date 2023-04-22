@@ -1,5 +1,6 @@
 const { generate } = require('lean-qr');
 const { toSvgSource, toSvgDataURL } = require('lean-qr/extras/svg');
+const { toPngBuffer } = require('lean-qr/extras/node_export');
 const {
   makeAsyncComponent,
   makeSyncComponent,
@@ -14,6 +15,12 @@ if (typeof generate !== 'function') {
 if (typeof toSvgSource !== 'function') {
   throw new Error(
     "require('lean-qr/extras/svg') did not return toSvgSource function",
+  );
+}
+
+if (typeof toPngBuffer !== 'function') {
+  throw new Error(
+    "require('lean-qr/extras/node_export') did not return toPngBuffer function",
   );
 }
 
