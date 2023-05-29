@@ -9,14 +9,14 @@ for React and Preact. Under 4kB compressed.
 - ISO 18004 compliant;
 - Lightweight (less than 4kB compressed, ~7kB uncompressed, no dependencies);
 - Simple yet flexible API, with sensible defaults for all configuration;
-- Supports all standard encodings out-of-the box:
+- Supports all [standard encodings](https://qr.davidje13.com/docs/#mode) out-of-the box:
   - including Unicode 😎;
   - and Shift-JIS 漢字;
-  - and supports custom modes for special requirements;
+  - and supports [custom modes](https://qr.davidje13.com/docs/#custom-modes) for special requirements;
 - Automatic encoding to minimise output size;
-- Fast enough for lag-free live editing;
+- [Fast enough for lag-free live editing](https://qr.davidje13.com/docs/#comparison);
 - Comprehensive automated testing;
-- Multiple output formats (canvas / PNG / SVG / text).
+- Multiple output formats ([canvas](https://qr.davidje13.com/docs/#Bitmap2D_toCanvas) / [PNG](https://qr.davidje13.com/docs/#toPngBuffer) / [SVG](https://qr.davidje13.com/docs/#toSvgSource) / [text](https://qr.davidje13.com/docs/#Bitmap2D_toString)).
 
 You can [see it in action online](https://qr.davidje13.com/), or try it from the terminal:
 
@@ -26,13 +26,15 @@ npx lean-qr 'MY MESSAGE HERE'
 
 ## Basic Usage
 
+See the [Quickstart](https://qr.davidje13.com/docs/#quickstart) documentation for NodeJS /
+Browser / React / Preact / CLI usage.
+
 ```shell
 npm install --save lean-qr
 ```
 
 ```html
 <canvas id="my-qr-code" />
-<a href="#" download="qr.png" id="download-link">Download</a>
 
 <style>
 #my-qr-code {
@@ -46,17 +48,7 @@ npm install --save lean-qr
 import { generate } from 'lean-qr';
 
 const qrCode = generate('LEAN-QR LIBRARY');
-
-// display in canvas:
 qrCode.toCanvas(document.getElementById('my-qr-code'));
-
-// provide a download link:
-const dataUrl = qrCode.toDataURL({ scale: 10 });
-document.getElementById('download-link')
-  .setAttribute('href', dataUrl);
-
-// display as text:
-console.log(qrCode.toString());
 ```
 
 ## Full Documentation

@@ -96,6 +96,27 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
     <span class="property">image-rendering</span>: <span class="value">pixelated</span>;
   }
 &lt;/<span class="value">style</span>&gt;</pre>
+            <section>
+              <h4>Providing a download link</h4>
+              <p>If you want to offer users a way to download the QR code as an image file, you can use a data URL:</p>
+              <pre>
+&lt;<span class="value">a</span> <span class="property">href</span>=<span class="string">"#"</span> <span class="property">download</span>=<span class="string">"qr.png"</span> <span class="property">id</span>=<span class="string">"download-link"</span>&gt;Download&lt;/<span class="value">a</span>&gt;
+
+&lt;<span class="value">script</span> <span class="property">type</span>=<span class="string">"module"</span>&gt;
+  <span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+
+  <span class="keyword">const</span> code = <a href="#generate"><span class="method">generate</span></a>(<span class="string">'LEAN-QR LIBRARY'</span>);
+
+  <span class="keyword">const</span> dataUrl = qrCode.<a href="#Bitmap2D_toDataURL"><span class="method">toDataURL</span></a>({ <span class="property">scale</span>: <span class="value">10</span> });
+  document.<span class="method">getElementById</span>(<span class="string">'download-link'</span>)
+    .<span class="method">setAttribute</span>(<span class="string">'href'</span>, dataUrl);
+&lt;/<span class="value">script</span>&gt;</pre>
+              <p>
+                Note that providing an <a href="#toSvgDataURL">SVG</a> download is preferable for letting users scale
+                the image without it blurring, but this may not be supported by all image editors.
+                The default format is PNG.
+              </p>
+            </section>
           </div>
           <div class="tabcontent" data-for="t3">
             <h3>React</h3>
@@ -1442,12 +1463,12 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                   >
                 </td>
                 <td class="R">45.4kB / 13.3kB</td>
-                <td>620 / &#x274C; / 21 <sup>11</sup></td>
+                <td>620 / &#x274C; / 21 <sup>10</sup></td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>5</sup></td>
-                <td class="C" title="no">&#x274C;<sup>10</sup></td>
+                <td class="C" title="no">&#x274C;<sup>11</sup></td>
                 <td class="C" title="partial">&#x26A0;&#xFE0F;<sup>12</sup></td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;<sup>13</sup></td>
@@ -1471,8 +1492,8 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
           <sup>9</sup> Tested in Chrome, as this library does not support NodeJS. Takes ~10ms to initialise when
           imported.
         </p>
-        <p><sup>10</sup> Only available in Java version.</p>
-        <p><sup>11</sup> Crudely measured using online demo.</p>
+        <p><sup>10</sup> Crudely measured using online demo.</p>
+        <p><sup>11</sup> Only available in Java version.</p>
         <p><sup>12</sup> Automatic mixed modes only available in Java version.</p>
         <p><sup>13</sup> Source code contains an example of this output, but it is not part of the library.</p>
         <section>
