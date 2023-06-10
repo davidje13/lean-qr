@@ -46,8 +46,9 @@ h1 {
   margin: -40px -40px 0;
 }
 
-h1 img {
+h1 object {
   width: 100%;
+  aspect-ratio: 1700 / 580;
 }
 
 h2,

@@ -1,4 +1,4 @@
-# <img src="https://qr.davidje13.com/resources/logo.png" alt="Lean QR" />
+# <img src="https://qr.davidje13.com/resources/logo.svg" alt="Lean QR" />
 
 Lean QR is a lightweight yet fully-featured library for generating QR Codes.
 It runs in NodeJS and all recent browsers, and includes wrapper components

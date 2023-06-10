@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta
       http-equiv="content-security-policy"
-      content="base-uri 'self'; default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; form-action 'none';"
+      content="base-uri 'self'; default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'self'; frame-src 'self'; form-action 'none';"
     />
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, minimal-ui" />
     <meta name="format-detection" content="telephone=no" />
@@ -14,7 +14,7 @@
   </head>
   <body>
     <article>
-      <h1><img src="/resources/logo.png" alt="Lean QR Library" /></h1>
+      <h1><object type="image/svg+xml" data="/resources/logo.svg">Lean QR Library</object></h1>
       <p>
         Lean QR is a lightweight yet fully-featured library for generating QR Codes. Also available as an
         <a href="/">online tool</a>.
