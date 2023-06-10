@@ -49,6 +49,7 @@ h1 {
 h1 object {
   width: 100%;
   aspect-ratio: 1700 / 580;
+  vertical-align: top;
 }
 
 h2,
