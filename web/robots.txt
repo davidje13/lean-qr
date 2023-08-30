@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+User-agent: AhrefsBot
+User-agent: BLEXBot
+User-agent: SemrushBot
+User-agent: Rogerbot
+User-agent: MJ12bot
+User-agent: adidxbot
+User-agent: serpstatbot
+User-agent: webprosbot
+User-agent: Mediapartners-Google
+User-agent: AdsBot-Google
+User-agent: facebot
+User-agent: GPTBot
+Disallow: /
