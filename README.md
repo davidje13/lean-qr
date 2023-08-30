@@ -51,6 +51,23 @@ const qrCode = generate('LEAN-QR LIBRARY');
 qrCode.toCanvas(document.getElementById('my-qr-code'));
 ```
 
+## Troubleshooting
+
+### Jest / JSDOM error: "TextEncoder is not defined"
+
+There is a [bug in JSDOM](https://github.com/jsdom/jsdom/issues/2524) which
+prevents this class being available in tests. This issue only affects JSDOM,
+and can be fixed with:
+
+```js
+import { TextEncoder, TextDecoder } from 'node:util';
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
+```
+
+You can put this in the test file or in Jest's `setupFilesAfterEnv` config.
+You should _not_ put this in your application code.
+
 ## Full Documentation
 
 - [Quickstart](https://qr.davidje13.com/docs/#quickstart)
