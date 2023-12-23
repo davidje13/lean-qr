@@ -52,7 +52,7 @@
   "homepage": "https://github.com/davidje13/lean-qr#readme",
   "devDependencies": {
     "lean-test": "2.x",
-    "pngjs": "6.x",
+    "pngjs": "7.x",
     "preact": "10.x",
     "prettier": "3.1.1",
     "rollup": "4.x",
