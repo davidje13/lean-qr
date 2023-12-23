@@ -29,7 +29,7 @@ const ALL_OPTS = [
   'height',
   'scale',
 ];
-const STYLES = { 'image-rendering': 'pixelated' };
+const STYLES = { imageRendering: 'pixelated' };
 
 const dataOrError = (fn) => {
   try {
