@@ -65,7 +65,11 @@ h5 {
 
 h2 {
   margin-top: 60px;
-  font: 1.8rem Vollkorn, Palatino, Georgia, serif;
+  font:
+    1.8rem Vollkorn,
+    Palatino,
+    Georgia,
+    serif;
   border-color: #cccccc;
   height: 2.6rem;
   top: 0;
@@ -78,7 +82,11 @@ h2 + a {
 
 h3 {
   margin-top: 50px;
-  font: 1.3rem Vollkorn, Palatino, Georgia, serif;
+  font:
+    1.3rem Vollkorn,
+    Palatino,
+    Georgia,
+    serif;
   border-color: #dddddd;
   height: 2.1rem;
   top: 2.5rem;
@@ -91,7 +99,11 @@ h3 + a {
 
 h4 {
   margin-top: 40px;
-  font: 1.1rem Vollkorn, Palatino, Georgia, serif;
+  font:
+    1.1rem Vollkorn,
+    Palatino,
+    Georgia,
+    serif;
   border-color: #eeeeee;
   height: 1.9rem;
   top: 4.5rem;
@@ -104,7 +116,11 @@ h4 + a {
 
 h5 {
   margin-top: 30px;
-  font: 1rem Vollkorn, Palatino, Georgia, serif;
+  font:
+    1rem Vollkorn,
+    Palatino,
+    Georgia,
+    serif;
   top: 6.3rem;
   height: 1.8rem;
   border-color: #f4f4f4;

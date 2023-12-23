@@ -50,16 +50,19 @@ export const makeAsyncComponent =
     const options = { ...defaultOptions, ...props };
     const canvasRef = useRef(null);
     const codeRef = useRef([null, {}]);
-    useEffect(() => {
-      canvasRef.current.hidden = !dataOrError(() => {
-        if (hasChange(options, codeRef.current[1], GENERATE_OPTS)) {
-          codeRef.current[0] = generate(options.content, options);
-        }
-        codeRef.current[0].toCanvas(canvasRef.current, options);
-        return 1;
-      });
-      codeRef.current[1] = options;
-    }, explode(options, ALL_OPTS));
+    useEffect(
+      () => {
+        canvasRef.current.hidden = !dataOrError(() => {
+          if (hasChange(options, codeRef.current[1], GENERATE_OPTS)) {
+            codeRef.current[0] = generate(options.content, options);
+          }
+          codeRef.current[0].toCanvas(canvasRef.current, options);
+          return 1;
+        });
+        codeRef.current[1] = options;
+      },
+      explode(options, ALL_OPTS),
+    );
 
     return createElement('canvas', {
       ref: canvasRef,
