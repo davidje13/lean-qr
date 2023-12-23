@@ -27,7 +27,6 @@ export default [
   {
     input: 'bin/cli.mjs',
     output: {
-      banner: '#!/usr/bin/env node\n',
       file: 'build/cli.mjs',
       format: 'esm',
     },

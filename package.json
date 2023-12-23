@@ -55,7 +55,7 @@
     "pngjs": "6.x",
     "preact": "10.x",
     "prettier": "3.1.1",
-    "rollup": "3.x",
+    "rollup": "4.x",
     "@rollup/plugin-node-resolve": "15.x",
     "@rollup/plugin-terser": "0.4.x",
     "static-server": "2.x"

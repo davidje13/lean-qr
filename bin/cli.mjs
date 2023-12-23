@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { mode, correction, generate } from '../build/index.js';
-import { toSvgSource } from '../build/extras/svg.js';
+import { mode, correction, generate } from '../build/index.mjs';
+import { toSvgSource } from '../build/extras/svg.mjs';
 import { toPngBuffer } from '../build/extras/node_export.mjs';
 import { readError } from '../build/extras/errors.mjs';
 import { printUsage, parseArgs } from './argparser.mjs';
