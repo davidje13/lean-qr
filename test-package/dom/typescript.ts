@@ -13,6 +13,14 @@ code.toCanvas(canvas, { on: [0, 0, 0], off: [255, 255, 255, 0] });
 const str = code.toString({ on: 'y', off: 'n' });
 process.stdout.write(str);
 
+const url = code.toDataURL({
+  type: 'image/png',
+  scale: 7,
+  on: [0, 0, 0],
+  off: [255, 255, 255, 0],
+});
+process.stdout.write(url);
+
 const code2 = generate(mode.numeric('123'), { minVersion: 3 });
 const svgSource = toSvgSource(code2);
 process.stdout.write(svgSource);
@@ -86,6 +94,9 @@ code.toCanvas({}, { on: [0, 0, 0], off: [255, 255, 255, 0] });
 
 // @ts-expect-error
 code.toString({ on: [0, 0, 0] });
+
+// @ts-expect-error
+code.toDataURL({ type: 'nope' });
 
 // @ts-expect-error
 toSvgSource('123');

@@ -107,7 +107,7 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
 
   <span class="keyword">const</span> code = <a href="#generate"><span class="method">generate</span></a>(<span class="string">'LEAN-QR LIBRARY'</span>);
 
-  <span class="keyword">const</span> dataUrl = qrCode.<a href="#Bitmap2D_toDataURL"><span class="method">toDataURL</span></a>({ <span class="property">scale</span>: <span class="value">10</span> });
+  <span class="keyword">const</span> dataUrl = code.<a href="#Bitmap2D_toDataURL"><span class="method">toDataURL</span></a>({ <span class="property">scale</span>: <span class="value">10</span> });
   document.<span class="method">getElementById</span>(<span class="string">'download-link'</span>)
     .<span class="method">setAttribute</span>(<span class="string">'href'</span>, dataUrl);
 &lt;/<span class="value">script</span>&gt;</pre>

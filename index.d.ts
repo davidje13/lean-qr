@@ -47,6 +47,15 @@ declare module 'lean-qr' {
       options?: Readonly<ImageDataOptions>,
     ): DataT;
 
+    toDataURL(
+      options?: Readonly<
+        ImageDataOptions & {
+          type?: `image/${string}`;
+          scale?: number;
+        }
+      >,
+    ): string;
+
     toCanvas(
       canvas: CanvasLike<ImageDataLike>,
       options?: Readonly<ImageDataOptions>,
