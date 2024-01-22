@@ -54,7 +54,7 @@
     "lean-test": "2.x",
     "pngjs": "7.x",
     "preact": "10.x",
-    "prettier": "3.1.1",
+    "prettier": "3.2.4",
     "rollup": "4.x",
     "@rollup/plugin-node-resolve": "15.x",
     "@rollup/plugin-terser": "0.4.x",
