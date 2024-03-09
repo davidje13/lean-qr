@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "es2015",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noImplicitAny": true,
+    "noEmit": true
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "typescript-esm-require.ts"]
+}

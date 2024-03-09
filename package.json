@@ -8,25 +8,29 @@
   ],
   "bin": "./build/cli.mjs",
   "main": "build/index.js",
+  "types": "index.d.ts",
   "exports": {
     ".": {
       "require": "./build/index.js",
-      "import": "./build/index.mjs"
+      "import": "./build/index.mjs",
+      "types": "./index.d.ts"
     },
     "./extras/svg": {
       "require": "./build/extras/svg.js",
-      "import": "./build/extras/svg.mjs"
+      "import": "./build/extras/svg.mjs",
+      "types": "./index.d.ts"
     },
     "./extras/node_export": {
       "require": "./build/extras/node_export.js",
-      "import": "./build/extras/node_export.mjs"
+      "import": "./build/extras/node_export.mjs",
+      "types": "./index.d.ts"
     },
     "./extras/react": {
       "require": "./build/extras/react.js",
-      "import": "./build/extras/react.mjs"
+      "import": "./build/extras/react.mjs",
+      "types": "./index.d.ts"
     }
   },
-  "types": "index.d.ts",
   "scripts": {
     "build": "rollup --config rollup.config.mjs && chmod +x build/cli.mjs",
     "format": "prettier --write .",
@@ -54,7 +58,7 @@
     "lean-test": "2.x",
     "pngjs": "7.x",
     "preact": "10.x",
-    "prettier": "3.2.4",
+    "prettier": "3.2.5",
     "rollup": "4.x",
     "@rollup/plugin-node-resolve": "15.x",
     "@rollup/plugin-terser": "0.4.x",
