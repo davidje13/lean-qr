@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import { mode, correction, generate } from '../build/index.mjs';
-import { toSvgSource } from '../build/extras/svg.mjs';
-import { toPngBuffer } from '../build/extras/node_export.mjs';
+import { toSvgDataURL, toSvgSource } from '../build/extras/svg.mjs';
+import { toPngBuffer, toPngDataURL } from '../build/extras/node_export.mjs';
 import { readError } from '../build/extras/errors.mjs';
 import { printUsage, parseArgs } from './argparser.mjs';
 
@@ -112,7 +112,13 @@ const FLAGS = [
     name: 'format',
     short: 'f',
     type: 'enum',
-    values: [...TEXT_FORMATS.keys(), 'svg', 'png'],
+    values: [
+      ...TEXT_FORMATS.keys(),
+      'svg',
+      'svg-data-url',
+      'png',
+      'png-data-url',
+    ],
     def: 'text-ansi-invert',
     info: 'Set the output format',
   },
@@ -132,6 +138,18 @@ const FLAGS = [
   },
 ];
 
+const SVG_OPTIONS = {
+  on: 'black',
+  off: 'white',
+  xmlDeclaration: true,
+};
+
+const PNG_OPTIONS = {
+  on: [0, 0, 0],
+  off: [255, 255, 255],
+  scale: 8,
+};
+
 try {
   const args = parseArgs(FLAGS, process.argv);
   if (args.help) {
@@ -139,15 +157,37 @@ try {
     process.exit(0);
   }
 
-  const content = args.rest;
-
   const encoding = ENCODINGS.get(args.encoding.toLowerCase());
   if (!encoding) {
     throw new Error('Unknown encoding type');
   }
-  const encoded = encoding(content);
+
+  let formatter;
+  if (args.format === 'svg') {
+    formatter = (code, options) =>
+      toSvgSource(code, { ...SVG_OPTIONS, ...options }) + '\n';
+  } else if (args.format === 'svg-data-url') {
+    formatter = (code, options) =>
+      toSvgDataURL(code, { ...SVG_OPTIONS, ...options }) + '\n';
+  } else if (args.format === 'png') {
+    formatter = (code, options) =>
+      toPngBuffer(code, { ...PNG_OPTIONS, ...options });
+  } else if (args.format === 'png-data-url') {
+    formatter = (code, options) =>
+      toPngDataURL(code, { ...PNG_OPTIONS, ...options }) + '\n';
+  } else if (TEXT_FORMATS.has(args.format)) {
+    formatter = (code, options) =>
+      code.toString({ ...TEXT_FORMATS.get(args.format), ...options });
+  } else {
+    throw new Error('Unknown output format');
+  }
+
+  const content = args.rest;
 
   const tm0 = Date.now();
+  const encoded = encoding(content);
+
+  const tm1 = Date.now();
   const code = generate(encoded, {
     minCorrectionLevel: correction[args.minCor],
     maxCorrectionLevel: correction[args.maxCor],
@@ -156,44 +196,18 @@ try {
     mask: args.mask === 'auto' ? null : Number(args.mask),
     trailer: args.trailer,
   });
-  const tm1 = Date.now();
-  let tm2;
-  if (args.format === 'svg') {
-    const result = toSvgSource(code, {
-      on: 'black',
-      off: 'white',
-      padX: args.padding,
-      padY: args.padding,
-      xmlDeclaration: true,
-    });
-    tm2 = Date.now();
-    process.stdout.write(result + '\n');
-  } else if (args.format === 'png') {
-    const result = toPngBuffer(code, {
-      on: [0, 0, 0],
-      off: [255, 255, 255],
-      scale: 8,
-      padX: args.padding,
-      padY: args.padding,
-    });
-    tm2 = Date.now();
-    process.stdout.write(result);
-  } else if (TEXT_FORMATS.has(args.format)) {
-    const result = code.toString({
-      ...TEXT_FORMATS.get(args.format),
-      padX: args.padding,
-      padY: args.padding,
-    });
-    tm2 = Date.now();
-    process.stdout.write(result);
-  } else {
-    throw new Error('Unknown output format');
-  }
+
+  const tm2 = Date.now();
+  const result = formatter(code, { padX: args.padding, padY: args.padding });
+
+  const tm3 = Date.now();
+  process.stdout.write(result);
 
   if (args.info) {
     process.stderr.write('Time taken:\n');
-    process.stderr.write(`  generate: ${tm1 - tm0}ms\n`);
-    process.stderr.write(`  format: ${tm2 - tm1}ms\n`);
+    process.stderr.write(`  encode: ${tm1 - tm0}ms\n`);
+    process.stderr.write(`  generate: ${tm2 - tm1}ms\n`);
+    process.stderr.write(`  format: ${tm3 - tm2}ms\n`);
   }
 } catch (e) {
   process.stderr.write(`${readError(e)}\n\n`);
