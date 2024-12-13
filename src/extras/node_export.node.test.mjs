@@ -16,6 +16,8 @@ describe('toPngBuffer', () => {
     expect(png.height).equals(3 + 8);
 
     expect(getLine(png, 0, 0, 1)).equals([0, 0, 0, 0]);
+    expect(getLine(png, 3, 4, 1)).equals([0, 0, 0, 0]);
+    expect(getLine(png, 4, 3, 1)).equals([0, 0, 0, 0]);
     expect(getLine(png, 4, 4, 3)).equals([
       0, 0, 0, 255, 0, 0, 0, 255, 0, 0, 0, 0,
     ]);
@@ -38,6 +40,8 @@ describe('toPngBuffer', () => {
     expect(png.height).equals((3 + 8) * 3);
 
     expect(getLine(png, 0, 0, 1)).equals([0, 0, 0, 0]);
+    expect(getLine(png, 4 * 3 - 1, 4 * 3, 1)).equals([0, 0, 0, 0]);
+    expect(getLine(png, 4 * 3, 4 * 3 - 1, 1)).equals([0, 0, 0, 0]);
     expect(getLine(png, 4 * 3, 4 * 3, 9)).equals([
       0, 0, 0, 255, 0, 0, 0, 255, 0, 0, 0, 255, 0, 0, 0, 255, 0, 0, 0, 255, 0,
       0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

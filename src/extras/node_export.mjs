@@ -21,7 +21,9 @@ export const toPngBuffer = (
   const imageData = Buffer.alloc(h * step);
   for (let y = 0; y < h; ++y) {
     for (let x = 0; x < w; ++x) {
-      if (code.get((x / scale - padX) | 0, (y / scale - padY) | 0)) {
+      if (
+        code.get(Math.floor(x / scale) - padX, Math.floor(y / scale) - padY)
+      ) {
         imageData[y * step + 1 + (x >> 3)] |= 0x80 >> (x & 7);
       }
     }
