@@ -123,6 +123,15 @@ const FLAGS = [
     info: 'Set the output format',
   },
   {
+    id: 'scale',
+    name: 'scale',
+    short: 's',
+    type: 'int',
+    min: 1,
+    def: 8,
+    info: 'Set the image scale for PNG exports (ignored if not using PNG)',
+  },
+  {
     id: 'info',
     name: 'info',
     short: 'i',
@@ -147,7 +156,6 @@ const SVG_OPTIONS = {
 const PNG_OPTIONS = {
   on: [0, 0, 0],
   off: [255, 255, 255],
-  scale: 8,
 };
 
 try {
@@ -171,10 +179,11 @@ try {
       toSvgDataURL(code, { ...SVG_OPTIONS, ...options }) + '\n';
   } else if (args.format === 'png') {
     formatter = (code, options) =>
-      toPngBuffer(code, { ...PNG_OPTIONS, ...options });
+      toPngBuffer(code, { ...PNG_OPTIONS, scale: args.scale, ...options });
   } else if (args.format === 'png-data-url') {
     formatter = (code, options) =>
-      toPngDataURL(code, { ...PNG_OPTIONS, ...options }) + '\n';
+      toPngDataURL(code, { ...PNG_OPTIONS, scale: args.scale, ...options }) +
+      '\n';
   } else if (TEXT_FORMATS.has(args.format)) {
     formatter = (code, options) =>
       code.toString({ ...TEXT_FORMATS.get(args.format), ...options });

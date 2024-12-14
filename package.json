@@ -55,13 +55,13 @@
   },
   "homepage": "https://github.com/davidje13/lean-qr#readme",
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "15.x",
+    "@rollup/plugin-terser": "0.4.x",
     "lean-test": "2.x",
     "pngjs": "7.x",
     "preact": "10.x",
     "prettier": "3.4.2",
     "rollup": "4.x",
-    "@rollup/plugin-node-resolve": "15.x",
-    "@rollup/plugin-terser": "0.4.x",
     "static-server": "2.x"
   }
 }

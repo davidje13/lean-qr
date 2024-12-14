@@ -2,7 +2,7 @@
   "name": "lean-qr-package-test",
   "private": true,
   "scripts": {
-    "test": "node commonjs.js && node es6modules.mjs && tsc --project dom/tsconfig.json && tsc --project dom/tsconfig-bundler.json && tsc --project react/tsconfig.json && tsc --project preact/tsconfig.json"
+    "test": "node commonjs.js && node es6modules.mjs && tsc --project dom/tsconfig.json && tsc --project dom/tsconfig-bundler.json && tsc --project react/tsconfig.json && tsc --project preact/tsconfig.json && ./cli.sh"
   },
   "devDependencies": {
     "@types/node": "14.x",
