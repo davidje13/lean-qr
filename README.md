@@ -34,7 +34,7 @@ npm install --save lean-qr
 ```
 
 ```html
-<canvas id="my-qr-code" />
+<canvas id="my-qr-code"></canvas>
 
 <style>
 #my-qr-code {
