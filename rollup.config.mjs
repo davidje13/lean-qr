@@ -26,11 +26,12 @@ export default [
   target('extras/errors'),
   {
     input: 'bin/cli.mjs',
+    external: [/\/src\//],
     output: {
       file: 'build/cli.mjs',
       format: 'esm',
+      paths: (p) => p.replace(/.+\/src\//, './'),
     },
-    external: [/\/build\//],
     plugins,
   },
   {

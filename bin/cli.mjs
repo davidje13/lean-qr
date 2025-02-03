@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-import { mode, correction, generate } from '../build/index.mjs';
-import { toSvgDataURL, toSvgSource } from '../build/extras/svg.mjs';
-import { toPngBuffer, toPngDataURL } from '../build/extras/node_export.mjs';
-import { readError } from '../build/extras/errors.mjs';
+import { mode, correction, generate } from '../src/index.mjs';
+import { toSvgDataURL, toSvgSource } from '../src/extras/svg.mjs';
+import { toPngBuffer, toPngDataURL } from '../src/extras/node_export.mjs';
+import { readError } from '../src/extras/errors.mjs';
 import { printUsage, parseArgs } from './argparser.mjs';
 
 const ENCODINGS = new Map();
