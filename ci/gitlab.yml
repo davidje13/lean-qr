@@ -9,7 +9,7 @@ stages:
 
 build_and_test:
   stage: test
-  image: node:16
+  image: node:18
   services:
     - name: selenium/standalone-firefox
       alias: firefox
