@@ -1,1 +1,0 @@
-"use strict";const e=1,o=2,n=3,r=4,a=5,t=6,d=7,c=8,s={[e]:"No data",[o]:"Bad version range",[n]:"Bad error correction range",[r]:"Too much data",[a]:"Data cannot be encoded using requested modes",[t]:"Bad framework",[d]:"Bad generate function",[c]:"Bad toSvgDataURL function"};exports.readError=e=>"object"!=typeof e?`${e}`||"Unknown error":s[e.code]||e.message||"Unknown error";

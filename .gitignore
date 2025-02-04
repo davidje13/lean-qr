@@ -4,3 +4,5 @@ xcuserdata/
 
 node_modules/
 *.tgz
+
+build/
