@@ -1,6 +1,6 @@
 {
   "name": "lean-qr",
-  "version": "2.3.5",
+  "version": "2.4.0",
   "description": "minimal QR code generation",
   "private": true,
   "bin": "./cli.mjs",
@@ -47,7 +47,8 @@
     "qr-code",
     "barcode",
     "react",
-    "preact"
+    "preact",
+    "web-component"
   ],
   "author": "David Evans",
   "license": "MIT",

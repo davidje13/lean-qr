@@ -27,7 +27,7 @@ npx lean-qr 'MY MESSAGE HERE'
 ## Basic Usage
 
 See the [Quickstart](https://qr.davidje13.com/docs/#quickstart) documentation for NodeJS /
-Browser / React / Preact / CLI usage.
+Browser / React / Preact / Web Components / CLI usage.
 
 ```shell
 npm install --save lean-qr
