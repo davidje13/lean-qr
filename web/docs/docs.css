@@ -422,6 +422,10 @@ pre a:hover {
   width: 100%;
 }
 
+.tabbox .tabbox > .tabcontent {
+  padding: 1rem 0.5rem 0;
+}
+
 .tabcontent > :first-child {
   margin-top: 0;
 }
@@ -441,6 +445,10 @@ pre a:hover {
 #t2:checked ~ .tabcontent[data-for='t2'],
 #t3:checked ~ .tabcontent[data-for='t3'],
 #t4:checked ~ .tabcontent[data-for='t4'],
-#t5:checked ~ .tabcontent[data-for='t5'] {
+#t5:checked ~ .tabcontent[data-for='t5'],
+#t6:checked ~ .tabcontent[data-for='t6'],
+#cdn1:checked ~ .tabcontent[data-for='cdn1'],
+#cdn2:checked ~ .tabcontent[data-for='cdn2'],
+#cdn3:checked ~ .tabcontent[data-for='cdn3'] {
   display: block;
 }

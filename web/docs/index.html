@@ -28,7 +28,8 @@
           <input type="radio" name="tab" id="t2" value="browser" checked /><label for="t2">Browser Native</label>
           <input type="radio" name="tab" id="t3" value="react" /><label for="t3">React</label>
           <input type="radio" name="tab" id="t4" value="preact" /><label for="t4">Preact</label>
-          <input type="radio" name="tab" id="t5" value="cli" /><label for="t5">Shell (CLI)</label>
+          <input type="radio" name="tab" id="t5" value="webcomponent" /><label for="t5">Web Component</label>
+          <input type="radio" name="tab" id="t6" value="cli" /><label for="t6">Shell (CLI)</label>
           <div class="tabcontent" data-for="t1">
             <h3>NodeJS</h3>
             <p>Install the dependency:</p>
@@ -198,6 +199,57 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
             </p>
           </div>
           <div class="tabcontent" data-for="t5">
+            <h3>Web Component</h3>
+            <p>
+              If you just want a basic QR code and do not want to write any custom Javascript, you can import the Web
+              Component version of Lean QR.
+            </p>
+            <p>Include the webcomponent.mjs script:</p>
+            <section class="tabbox">
+              <input type="radio" name="cdn" id="cdn1" value="node" checked /><label for="cdn1">Self-hosted</label>
+              <input type="radio" name="cdn" id="cdn2" value="node" /><label for="cdn2">CDN (jsDelivr)</label>
+              <input type="radio" name="cdn" id="cdn3" value="node" /><label for="cdn3">CDN (UNPKG)</label>
+              <div class="tabcontent" data-for="cdn1">
+                <pre>npm install --save <span class="string">lean-qr</span></pre>
+                <pre>&lt;<span class="value">script</span>
+  <span class="property">src</span>=<span class="string">"./node_modules/lean-qr/webcomponent.mjs"</span>
+  <span class="property">type</span>=<span class="string">"module"</span>
+&gt;&lt;/<span class="value">script</span>&gt;</pre>
+              </div>
+              <div class="tabcontent" data-for="cdn2">
+                <p>Always set the <code>integrity</code> attribute for security when using a third party CDN.</p>
+                <pre>&lt;<span class="value">script</span>
+  <span class="property">src</span>=<span class="string">"https://cdn.jsdelivr.net/npm/lean-qr@2.4.0/webcomponent.mjs"</span>
+  <span class="property">integrity</span>=<span class="string">"sha384-L1udibYX2Bx6aseKv8cF5fMaRbSQxvYEWAAN1l7hzBly5Ez0nnWsRQvNz0ipYPTf"</span>
+  <span class="property">type</span>=<span class="string">"module"</span>
+&gt;&lt;/<span class="value">script</span>&gt;</pre>
+              </div>
+              <div class="tabcontent" data-for="cdn3">
+                <p>Always set the <code>integrity</code> attribute for security when using a third party CDN.</p>
+                <pre>&lt;<span class="value">script</span>
+  <span class="property">src</span>=<span class="string">"https://www.unpkg.com/lean-qr@2.4.0/webcomponent.mjs"</span>
+  <span class="property">integrity</span>=<span class="string">"sha384-L1udibYX2Bx6aseKv8cF5fMaRbSQxvYEWAAN1l7hzBly5Ez0nnWsRQvNz0ipYPTf"</span>
+  <span class="property">type</span>=<span class="string">"module"</span>
+&gt;&lt;/<span class="value">script</span>&gt;</pre>
+              </div>
+            </section>
+            <section>
+              <h4>Display a QR code with fixed content:</h4>
+              <pre>&lt;<a href="#LeanQRElement"><span class="value">lean-qr</span></a> <span class="property">value</span>=<span class="string">"MY MESSAGE HERE"</span>&gt;&lt;/<span class="value">lean-qr</span>&gt;</pre>
+            </section>
+            <section>
+              <h4>Display a QR code linked to another element:</h4>
+              <pre>
+&lt;<span class="value">a</span> <span class="property">id</span>=<span class="string">"mylink"</span> <span class="property">href</span>=<span class="string">"https://example.com/"</span>&gt;My link&lt;/<span class="value">a</span>&gt;
+&lt;<a href="#LeanQRElement"><span class="value">lean-qr</span></a> <span class="property">for</span>=<span class="string">"mylink"</span>&gt;&lt;/<span class="value">lean-qr</span>&gt;</pre>
+              <p>
+                In this example, the QR code will contain <code>https://example.com/</code>. You can also link to
+                <code>&lt;input&gt;</code> elements to create a live QR code from their <code>value</code>, or any other
+                element to create a QR code from its content.
+              </p>
+            </section>
+          </div>
+          <div class="tabcontent" data-for="t6">
             <h3>Shell (CLI)</h3>
             <p>
               Though not recommended for production use, it is possible to use the built-in commandline interface to
@@ -307,6 +359,14 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
             <ul>
               <li>
                 <a href="#readError"><code>readError(error)</code></a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#webcomponent">webcomponent</a>
+            <ul>
+              <li>
+                <a href="#LeanQRElement"><code>&lt;lean-qr&gt;</code> / <code>LeanQRElement</code></a>
               </li>
             </ul>
           </li>
@@ -1144,6 +1204,79 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
   <span class="keyword">const</span> message = <span class="method">readError</span>(e);
   window.<span class="method">alert</span>(message);
 }</pre>
+          </section>
+        </section>
+        <section>
+          <h3>webcomponent</h3>
+          <a id="webcomponent"></a>
+          <p>
+            This is an alternative way to use Lean QR as a Web Component. This import is fully self-contained and
+            defines the <code>&lt;lean-qr&gt;</code> component for use in HTML without the need to write custom
+            Javascript. See the Web Component <a href="#quickstart">quickstart</a> for an example.
+          </p>
+          <p>
+            Note that because this is a self-contained import, it contains a copy of the full Lean QR source code. This
+            means that if you use this import as well as the main import, you will get two copies in your app (it will
+            not be deduplicated by bundlers). You should prefer picking <em>either</em> the Javascript API
+            <em>or</em> the Web Component.
+          </p>
+          <section>
+            <h4><code>&lt;lean-qr&gt;</code> / <code>LeanQRElement</code></h4>
+            <a id="LeanQRElement"></a>
+            <p>Displays a QR code on the page as an image.</p>
+            <pre>&lt;<span class="value">lean-qr</span>
+  <a href="#LeanQRElement_value_for"><span class="property">value</span></a>=<span class="string">"Hello!"</span>
+  <a href="#LeanQRElement_value_for"><span class="property">for</span></a>=<span class="string">"my-other-element-id"</span>
+  <a href="#LeanQRElement_other"><span class="property">min-version</span></a>=<span class="string">"1"</span>
+  <a href="#LeanQRElement_other"><span class="property">max-version</span></a>=<span class="string">"40"</span>
+  <a href="#LeanQRElement_other"><span class="property">min-correction-level</span></a>=<span class="string">"L"</span>
+  <a href="#LeanQRElement_other"><span class="property">max-correction-level</span></a>=<span class="string">"H"</span>
+  <a href="#LeanQRElement_other"><span class="property">modes</span></a>=<span class="string">"numeric alphanumeric ascii iso8859_1 shift_jis utf8"</span>
+  <a href="#LeanQRElement_other"><span class="property">on</span></a>=<span class="string">"#000000"</span>
+  <a href="#LeanQRElement_other"><span class="property">off</span></a>=<span class="string">"#FFFFFF"</span>
+  <a href="#LeanQRElement_other"><span class="property">pad-x</span></a>=<span class="string">"4"</span>
+  <a href="#LeanQRElement_other"><span class="property">pad-y</span></a>=<span class="string">"4"</span>
+&gt;&lt;/<span class="value">lean-qr</span>&gt;</pre>
+            <p>
+              The component renders as a block element by default, sized to fill the available width. You can customise
+              this with CSS as normal. See the following sections for details about the available attributes.
+            </p>
+            <section>
+              <h5><code>value</code> / <code>for</code></h5>
+              <a id="LeanQRElement_value_for"></a>
+              <p>
+                Specify <em>either</em> <code>value</code> (with the content for the QR code) <em>or</em>
+                <code>for</code> (with the ID of another element on the page to load the content from). If
+                <code>for</code> is set, the target's <code>value</code>, <code>href</code>, or
+                <code>innerText</code> will be used. The QR code will automatically update if the referenced value
+                changes.
+              </p>
+            </section>
+            <section>
+              <h5>Other Attributes</h5>
+              <a id="LeanQRElement_other"></a>
+              <p>
+                The configuration and display attributes have the same meanings as defined in
+                <a href="#generate"><code>generate</code></a> and <a href="#Bitmap2D_toCanvas"><code>toCanvas</code></a
+                >, and have the same default values. The <code>on</code> and <code>off</code> colours can be specified
+                using any valid CSS colour identifier (e.g. <code>#FF0000</code>, <code>red</code>,
+                <code>rgb(255,0,0)</code>, etc.)
+              </p>
+            </section>
+            <section>
+              <h5>Child Content</h5>
+              <a id="LeanQRElement_children"></a>
+              <p>
+                The component does not take children (any child content will be ignored), so you can use the children as
+                "fallback content" (displayed if, for example, the user has Javascript disabled, is using an older
+                browser which does not support Web Components, or the Lean QR script fails to download). Note this
+                content may also appear while the page is loading.
+              </p>
+              <p>
+                Web Components cannot be self-closing, so you still need to specify
+                <code>&lt;/lean-qr&gt;</code> explicitly even if you do not require fallback content.
+              </p>
+            </section>
           </section>
         </section>
         <section>

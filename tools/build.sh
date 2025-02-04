@@ -24,16 +24,15 @@ measure() {
   fi;
 }
 
-{
-  printf "core esm:               $(measure "$BASE_DIR/build/index.mjs")\n";
-  printf "core cjs:               $(measure "$BASE_DIR/build/index.js")\n";
-  printf "extras/svg esm:         $(measure "$BASE_DIR/build/extras/svg.mjs")\n";
-  printf "extras/svg cjs:         $(measure "$BASE_DIR/build/extras/svg.js")\n";
-  printf "extras/node_export esm: $(measure "$BASE_DIR/build/extras/node_export.mjs")\n";
-  printf "extras/node_export cjs: $(measure "$BASE_DIR/build/extras/node_export.js")\n";
-  printf "extras/react esm:       $(measure "$BASE_DIR/build/extras/react.mjs")\n";
-  printf "extras/react cjs:       $(measure "$BASE_DIR/build/extras/react.js")\n";
-} > "$BASE_DIR/docs/stats.txt";
+FILES="index.mjs index.js extras/svg.mjs extras/svg.js extras/node_export.mjs extras/node_export.js extras/react.mjs extras/react.js webcomponent.mjs";
+
+for FILE in $FILES; do
+  printf "%-24s%s\n" "$FILE:" "$(measure "$BASE_DIR/build/$FILE")";
+done > "$BASE_DIR/docs/stats.txt";
+
+for FILE in $FILES; do
+  printf "%-24s%s\n" "$FILE:" "sha384-$(< "$BASE_DIR/build/$FILE" openssl dgst -sha384 -binary | openssl base64 -A)";
+done > "$BASE_DIR/docs/integrity.txt";
 
 echo "Packaging...";
 echo;

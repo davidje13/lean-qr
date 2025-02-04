@@ -2,6 +2,7 @@ import { generate, mode } from 'lean-qr';
 import { toSvgSource } from 'lean-qr/extras/svg';
 import { toPngBuffer } from 'lean-qr/extras/node_export';
 import { readError } from 'lean-qr/extras/errors';
+import { LeanQRElement } from 'lean-qr/webcomponent';
 
 // this file just checks types; the code is not executed
 
@@ -54,6 +55,8 @@ mode.auto('', {
     customMode,
   ],
 });
+
+const element: HTMLElement = new LeanQRElement();
 
 // @ts-expect-error
 mode.auto('', { modes: [mode.bytes] });

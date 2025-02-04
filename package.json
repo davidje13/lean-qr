@@ -26,11 +26,15 @@
       "require": "./extras/react.js",
       "import": "./extras/react.mjs",
       "types": "./index.d.ts"
+    },
+    "./webcomponent": {
+      "import": "./webcomponent.mjs",
+      "types": "./index.d.ts"
     }
   },
   "scripts": {
     "format": "prettier --write .",
-    "start": "cd web && static-server --index index.html --port 8080",
+    "start": "./tools/build.sh && cd web && static-server --index index.html --port 8080",
     "test": "lean-test --target=node,chrome,firefox -x '**/*.node.*' -x '**/*.browser.*' && lean-test -i '**/*.node.test.*' && lean-test --target=chrome,firefox --preprocess=rollup -i '**/*.browser.test.*' && ./test-package/run.sh && prettier --check .",
     "dopublish": "./tools/build.sh && npm publish package.tgz"
   },

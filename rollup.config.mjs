@@ -25,6 +25,11 @@ export default [
   target('extras/react'),
   target('extras/errors'),
   {
+    input: 'src/web-component/index.mjs',
+    output: { file: 'build/webcomponent.mjs', format: 'esm' },
+    plugins,
+  },
+  {
     input: 'bin/cli.mjs',
     external: [/\/src\//],
     output: {
