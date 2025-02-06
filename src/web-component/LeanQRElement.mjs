@@ -78,7 +78,7 @@ export class LeanQRElement extends HTMLElement {
     const forId = this.getAttribute('for');
     const target = forId ? this.ownerDocument.getElementById(forId) : null;
     const msg =
-      this._watcher.get(target, ['value', 'href', 'innerText']) ??
+      this._watcher.get(target, ['value', 'href', 'textContent']) ??
       this.getAttribute('value') ??
       '';
     const options = { msg };

@@ -29,7 +29,7 @@ export class Watcher {
         attributes: true,
         attributeFilter: ['id', ...checkedAttrs],
       });
-      if (checkedAttrs.includes('innerText')) {
+      if (checkedAttrs.includes('textContent')) {
         this._mo.observe(target, {
           subtree: true,
           childList: true,
