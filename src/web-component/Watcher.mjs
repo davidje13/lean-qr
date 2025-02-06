@@ -1,22 +1,21 @@
 import { listen } from './utils.mjs';
 
 export class Watcher {
-  constructor(callback, fields) {
+  constructor(callback) {
     this._mo = new MutationObserver(callback);
     this._callback = callback;
     this._observing = null;
     this._observingCount = 0;
-    this._fields = fields;
   }
 
-  get(target) {
+  get(target, fields) {
     if (!target) {
       this.stop();
       return null;
     }
     let value = '';
     let n = 0;
-    for (const field of this._fields) {
+    for (const field of fields) {
       ++n;
       value = target[field];
       if (value !== undefined && (value || field !== 'href')) {
@@ -25,15 +24,18 @@ export class Watcher {
     }
     if (target !== this._observing || n !== this._observingCount) {
       this.stop();
-      const checkedAttrs = this._fields.slice(0, n);
-      const isInnerText = checkedAttrs.includes('innerText');
+      const checkedAttrs = fields.slice(0, n);
       this._mo.observe(target, {
-        subtree: isInnerText,
-        childList: isInnerText,
         attributes: true,
         attributeFilter: ['id', ...checkedAttrs],
-        characterData: isInnerText,
       });
+      if (checkedAttrs.includes('innerText')) {
+        this._mo.observe(target, {
+          subtree: true,
+          childList: true,
+          characterData: true,
+        });
+      }
       if (checkedAttrs.includes('value')) {
         this._stop = listen(target, ['input', 'change'], this._callback);
       }

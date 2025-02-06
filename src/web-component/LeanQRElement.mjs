@@ -36,10 +36,7 @@ export class LeanQRElement extends HTMLElement {
   constructor() {
     super();
     this._lastRendered = [];
-    this._watcher = new Watcher(
-      () => this.attributeChangedCallback(),
-      ['value', 'href', 'innerText'],
-    );
+    this._watcher = new Watcher(() => this.attributeChangedCallback());
     const canvas = this.ownerDocument.createElement('canvas');
     this._canvas = canvas;
     canvas.style.display = 'block';
@@ -80,7 +77,10 @@ export class LeanQRElement extends HTMLElement {
     }
     const forId = this.getAttribute('for');
     const target = forId ? this.ownerDocument.getElementById(forId) : null;
-    const msg = this._watcher.get(target) ?? this.getAttribute('value') ?? '';
+    const msg =
+      this._watcher.get(target, ['value', 'href', 'innerText']) ??
+      this.getAttribute('value') ??
+      '';
     const options = { msg };
     for (const [k, a, f] of ATTRS) {
       const v = this.getAttribute(a);
