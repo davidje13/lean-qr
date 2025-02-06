@@ -27,6 +27,9 @@ export const correctionData = (version, totalBytes) => (correctionIndex) => {
   };
 };
 
+export const minCorrection = 0;
+export const maxCorrection = 3;
+
 export const correction = {
   min: 0,
   L: 0,

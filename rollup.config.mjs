@@ -1,5 +1,6 @@
 import terser from '@rollup/plugin-terser';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
+import { strip } from './tools/rollup-plugin-strip.mjs';
 
 const plugins = [
   nodeResolve(), // for tests
@@ -25,9 +26,20 @@ export default [
   target('extras/react'),
   target('extras/errors'),
   {
-    input: 'src/web-component/index.mjs',
+    input: 'src/web-component/LeanQRElement.mjs',
     output: { file: 'build/webcomponent.mjs', format: 'esm' },
-    plugins,
+    plugins: [
+      strip('exclude-webcomponent'),
+      terser({
+        format: { ascii_only: true },
+        mangle: {
+          properties: {
+            regex:
+              /^_|^(toCanvas|toImageData|auto|numeric|alphaNumeric|ascii|iso8859_1|shift_jis|utf8)$/,
+          },
+        },
+      }),
+    ],
   },
   {
     input: 'bin/cli.mjs',

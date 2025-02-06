@@ -1,94 +1,88 @@
-import { LeanQRElement } from './index.mjs';
+import { LeanQRElement } from './LeanQRElement.mjs';
+import '../test-helpers/ValueCounterElement.mjs';
 
 describe('LeanQRElement', () => {
-  it('registers a lean-qr tag', async () => {
+  it('registers a lean-qr tag', () => {
     const c = render('<lean-qr value="hello"></lean-qr>');
     const el = c.querySelector('lean-qr');
     expect(el).toBeInstanceOf(LeanQRElement);
 
-    await nextFrame();
     expect(el.getAttribute('title')).toEqual('hello');
   });
 
-  it('sets accessibility properties', async () => {
+  it('sets accessibility properties', () => {
     const c = render('<lean-qr value="hello"></lean-qr>');
     const el = c.querySelector('lean-qr');
 
-    await nextFrame();
     expect(el.getAttribute('role')).toEqual('img');
     expect(el.getAttribute('aria-label')).toEqual('QR code for "hello"');
   });
 
-  it('sets styles', async () => {
+  it('sets styles', () => {
     const c = render('<lean-qr value="hello" pad-x="2"></lean-qr>');
     const el = c.querySelector('lean-qr');
 
-    await nextFrame();
     expect(getComputedStyle(el).aspectRatio).toEqual('25 / 29');
   });
 
-  it('can source content from another element', async () => {
+  it('can source content from another element', () => {
     const c = render(`
       <div id="source">My message</div>
       <lean-qr for="source"></lean-qr>
     `);
-    await nextFrame();
-    expect(c.querySelector('lean-qr').getAttribute('title')).toEqual(
-      'My message',
-    );
+    const el = c.querySelector('lean-qr');
+
+    expect(el.getAttribute('title')).toEqual('My message');
   });
 
-  it('can source content from later elements in the page', async () => {
+  it('can source content from later elements in the page', () => {
     const c = render(`
       <lean-qr for="source"></lean-qr>
       <div id="source">My message</div>
     `);
-    await nextFrame();
-    expect(c.querySelector('lean-qr').getAttribute('title')).toEqual(
-      'My message',
-    );
+    const el = c.querySelector('lean-qr');
+
+    expect(el.getAttribute('title')).toEqual('My message');
   });
 
-  it('uses source element value if available', async () => {
+  it('uses source element value if available', () => {
     const c = render(`
       <input type="text" id="source" value="Stuff" />
       <lean-qr for="source"></lean-qr>
     `);
-    await nextFrame();
-    expect(c.querySelector('lean-qr').getAttribute('title')).toEqual('Stuff');
+    const el = c.querySelector('lean-qr');
+
+    expect(el.getAttribute('title')).toEqual('Stuff');
   });
 
-  it('uses source element href if available', async () => {
+  it('uses source element href if available', () => {
     const c = render(`
       <a href="https://example.com/foo" id="source">My link</a>
       <lean-qr for="source"></lean-qr>
     `);
-    await nextFrame();
-    expect(c.querySelector('lean-qr').getAttribute('title')).toEqual(
-      'https://example.com/foo',
-    );
+    const el = c.querySelector('lean-qr');
+
+    expect(el.getAttribute('title')).toEqual('https://example.com/foo');
   });
 
-  it('uses source inner text as fallback', async () => {
+  it('uses source inner text as fallback', () => {
     const c = render(`
       <a id="source">My anchor</a>
       <lean-qr for="source"></lean-qr>
     `);
-    await nextFrame();
-    expect(c.querySelector('lean-qr').getAttribute('title')).toEqual(
-      'My anchor',
-    );
+    const el = c.querySelector('lean-qr');
+
+    expect(el.getAttribute('title')).toEqual('My anchor');
   });
 
   it('updates automatically when attributes change', async () => {
     const c = render('<lean-qr value="message 1"></lean-qr>');
     const el = c.querySelector('lean-qr');
 
-    await nextFrame();
     expect(el.getAttribute('title')).toEqual('message 1');
 
     el.setAttribute('value', 'message 2');
-    await nextFrame();
+    await nextTick();
     expect(el.getAttribute('title')).toEqual('message 2');
   });
 
@@ -100,7 +94,6 @@ describe('LeanQRElement', () => {
     const source = c.querySelector('#source');
     const el = c.querySelector('lean-qr');
 
-    await nextFrame();
     expect(el.getAttribute('title')).toEqual('message 1');
 
     source.textContent = 'message 2';
@@ -116,13 +109,29 @@ describe('LeanQRElement', () => {
     const source = c.querySelector('#source');
     const el = c.querySelector('lean-qr');
 
-    await nextFrame();
     expect(el.getAttribute('title')).toEqual('message 1');
 
     source.value = 'message 2';
     source.dispatchEvent(new CustomEvent('input'));
-    await nextFrame();
+    await nextTick();
     expect(el.getAttribute('title')).toEqual('message 2');
+  });
+
+  it('deduplicates changes when multiple attributes change', async () => {
+    const c = render(`
+      <value-counter id="src" value="hello"></value-counter>
+      <lean-qr for="src" pad-x="4" pad-y="4"></lean-qr>
+    `);
+    const src = c.querySelector('value-counter');
+    const el = c.querySelector('lean-qr');
+
+    expect(src.count).toEqual(1);
+
+    el.setAttribute('value', 'message 2');
+    el.setAttribute('pad-x', '8');
+    el.setAttribute('pad-y', '8');
+    await nextTick();
+    expect(src.count).toEqual(2);
   });
 
   const items = [];
@@ -143,3 +152,4 @@ describe('LeanQRElement', () => {
 });
 
 const nextFrame = () => new Promise((resolve) => setTimeout(resolve, 0));
+const nextTick = () => Promise.resolve();

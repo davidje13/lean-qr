@@ -1,6 +1,5 @@
 import { generate, mode } from '../index.mjs';
-import { listen, parseCol } from './utils.mjs';
-import { Watcher } from './Watcher.mjs';
+import { parseCol } from './utils.mjs';
 
 const MODE_LOOKUP = new Map([
   ['numeric', mode.numeric],
@@ -11,11 +10,12 @@ const MODE_LOOKUP = new Map([
   ['utf8', mode.utf8],
 ]);
 
+const getCorrection = (v) => 'LMQH'.indexOf(v);
 const parseInt = Number.parseInt;
 
 const ATTRS = [
-  ['minCorrectionLevel', 'min-correction-level'],
-  ['maxCorrectionLevel', 'max-correction-level'],
+  ['minCorrectionLevel', 'min-correction-level', getCorrection],
+  ['maxCorrectionLevel', 'max-correction-level', getCorrection],
   ['minVersion', 'min-version', parseInt],
   ['maxVersion', 'max-version', parseInt],
   ['mask', 'mask', parseInt],
@@ -36,9 +36,8 @@ export class LeanQRElement extends HTMLElement {
   constructor() {
     super();
     this._lastRendered = [];
-    this._watcher = new Watcher(() => this.attributeChangedCallback());
-    const canvas = this.ownerDocument.createElement('canvas');
-    this._canvas = canvas;
+    this._observer = new MutationObserver(this._changed);
+    const canvas = (this._canvas = this.ownerDocument.createElement('canvas'));
     canvas.style.display = 'block';
     canvas.style.width = '100%';
     canvas.style.imageRendering = 'pixelated';
@@ -47,45 +46,46 @@ export class LeanQRElement extends HTMLElement {
   }
 
   connectedCallback() {
-    this._disconnect = listen(this._canvas, ['contextrestored'], () => {
-      this._lastRendered = [];
-      this._render();
-    });
+    this._canvas.addEventListener('contextrestored', this._contextRestored);
     this._render();
   }
 
   disconnectedCallback() {
-    this._disconnect?.();
-    this._disconnect = null;
-    this._watcher.stop();
+    this._canvas.removeEventListener('contextrestored', this._contextRestored);
+    this._stopWatching();
   }
 
   attributeChangedCallback() {
-    this._dirty = true;
-    // deduplicate multiple attributes changing in a single frame
-    Promise.resolve().then(() => {
-      if (this._dirty) {
-        this._render();
-      }
-    });
+    this._changed();
   }
+
+  _contextRestored = () => {
+    this._lastRendered = [];
+    this._render();
+  };
+
+  _changed = async () => {
+    this._dirty = true;
+    await 1; // deduplicate multiple attributes changing in a single frame
+    if (this._dirty) {
+      this._render();
+    }
+  };
 
   _render() {
     this._dirty = false;
-    if (!this.ownerDocument.defaultView) {
+    const doc = this.ownerDocument;
+    if (!doc.defaultView) {
       return;
     }
     const forId = this.getAttribute('for');
-    const target = forId ? this.ownerDocument.getElementById(forId) : null;
-    const msg =
-      this._watcher.get(target, ['value', 'href', 'textContent']) ??
-      this.getAttribute('value') ??
-      '';
+    const target = forId ? doc.getElementById(forId) : null;
+    const msg = this._getAndWatch(target) ?? this.getAttribute('value') ?? '';
     const options = { msg };
-    for (const [k, a, f] of ATTRS) {
-      const v = this.getAttribute(a);
-      if (v) {
-        options[k] = f ? f(v) : v;
+    for (const [key, attr, mapper] of ATTRS) {
+      const value = this.getAttribute(attr);
+      if (value) {
+        options[key] = mapper(value);
       }
     }
     const check = Object.entries(options).flat(2);
@@ -107,4 +107,46 @@ export class LeanQRElement extends HTMLElement {
       this._lastRendered = check;
     }
   }
+
+  _getAndWatch(target) {
+    if (!target) {
+      this._stopWatching();
+      return null;
+    }
+    const targetValue = target.value;
+    const value = targetValue ?? (target.href || undefined);
+    const isContent = value === undefined;
+    if (target !== this._observing || isContent !== this._observingContent) {
+      this._stopWatching();
+      this._observer.observe(target, {
+        attributes: true,
+        attributeFilter: ['id', 'value', 'href'],
+      });
+      if (isContent) {
+        this._observer.observe(target, {
+          subtree: true,
+          childList: true,
+          characterData: true,
+        });
+      }
+      if (targetValue !== undefined) {
+        target.addEventListener('input', this._changed, { passive: true });
+        target.addEventListener('change', this._changed, { passive: true });
+      }
+      this._observing = target;
+      this._observingContent = isContent;
+    }
+    return value ?? target.textContent;
+  }
+
+  _stopWatching() {
+    if (this._observing) {
+      this._observing.removeEventListener('input', this._changed);
+      this._observing.removeEventListener('change', this._changed);
+      this._observer.disconnect();
+      this._observing = null;
+    }
+  }
 }
+
+customElements?.define('lean-qr', LeanQRElement);

@@ -255,11 +255,13 @@ export const mode = {
       }
       parts.forEach((enc) => enc(data, version));
     },
+  // begin-exclude-webcomponent
   multi,
   eci,
+  bytes,
+  // end-exclude-webcomponent
   numeric,
   alphaNumeric,
-  bytes,
   ascii,
   iso8859_1,
   shift_jis,

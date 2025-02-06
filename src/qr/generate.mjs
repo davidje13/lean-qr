@@ -2,7 +2,11 @@ import { Bitmap1D } from '../structures/Bitmap1D.mjs';
 import { Bitmap2D } from '../structures/Bitmap2D.mjs';
 import { mode, DEFAULT_AUTO_MODES } from './options/modes.mjs';
 import { masks } from './options/masks.mjs';
-import { correctionData, correction } from './options/corrections.mjs';
+import {
+  correctionData,
+  minCorrection,
+  maxCorrection,
+} from './options/corrections.mjs';
 import { calculateEC } from './errorCorrection.mjs';
 import { drawFrame, getPath, drawCode, applyMask } from './draw.mjs';
 import { scoreCode } from './score.mjs';
@@ -19,8 +23,8 @@ const baseCache = [];
 export const generate = (
   modeData = fail(ERROR_NO_DATA),
   {
-    minCorrectionLevel = correction.min,
-    maxCorrectionLevel = correction.max,
+    minCorrectionLevel = minCorrection,
+    maxCorrectionLevel = maxCorrection,
     minVersion = 1,
     maxVersion = 40,
     mask,
@@ -86,6 +90,7 @@ export const generate = (
   fail(ERROR_TOO_MUCH_DATA);
 };
 
+// begin-exclude-webcomponent
 generate.with =
   (...extraModes) =>
   (modeData, options) =>
@@ -93,3 +98,4 @@ generate.with =
       modes: [...DEFAULT_AUTO_MODES, ...extraModes],
       ...options,
     });
+// end-exclude-webcomponent

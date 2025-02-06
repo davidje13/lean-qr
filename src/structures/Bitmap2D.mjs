@@ -14,6 +14,7 @@ export const Bitmap2D = (
     _data[y * size + x] = value;
   },
 
+  // begin-exclude-webcomponent
   toString({ on = '##', off = '  ', lf = '\n', padX = 4, padY = 4 } = {}) {
     let r = '';
     for (let y = -padY; y < size + padY; ++y) {
@@ -24,6 +25,7 @@ export const Bitmap2D = (
     }
     return r;
   },
+  // end-exclude-webcomponent
 
   toImageData(
     context,
@@ -53,6 +55,7 @@ export const Bitmap2D = (
     ctx.putImageData(data, 0, 0);
   },
 
+  // begin-exclude-webcomponent
   toDataURL({ type = 'image/png', scale = 1, ...options } = {}) {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -75,4 +78,5 @@ export const Bitmap2D = (
     );
     return canvas.toDataURL(type, 1);
   },
+  // end-exclude-webcomponent
 });
