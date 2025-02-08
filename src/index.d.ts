@@ -239,7 +239,3 @@ declare module 'lean-qr/extras/react' {
 declare module 'lean-qr/extras/errors' {
   export const readError: (error: unknown) => string;
 }
-
-declare module 'lean-qr/webcomponent' {
-  export class LeanQRElement extends HTMLElement {}
-}

@@ -29,7 +29,7 @@
     },
     "./webcomponent": {
       "import": "./webcomponent.mjs",
-      "types": "./index.d.ts"
+      "types": "./webcomponent.d.ts"
     }
   },
   "scripts": {

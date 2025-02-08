@@ -57,6 +57,7 @@ mode.auto('', {
 });
 
 const element: HTMLElement = new LeanQRElement();
+const element2: LeanQRElement = document.createElement('lean-qr');
 
 // @ts-expect-error
 mode.auto('', { modes: [mode.bytes] });

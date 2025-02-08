@@ -14,7 +14,7 @@ npx rollup --config rollup.config.mjs;
 cd - >/dev/null;
 
 chmod +x "$BASE_DIR/build/cli.mjs";
-cp "$BASE_DIR/README.md" "$BASE_DIR/LICENSE" "$BASE_DIR/index.d.ts" "$BASE_DIR/build";
+cp "$BASE_DIR/README.md" "$BASE_DIR/LICENSE" "$BASE_DIR/src/index.d.ts" "$BASE_DIR/src/webcomponent.d.ts" "$BASE_DIR/build";
 ./tools/map-package-json.mjs < "$BASE_DIR/package.json" > "$BASE_DIR/build/package.json";
 
 measure() {
