@@ -2,7 +2,9 @@
 
 Lean QR is a lightweight yet fully-featured library for generating QR Codes.
 It runs in NodeJS and all recent browsers, and includes wrapper components
-for React and Preact. Under 4kB compressed.
+for [React, Preact](https://qr.davidje13.com/docs/#extras_react), and
+[native Web Components](https://qr.davidje13.com/docs/#webcomponent).
+Under 4kB compressed.
 
 ## Features
 

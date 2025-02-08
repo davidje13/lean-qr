@@ -235,13 +235,13 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
             </section>
             <section>
               <h4>Display a QR code with fixed content:</h4>
-              <pre>&lt;<a href="#LeanQRElement"><span class="value">lean-qr</span></a> <span class="property">value</span>=<span class="string">"MY MESSAGE HERE"</span>&gt;&lt;/<span class="value">lean-qr</span>&gt;</pre>
+              <pre>&lt;<a href="#LeanQRElement"><span class="value">lean-qr</span></a> <span class="property">value</span>=<span class="string">"MY MESSAGE HERE"</span> <span class="property">style</span>=<span class="string">"width: 100px"</span>&gt;&lt;/<span class="value">lean-qr</span>&gt;</pre>
             </section>
             <section>
               <h4>Display a QR code linked to another element:</h4>
               <pre>
 &lt;<span class="value">a</span> <span class="property">id</span>=<span class="string">"mylink"</span> <span class="property">href</span>=<span class="string">"https://example.com/"</span>&gt;My link&lt;/<span class="value">a</span>&gt;
-&lt;<a href="#LeanQRElement"><span class="value">lean-qr</span></a> <span class="property">for</span>=<span class="string">"mylink"</span>&gt;&lt;/<span class="value">lean-qr</span>&gt;</pre>
+&lt;<a href="#LeanQRElement"><span class="value">lean-qr</span></a> <span class="property">for</span>=<span class="string">"mylink"</span> <span class="property">style</span>=<span class="string">"width: 100px"</span>&gt;&lt;/<span class="value">lean-qr</span>&gt;</pre>
               <p>
                 In this example, the QR code will contain <code>https://example.com/</code>. You can also link to
                 <code>&lt;input&gt;</code> elements to create a live QR code from their <code>value</code>, or any other
@@ -1224,6 +1224,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
             <h4><code>&lt;lean-qr&gt;</code> / <code>LeanQRElement</code></h4>
             <a id="LeanQRElement"></a>
             <p>Displays a QR code on the page as an image.</p>
+            <pre>&lt;<span class="value">script</span> <span class="property">src</span>=<span class="string">"./node_modules/lean-qr/webcomponent.mjs"</span> <span class="property">type</span>=<span class="string">"module"</span>&gt;&lt;/<span class="value">script</span>&gt;</pre>
             <pre>&lt;<span class="value">lean-qr</span>
   <a href="#LeanQRElement_value_for"><span class="property">value</span></a>=<span class="string">"Hello!"</span>
   <a href="#LeanQRElement_value_for"><span class="property">for</span></a>=<span class="string">"my-other-element-id"</span>
