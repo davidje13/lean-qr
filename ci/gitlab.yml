@@ -22,13 +22,19 @@ build_and_test:
     TESTRUNNER_HOST: '0.0.0.0'
   script:
     - npm install-test
+    - mv web public
+  artifacts:
+    name: public
+    expire_in: 20 minutes
+    paths:
+      - public
 
 pages:
   stage: package
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
-  script:
-    - npx rollup --config rollup.config.mjs && mv web public
+  dependencies:
+    - build_and_test
   artifacts:
     paths:
       - public
