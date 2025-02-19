@@ -53,7 +53,7 @@ export default [
   },
   {
     input: 'web/index.mjs',
-    output: { file: 'web/build/index.min.mjs', format: 'esm' },
+    output: { file: 'web/build/index.min.js', format: 'esm' },
     plugins,
   },
 ];
