@@ -22,12 +22,11 @@ build_and_test:
     TESTRUNNER_HOST: '0.0.0.0'
   script:
     - npm install-test
-    - mv web public
   artifacts:
-    name: public
+    name: web
     expire_in: 20 minutes
     paths:
-      - public
+      - web
 
 pages:
   stage: package
@@ -35,6 +34,8 @@ pages:
     - if: '$CI_COMMIT_BRANCH == "master"'
   dependencies:
     - build_and_test
+  script:
+    - mv web public
   artifacts:
     paths:
       - public
