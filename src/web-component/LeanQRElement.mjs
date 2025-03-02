@@ -13,25 +13,22 @@ const MODE_LOOKUP = new Map([
 const getCorrection = (v) => 'LMQH'.indexOf(v);
 const parseInt = Number.parseInt;
 
-const ATTRS = [
-  ['minCorrectionLevel', 'min-correction-level', getCorrection],
-  ['maxCorrectionLevel', 'max-correction-level', getCorrection],
-  ['minVersion', 'min-version', parseInt],
-  ['maxVersion', 'max-version', parseInt],
-  ['mask', 'mask', parseInt],
-  [
-    'modes',
-    'modes',
-    (v) => v.matchAll(/\w+/g).map(([m]) => MODE_LOOKUP.get(m)),
-  ],
-  ['on', 'on', parseCol],
-  ['off', 'off', parseCol],
-  ['padX', 'pad-x', parseInt],
-  ['padY', 'pad-y', parseInt],
-];
+// we use Object.entries here so that terser can mangle the property names consistently
+const ATTRS = Object.entries({
+  minCorrectionLevel: ['min-correction-level', getCorrection],
+  maxCorrectionLevel: ['max-correction-level', getCorrection],
+  minVersion: ['min-version', parseInt],
+  maxVersion: ['max-version', parseInt],
+  mask: ['mask', parseInt],
+  modes: ['modes', (v) => v.matchAll(/\w+/g).map(([m]) => MODE_LOOKUP.get(m))],
+  on: ['on', parseCol],
+  off: ['off', parseCol],
+  padX: ['pad-x', parseInt],
+  padY: ['pad-y', parseInt],
+});
 
 export class LeanQRElement extends HTMLElement {
-  static observedAttributes = ['for', 'value', ...ATTRS.map((v) => v[1])];
+  static observedAttributes = ['for', 'value', ...ATTRS.map((v) => v[1][0])];
 
   constructor() {
     super();
@@ -82,7 +79,7 @@ export class LeanQRElement extends HTMLElement {
     const target = forId ? doc.getElementById(forId) : null;
     const msg = this._getAndWatch(target) ?? this.getAttribute('value') ?? '';
     const options = { msg };
-    for (const [key, attr, mapper] of ATTRS) {
+    for (const [key, [attr, mapper]] of ATTRS) {
       const value = this.getAttribute(attr);
       if (value) {
         options[key] = mapper(value);

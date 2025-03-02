@@ -6,4 +6,4 @@ extras/node_export.mjs: sha384-gxcKIBod9TXrqf7xHrOS3ThZwQ54A3+n+zrOp6AajosZa84mU
 extras/node_export.js:  sha384-rkUFkSf/dDa3ekf3/uPbRV+8xhDfyUemCAg2nY5oVafD8C0omuXF1VxgDptH0YXe
 extras/react.mjs:       sha384-6lwJQfxJbIn3DRsoFUddPw5m/N8X+9KAGFySyZrUuk1QBHiU8RJwafqJUHjK6Y1p
 extras/react.js:        sha384-yQuponN6/Z68RGSUMenRLXOdIP7GQEKZ6Ovvi1tNHem5TOit4lFs2ai5YNfARtSP
-webcomponent.mjs:       sha384-MsLHiu3YR670LNidbrQL9zoZ5IKHXQzLEsSXfzz73UboL1Xox0GWWKu3rOA6KucN
+webcomponent.mjs:       sha384-G5ALRmAILe2xZHacSGhxBXC5/T1rCQhJTfDUffwGqWbmc9xpaco4+hjtTudgc2dD
