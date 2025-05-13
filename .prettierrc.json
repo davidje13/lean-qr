@@ -2,6 +2,7 @@
   "singleQuote": true,
   "trailingComma": "all",
   "overrides": [
+    { "files": "*.md", "options": { "proseWrap": "always" } },
     { "files": "*.html", "options": { "printWidth": 120 } },
     { "files": "*.json", "options": { "trailingComma": "none" } }
   ]
