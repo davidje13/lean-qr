@@ -176,6 +176,17 @@ code {
   border-radius: 5px;
 }
 
+math {
+  font-size: 1.1em;
+  padding: 1px 5px;
+  margin: -2px 0;
+  position: relative;
+  top: -1px;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
 table {
   margin: 20px;
   border-collapse: collapse;

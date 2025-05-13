@@ -259,7 +259,12 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
             <p>
               By default this will print the QR Code to <code>stdout</code> using ANSI escape sequences, so it is
               recommended that you set a maximum version to ensure the QR Code does not exceed the width of the screen
-              (the output width will be <code>(17 + version * 4) * 2</code> characters):
+              (the output width will be
+              <math
+                ><mo>(</mo><mrow><mn>17</mn><mo>+</mo><mi>version</mi><mo>&times;</mo><mn>4</mn></mrow
+                ><mo>)</mo><mo>&times;</mo><mn>2</mn></math
+              >
+              characters):
             </p>
             <pre>npx lean-qr --max-version 5 <span class="string">'MY MESSAGE HERE'</span></pre>
             <p>You can also customise the output format (e.g. to generate a file):</p>
@@ -405,8 +410,9 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
             <h4>Versions (<code>minVersion</code> / <code>maxVersion</code>)</h4>
             <a id="version"></a>
             <p>
-              QR Code versions refer to the size of the output (the size will be <code>17 + version * 4</code>, plus
-              outer padding).
+              QR Code versions refer to the size of the output (the size will be
+              <math><mn>17</mn><mo>+</mo><mi>version</mi><mo>&times;</mo><mn>4</mn></math
+              >, plus outer padding).
             </p>
             <p>
               By default, all versions can be used. To restrict this, you can specify a minimum and/or maximum version:
@@ -884,9 +890,10 @@ document.<span class="property">body</span>.<span class="method">append</span>(l
 }</pre>
             <p>
               Requests outside the range
-              <code
-                >0 &leq; x &lt; <a href="#Bitmap2D_size">size</a>, 0 &leq; y &lt;
-                <a href="#Bitmap2D_size">size</a></code
+              <math
+                ><mn>0</mn><mo>&leq;</mo><mi>x</mi><mo>&lt;</mo><mi><a href="#Bitmap2D_size">size</a></mi
+                ><mo>,</mo><mn>0</mn><mo>&leq;</mo><mi>y</mi><mo>&lt;</mo
+                ><mi><a href="#Bitmap2D_size">size</a></mi></math
               >
               will return <code>false</code>.
             </p>
@@ -896,7 +903,8 @@ document.<span class="property">body</span>.<span class="method">append</span>(l
             <a id="Bitmap2D_size"></a>
             <p>
               An integer representing the size of the QR Code, excluding any padding. This is equal to
-              <code>17 + version * 4</code>.
+              <math><mn>17</mn><mo>+</mo><mi>version</mi><mo>&times;</mo><mn>4</mn></math
+              >.
             </p>
           </section>
         </section>
