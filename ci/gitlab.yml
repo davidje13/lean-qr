@@ -31,7 +31,7 @@ build_and_test:
 pages:
   stage: package
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
   dependencies:
     - build_and_test
   script:
