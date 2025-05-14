@@ -377,6 +377,7 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
           </li>
           <li><a href="#errors">Error Reference</a></li>
           <li><a href="#custom-modes">Custom Modes</a></li>
+          <li><a href="#lean-qr-nano">Lean QR Nano</a></li>
         </ul>
         <section>
           <h3><code>generate(content[, options])</code></h3>
@@ -400,7 +401,10 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
     mode.<span class="property">utf8</span>,
   ],
 });</pre>
-          <p>The options shown are the defaults. See the following sections for details on their meaning.</p>
+          <p>
+            The options shown are the defaults and can be omitted unless you want to customise them. See the following
+            sections for details on their meaning.
+          </p>
           <p>
             Returns a <a href="#Bitmap2D"><code>Bitmap2D</code></a> containing the generated QR Code, or
             <a href="#errors">throws an error</a> if it is not possible to generate a QR Code with the requested content
@@ -1390,6 +1394,66 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
 );</pre>
           <p>See <a href="#mode">modes</a> for details on how to register your custom mode.</p>
         </section>
+        <section>
+          <h3>Lean QR Nano</h3>
+          <a id="lean-qr-nano"></a>
+          <p>
+            Lean QR aims to be the smallest ISO 18004 compliant library (<a href="#comparison">and it is</a>), but it
+            still supports a lot of customisation options, as well as compression of the QR code content itself. If you
+            do not need these features or message compression, you can switch to an even smaller (and API-compatible)
+            import to save a couple more kilobytes:
+          </p>
+          <pre
+            class="diff"
+          ><del><span class="keyword">import</span> { generate, correction } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;</del>
+<ins><span class="keyword">import</span> { generate, correction } <span class="keyword">from</span> <span class="string">'lean-qr/nano'</span>;</ins></pre>
+          <p>
+            The Nano version is API-compatible with the regular version of Lean QR (and can be used with all of the
+            included extras including SVG, React/Preact wrapper, and NodeJS export), with some omissions:
+          </p>
+          <ul>
+            <li>
+              <a href="#generate"><code>generate</code></a> ignores various configuration options:
+              <ul>
+                <li>
+                  <a href="#version"><code>maxVersion</code></a> is always <code>40</code>;
+                </li>
+                <li>
+                  <a href="#correction"><code>maxCorrectionLevel</code></a> is always set to
+                  <code>minCorrectionLevel</code> (i.e. the chosen <code>minCorrectionLevel</code> is used without
+                  attempting to fit better compression in the same version);
+                </li>
+                <li>
+                  <a href="#mask"><code>mask</code></a> is always <code>null</code> (i.e. the mask is chosen according
+                  to ISO 18004's requirements and cannot be overridden);
+                </li>
+                <li>
+                  <a href="#trailer"><code>trailer</code></a> is always <code>0b11101100_00010001</code>;
+                </li>
+                <li>
+                  <a href="#mode"><code>modes</code></a> is always <code>[utf8]</code> (i.e. messages will be encoded as
+                  UTF-8 by default, with ECI 26 explicitly set). Note that this means very long content (especially if
+                  it is primarily numeric or uppercase latin) may not fit when using Nano, even if it does fit when
+                  using the regular Lean QR. You can still use <a href="#custom-modes">custom modes</a>.
+                </li>
+              </ul>
+            </li>
+            <li>
+              The <a href="#Bitmap2D"><code>Bitmap2D</code></a> returned by
+              <a href="#generate"><code>generate</code></a> only supports <a href="#Bitmap2D_size"><code>.size</code></a
+              >, <a href="#Bitmap2D_get"><code>.get</code></a
+              >, and <a href="#Bitmap2D_toCanvas"><code>.toCanvas</code></a
+              >. Other methods such as <a href="#Bitmap2D_toString"><code>.toString</code></a> are not available. This
+              may make debugging more difficult.
+            </li>
+            <li>
+              The <a href="#mode"><code>mode</code></a> export is not available.
+            </li>
+            <li>
+              <a href="#generate_with"><code>generate.with</code></a> is not available.
+            </li>
+          </ul>
+        </section>
       </section>
       <section>
         <h2>Version 2 Migration Guide</h2>
@@ -1460,7 +1524,7 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                 <th>num</th>
                 <th>alnum</th>
                 <th>latin-1</th>
-                <th>utf-8</th>
+                <th>UTF-8</th>
                 <th>SJIS</th>
                 <th>automatic</th>
                 <th>text</th>
@@ -1477,8 +1541,8 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                   <a href="https://www.npmjs.com/package/lean-qr" target="_blank" rel="noopener">lean-qr</a>
                   <small>(<a href="https://qr.davidje13.com/" target="_blank" rel="noopener">demo</a>)</small>
                 </td>
-                <td class="R"><strong>7.2kB</strong> / <strong>3.7kB</strong></td>
-                <td>2800 / <strong>66</strong> / <strong>35</strong></td>
+                <td class="R">7.2kB / 3.7kB</td>
+                <td>2800 / 66 / 35</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
@@ -1493,9 +1557,26 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                 <td>-</td>
               </tr>
               <tr>
+                <td><a href="#lean-qr-nano">lean-qr/nano</a></td>
+                <td class="R">4.1kB / 2.3kB</td>
+                <td>untested</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="with plugin">&#x2705;<sup>2</sup></td>
+                <td class="C" title="with plugin">&#x2705;<sup>3</sup></td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td>-</td>
+              </tr>
+              <tr>
                 <td><a href="https://www.npmjs.com/package/qrcode" target="_blank" rel="noopener">qrcode</a></td>
                 <td class="R">23.4kB / 9.0kB</td>
-                <td><strong>3200</strong> / 59 / 23 <sup>4</sup></td>
+                <td>3200 / 59 / 23 <sup>4</sup></td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="no">&#x274C;</td>

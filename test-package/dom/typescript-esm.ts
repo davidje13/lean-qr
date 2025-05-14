@@ -1,4 +1,5 @@
-import { generate, mode } from 'lean-qr';
+import { generate, correction, mode } from 'lean-qr';
+import { generate as generateNano } from 'lean-qr/nano';
 import { toSvgSource } from 'lean-qr/extras/svg';
 import { toPngBuffer } from 'lean-qr/extras/node_export';
 import { readError } from 'lean-qr/extras/errors';
@@ -22,7 +23,14 @@ const url = code.toDataURL({
 });
 process.stdout.write(url);
 
-const code2 = generate(mode.numeric('123'), { minVersion: 3 });
+const code2 = generate(mode.numeric('123'), {
+  minVersion: 3,
+  maxVersion: 10,
+  minCorrectionLevel: correction.M,
+  maxCorrectionLevel: correction.M,
+  mask: 5,
+  trailer: 5,
+});
 const svgSource = toSvgSource(code2);
 process.stdout.write(svgSource);
 const pngBuffer = toPngBuffer(code);
@@ -113,3 +121,37 @@ mode.shift_jis(1);
 
 // @ts-expect-error
 readError();
+
+const nanoCode = generateNano('foo');
+nanoCode.toCanvas(canvas, { on: [0, 0, 0], off: [255, 255, 255, 0] });
+
+const nanoSvgSource = toSvgSource(nanoCode);
+process.stdout.write(nanoSvgSource);
+const nanoPngBuffer = toPngBuffer(nanoCode);
+process.stdout.write(nanoPngBuffer.BYTES_PER_ELEMENT.toString());
+
+generateNano(mode.numeric('123'), {
+  minVersion: 3,
+  minCorrectionLevel: correction.M,
+});
+
+// @ts-expect-error
+generateNano(7);
+
+// @ts-expect-error
+generateNano('foo', { maxCorrectionLevel: correction.H });
+
+// @ts-expect-error
+generateNano('foo', { maxVersion: 5 });
+
+// @ts-expect-error
+generateNano('foo', { mask: 5 });
+
+// @ts-expect-error
+generateNano('foo', { trailer: 5 });
+
+// @ts-expect-error
+nanoCode.toString({ on: 'y', off: 'n' });
+
+// @ts-expect-error
+nanoCode.toDataURL();

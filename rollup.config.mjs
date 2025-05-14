@@ -43,6 +43,25 @@ export default [
     ],
   },
   {
+    input: 'src/nano.mjs',
+    output: [
+      { file: 'build/nano.mjs', format: 'esm' },
+      { file: 'build/nano.js', format: 'cjs' },
+    ],
+    plugins: [
+      strip('exclude-nano'),
+      terser({
+        format: { ascii_only: true },
+        mangle: {
+          properties: {
+            keep_quoted: 'strict',
+            regex: /^_|^(toImageData)$/,
+          },
+        },
+      }),
+    ],
+  },
+  {
     input: 'bin/cli.mjs',
     external: [/\/src\//],
     output: {

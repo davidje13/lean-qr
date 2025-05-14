@@ -15,6 +15,7 @@ export const Bitmap2D = (
   },
 
   // begin-exclude-webcomponent
+  // begin-exclude-nano
   toString({ on = '##', off = '  ', lf = '\n', padX = 4, padY = 4 } = {}) {
     let r = '';
     for (let y = -padY; y < size + padY; ++y) {
@@ -25,6 +26,7 @@ export const Bitmap2D = (
     }
     return r;
   },
+  // end-exclude-nano
   // end-exclude-webcomponent
 
   toImageData(
@@ -56,6 +58,7 @@ export const Bitmap2D = (
   },
 
   // begin-exclude-webcomponent
+  // begin-exclude-nano
   toDataURL({ type = 'image/png', scale = 1, ...options } = {}) {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -78,5 +81,6 @@ export const Bitmap2D = (
     );
     return canvas.toDataURL(type, 1);
   },
+  // end-exclude-nano
   // end-exclude-webcomponent
 });

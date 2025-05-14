@@ -146,6 +146,38 @@ pre {
   overflow-x: auto;
 }
 
+pre.diff {
+  position: relative;
+  padding-left: 35px;
+}
+
+pre ins {
+  background: #ddffdd;
+  text-decoration: none;
+}
+pre ins::before {
+  content: '+';
+}
+pre del {
+  background: #ffdddd;
+  text-decoration: rgba(0, 0, 0, 0.7) line-through 2px;
+}
+pre del::before {
+  content: '-';
+}
+pre ins::before,
+pre del::before {
+  position: absolute;
+  left: 10px;
+}
+pre ins,
+pre del {
+  display: inline-block;
+  margin: 0 -10px 0 -35px;
+  padding: 0 10px 0 35px;
+  min-width: 100%;
+}
+
 pre .keyword {
   color: #0000cc;
 }

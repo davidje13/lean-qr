@@ -1,4 +1,5 @@
 import { correction, generate } from 'lean-qr';
+import { generate as generateNano } from 'lean-qr/nano';
 import { makeAsyncComponent, makeSyncComponent } from 'lean-qr/extras/react';
 import { toSvgDataURL } from 'lean-qr/extras/svg';
 import { createElement, render } from 'preact';
@@ -16,6 +17,9 @@ render(<SyncQRComponent content="Hello!" />, document.body);
 
 makeAsyncComponent(framework, generate, { minVersion: 2 });
 makeSyncComponent(framework, generate, toSvgDataURL, { minVersion: 2 });
+
+makeAsyncComponent(framework, generateNano);
+makeSyncComponent(framework, generateNano, toSvgDataURL);
 
 render(
   <AsyncQRComponent

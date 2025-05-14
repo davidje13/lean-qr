@@ -1,4 +1,5 @@
 import LeanQR = require('lean-qr');
+import LeanQRNano = require('lean-qr/nano');
 import Svg = require('lean-qr/extras/svg');
 import NodeExport = require('lean-qr/extras/node_export');
 import Errors = require('lean-qr/extras/errors');
@@ -23,3 +24,9 @@ NodeExport.toPngBuffer('123');
 
 // @ts-expect-error
 Errors.readError();
+
+const nanoCode = LeanQRNano.generate('foo');
+process.stdout.write(Svg.toSvgSource(nanoCode));
+
+// @ts-expect-error
+LeanQRNano.generate(0);

@@ -1,4 +1,5 @@
-const { generate } = require('lean-qr');
+const { generate, correction, mode } = require('lean-qr');
+const { generate: generateNano } = require('lean-qr/nano');
 const { toSvgSource, toSvgDataURL } = require('lean-qr/extras/svg');
 const { toPngBuffer } = require('lean-qr/extras/node_export');
 const {
@@ -61,4 +62,25 @@ const expected = `-----------------------------
 const sample = generate('LEAN-QR LIBRARY').toString({ on: 'o', off: '-' });
 if (sample !== expected) {
   throw new Error("require('lean-qr') produced incorrect output\n" + sample);
+}
+
+const config = { minCorrectionLevel: correction.max };
+const sample2 = generate(mode.utf8('LEAN-QR LIBRARY'), config);
+const sample2Nano = generateNano('LEAN-QR LIBRARY', config);
+if (!equal(sample2Nano, sample2)) {
+  throw new Error("require('lean-qr/nano') produced incorrect output");
+}
+
+function equal(a, b) {
+  if (a.size !== b.size) {
+    return false;
+  }
+  for (let x = 0; x < a.size; ++x) {
+    for (let y = 0; y < a.size; ++y) {
+      if (a.get(x, y) !== b.get(x, y)) {
+        return false;
+      }
+    }
+  }
+  return true;
 }

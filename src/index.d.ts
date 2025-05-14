@@ -88,7 +88,7 @@ declare module 'lean-qr' {
     utf8: ModeFactory;
   }>;
 
-  type Correction = number & { readonly _: unique symbol };
+  export type Correction = number & { readonly _: unique symbol };
   export const correction: Readonly<{
     min: Correction;
     L: Correction;
@@ -117,8 +117,34 @@ declare module 'lean-qr' {
   export const generate: Generate;
 }
 
+declare module 'lean-qr/nano' {
+  import type { Correction, Bitmap2D as FullBitmap2D, Mode } from 'lean-qr';
+  export { correction } from 'lean-qr';
+
+  export type { Correction, Mode };
+
+  export interface Bitmap2D {
+    readonly size: number;
+    get(x: number, y: number): boolean;
+    toCanvas: FullBitmap2D['toCanvas'];
+  }
+
+  export interface GenerateOptions {
+    minCorrectionLevel?: Correction;
+    minVersion?: number;
+  }
+
+  export function generate(
+    data: Mode | string,
+    options?: Readonly<GenerateOptions>,
+  ): Bitmap2D;
+}
+
 declare module 'lean-qr/extras/svg' {
-  import type { Bitmap2D } from 'lean-qr';
+  interface Bitmap2D {
+    readonly size: number;
+    get(x: number, y: number): boolean;
+  }
 
   export interface SVGOptions {
     on?: string;
@@ -151,7 +177,12 @@ declare module 'lean-qr/extras/svg' {
 }
 
 declare module 'lean-qr/extras/node_export' {
-  import type { RGBA, Bitmap2D } from 'lean-qr';
+  type RGBA = readonly [number, number, number, number?];
+
+  interface Bitmap2D {
+    readonly size: number;
+    get(x: number, y: number): boolean;
+  }
 
   export interface PNGOptions {
     on?: RGBA;
@@ -173,7 +204,12 @@ declare module 'lean-qr/extras/node_export' {
 }
 
 declare module 'lean-qr/extras/react' {
-  import type { ImageDataOptions, GenerateOptions, GenerateFn } from 'lean-qr';
+  import type {
+    Bitmap2D,
+    GenerateOptions,
+    ImageDataOptions,
+    Mode,
+  } from 'lean-qr';
   import type { SVGOptions, toSvgDataURLFn } from 'lean-qr/extras/svg';
 
   export interface AsyncFramework<T> {
@@ -205,7 +241,10 @@ declare module 'lean-qr/extras/react' {
 
   export const makeAsyncComponent: <T>(
     framework: Readonly<AsyncFramework<T>>,
-    generate: GenerateFn,
+    generate: (
+      data: Mode | string,
+      options?: Readonly<GenerateOptions>,
+    ) => { readonly toCanvas: Bitmap2D['toCanvas'] },
     defaultProps?: Readonly<Partial<AsyncQRComponentProps>>,
   ) => AsyncQRComponent<T>;
 
@@ -230,7 +269,10 @@ declare module 'lean-qr/extras/react' {
 
   export const makeSyncComponent: <T>(
     framework: Readonly<SyncFramework<T>>,
-    generate: GenerateFn,
+    generate: (
+      data: Mode | string,
+      options?: Readonly<GenerateOptions>,
+    ) => { readonly size: number; get(x: number, y: number): boolean },
     toSvgDataURL: toSvgDataURLFn,
     defaultProps?: Readonly<Partial<SyncQRComponentProps>>,
   ) => SyncQRComponent<T>;

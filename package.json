@@ -12,6 +12,11 @@
       "import": "./index.mjs",
       "types": "./index.d.ts"
     },
+    "./nano": {
+      "require": "./nano.js",
+      "import": "./nano.mjs",
+      "types": "./index.d.ts"
+    },
     "./extras/svg": {
       "require": "./extras/svg.js",
       "import": "./extras/svg.mjs",
