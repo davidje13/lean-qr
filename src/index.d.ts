@@ -14,39 +14,93 @@ declare module 'lean-qr' {
     getContext(type: '2d'): Context2DLike<DataT> | null;
   }
 
+  /**
+   * A colour in `[red, green, blue, alpha]` format (all values from 0 to 255).
+   * If alpha is omitted, it is assumed to be 255 (opaque).
+   */
   export type RGBA = readonly [number, number, number, number?];
 
   export interface Bitmap1D {
+    /**
+     * Appends a sequence of bits.
+     *
+     * @param value an integer containing the bits to append (big endian).
+     * @param bits the number of bits to read from `value`. Must be between 1 and 24.
+     */
     push(value: number, bits: number): void;
   }
 
   export interface StringOptions {
+    /** the text to use for modules which are 'on' (typically black) */
     on?: string;
+
+    /** the text to use for modules which are 'off' (typically white) */
     off?: string;
+
+    /** the text to use for linefeeds between rows */
     lf?: string;
+
+    /** the padding to apply on the left and right of the output (populated with 'off' modules) */
     padX?: number;
+
+    /** the padding to apply on the top and bottom of the output (populated with 'off' modules) */
     padY?: number;
   }
 
   export interface ImageDataOptions {
+    /** the colour to use for modules which are 'on' (typically black) */
     on?: RGBA;
+
+    /** the colour to use for modules which are 'off' (typically white) */
     off?: RGBA;
+
+    /** the padding to apply on the left and right of the output (filled with 'off') */
     padX?: number;
+
+    /** the padding to apply on the top and bottom of the output (filled with 'off') */
     padY?: number;
   }
 
   export interface Bitmap2D {
+    /** the width / height of the QR code in modules (excluding any padding) */
     readonly size: number;
 
+    /**
+     * Read the state of a module from the QR code.
+     *
+     * @param x the x coordinate to read. Can be negative / out of bounds.
+     * @param y the y coordinate to read. Can be negative / out of bounds.
+     * @returns true if the requested module is set (i.e. typically black)
+     */
     get(x: number, y: number): boolean;
 
+    /**
+     * Generate a string containing the QR code, suitable for displaying in a
+     * terminal environment. Generally, you should customise on and off to use
+     * the ANSI escapes of your target terminal for better rendering.
+     *
+     * @param options optional configuration for the display.
+     */
     toString(options?: Readonly<StringOptions>): string;
 
+    /**
+     * Generate image data containing the QR code, at a scale of 1 pixel per
+     * module. Use this if you need more control than toCanvas allows.
+     *
+     * @param context a context to use for creating the image data.
+     * @param options optional configuration for the display.
+     */
     toImageData<DataT extends ImageDataLike>(
       context: Context2DLike<DataT>,
       options?: Readonly<ImageDataOptions>,
     ): DataT;
 
+    /**
+     * Generate a `data:image/*` URL for the QR code.
+     *
+     * @param options optional configuration for the output.
+     * @returns a string suitable for use as the `src` of an `img` tag.
+     */
     toDataURL(
       options?: Readonly<
         ImageDataOptions & {
@@ -56,6 +110,15 @@ declare module 'lean-qr' {
       >,
     ): string;
 
+    /**
+     * Populate a given canvas with the QR code, at a scale of 1 pixel per
+     * module. Set image-rendering: pixelated and scale the canvas using CSS
+     * for a large image. Automatically resizes the canvas to fit the QR code
+     * if necessary.
+     *
+     * @param canvas the canvas to populate.
+     * @param options optional configuration for the display.
+     */
     toCanvas(
       canvas: CanvasLike<ImageDataLike>,
       options?: Readonly<ImageDataOptions>,
@@ -66,74 +129,125 @@ declare module 'lean-qr' {
   export type Mode = (data: Bitmap1D, version: number) => void;
   export interface ModeFactory {
     (value: string): Mode;
+    /** a function which returns true when given a character which the current mode can represent */
     test(string: string): boolean;
+    /** a function which returns an estimate of the number of bits required to encode a given value */
     est(value: string, version: number): number;
+    /** an optional ECI which must be active for this mode to be interpreted correctly by a reader */
     eci?: number;
   }
 
   interface ModeAutoOptions {
+    /** a list of modes which can be considered when encoding a message */
     modes?: ReadonlyArray<ModeFactory>;
   }
 
   export const mode: Readonly<{
+    /** automatically picks the most optimal combination of modes for the requested message */
     auto(value: string, options?: Readonly<ModeAutoOptions>): Mode;
+    /** concatenates multiple modes together */
     multi(...modes: ReadonlyArray<Mode>): Mode;
+    /** sets the Extended Channel Interpretation for the message from this point onwards */
     eci(id: number): Mode;
+    /** supports `0-9` and stores 3 characters per 10 bits */
     numeric: ModeFactory;
+    /** supports `0-9A-Z $%*+-./:` and stores 2 characters per 11 bits */
     alphaNumeric: ModeFactory;
+    /** arbitrary byte data, typically combined with `eci` */
     bytes(data: Uint8Array | ReadonlyArray<number>): Mode;
+    /** supports 7-bit ASCII and stores 1 character per 8 bits with no ECI */
     ascii: ModeFactory;
+    /** supports 8-bit ISO-8859-1 and stores 1 character per 8 bits with ECI 3 */
     iso8859_1: ModeFactory;
+    /** supports double-byte Shift-JIS characters stores 1 character per 13 bits */
     shift_jis: ModeFactory;
+    /** supports variable length UTF-8 with ECI 26 */
     utf8: ModeFactory;
   }>;
 
   export type Correction = number & { readonly _: unique symbol };
   export const correction: Readonly<{
+    /** minimum possible correction level (same as L) */
     min: Correction;
+    /** ~7.5% error tolerance, ~25% data overhead */
     L: Correction;
+    /** ~15% error tolerance, ~60% data overhead */
     M: Correction;
+    /** ~22.5% error tolerance, ~120% data overhead */
     Q: Correction;
+    /** ~30% error tolerance, ~190% data overhead */
     H: Correction;
+    /** maximum possible correction level (same as H) */
     max: Correction;
   }>;
 
   export interface GenerateOptions extends ModeAutoOptions {
+    /** the minimum correction level to use (higher levels may still be used if the chosen version has space) */
     minCorrectionLevel?: Correction;
+    /** the maximum correction level to use */
     maxCorrectionLevel?: Correction;
+    /** the minimum version (size) of code to generate (must be between 1 and 40) */
     minVersion?: number;
+    /** the maximum version (size) of code to generate (must be between 1 and 40) */
     maxVersion?: number;
+    /** a mask to use on the QR code (should be left as `null` for ISO compliance but may be changed for artistic effect) */
     mask?: null | Mask;
+    /** padding bits to use for extra space in the QR code (should be left as the default for ISO compliance but may be changed for artistic effect) */
     trailer?: number;
   }
 
+  /**
+   * Generate a QR code.
+   *
+   * @param data either a string, or a pre-encoded mode.
+   * @param options optional configuration for the QR code.
+   * @returns the requested QR code.
+   */
   export type GenerateFn = (
     data: Mode | string,
     options?: Readonly<GenerateOptions>,
   ) => Bitmap2D;
   interface Generate extends GenerateFn {
+    /**
+     * Creates a scoped `generate` function which considers additional modes
+     * when using auto encoding.
+     *
+     * @param modes the modes to add.
+     * @returns a `generate` function which will additionally consider the
+     * given modes when using auto encoding.
+     */
     with(...modes: ReadonlyArray<ModeFactory>): GenerateFn;
   }
   export const generate: Generate;
 }
 
 declare module 'lean-qr/nano' {
-  import type { Correction, Bitmap2D as FullBitmap2D, Mode } from 'lean-qr';
-  export { correction } from 'lean-qr';
+  import type {
+    Correction,
+    Bitmap2D as FullBitmap2D,
+    GenerateOptions as FullGenerateOptions,
+    Mode,
+  } from 'lean-qr';
+  import { correction as fullCorrection } from 'lean-qr';
 
   export type { Correction, Mode };
 
-  export interface Bitmap2D {
-    readonly size: number;
-    get(x: number, y: number): boolean;
-    toCanvas: FullBitmap2D['toCanvas'];
-  }
+  export const correction: Pick<typeof fullCorrection, 'L' | 'M' | 'Q' | 'H'>;
 
-  export interface GenerateOptions {
-    minCorrectionLevel?: Correction;
-    minVersion?: number;
-  }
+  export type Bitmap2D = Pick<FullBitmap2D, 'size' | 'get' | 'toCanvas'>;
 
+  export type GenerateOptions = Pick<
+    FullGenerateOptions,
+    'minCorrectionLevel' | 'minVersion'
+  >;
+
+  /**
+   * Generate a QR code.
+   *
+   * @param data either a string, or a pre-encoded mode.
+   * @param options optional configuration for the QR code.
+   * @returns the requested QR code.
+   */
   export function generate(
     data: Mode | string,
     options?: Readonly<GenerateOptions>,
@@ -141,76 +255,134 @@ declare module 'lean-qr/nano' {
 }
 
 declare module 'lean-qr/extras/svg' {
-  interface Bitmap2D {
-    readonly size: number;
-    get(x: number, y: number): boolean;
-  }
+  import type { Bitmap2D as FullBitmap2D } from 'lean-qr';
+
+  type Bitmap2D = Pick<FullBitmap2D, 'size' | 'get'>;
 
   export interface SVGOptions {
+    /** the colour to use for modules which are 'on' (typically black) */
     on?: string;
+    /** the colour to use for modules which are 'off' (typically white) */
     off?: string;
+    /** the padding to apply on the left and right of the output (filled with 'off') */
     padX?: number;
+    /** the padding to apply on the top and bottom of the output (filled with 'off') */
     padY?: number;
+    /** a width to apply to the resulting image (overrides `scale`) */
     width?: number | null;
+    /** a height to apply to the resulting image (overrides `scale`) */
     height?: number | null;
+    /** a scale to apply to the resulting image (`scale` pixels = 1 module) */
     scale?: number;
   }
 
-  export const toSvgPath: (code: Bitmap2D) => string;
+  /**
+   * Generate the raw outline of the QR code for use in an existing SVG.
+   *
+   * @param code the QR code to convert.
+   * @returns a string suitable for passing to the `d` attribute of a `path`.
+   */
+  export function toSvgPath(code: Bitmap2D): string;
 
-  export const toSvg: (
+  /**
+   * Generate an SVG element which can be added to the DOM.
+   *
+   * @param code the QR code to convert.
+   * @param options optional configuration for the display.
+   * @returns an SVG element.
+   */
+  export function toSvg(
     code: Bitmap2D,
     target: Document | SVGElement,
     options?: Readonly<SVGOptions>,
-  ) => SVGElement;
+  ): SVGElement;
 
-  export const toSvgSource: (
+  /**
+   * Generate an SVG document which can be exported to a file or served from a
+   * web server.
+   *
+   * @param code the QR code to convert.
+   * @param options optional configuration for the display.
+   * @returns an SVG document.
+   */
+  export function toSvgSource(
     code: Bitmap2D,
-    options?: Readonly<SVGOptions & { xmlDeclaration?: boolean }>,
-  ) => string;
+    options?: Readonly<
+      SVGOptions & {
+        /** `true` to include an XML declaration at the start of the source (for standalone documents which will not be embedded inside another document) */
+        xmlDeclaration?: boolean;
+      }
+    >,
+  ): string;
 
-  export type toSvgDataURLFn = (
+  /**
+   * Generate a `data:image/svg+xml` URL.
+   *
+   * @param code the QR code to convert.
+   * @param options optional configuration for the display.
+   * @returns a string suitable for use as the `src` of an `img` tag.
+   */
+  export function toSvgDataURL(
     code: Bitmap2D,
     options?: Readonly<SVGOptions>,
-  ) => string;
-  export const toSvgDataURL: toSvgDataURLFn;
+  ): string;
 }
 
 declare module 'lean-qr/extras/node_export' {
-  type RGBA = readonly [number, number, number, number?];
+  import type { RGBA, Bitmap2D as FullBitmap2D } from 'lean-qr';
 
-  interface Bitmap2D {
-    readonly size: number;
-    get(x: number, y: number): boolean;
-  }
+  type Bitmap2D = Pick<FullBitmap2D, 'size' | 'get'>;
 
   export interface PNGOptions {
+    /** the colour to use for modules which are 'on' (typically black) */
     on?: RGBA;
+    /** the colour to use for modules which are 'off' (typically white) */
     off?: RGBA;
+    /** the padding to apply on the left and right of the output (filled with 'off') */
     padX?: number;
+    /** the padding to apply on the top and bottom of the output (filled with 'off') */
     padY?: number;
+    /** a scale to apply to the resulting image (`scale` pixels = 1 module) */
     scale?: number;
   }
 
-  export const toPngBuffer: (
+  /**
+   * Generate a PNG document which can be exported to a file or served from a
+   * web server.
+   *
+   * @param code the QR code to convert.
+   * @param options optional configuration for the display.
+   * @returns a PNG document.
+   */
+  export function toPngBuffer(
     code: Bitmap2D,
     options?: Readonly<PNGOptions>,
-  ) => Uint8Array;
+  ): Uint8Array;
 
-  export const toPngDataURL: (
+  /**
+   * Generate a `data:image/png` URL.
+   *
+   * @param code the QR code to convert.
+   * @param options optional configuration for the display.
+   * @returns a string suitable for use as the `src` of an `img` tag.
+   */
+  export function toPngDataURL(
     code: Bitmap2D,
     options?: Readonly<PNGOptions>,
-  ) => string;
+  ): string;
 }
 
 declare module 'lean-qr/extras/react' {
   import type {
-    Bitmap2D,
+    Bitmap2D as FullBitmap2D,
     GenerateOptions,
     ImageDataOptions,
     Mode,
   } from 'lean-qr';
-  import type { SVGOptions, toSvgDataURLFn } from 'lean-qr/extras/svg';
+  import type {
+    SVGOptions,
+    toSvgDataURL as toSvgDataURLFn,
+  } from 'lean-qr/extras/svg';
 
   export interface AsyncFramework<T> {
     createElement: (
@@ -239,14 +411,28 @@ declare module 'lean-qr/extras/react' {
     props: Readonly<AsyncQRComponentProps>,
   ) => T;
 
-  export const makeAsyncComponent: <T>(
+  /**
+   * Generate an asynchronous QR component (rendering to a `canvas`).
+   * You should call this just once, in the global scope.
+   *
+   * This is not suitable for server-side rendering (use `makeSyncComponent`
+   * instead).
+   *
+   * @param framework the framework to use (e.g. `React`).
+   * @param generate the `generate` function to use
+   * (from `lean-qr` or `lean-qr/nano`).
+   * @param defaultProps optional default properties to apply when the
+   * component is used (overridden by properties set on use).
+   * @returns a component which can be rendered elsewhere.
+   */
+  export function makeAsyncComponent<T>(
     framework: Readonly<AsyncFramework<T>>,
     generate: (
       data: Mode | string,
       options?: Readonly<GenerateOptions>,
-    ) => { readonly toCanvas: Bitmap2D['toCanvas'] },
+    ) => Pick<FullBitmap2D, 'toCanvas'>,
     defaultProps?: Readonly<Partial<AsyncQRComponentProps>>,
-  ) => AsyncQRComponent<T>;
+  ): AsyncQRComponent<T>;
 
   export interface SyncFramework<T> {
     createElement: (
@@ -267,17 +453,41 @@ declare module 'lean-qr/extras/react' {
 
   export type SyncQRComponent<T> = (props: Readonly<SyncQRComponentProps>) => T;
 
-  export const makeSyncComponent: <T>(
+  /**
+   * Generate a synchronous QR component (rendering to an SVG).
+   * You should call this just once, in the global scope.
+   *
+   * This is best suited for server-side rendering (prefer
+   * `makeAsyncComponent` if you only need client-side rendering).
+   *
+   * @param framework the framework to use (e.g. `React`).
+   * @param generate the `generate` function to use
+   * (from `lean-qr` or `lean-qr/nano`).
+   * @param toSvgDataURL the `toSvgDataURL` function to use
+   * (from `lean-qr/extras/svg`).
+   * @param defaultProps optional default properties to apply when the
+   * component is used (overridden by properties set on use).
+   * @returns a component which can be rendered elsewhere.
+   */
+  export function makeSyncComponent<T>(
     framework: Readonly<SyncFramework<T>>,
     generate: (
       data: Mode | string,
       options?: Readonly<GenerateOptions>,
-    ) => { readonly size: number; get(x: number, y: number): boolean },
-    toSvgDataURL: toSvgDataURLFn,
+    ) => Pick<FullBitmap2D, 'size' | 'get'>,
+    toSvgDataURL: typeof toSvgDataURLFn,
     defaultProps?: Readonly<Partial<SyncQRComponentProps>>,
-  ) => SyncQRComponent<T>;
+  ): SyncQRComponent<T>;
 }
 
 declare module 'lean-qr/extras/errors' {
-  export const readError: (error: unknown) => string;
+  /**
+   * Convert an error into a human-readable message. This is intended for use
+   * with Lean QR errors, but will return somewhat meaningful messages for
+   * other errors too.
+   *
+   * @param error the error to convert.
+   * @returns a human-readable message explaining the error.
+   */
+  export function readError(error: unknown): string;
 }
