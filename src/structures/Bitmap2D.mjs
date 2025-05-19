@@ -10,10 +10,6 @@ export const Bitmap2D = (
 
   get: (x, y) => x >= 0 && x < size && !!(_data[y * size + x] & 1),
 
-  _set(x, y, value) {
-    _data[y * size + x] = value;
-  },
-
   // begin-exclude-webcomponent
   // begin-exclude-nano
   toString({ on = '##', off = '  ', lf = '\n', padX = 4, padY = 4 } = {}) {

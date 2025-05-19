@@ -1,13 +1,14 @@
-import { Bitmap2D } from '../structures/Bitmap2D.mjs';
+import { makeBitmap } from '../test-helpers/makeBitmap.mjs';
 import { toPngBuffer } from './node_export.mjs';
 import { PNG } from 'pngjs';
 
 describe('toPngBuffer', () => {
   it('returns a valid PNG containing the code', () => {
-    const bitmap = Bitmap2D(3);
-    bitmap._set(0, 0, true);
-    bitmap._set(1, 0, true);
-    bitmap._set(1, 1, true);
+    const bitmap = makeBitmap(`
+      ##-
+      -#-
+      ---
+    `);
 
     const pngData = toPngBuffer(bitmap);
 
@@ -28,10 +29,11 @@ describe('toPngBuffer', () => {
   });
 
   it('scales up the code', () => {
-    const bitmap = Bitmap2D(3);
-    bitmap._set(0, 0, true);
-    bitmap._set(1, 0, true);
-    bitmap._set(1, 1, true);
+    const bitmap = makeBitmap(`
+      ##-
+      -#-
+      ---
+    `);
 
     const pngData = toPngBuffer(bitmap, { scale: 3 });
 
@@ -57,10 +59,11 @@ describe('toPngBuffer', () => {
   });
 
   it('uses custom on and off colours if given', () => {
-    const bitmap = Bitmap2D(3);
-    bitmap._set(0, 0, true);
-    bitmap._set(1, 0, true);
-    bitmap._set(1, 1, true);
+    const bitmap = makeBitmap(`
+      ##-
+      -#-
+      ---
+    `);
 
     const pngData = toPngBuffer(bitmap, {
       on: [10, 20, 30],

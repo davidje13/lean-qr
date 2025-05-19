@@ -12,7 +12,7 @@ compressed.
 - Lightweight (less than 4kB compressed, ~7kB uncompressed, no dependencies);
   - still too big? There's also an
     [even smaller "nano" export](https://qr.davidje13.com/docs/#lean-qr-nano)
-    which has reduced features to fit into ~2.3kB compressed, ~4kB uncompressed!
+    which has reduced features to fit into ~2kB compressed, ~4kB uncompressed!
 - Simple yet flexible API, with sensible defaults for all configuration;
 - Supports all [standard encodings](https://qr.davidje13.com/docs/#mode)
   out-of-the box:

@@ -1,16 +1,12 @@
 import { makeUint8Array } from '../util.mjs';
 
-const LOG = makeUint8Array(512);
-LOG[0] = 1;
-for (let i = 0, v = 1; i < 255; LOG[++i] = v) {
-  LOG[v + 256] = i;
-  v *= 2;
-  if (v & 256) {
-    v ^= 285;
-  }
+// lookup table for galois field of size 256, modulo 285
+const LOG = makeUint8Array(511);
+for (let i = 0, v = 1; i < 255; v = (v * 2) ^ ((v > 127) * 285)) {
+  LOG[(LOG[v + 255] = i++)] = v;
 }
-const e = (x) => LOG[x % 255]; // assume x is never negative
-const ln = (x) => LOG[x + 256];
+export const e = (x) => LOG[x % 255]; // assume x is never negative
+export const ln = (x) => LOG[x + 255];
 
 export const mult256PolyLn = (p1Ln, p2Ln) => {
   const result = makeUint8Array(p1Ln.length + p2Ln.length - 1);

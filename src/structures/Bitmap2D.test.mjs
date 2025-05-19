@@ -12,10 +12,10 @@ describe('Bitmap2D', () => {
 
   it('stores pixels', () => {
     const bmp = Bitmap2D(10);
-    bmp._set(5, 7, 3);
-    bmp._set(9, 1, 2);
-    bmp._set(8, 2, 1);
-    bmp._set(4, 3, 0);
+    set(bmp, 5, 7, 3);
+    set(bmp, 9, 1, 2);
+    set(bmp, 8, 2, 1);
+    set(bmp, 4, 3, 0);
     expect(bmp.get(5, 7)).toEqual(true);
     expect(bmp.get(9, 1)).toEqual(false);
     expect(bmp.get(8, 2)).toEqual(true);
@@ -24,10 +24,10 @@ describe('Bitmap2D', () => {
 
   it('stores mask status pixels', () => {
     const bmp = Bitmap2D(10);
-    bmp._set(5, 7, 3);
-    bmp._set(9, 1, 2);
-    bmp._set(8, 2, 1);
-    bmp._set(4, 3, 0);
+    set(bmp, 5, 7, 3);
+    set(bmp, 9, 1, 2);
+    set(bmp, 8, 2, 1);
+    set(bmp, 4, 3, 0);
     expect(bmp._data[75]).toEqual(3);
     expect(bmp._data[19]).toEqual(2);
     expect(bmp._data[28]).toEqual(1);
@@ -36,18 +36,18 @@ describe('Bitmap2D', () => {
 
   it('copies an existing bitmap', () => {
     const bmp1 = Bitmap2D(3);
-    bmp1._set(0, 1, true);
+    set(bmp1, 0, 1, true);
     const bmp2 = Bitmap2D(bmp1.size, bmp1._data);
 
     expect(bmp2.size).toEqual(3);
     expect(bmp2.get(0, 0)).toEqual(false);
     expect(bmp2.get(0, 1)).toEqual(true);
 
-    bmp2._set(1, 0, true);
+    set(bmp2, 1, 0, true);
     expect(bmp2.get(1, 0)).toEqual(true);
     expect(bmp1.get(1, 0)).toEqual(false);
 
-    bmp1._set(1, 1, true);
+    set(bmp1, 1, 1, true);
     expect(bmp2.get(1, 1)).toEqual(false);
   });
 
@@ -242,13 +242,17 @@ describe('Bitmap2D', () => {
 });
 
 const TEST_IMAGE = Bitmap2D(3);
-TEST_IMAGE._set(0, 0, true);
-TEST_IMAGE._set(0, 1, true);
-TEST_IMAGE._set(0, 2, true);
-TEST_IMAGE._set(2, 2, true);
+set(TEST_IMAGE, 0, 0, true);
+set(TEST_IMAGE, 0, 1, true);
+set(TEST_IMAGE, 0, 2, true);
+set(TEST_IMAGE, 2, 2, true);
 
 const VIRTUAL_CANVAS = {
   createImageData: (width, height) => {
     return { width, height, data: new Uint8ClampedArray(width * height * 4) };
   },
 };
+
+function set({ _data, size }, x, y, value) {
+  _data[y * size + x] = value;
+}

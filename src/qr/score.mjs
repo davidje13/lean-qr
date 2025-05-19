@@ -73,11 +73,10 @@ export const scoreCode = ({ size, _data }, score = 0, totalOn = 0) => {
           score += 40;
         }
         if (cur !== last) {
-          consec = 1;
-          last = cur;
-        } else if (++consec > 4) {
-          score += consec < 6 ? 3 : 1;
+          consec = 0;
         }
+        last = cur;
+        score += ++consec === 5 ? 3 : consec > 5;
       }
     }
     if (i) {

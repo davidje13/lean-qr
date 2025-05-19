@@ -6,24 +6,7 @@ import {
   scoreImbalance,
 } from './score.mjs';
 import { Bitmap2D } from '../structures/Bitmap2D.mjs';
-
-function makeBitmap(lines) {
-  const bmp = Bitmap2D(lines.length);
-  lines.forEach((line, y) => {
-    for (let x = 0; x < line.length; ++x) {
-      bmp._set(x, y, line[x] !== ' ');
-    }
-  });
-  return bmp;
-}
-
-function makeBitmap1D(line, shift = 0, vert = false) {
-  const bmp = Bitmap2D(line.length);
-  for (let i = 0; i < line.length; ++i) {
-    bmp._set(vert ? shift : i, vert ? i : shift, line[i] !== ' ');
-  }
-  return bmp;
-}
+import { makeBitmap } from '../test-helpers/makeBitmap.mjs';
 
 // Source: https://www.thonky.com/qr-code-tutorial/data-masking
 const sample = makeBitmap([
@@ -297,3 +280,13 @@ describe('scoreCode', () => {
     expect(scoreCode(sample)).toEqual(180 + 47 * 3 + 3 * 40 + 0);
   });
 });
+
+function makeBitmap1D(line, shift = 0, vert = false) {
+  const bmp = Bitmap2D(line.length);
+  for (let i = 0; i < line.length; ++i) {
+    const x = vert ? shift : i;
+    const y = vert ? i : shift;
+    bmp._data[y * bmp.size + x] = line[i] !== ' ';
+  }
+  return bmp;
+}
