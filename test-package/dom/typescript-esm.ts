@@ -130,7 +130,7 @@ process.stdout.write(nanoSvgSource);
 const nanoPngBuffer = toPngBuffer(nanoCode);
 process.stdout.write(nanoPngBuffer.BYTES_PER_ELEMENT.toString());
 
-generateNano(mode.numeric('123'), {
+generateNano('123', {
   minVersion: 3,
   minCorrectionLevel: correction.M,
 });
@@ -140,6 +140,9 @@ generateNano(7);
 
 // @ts-expect-error
 generateNano('foo', { maxCorrectionLevel: correction.H });
+
+// @ts-expect-error
+generateNano(mode.numeric('123'));
 
 // @ts-expect-error
 generateNano('foo', { maxVersion: 5 });

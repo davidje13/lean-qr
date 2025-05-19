@@ -1,28 +1,30 @@
-import { Bitmap1D } from '../structures/Bitmap1D.mjs';
 import { Bitmap2D } from '../structures/Bitmap2D.mjs';
 import { masks } from './options/masks.mjs';
 import { correctionData, minCorrection } from './options/corrections.mjs';
 import { calculateEC } from './errorCorrection.mjs';
 import { drawFrame, getPath, drawCode, applyMask } from './draw.mjs';
 import { scoreCode } from './score.mjs';
+import {
+  ERROR_NO_DATA,
+  ERROR_TOO_MUCH_DATA,
+  ERROR_UNENCODABLE,
+  makeUint8Array,
+} from '../util.mjs';
 
 const baseCache = [];
 
 export const generate = (
-  modeData = '',
-  { minCorrectionLevel = minCorrection, minVersion = 1 } = {},
+  content = fail(ERROR_NO_DATA),
+  { minCorrectionLevel: correctionLevel = minCorrection, minVersion = 1 } = {},
 ) => {
-  if (typeof modeData === 'string') {
-    const enc = new TextEncoder().encode(modeData);
-    modeData = (data, version) => {
-      // set ECI 26 and begin bytes section
-      data.push((0b0111 << 12) | (26 << 4) | 0b0100, 16);
-      data.push(enc.length, version > 9 ? 16 : 8);
-      enc.forEach((b) => data.push(b, 8));
-    };
+  if (typeof content !== 'string') {
+    fail(ERROR_UNENCODABLE);
   }
+  content = new TextEncoder().encode(content);
+  const data = makeUint8Array(2957); // max capacity of any code + 1 for ease of padding
+  data.set([0b01110001, 0b10100100, content.length >> 8]); // set ECI 26 and begin bytes section
 
-  for (let version = minVersion, dataLengthBits = 0; version <= 40; ++version) {
+  for (let version = minVersion; version < 41; ++version) {
     let base = baseCache[version];
     if (!base) {
       baseCache[version] = base = Bitmap2D(version * 4 + 17);
@@ -30,42 +32,40 @@ export const generate = (
       base.p = getPath(base);
     }
     const versionCorrection = correctionData(version, base.p.length >> 3);
-    const correction = versionCorrection(minCorrectionLevel);
-    if (correction._capacityBits < dataLengthBits) {
-      continue;
+    const correction = versionCorrection(correctionLevel);
+    if (correction._capacityBits >= (3 + (version > 9) + content.length) * 8) {
+      let p = version > 9 ? 3 : 2;
+      data[p++] = content.length;
+
+      // utf8 content
+      data.set(content, p);
+
+      // padding
+      for (
+        p += content.length - 1;
+        p < 2954;
+        data.set([0b11101100, 0b00010001], (p += 2))
+      );
+
+      const code = Bitmap2D(base.size, base._data);
+      drawCode(code, base.p, calculateEC(data, correction));
+
+      // (we could save ~400 more bytes here by hard-coding a specific mask and
+      // avoiding the need to call scoreCode, but then we would not be ISO 18004
+      // compliant and certain patterns could make things difficult for readers)
+      //applyMask(code, masks[0], 0, correctionLevel);
+      //return code;
+
+      // pick best mask
+      return masks
+        .map((m, maskId) => {
+          const masked = Bitmap2D(code.size, code._data);
+          applyMask(masked, m, maskId, correctionLevel);
+          masked.s = scoreCode(masked);
+          return masked;
+        })
+        .sort((a, b) => a.s - b.s)[0];
     }
-
-    const data = Bitmap1D();
-    modeData(data, version);
-    dataLengthBits = data._bits;
-
-    if (correction._capacityBits < dataLengthBits) {
-      continue;
-    }
-    data.push(0b0000, 4);
-    data._bits = (data._bits + 7) & ~7; // pad with 0s to the next byte
-    while (data._bits < correction._capacityBits) {
-      data.push(0b11101100_00010001, 16);
-    }
-
-    const code = Bitmap2D(base.size, base._data);
-    drawCode(code, base.p, calculateEC(data._bytes, correction));
-
-    // (we could save ~400 more bytes here by hard-coding a specific mask and
-    // avoiding the need to call scoreCode, but then we would not be ISO 18004
-    // compliant and certain patterns could make things difficult for readers)
-    //applyMask(code, masks[0], 0, minCorrection);
-    //return code;
-
-    // pick best mask
-    return masks
-      .map((m, maskId) => {
-        const masked = Bitmap2D(code.size, code._data);
-        applyMask(masked, m, maskId, minCorrectionLevel);
-        masked.s = scoreCode(masked);
-        return masked;
-      })
-      .reduce((best, masked) => (masked.s < best.s ? masked : best));
   }
-  throw new Error('too much data');
+  fail(ERROR_TOO_MUCH_DATA);
 };

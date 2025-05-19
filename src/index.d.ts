@@ -226,11 +226,10 @@ declare module 'lean-qr/nano' {
     Correction,
     Bitmap2D as FullBitmap2D,
     GenerateOptions as FullGenerateOptions,
-    Mode,
   } from 'lean-qr';
   import { correction as fullCorrection } from 'lean-qr';
 
-  export type { Correction, Mode };
+  export type { Correction };
 
   export const correction: Pick<typeof fullCorrection, 'L' | 'M' | 'Q' | 'H'>;
 
@@ -249,7 +248,7 @@ declare module 'lean-qr/nano' {
    * @returns the requested QR code.
    */
   export function generate(
-    data: Mode | string,
+    data: string,
     options?: Readonly<GenerateOptions>,
   ): Bitmap2D;
 }
@@ -377,7 +376,6 @@ declare module 'lean-qr/extras/react' {
     Bitmap2D as FullBitmap2D,
     GenerateOptions,
     ImageDataOptions,
-    Mode,
   } from 'lean-qr';
   import type {
     SVGOptions,
@@ -428,7 +426,7 @@ declare module 'lean-qr/extras/react' {
   export function makeAsyncComponent<T>(
     framework: Readonly<AsyncFramework<T>>,
     generate: (
-      data: Mode | string,
+      data: string,
       options?: Readonly<GenerateOptions>,
     ) => Pick<FullBitmap2D, 'toCanvas'>,
     defaultProps?: Readonly<Partial<AsyncQRComponentProps>>,
@@ -472,7 +470,7 @@ declare module 'lean-qr/extras/react' {
   export function makeSyncComponent<T>(
     framework: Readonly<SyncFramework<T>>,
     generate: (
-      data: Mode | string,
+      data: string,
       options?: Readonly<GenerateOptions>,
     ) => Pick<FullBitmap2D, 'size' | 'get'>,
     toSvgDataURL: typeof toSvgDataURLFn,

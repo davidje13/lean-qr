@@ -11,12 +11,9 @@ const LONG_MESSAGE =
 
 it(
   'nano generate matches the output of full generate',
-  ({ message, options, fullMessage, fullOptions }) => {
+  ({ message, options, fullOptions }) => {
     const nanoCode = generateNano(message, options);
-    const fullCode = generateFull(
-      fullMessage ?? message,
-      fullOptions ?? options,
-    );
+    const fullCode = generateFull(mode.utf8(message), fullOptions ?? options);
     expect(nanoCode).toMatchImage(
       fullCode.toString({ on: '#', off: ' ', padX: 0, padY: 0 }),
     );
@@ -27,21 +24,19 @@ it(
         name: 'plain text is encoded as utf8',
         message: 'hello',
         options: { minCorrectionLevel: correction.max },
-        fullMessage: mode.utf8('hello'),
       },
       {
         name: 'custom correction level',
         message: 'hello',
         options: { minCorrectionLevel: correction.M },
-        fullMessage: mode.utf8('hello'),
         fullOptions: {
           minCorrectionLevel: correction.M,
           maxCorrectionLevel: correction.M,
         },
       },
       {
-        name: 'explicit ASCII message with fixed parameters',
-        message: mode.ascii('hello'),
+        name: 'fixed parameters',
+        message: 'hello',
         options: { minVersion: 1, minCorrectionLevel: correction.Q },
         fullOptions: {
           minCorrectionLevel: correction.Q,
@@ -50,12 +45,12 @@ it(
       },
       {
         name: 'long message',
-        message: mode.ascii(LONG_MESSAGE),
+        message: LONG_MESSAGE,
         options: { minCorrectionLevel: correction.max },
       },
       {
         name: 'allows larger versions to be forced',
-        message: mode.ascii(LONG_MESSAGE),
+        message: LONG_MESSAGE,
         options: { minVersion: 10, minCorrectionLevel: correction.max },
       },
     ],
