@@ -31,6 +31,7 @@ td {
   --background: #ffffff;
   --color: #000000;
   --focus: #0080ff;
+  --row-highlight: #e7ecf5;
   --margin: 10px;
 
   --hTop: 0.5rem;
@@ -258,7 +259,7 @@ thead {
 }
 
 tbody tr:hover td {
-  background: #80a0d033 !important;
+  background: var(--row-highlight) !important;
 }
 
 td {
@@ -276,13 +277,13 @@ td.C {
 
 .wide {
   overflow-x: auto;
-  margin: 30px calc((100% - min(calc(100vw - 20px), 1500px)) / 2);
+  margin: 30px calc((100% - min(calc(100vw - 20px), 1600px)) / 2);
   padding: 10px 0;
 }
 
 .wide table {
   white-space: nowrap;
-  margin: 0 0 10px;
+  margin: 0 auto 10px;
 }
 .wide th {
   font-size: 0.8em;
@@ -490,7 +491,7 @@ pre a:hover {
 .tabcontent h3::after,
 .tabcontent h4::after,
 .tabcontent h5::after {
-  background: var(--border);
+  background: var(--tab-border);
 }
 
 #t1:checked ~ .tabcontent[data-for='t1'],
@@ -510,6 +511,7 @@ pre a:hover {
     --background: #333333;
     --color: #f8f8f8;
     --focus: #0080ff;
+    --row-highlight: #404050;
   }
 
   h1 object {
