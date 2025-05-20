@@ -9,12 +9,20 @@ on:
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { node: '20' }
+          - { node: '22' }
+          - { node: '24' }
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: ${{ matrix.node }}
       - name: Test
         run: npm install-test

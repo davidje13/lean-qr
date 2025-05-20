@@ -7,9 +7,8 @@ stages:
   - test
   - package
 
-build_and_test:
+.build_and_test: &build_and_test
   stage: test
-  image: node:18
   services:
     - name: selenium/standalone-firefox
       alias: firefox
@@ -22,6 +21,18 @@ build_and_test:
     TESTRUNNER_HOST: '0.0.0.0'
   script:
     - npm install-test
+
+node:20:
+  <<: *build_and_test
+  image: node:20
+
+node:22:
+  <<: *build_and_test
+  image: node:22
+
+node:24:
+  <<: *build_and_test
+  image: node:24
   artifacts:
     name: web
     expire_in: 20 minutes
@@ -33,7 +44,9 @@ pages:
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
   dependencies:
-    - build_and_test
+    - node:20
+    - node:22
+    - node:24
   script:
     - mv web public
   artifacts:
