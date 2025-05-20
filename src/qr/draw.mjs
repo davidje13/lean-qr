@@ -102,11 +102,11 @@ export const applyMask = ({ size, _data }, mask, maskId, ecLevel) => {
   const info = ((ecLevel ^ 1) << 3) | maskId;
   let pattern = 0b101010000010010 ^ remBinPoly(info, 0b10100110111, 10);
   for (let i = 0; i++ < 8; pattern >>= 1) {
-    _data[(i - (i < 7)) * size + 8] = pattern;
-    _data[9 * size - i] = pattern;
+    _data[(i - (i < 7)) * size + 8] = pattern & 1;
+    _data[9 * size - i] = pattern & 1;
   }
   for (let i = 8; --i, pattern; pattern >>= 1) {
-    _data[8 * size + i - (i < 7)] = pattern;
-    _data[(size - i) * size + 8] = pattern;
+    _data[8 * size + i - (i < 7)] = pattern & 1;
+    _data[(size - i) * size + 8] = pattern & 1;
   }
 };

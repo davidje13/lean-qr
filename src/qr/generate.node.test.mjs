@@ -95,6 +95,13 @@ describe('generate', () => {
     const code = generate(mode.ascii(LONG_MESSAGE), { minVersion: 10 });
     expect(code.size).toEqual(10 * 4 + 17);
   });
+
+  it('does not set unexpected bits in the bitmap', () => {
+    const code = generate('test');
+    for (const v of code._data) {
+      expect(v).toBeLessThan(0b100);
+    }
+  });
 });
 
 describe('known examples', () => {

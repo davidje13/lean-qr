@@ -1,10 +1,10 @@
+import { scoreCode } from './score.mjs';
 import {
-  scoreCode,
   scoreLines,
   countBoxes,
   countPatterns,
   scoreImbalance,
-} from './score.mjs';
+} from './score-test-comparisons.mjs';
 import { Bitmap2D } from '../structures/Bitmap2D.mjs';
 import { makeBitmap } from '../test-helpers/makeBitmap.mjs';
 
@@ -248,33 +248,37 @@ describe('scoreImbalance', () => {
   });
 });
 
+const ALL_SAMPLES = [
+  sample,
+  hLines,
+  vLines,
+  longLine,
+  brokenLines,
+  smallBoxes,
+  overlapBoxes,
+  dither,
+  leftRight,
+  allOn,
+  allOff,
+];
+
 describe('scoreCode', () => {
-  it(
-    'combines all scores',
-    {
-      parameters: [
-        sample,
-        hLines,
-        vLines,
-        longLine,
-        brokenLines,
-        smallBoxes,
-        overlapBoxes,
-        dither,
-        leftRight,
-        allOn,
-        allOff,
-      ],
-    },
-    (code) => {
-      expect(scoreCode(code)).toEqual(
-        scoreLines(code) +
-          countBoxes(code) * 3 +
-          countPatterns(code) * 40 +
-          scoreImbalance(code) * 10,
-      );
-    },
-  );
+  it('combines all scores', { parameters: ALL_SAMPLES }, (code) => {
+    expect(scoreCode(code)).toEqual(
+      scoreLines(code) +
+        countBoxes(code) * 3 +
+        countPatterns(code) * 40 +
+        scoreImbalance(code) * 10,
+    );
+  });
+
+  it('ignores masking bits', { parameters: ALL_SAMPLES }, (code) => {
+    const withMask = Bitmap2D(code.size, code._data);
+    for (let i = 0; i < withMask._data.length; ++i) {
+      withMask._data[i] |= i & 0b00000010;
+    }
+    expect(scoreCode(withMask)).toEqual(scoreCode(code));
+  });
 
   it('matches a known sample score', () => {
     expect(scoreCode(sample)).toEqual(180 + 47 * 3 + 3 * 40 + 0);
