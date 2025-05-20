@@ -44,10 +44,7 @@ export default [
   },
   {
     input: 'src/nano.mjs',
-    output: [
-      { file: 'build/nano.mjs', format: 'esm' },
-      { file: 'build/nano.js', format: 'cjs' },
-    ],
+    output: { file: 'build/nano.mjs', format: 'esm' },
     plugins: [
       strip('exclude-nano'),
       terser({

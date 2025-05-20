@@ -13,7 +13,7 @@
       "types": "./index.d.ts"
     },
     "./nano": {
-      "require": "./nano.js",
+      "require": "./nano.mjs",
       "import": "./nano.mjs",
       "types": "./index.d.ts"
     },
@@ -33,6 +33,7 @@
       "types": "./index.d.ts"
     },
     "./webcomponent": {
+      "require": "./webcomponent.mjs",
       "import": "./webcomponent.mjs",
       "types": "./webcomponent.d.ts"
     }

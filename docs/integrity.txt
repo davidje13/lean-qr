@@ -1,7 +1,6 @@
 index.mjs:              sha384-t+94URBG0X4n9UfMx4w+QAFX9G5Y8+sQvj2nlz5/7vgweO7sAhX2e1wk7txC16Cj
 index.js:               sha384-sBqXcYWazfHB7xekYG3pcTE62PVw4Kl4DAS71zhVPwESkFJejqoVwhKX3YiaWA1D
 nano.mjs:               sha384-4Ws+pC9t1jZdJyS4XRFsLI8NQrlUL/bk+6sGUIT4I98XlDPBx/ga682gAmemIMTw
-nano.js:                sha384-KAO3o16GYwgymuasHAzBiUEIxQU60JsPXppIMvWCGNHes8S0Yu5Y2PVB4YWdtQaI
 extras/svg.mjs:         sha384-3pkh2mVqJfcbY5hcEp4KTGcaWZN1EeJfqKCr6Xnz9qUkgXb54ocau/pBlClVACyL
 extras/svg.js:          sha384-FElcxc5DxhRR9QjjMNlQ/0C1dTlVogFRx7Fj/sgOeUR0oKA2yvVXMqaSX6vDQsVo
 extras/node_export.mjs: sha384-l3U32OuSe/3qIQkqn4i0VGLdCeJCpTBUd+bqIbNX7Z1HSC4iEz10feCrWIyi2PqB
