@@ -16,13 +16,11 @@ export const correctionData = (version, totalBytes) => (correctionIndex) => {
   const g1s = gs - ecs;
 
   return {
-    _capacityBits: (g1n * g1s + g2n * (g1s + 1)) * 8,
-    _groups: g2n
-      ? [
-          [g1n, g1s],
-          [g2n, g1s + 1],
-        ]
-      : [[g1n, g1s]],
+    _capacityBytes: g1n * g1s + g2n * g1s + g2n,
+    _groups: [
+      [g1n, g1s],
+      [g2n, g1s + 1],
+    ],
     _ecSize: ecs,
   };
 };

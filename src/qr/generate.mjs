@@ -54,7 +54,10 @@ export const generate = (
       base.p = getPath(base);
     }
     const versionCorrection = correctionData(version, base.p.length >> 3);
-    if (versionCorrection(minCorrectionLevel)._capacityBits < dataLengthBits) {
+    if (
+      versionCorrection(minCorrectionLevel)._capacityBytes * 8 <
+      dataLengthBits
+    ) {
       continue;
     }
 
@@ -64,12 +67,11 @@ export const generate = (
 
     for (let cl = maxCorrectionLevel; cl >= minCorrectionLevel; --cl) {
       const correction = versionCorrection(cl);
-      if (correction._capacityBits < dataLengthBits) {
+      if (correction._capacityBytes * 8 < dataLengthBits) {
         continue;
       }
-      data.push(0b0000, 4);
-      data._bits = (data._bits + 7) & ~7; // pad with 0s to the next byte
-      while (data._bits < correction._capacityBits) {
+      data._bits = (dataLengthBits + 11) & ~7; // pad with 1 nibble, then to the next byte
+      while (data._bits < correction._capacityBytes * 8) {
         data.push(trailer, 16);
       }
 

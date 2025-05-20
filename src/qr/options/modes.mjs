@@ -46,12 +46,12 @@ const numeric = makeMode(
       data.push(+value.slice(i, i + 3), 10);
     }
     if (i < value.length - 1) {
-      data.push(+value.slice(i, i + 2), 7);
+      data.push(+value.slice(i), 7);
     } else if (i < value.length) {
       data.push(+value[i], 4);
     }
   },
-  /./.test.bind(/[0-9]/),
+  (x) => /[0-9]/.test(x),
   (count, version) =>
     14 + (version > 26) * 2 + (version > 9) * 2 + (count * 10) / 3,
 );
@@ -79,6 +79,7 @@ const ascii = makeMode(
   (count, version) => 12 + (version > 9) * 8 + count * 8,
 );
 ascii._composable = true;
+ascii._skipIfECI = true; // bespoke optimisation: ascii is never better if ECI has already been set
 
 const iso8859_1 = makeMode(
   ascii,
@@ -155,25 +156,23 @@ export const mode = {
        * speed rather than code size.
        */
 
-      let id = 1;
-      for (const mode of modes) {
+      const scopedModes = modes.map((mode, i) => {
         const cache = new Map();
-        mode._id = id <<= 1;
-        mode._switchCost = mode.est('', version);
-        mode._est = mode._estimateByLength
-          ? (start, end) => {
-              const l = end - start;
-              const n = cache.get(l) ?? mode._estimateByLength(l, version);
-              cache.set(l, n);
-              return n;
-            }
-          : (start, end) => {
-              const s = value.slice(start, end);
-              const n = cache.get(s) ?? mode.est(s, version);
-              cache.set(s, n);
-              return n;
-            };
-      }
+        const calcCached = (k, fn) => {
+          if (!cache.has(k)) {
+            cache.set(k, fn(k, version));
+          }
+          return cache.get(k);
+        };
+        return {
+          _base: mode,
+          _id: 1 << i,
+          _switchCost: mode.est('', version),
+          _est: mode._estimateByLength
+            ? (start, end) => calcCached(end - start, mode._estimateByLength)
+            : (start, end) => calcCached(value.slice(start, end), mode.est),
+        };
+      });
 
       let cur = [{ _cost: 0 }];
       let start = 0;
@@ -182,8 +181,8 @@ export const mode = {
       for (const c of [...value, '']) {
         let active = 0;
         if (c) {
-          for (const mode of modes) {
-            if (mode.test(c)) {
+          for (const mode of scopedModes) {
+            if (mode._base.test(c)) {
               active |= mode._id;
             }
           }
@@ -192,50 +191,43 @@ export const mode = {
           if (prevActive !== -1) {
             const ecis = new Set(cur.map((p) => p._eci));
             const next = [];
-            for (const mode of modes.filter((m) => prevActive & m._id)) {
-              const fragCost = mode._est(start, end);
-              for (const eci of mode.eci ?? ecis) {
-                if (mode === ascii && eci) {
-                  // bespoke optimisation: ascii is never better if ECI has already been set
-                  continue;
-                }
-                let best;
-                for (const p of cur) {
-                  if (p._eci === eci || mode.eci) {
-                    const join = p._mode === mode && p._eci === eci;
-                    const prev = join ? p._prev : p;
-                    const joinedStart = join ? p._start : start;
+            for (const { _base, _switchCost, _est, _id } of scopedModes) {
+              if (prevActive & _id) {
+                const fragCost = _est(start, end);
+                for (const eci of _base.eci ?? ecis) {
+                  if (!_base._skipIfECI || !eci) {
+                    let best;
+                    for (const p of cur) {
+                      if (p._eci === eci || _base.eci) {
+                        const join = p._base === _base && p._eci === eci;
+                        const prev = join ? p._prev : p;
 
-                    let cost;
-                    if (mode._composable && join) {
-                      cost = p._cost + fragCost - mode._switchCost;
-                    } else {
-                      cost =
-                        prev._cost +
-                        (prev._eci !== eci) * 12 +
-                        (joinedStart === start
-                          ? fragCost
-                          : mode._est(joinedStart, end));
+                        const cost =
+                          _base._composable && join
+                            ? p._cost + fragCost - _switchCost
+                            : prev._cost +
+                              (prev._eci !== eci) * 12 + // cost of switching ECI
+                              (join
+                                ? _est(join ? p._start : start, end)
+                                : fragCost);
+                        if (!best || cost < best._cost) {
+                          best = {
+                            _start: join ? p._start : start,
+                            _prev: prev,
+                            _base: _base,
+                            _eci: eci,
+                            _end: end,
+                            _cost: cost,
+                          };
+                        }
+                      }
                     }
-                    if (!best || cost < best._cost) {
-                      best = {
-                        _start: joinedStart,
-                        _prev: prev,
-                        _mode: mode,
-                        _eci: eci,
-                        _end: end,
-                        _cost: cost,
-                      };
+                    if (best) {
+                      next.push(best);
                     }
                   }
                 }
-                if (best) {
-                  next.push(best);
-                }
               }
-            }
-            if (!next.length) {
-              fail(ERROR_UNENCODABLE);
             }
             cur = next;
           }
@@ -244,16 +236,19 @@ export const mode = {
         }
         end += c.length;
       }
+      if (!cur.length) {
+        fail(ERROR_UNENCODABLE);
+      }
 
       const parts = [];
       for (
         let part = cur.reduce((a, b) => (b._cost < a._cost ? b : a));
-        part._mode;
+        part._base;
         part = part._prev
       ) {
-        parts.unshift(part._mode(value.slice(part._start, part._end)));
+        parts.push(part._base(value.slice(part._start, part._end)));
       }
-      parts.forEach((enc) => enc(data, version));
+      parts.reverse().forEach((enc) => enc(data, version));
     },
   // begin-exclude-webcomponent
   multi,

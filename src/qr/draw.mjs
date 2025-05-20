@@ -1,11 +1,12 @@
 const remBinPoly = (num, den, denBitsMinusOne) => {
   num <<= denBitsMinusOne;
+  let r = num;
   for (let i = 0x8000000; (i >>= 1); ) {
-    if (num & i) {
-      num ^= den * (i >> denBitsMinusOne);
+    if (r & i) {
+      r ^= den * (i >> denBitsMinusOne);
     }
   }
-  return num;
+  return r | num;
 };
 
 export const drawFrame = ({ size, _data }, version) => {
@@ -43,13 +44,12 @@ export const drawFrame = ({ size, _data }, version) => {
   }
   if (version > 6) {
     for (
-      let dat = (version << 12) | remBinPoly(version, 0b1111100100101, 12),
-        j = 0;
-      j < 6;
+      let dat = remBinPoly(version, 0b1111100100101, 12), j = 1;
+      j < 7;
       ++j
     ) {
       for (let i = 12; i-- > 9; dat >>= 1) {
-        _data[j * size + size - i] = 2 | (dat & 1);
+        _data[j * size - i] = 2 | (dat & 1);
       }
     }
   }
@@ -100,8 +100,7 @@ export const applyMask = ({ size, _data }, mask, maskId, ecLevel) => {
     }
   }
   const info = ((ecLevel ^ 1) << 3) | maskId;
-  let pattern =
-    0b101010000010010 ^ ((info << 10) | remBinPoly(info, 0b10100110111, 10));
+  let pattern = 0b101010000010010 ^ remBinPoly(info, 0b10100110111, 10);
   for (let i = 0; i++ < 8; pattern >>= 1) {
     _data[(i - (i < 7)) * size + 8] = pattern;
     _data[9 * size - i] = pattern;

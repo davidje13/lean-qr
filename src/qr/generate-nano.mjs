@@ -33,7 +33,7 @@ export const generate = (
     }
     const versionCorrection = correctionData(version, base.p.length >> 3);
     const correction = versionCorrection(correctionLevel);
-    if (correction._capacityBits >= (3 + (version > 9) + content.length) * 8) {
+    if (correction._capacityBytes >= 3 + (version > 9) + content.length) {
       let p = version > 9 ? 3 : 2;
       data[p++] = content.length;
 
