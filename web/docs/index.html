@@ -33,22 +33,20 @@
           <div class="tabcontent" data-for="t1">
             <h3>NodeJS</h3>
             <p>Install the dependency:</p>
-            <pre>npm install --save <span class="string">lean-qr</span></pre>
+            <pre><code>npm install --save <span class="string">lean-qr</span></code></pre>
             <section>
               <h4>Display QR Code in terminal output:</h4>
-              <pre>
-<span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+              <pre><code><span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
 
 <span class="keyword">const</span> code = <a href="#generate"><span class="method">generate</span></a>(<span class="string">'LEAN-QR LIBRARY'</span>);
 
 process.<span class="property">stdout</span>.<span class="method">write</span>(code.<a href="#Bitmap2D_toString"><span class="method">toString</span></a>({
   <span class="property">on</span>: <span class="string">'\u001B[7m  \u001B[0m'</span>, <span class="comment">// ANSI escape: inverted</span>
-}));</pre>
+}));</code></pre>
             </section>
             <section>
               <h4>Generate SVG source for serving from a webserver:</h4>
-              <pre>
-<span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+              <pre><code><span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
 <span class="keyword">import</span> { toSvgSource } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
 
 <span class="keyword">const</span> code = <a href="#generate"><span class="method">generate</span></a>(<span class="string">'LEAN-QR LIBRARY'</span>);
@@ -56,17 +54,16 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
 <span class="keyword">const</span> svg = <a href="#toSvgSource"><span class="method">toSvgSource</span></a>(code, {
   <span class="comment">// set to false if you want to embed the QR Code inside a HTML document</span>
   <span class="property">xmlDeclaration</span>: <span class="value">true</span>,
-});</pre>
+});</code></pre>
             </section>
             <section>
               <h4>Generate PNG for serving from a webserver:</h4>
-              <pre>
-<span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+              <pre><code><span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
 <span class="keyword">import</span> { toPngBuffer } <span class="keyword">from</span> <span class="string">'lean-qr/extras/node_export'</span>;
 
 <span class="keyword">const</span> code = <a href="#generate"><span class="method">generate</span></a>(<span class="string">'LEAN-QR LIBRARY'</span>);
 
-<span class="keyword">const</span> png = <a href="#toPngBuffer"><span class="method">toPngBuffer</span></a>(code, { <span class="property">scale</span>: <span class="value">8</span> });</pre>
+<span class="keyword">const</span> png = <a href="#toPngBuffer"><span class="method">toPngBuffer</span></a>(code, { <span class="property">scale</span>: <span class="value">8</span> });</code></pre>
               <p>
                 Note: SVG is the recommended file export format as it will automatically scale without blurring, but you
                 can also render PNGs using the CSS: <code>image-rendering: pixelated</code>.
@@ -76,13 +73,12 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
           <div class="tabcontent" data-for="t2">
             <h3>Browser Native</h3>
             <p>Install the dependency:</p>
-            <pre>npm install --save <span class="string">lean-qr</span></pre>
+            <pre><code>npm install --save <span class="string">lean-qr</span></code></pre>
             <p>
               The recommended in-browser approach is to render directly to a <code>canvas</code> element, and size it
               using CSS:
             </p>
-            <pre>
-&lt;<span class="value">canvas</span> <span class="property">id</span>=<span class="string">"my-canvas"</span>&gt;&lt;/<span class="value">canvas</span>&gt;
+            <pre><code>&lt;<span class="value">canvas</span> <span class="property">id</span>=<span class="string">"my-canvas"</span>&gt;&lt;/<span class="value">canvas</span>&gt;
 
 &lt;<span class="value">script</span> <span class="property">type</span>=<span class="string">"module"</span>&gt;
   <span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
@@ -96,12 +92,11 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
     <span class="property">width</span>: <span class="value">100%</span>;
     <span class="property">image-rendering</span>: <span class="value">pixelated</span>;
   }
-&lt;/<span class="value">style</span>&gt;</pre>
+&lt;/<span class="value">style</span>&gt;</code></pre>
             <section>
               <h4>Providing a download link</h4>
               <p>If you want to offer users a way to download the QR code as an image file, you can use a data URL:</p>
-              <pre>
-&lt;<span class="value">a</span> <span class="property">href</span>=<span class="string">"#"</span> <span class="property">download</span>=<span class="string">"qr.png"</span> <span class="property">id</span>=<span class="string">"download-link"</span>&gt;Download&lt;/<span class="value">a</span>&gt;
+              <pre><code>&lt;<span class="value">a</span> <span class="property">href</span>=<span class="string">"#"</span> <span class="property">download</span>=<span class="string">"qr.png"</span> <span class="property">id</span>=<span class="string">"download-link"</span>&gt;Download&lt;/<span class="value">a</span>&gt;
 
 &lt;<span class="value">script</span> <span class="property">type</span>=<span class="string">"module"</span>&gt;
   <span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
@@ -111,7 +106,7 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
   <span class="keyword">const</span> dataUrl = code.<a href="#Bitmap2D_toDataURL"><span class="method">toDataURL</span></a>({ <span class="property">scale</span>: <span class="value">10</span> });
   document.<span class="method">getElementById</span>(<span class="string">'download-link'</span>)
     .<span class="method">setAttribute</span>(<span class="string">'href'</span>, dataUrl);
-&lt;/<span class="value">script</span>&gt;</pre>
+&lt;/<span class="value">script</span>&gt;</code></pre>
               <p>
                 Note that providing an <a href="#toSvgDataURL">SVG</a> download is preferable for letting users scale
                 the image without it blurring, but this may not be supported by all image editors. The default format is
@@ -122,10 +117,9 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
           <div class="tabcontent" data-for="t3">
             <h3>React</h3>
             <p>Install the dependency:</p>
-            <pre>npm install --save <span class="string">lean-qr</span></pre>
+            <pre><code>npm install --save <span class="string">lean-qr</span></code></pre>
             <p>A convenience wrapper component is provided for React:</p>
-            <pre>
-<span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+            <pre><code><span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
 <span class="keyword">import</span> { makeAsyncComponent } <span class="keyword">from</span> <span class="string">'lean-qr/extras/react'</span>;
 <span class="keyword">import</span> <span class="keyword">* as</span> React <span class="keyword">from</span> <span class="string">'react'</span>;
 
@@ -138,12 +132,11 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
     Scan this QR Code!
     &lt;<span class="value">QR</span> <span class="property">content</span>=<span class="string">"LEAN-QR LIBRARY"</span> <span class="property">className</span>=<span class="string">"qr-code"</span> /&gt;
   &lt;/<span class="value">section</span>&gt;
-);</pre>
+);</code></pre>
             <p>You should apply some styling to the QR Code to set its size:</p>
-            <pre>
-<span class="string">.qr-code</span> {
+            <pre><code><span class="string">.qr-code</span> {
   <span class="property">width</span>: <span class="value">300px;</span>
-}</pre>
+}</code></pre>
             <p>
               Note that this uses <code>canvas</code> rendering, which is optimal on the client-side, but will not work
               if you want to perform server-side rendering (the QR Code will not be visible until client-side hydration
@@ -151,8 +144,7 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               <a href="#makeSyncComponent"><code>makeSyncComponent</code></a>
               instead:
             </p>
-            <pre>
-<span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+            <pre><code><span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
 <span class="keyword">import</span> { toSvgDataURL } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
 <span class="keyword">import</span> { makeSyncComponent } <span class="keyword">from</span> <span class="string">'lean-qr/extras/react'</span>;
 <span class="keyword">import</span> <span class="keyword">* as</span> React <span class="keyword">from</span> <span class="string">'react'</span>;
@@ -164,15 +156,14 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
     Scan this QR Code!
     &lt;<span class="value">QR</span> <span class="property">content</span>=<span class="string">"LEAN-QR LIBRARY"</span> <span class="property">className</span>=<span class="string">"qr-code"</span> /&gt;
   &lt;/<span class="value">section</span>&gt;
-);</pre>
+);</code></pre>
           </div>
           <div class="tabcontent" data-for="t4">
             <h3>Preact</h3>
             <p>Install the dependency:</p>
-            <pre>npm install --save <span class="string">lean-qr</span></pre>
+            <pre><code>npm install --save <span class="string">lean-qr</span></code></pre>
             <p>A convenience wrapper component is provided for Preact:</p>
-            <pre>
-<span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+            <pre><code><span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
 <span class="keyword">import</span> { makeAsyncComponent } <span class="keyword">from</span> <span class="string">'lean-qr/extras/react'</span>;
 <span class="keyword">import</span> { createElement } <span class="keyword">from</span> <span class="string">'preact'</span>;
 <span class="keyword">import</span> <span class="keyword">* as</span> hooks <span class="keyword">from</span> <span class="string">'preact/hooks'</span>;
@@ -186,12 +177,11 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
     Scan this QR Code!
     &lt;<span class="value">QR</span> <span class="property">content</span>=<span class="string">"LEAN-QR LIBRARY"</span> <span class="property">class</span>=<span class="string">"qr-code"</span> /&gt;
   &lt;/<span class="value">section</span>&gt;
-);</pre>
+);</code></pre>
             <p>You should apply some styling to the QR Code to set its size:</p>
-            <pre>
-<span class="string">.qr-code</span> {
+            <pre><code><span class="string">.qr-code</span> {
   <span class="property">width</span>: <span class="value">300px;</span>
-}</pre>
+}</code></pre>
             <p>
               If you want to reduce the build size further, you can provide just the <code>useRef</code> and
               <code>useEffect</code> hooks rather than all hooks to enable tree shaking optimisations during the build.
@@ -210,38 +200,37 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               <input type="radio" name="cdn" id="cdn2" value="node" /><label for="cdn2">CDN (jsDelivr)</label>
               <input type="radio" name="cdn" id="cdn3" value="node" /><label for="cdn3">CDN (UNPKG)</label>
               <div class="tabcontent" data-for="cdn1">
-                <pre>npm install --save <span class="string">lean-qr</span></pre>
-                <pre>&lt;<span class="value">script</span>
+                <pre><code>npm install --save <span class="string">lean-qr</span></code></pre>
+                <pre><code>&lt;<span class="value">script</span>
   <span class="property">src</span>=<span class="string">"./node_modules/lean-qr/webcomponent.mjs"</span>
   <span class="property">type</span>=<span class="string">"module"</span>
-&gt;&lt;/<span class="value">script</span>&gt;</pre>
+&gt;&lt;/<span class="value">script</span>&gt;</code></pre>
               </div>
               <div class="tabcontent" data-for="cdn2">
                 <p>Always set the <code>integrity</code> attribute for security when using a third party CDN.</p>
-                <pre>&lt;<span class="value">script</span>
+                <pre><code>&lt;<span class="value">script</span>
   <span class="property">src</span>=<span class="string">"https://cdn.jsdelivr.net/npm/lean-qr@2.5.0/webcomponent.mjs"</span>
   <span class="property">integrity</span>=<span class="string">"sha384-K3p+YoLK5MrGTZX0UnO6siMZJzIilHuW1Sje0euI6Kr2NWYWQ7YVU2ynSF0RhM72"</span>
   <span class="property">type</span>=<span class="string">"module"</span>
-&gt;&lt;/<span class="value">script</span>&gt;</pre>
+&gt;&lt;/<span class="value">script</span>&gt;</code></pre>
               </div>
               <div class="tabcontent" data-for="cdn3">
                 <p>Always set the <code>integrity</code> attribute for security when using a third party CDN.</p>
-                <pre>&lt;<span class="value">script</span>
+                <pre><code>&lt;<span class="value">script</span>
   <span class="property">src</span>=<span class="string">"https://www.unpkg.com/lean-qr@2.5.0/webcomponent.mjs"</span>
   <span class="property">integrity</span>=<span class="string">"sha384-K3p+YoLK5MrGTZX0UnO6siMZJzIilHuW1Sje0euI6Kr2NWYWQ7YVU2ynSF0RhM72"</span>
   <span class="property">type</span>=<span class="string">"module"</span>
-&gt;&lt;/<span class="value">script</span>&gt;</pre>
+&gt;&lt;/<span class="value">script</span>&gt;</code></pre>
               </div>
             </section>
             <section>
               <h4>Display a QR code with fixed content:</h4>
-              <pre>&lt;<a href="#LeanQRElement"><span class="value">lean-qr</span></a> <span class="property">value</span>=<span class="string">"MY MESSAGE HERE"</span> <span class="property">style</span>=<span class="string">"width: 100px"</span>&gt;&lt;/<span class="value">lean-qr</span>&gt;</pre>
+              <pre><code>&lt;<a href="#LeanQRElement"><span class="value">lean-qr</span></a> <span class="property">value</span>=<span class="string">"MY MESSAGE HERE"</span> <span class="property">style</span>=<span class="string">"width: 100px"</span>&gt;&lt;/<span class="value">lean-qr</span>&gt;</code></pre>
             </section>
             <section>
               <h4>Display a QR code linked to another element:</h4>
-              <pre>
-&lt;<span class="value">a</span> <span class="property">id</span>=<span class="string">"mylink"</span> <span class="property">href</span>=<span class="string">"https://example.com/"</span>&gt;My link&lt;/<span class="value">a</span>&gt;
-&lt;<a href="#LeanQRElement"><span class="value">lean-qr</span></a> <span class="property">for</span>=<span class="string">"mylink"</span> <span class="property">style</span>=<span class="string">"width: 100px"</span>&gt;&lt;/<span class="value">lean-qr</span>&gt;</pre>
+              <pre><code>&lt;<span class="value">a</span> <span class="property">id</span>=<span class="string">"mylink"</span> <span class="property">href</span>=<span class="string">"https://example.com/"</span>&gt;My link&lt;/<span class="value">a</span>&gt;
+&lt;<a href="#LeanQRElement"><span class="value">lean-qr</span></a> <span class="property">for</span>=<span class="string">"mylink"</span> <span class="property">style</span>=<span class="string">"width: 100px"</span>&gt;&lt;/<span class="value">lean-qr</span>&gt;</code></pre>
               <p>
                 In this example, the QR code will contain <code>https://example.com/</code>. You can also link to
                 <code>&lt;input&gt;</code> elements to create a live QR code from their <code>value</code>, or any other
@@ -255,7 +244,7 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               Though not recommended for production use, it is possible to use the built-in commandline interface to
               generate QR Codes from shell scripts:
             </p>
-            <pre>npx lean-qr <span class="string">'MY MESSAGE HERE'</span></pre>
+            <pre><code>npx lean-qr <span class="string">'MY MESSAGE HERE'</span></code></pre>
             <p>
               By default this will print the QR Code to <code>stdout</code> using ANSI escape sequences, so it is
               recommended that you set a maximum version to ensure the QR Code does not exceed the width of the screen
@@ -266,11 +255,11 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               >
               characters):
             </p>
-            <pre>npx lean-qr --max-version 5 <span class="string">'MY MESSAGE HERE'</span></pre>
+            <pre><code>npx lean-qr --max-version 5 <span class="string">'MY MESSAGE HERE'</span></code></pre>
             <p>You can also customise the output format (e.g. to generate a file):</p>
-            <pre>npx lean-qr --format svg <span class="string">'漢字'</span> <span class="keyword">&gt;</span> my-qr-code.svg</pre>
+            <pre><code>npx lean-qr --format svg <span class="string">'漢字'</span> <span class="keyword">&gt;</span> my-qr-code.svg</code></pre>
             <p>For full documentation, run:</p>
-            <pre>npx lean-qr --help</pre>
+            <pre><code>npx lean-qr --help</code></pre>
           </div>
         </section>
       </section>
@@ -382,8 +371,7 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
         <section>
           <h3><code>generate(content[, options])</code></h3>
           <a id="generate"></a>
-          <pre>
-<span class="keyword">import</span> { generate, correction, mode } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+          <pre><code><span class="keyword">import</span> { generate, correction, mode } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
 
 <span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
   <a href="#version"><span class="property">minVersion</span></a>: <span class="value">1</span>,
@@ -400,7 +388,7 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
     mode.<span class="property">shift_jis</span>,
     mode.<span class="property">utf8</span>,
   ],
-});</pre>
+});</code></pre>
           <p>
             The options shown are the defaults and can be omitted unless you want to customise them. See the following
             sections for details on their meaning.
@@ -421,11 +409,10 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
             <p>
               By default, all versions can be used. To restrict this, you can specify a minimum and/or maximum version:
             </p>
-            <pre>
-<span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
+            <pre><code><span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
   <span class="property">minVersion</span>: <span class="value">10</span>,
   <span class="property">maxVersion</span>: <span class="value">20</span>,
-});</pre>
+});</code></pre>
             <p>Versions must be integers in the range 1&ndash;40 (inclusive).</p>
             <p>
               If there is too much data for the <code>maxVersion</code> size, an
@@ -440,11 +427,10 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               unreadable.
             </p>
             <p>You can specify minimum and maximum correction levels:</p>
-            <pre>
-<span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
+            <pre><code><span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
   <span class="property">minCorrectionLevel</span>: correction.<span class="property">M</span>,
   <span class="property">maxCorrectionLevel</span>: correction.<span class="property">Q</span>,
-});</pre>
+});</code></pre>
             <table>
               <thead>
                 <tr>
@@ -496,10 +482,9 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               colour). To achieve this, ISO 18004 requires that the mask is chosen according to a specific algorithm
               (and this is the default behaviour), but it is also possible to explicitly specify a non-optimal mask:
             </p>
-            <pre>
-<span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
+            <pre><code><span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
   <span class="property">mask</span>: <span class="value">5</span>,
-});</pre>
+});</code></pre>
             <p>Valid masks are integers in the range 0&ndash;7 (inclusive).</p>
             <p>
               Note that this may make your QR Code more difficult to scan, and should generally be left as the default
@@ -557,8 +542,7 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               which does not support certain modes, or if you want to support a non-standard mode), you can specify a
               list of options:
             </p>
-            <pre>
-<span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
+            <pre><code><span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
   <span class="property">modes</span>: [
     mode.<span class="property">numeric</span>,
     mode.<span class="property">alphaNumeric</span>,
@@ -568,15 +552,14 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
     mode.<span class="property">utf8</span>,
     myCustomMode, <span class="comment">// see <a href="#custom-modes">Custom Modes</a> below</span>
   ],
-});</pre>
+});</code></pre>
             <p>
               Or for full control, you can define the modes before passing the content in, avoiding the automatic
               optimisation entirely:
             </p>
-            <pre>
-<span class="keyword">import</span> { generate, mode } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+            <pre><code><span class="keyword">import</span> { generate, mode } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
 
-<span class="keyword">const</span> code = <span class="method">generate</span>(mode.<span class="method">alphaNumeric</span>(<span class="string">'LEAN-QR LIBRARY'</span>));</pre>
+<span class="keyword">const</span> code = <span class="method">generate</span>(mode.<span class="method">alphaNumeric</span>(<span class="string">'LEAN-QR LIBRARY'</span>));</code></pre>
             <p>
               Note that if you specify a mode explicitly, it is your responsibility to ensure the content you are
               encoding conforms to the accepted character set. If you provide mismatched content, the resulting QR Code
@@ -628,12 +611,11 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               <h5><code>multi(...modes)</code></h5>
               <a id="mode_multi"></a>
               <p><code>mode.multi</code> enables switching modes during a message:</p>
-              <pre>
-<span class="keyword">const</span> code = <span class="method">generate</span>(mode.<span class="method">multi</span>(
+              <pre><code><span class="keyword">const</span> code = <span class="method">generate</span>(mode.<span class="method">multi</span>(
   mode.<span class="method">iso8859_1</span>(<span class="string">'https://example.com/'</span>),
   mode.<span class="method">numeric</span>(<span class="string">'123456789012345678901234567890'</span>),
   mode.<span class="method">alphaNumeric</span>(<span class="string">'/LOOKUP'</span>),
-));</pre>
+));</code></pre>
             </section>
             <section>
               <h5><code>eci(value)</code> / <code>bytes(data)</code></h5>
@@ -647,11 +629,10 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
                 >). After setting this, subsequent <code>mode.bytes</code> will be interpreted in the specified
                 character set.
               </p>
-              <pre>
-<span class="keyword">const</span> code = <span class="method">generate</span>(mode.<span class="method">multi</span>(
+              <pre><code><span class="keyword">const</span> code = <span class="method">generate</span>(mode.<span class="method">multi</span>(
   mode.<span class="method">eci</span>(<span class="value">24</span>), <span class="comment">// Arabic (Windows-1256)</span>
   mode.<span class="method">bytes</span>([<span class="value">0xD3</span>]), <span class="comment">// Shin character</span>
-));</pre>
+));</code></pre>
               <p>
                 <code>mode.eci</code> will avoid outputting additional switches if the ECI already matches the requested
                 value.
@@ -676,13 +657,12 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
                 default if you provide a plain string to <code>generate</code>, but you can also use it explicitly (e.g.
                 if you want to control part of a message but still have automatic compression for other parts):
               </p>
-              <pre>
-<span class="keyword">const</span> code = <span class="method">generate</span>(mode.<span class="method">multi</span>(
+              <pre><code><span class="keyword">const</span> code = <span class="method">generate</span>(mode.<span class="method">multi</span>(
   mode.<span class="method">auto</span>(<span class="string">'FOOBAR'</span>, {
     <span class="property">modes</span>: [mode.<span class="property">numeric</span>, mode.<span class="property">iso8859_1</span>], <span class="comment">// disallowing alphaNumeric mode</span>
   }),
   mode.<span class="method">bytes</span>([<span class="value">0x12</span>, <span class="value">0x34</span>]), <span class="comment">// finish message with non-standard custom data</span>
-));</pre>
+));</code></pre>
             </section>
           </section>
           <section>
@@ -695,10 +675,9 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               >
               &ndash; <code>0xFFFF</code>).
             </p>
-            <pre>
-<span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
+            <pre><code><span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
   <span class="property">trailer</span>: <span class="value">0x0000</span>,
-});</pre>
+});</code></pre>
             <p>
               Combining a large <a href="#version"><code>minVersion</code></a> with a trailer of
               <code>0x0000</code> will reveal the pattern of the chosen <a href="#mask"><code>mask</code></a
@@ -710,15 +689,13 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
             <h4><code>.with(...modes)</code></h4>
             <a id="generate_with"></a>
             <p>Adds one or more <a href="#custom-modes">custom modes</a> to the list of default modes.</p>
-            <pre>
-<span class="keyword">const</span> myGenerate = generate.<span class="method">with</span>(myCustomMode);
-<span class="keyword">const</span> code = <span class="method">myGenerate</span>(<span class="string">'text'</span>);</pre>
+            <pre><code><span class="keyword">const</span> myGenerate = generate.<span class="method">with</span>(myCustomMode);
+<span class="keyword">const</span> code = <span class="method">myGenerate</span>(<span class="string">'text'</span>);</code></pre>
             <p>
               This is equivalent to adding the custom mode(s) to the <a href="#mode"><code>modes</code></a> argument in
               all calls:
             </p>
-            <pre>
-<span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
+            <pre><code><span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
   <span class="property">modes</span>: [
     mode.<span class="property">numeric</span>,
     mode.<span class="property">alphaNumeric</span>,
@@ -728,13 +705,12 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
     mode.<span class="property">utf8</span>,
     myCustomMode,
   ],
-});</pre>
+});</code></pre>
             <p>
               Note that you only need to register custom modes if you want to use automatic encoding. There is no need
               to register a custom mode if you call it explicitly:
             </p>
-            <pre>
-<span class="keyword">const</span> code = <span class="method">generate</span>(<span class="method">myCustomMode</span>(<span class="string">'FOOBAR'</span>));</pre>
+            <pre><code><span class="keyword">const</span> code = <span class="method">generate</span>(<span class="method">myCustomMode</span>(<span class="string">'FOOBAR'</span>));</code></pre>
           </section>
         </section>
         <section>
@@ -748,14 +724,13 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
             <h4><code>.toString([options])</code></h4>
             <a id="Bitmap2D_toString"></a>
             <p>Converts the QR Code to a string (e.g. for printing to the terminal)</p>
-            <pre>
-console.<span class="method">log</span>(code.<span class="method">toString</span>({
+            <pre><code>console.<span class="method">log</span>(code.<span class="method">toString</span>({
   <span class="property">on</span>: <span class="string">'##'</span>,
   <span class="property">off</span>: <span class="string">'  '</span>, <span class="comment">// note: this is 2 spaces</span>
   <span class="property">lf</span>: <span class="string">'\n'</span>,
   <span class="property">padX</span>: <span class="value">4</span>,
   <span class="property">padY</span>: <span class="value">4</span>,
-}));</pre>
+}));</code></pre>
             <p>
               The options shown are the defaults. Note that for portability, the defaults only use ASCII characters, but
               this will not result in a successful read (QR Code scanners require well-defined edges between cells). As
@@ -774,8 +749,7 @@ console.<span class="method">log</span>(code.<span class="method">toString</span
                   >ANSI escape codes</a
                 >, you can use them to define the cell colour:
               </p>
-              <pre>
-<span class="comment">// Inverted "on" cells:</span>
+              <pre><code><span class="comment">// Inverted "on" cells:</span>
 console.<span class="method">log</span>(code.<span class="method">toString</span>({
   <span class="property">on</span>: <span class="string">'\u001B[7m  \u001B[0m'</span>, <span class="comment">// ANSI escape: inverted</span>
 }));
@@ -785,7 +759,7 @@ console.<span class="method">log</span>(code.<span class="method">toString</span
   <span class="property">on</span>: <span class="string">'\u001B[40m  '</span>,   <span class="comment">// ANSI escape: black background</span>
   <span class="property">off</span>: '<span class="string">\u001B[107m  '</span>, <span class="comment">// ANSI escape: white background</span>
   <span class="property">lf</span>: <span class="string">'\u001B[0m\n'</span>,    <span class="comment">// ANSI escape: default</span>
-}));</pre>
+}));</code></pre>
               <p>
                 Ensure the <code>on</code> and <code>off</code> strings have the same printed length or the resulting QR
                 Code will be misaligned.
@@ -794,25 +768,23 @@ console.<span class="method">log</span>(code.<span class="method">toString</span
                 For displays which do not support ANSI escapes, but do have a line height equal to the character height,
                 you could use Unicode box drawing characters instead:
               </p>
-              <pre>
-<span class="comment">// Unicode box drawing characters: (not recommended)</span>
+              <pre><code><span class="comment">// Unicode box drawing characters: (not recommended)</span>
 console.<span class="method">log</span>(code.<span class="method">toString</span>({
   <span class="property">on</span>: <span class="string">'\u2588\u2588'</span>,
-}));</pre>
+}));</code></pre>
             </section>
           </section>
           <section>
             <h4><code>.toCanvas(canvas[, options])</code></h4>
             <a id="Bitmap2D_toCanvas"></a>
             <p>Renders the QR Code inside an existing canvas on the page.</p>
-            <pre>
-<span class="keyword">const</span> targetCanvas = document.<span class="method">getElementById</span>(<span class="string">'my-canvas'</span>);
+            <pre><code><span class="keyword">const</span> targetCanvas = document.<span class="method">getElementById</span>(<span class="string">'my-canvas'</span>);
 code.<span class="method">toCanvas</span>(targetCanvas, {
   <span class="property">on</span>: [<span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0xFF</span>], <span class="comment">// black</span>
   <span class="property">off</span>: [<span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>], <span class="comment">// transparent</span>
   <span class="property">padX</span>: <span class="value">4</span>,
   <span class="property">padY</span>: <span class="value">4</span>,
-});</pre>
+});</code></pre>
             <p>The options shown are the defaults.</p>
             <p>
               This will replace the image in <code>targetCanvas</code> (which must be a
@@ -820,11 +792,10 @@ code.<span class="method">toCanvas</span>(targetCanvas, {
               of 1 pixel per module (the <code>canvas</code> will be resized to the correct size automatically). To
               display this image at a reasonable size, it is recommended that you use the following CSS:
             </p>
-            <pre>
-<span class="string">#my-canvas</span> {
+            <pre><code><span class="string">#my-canvas</span> {
   <span class="property">width</span>: <span class="value">100%</span>;
   <span class="property">image-rendering</span>: <span class="value">pixelated</span>;
-}</pre>
+}</code></pre>
             <p>
               The values of <code>on</code> and <code>off</code> should be arrays in
               <code>[red, green, blue, alpha?]</code> format. If <code>alpha</code> is omitted, 255 is assumed.
@@ -838,8 +809,7 @@ code.<span class="method">toCanvas</span>(targetCanvas, {
               <code>toImageData</code> instead. This returns an <code>ImageData</code> representation of the QR Code
               (created using <code>context.createImageData</code>).
             </p>
-            <pre>
-<span class="keyword">const</span> myContext = myCanvas.<span class="method">getContext</span>(<span class="string">'2d'</span>);
+            <pre><code><span class="keyword">const</span> myContext = myCanvas.<span class="method">getContext</span>(<span class="string">'2d'</span>);
 
 <span class="keyword">const</span> imageData = code.<span class="method">toImageData</span>(myContext, {
   <span class="property">on</span>: [<span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0xFF</span>], <span class="comment">// black</span>
@@ -849,15 +819,14 @@ code.<span class="method">toCanvas</span>(targetCanvas, {
 });
 
 <span class="comment">// later</span>
-myContext.<span class="method">putImageData</span>(imageData, 200, 100);</pre>
+myContext.<span class="method">putImageData</span>(imageData, 200, 100);</code></pre>
             <p>The options shown are the defaults.</p>
           </section>
           <section>
             <h4><code>.toDataURL([options])</code></h4>
             <a id="Bitmap2D_toDataURL"></a>
             <p>Returns a string which can be used as a <code>href</code>, e.g. for downloading;</p>
-            <pre>
-<span class="keyword">const</span> url = code.<span class="method">toDataURL</span>({
+            <pre><code><span class="keyword">const</span> url = code.<span class="method">toDataURL</span>({
   <span class="property">type</span>: <span class="string">'image/png'</span>,
   <span class="property">on</span>: [<span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0xFF</span>], <span class="comment">// black</span>
   <span class="property">off</span>: [<span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>], <span class="comment">// transparent</span>
@@ -869,7 +838,7 @@ myContext.<span class="method">putImageData</span>(imageData, 200, 100);</pre>
 <span class="keyword">const</span> link = document.<span class="method">createElement</span>(<span class="string">'a'</span>);
 link.<span class="method">setAttribute</span>(<span class="string">'href'</span>, url);
 link.<span class="method">setAttribute</span>(<span class="string">'download'</span>, <span class="string">'my-qr.png'</span>);
-document.<span class="property">body</span>.<span class="method">append</span>(link);</pre>
+document.<span class="property">body</span>.<span class="method">append</span>(link);</code></pre>
             <p>
               The options shown are the defaults. You will probably want to set <code>scale</code> to a larger integer
               as a convenience to your users.
@@ -885,13 +854,12 @@ document.<span class="property">body</span>.<span class="method">append</span>(l
             <h4><code>.get(x, y)</code></h4>
             <a id="Bitmap2D_get"></a>
             <p>For custom output formats, you can inspect the data directly:</p>
-            <pre>
-<span class="keyword">for</span> (<span class="keyword">let</span> y = 0; y &lt; code.<a href="#Bitmap2D_size"><span class="property">size</span></a>; y++) {
+            <pre><code><span class="keyword">for</span> (<span class="keyword">let</span> y = 0; y &lt; code.<a href="#Bitmap2D_size"><span class="property">size</span></a>; y++) {
   <span class="keyword">for</span> (<span class="keyword">let</span> x = 0; x &lt; code.<a href="#Bitmap2D_size"><span class="property">size</span></a>; x++) {
     process.<span class="property">stdout</span>.<span class="method">write</span>(code.<span class="method">get</span>(x, y) ? <span class="string">'##'</span> : <span class="string">'  '</span>);
   }
   process.<span class="property">stdout</span>.<span class="method">write</span>(<span class="string">'\n'</span>);
-}</pre>
+}</code></pre>
             <p>
               Requests outside the range
               <math
@@ -923,8 +891,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(l
             <h4><code>toSvg(code, target[, options])</code></h4>
             <a id="toSvg"></a>
             <p>Creates or replaces an <code>svg</code> element with the current QR Code</p>
-            <pre>
-<span class="keyword">import</span> { toSvg } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
+            <pre><code><span class="keyword">import</span> { toSvg } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
 
 <span class="keyword">const</span> mySvg = document.<span class="method">getElementById</span>(<span class="string">'my-svg'</span>);
 <span class="method">toSvg</span>(code, mySvg, {
@@ -935,7 +902,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(l
   <span class="property">width</span>: <span class="value">null</span>,
   <span class="property">height</span>: <span class="value">null</span>,
   <span class="property">scale</span>: <span class="value">1</span>,
-});</pre>
+});</code></pre>
             <p>The options shown are the defaults.</p>
             <p>
               This will replace the image in <code>mySvg</code> (which must be an <code>svg</code> element) with a copy
@@ -947,10 +914,9 @@ document.<span class="property">body</span>.<span class="method">append</span>(l
               If <code>target</code> is the <code>document</code> object, this will create and return a new SVG entity
               associated with the document (but not attached to it):
             </p>
-            <pre>
-<span class="keyword">const</span> mySvg = <span class="method">toSvg</span>(code, document, {<span class="comment">/* options */</span>});
+            <pre><code><span class="keyword">const</span> mySvg = <span class="method">toSvg</span>(code, document, {<span class="comment">/* options */</span>});
 
-document.<span class="property">body</span>.<span class="method">append</span>(mySvg);</pre>
+document.<span class="property">body</span>.<span class="method">append</span>(mySvg);</code></pre>
             <p>
               If <code>width</code> / <code>height</code> is given, the root SVG element will have the explicit size
               applied. If these are not specified, they will be auto-calculated by multiplying the QR Code size +
@@ -965,8 +931,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
               Like <a href="#toSvg"><code>toSvg</code></a> but returns the source code for an SVG, rather than
               manipulating DOM nodes (can be called inside NodeJS).
             </p>
-            <pre>
-<span class="keyword">import</span> { toSvgSource } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
+            <pre><code><span class="keyword">import</span> { toSvgSource } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
 
 <span class="keyword">const</span> svgSource = <span class="method">toSvgSource</span>(code, {
   <span class="property">on</span>: <span class="string">'black'</span>,
@@ -977,7 +942,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
   <span class="property">height</span>: <span class="value">null</span>,
   <span class="property">xmlDeclaration</span>: <span class="value">false</span>,
   <span class="property">scale</span>: <span class="value">1</span>,
-});</pre>
+});</code></pre>
             <p>
               The options shown are the defaults, and match <a href="#toSvg"><code>toSvg</code></a
               >.
@@ -999,8 +964,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
               the image data, suitable for displaying in an <code>img</code> tag or downloading from an
               <code>a</code> tag. Can be called inside NodeJS.
             </p>
-            <pre>
-<span class="keyword">import</span> { toSvgDataURL } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
+            <pre><code><span class="keyword">import</span> { toSvgDataURL } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
 
 <span class="keyword">const</span> dataURL = <span class="method">toSvgDataURL</span>(code, {
   <span class="property">on</span>: <span class="string">'black'</span>,
@@ -1010,7 +974,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
   <span class="property">width</span>: <span class="value">null</span>,
   <span class="property">height</span>: <span class="value">null</span>,
   <span class="property">scale</span>: <span class="value">1</span>,
-});</pre>
+});</code></pre>
             <p>
               The options shown are the defaults, and match <a href="#toSvg"><code>toSvg</code></a
               >.
@@ -1024,11 +988,10 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
               <a href="#toSvgSource"><code>toSvgSource</code></a
               >.
             </p>
-            <pre>
-<span class="keyword">import</span> { toSvgPath } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
+            <pre><code><span class="keyword">import</span> { toSvgPath } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
 
 <span class="keyword">const</span> svgPath = <span class="method">toSvgPath</span>(code);
-<span class="comment">// e.g. "M1 2L1 1L2 1L2 2ZM3 3L3 2L4 2L4 3Z"</span></pre>
+<span class="comment">// e.g. "M1 2L1 1L2 1L2 2ZM3 3L3 2L4 2L4 3Z"</span></code></pre>
             <p>
               The returned path is always at a scale of 1 SVG unit to 1 module, with no padding. The path will define
               the whole QR Code in a single string suitable for use inside <code>&lt;path d="[path here]"&gt;</code>,
@@ -1050,8 +1013,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
             <h4><code>toPngBuffer(code[, options])</code></h4>
             <a id="toPngBuffer"></a>
             <p>Returns a <code>Buffer</code> containing a PNG file for the QR Code.</p>
-            <pre>
-<span class="keyword">import</span> { toPngBuffer } <span class="keyword">from</span> <span class="string">'lean-qr/extras/node_export'</span>;
+            <pre><code><span class="keyword">import</span> { toPngBuffer } <span class="keyword">from</span> <span class="string">'lean-qr/extras/node_export'</span>;
 
 <span class="keyword">const</span> pngBuffer = <span class="method">toPngBuffer</span>(code, {
   <span class="property">on</span>: [<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">255</span>],
@@ -1059,7 +1021,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
   <span class="property">padX</span>: <span class="value">4</span>,
   <span class="property">padY</span>: <span class="value">4</span>,
   <span class="property">scale</span>: <span class="value">1</span>,
-});</pre>
+});</code></pre>
             <p>The options shown are the defaults.</p>
             <p>Returns a complete PNG Buffer which can be written to a standalone file.</p>
           </section>
@@ -1071,8 +1033,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
               containing the image data, suitable for displaying in an <code>img</code> tag or downloading from an
               <code>a</code> tag.
             </p>
-            <pre>
-<span class="keyword">import</span> { toPngDataURL } <span class="keyword">from</span> <span class="string">'lean-qr/extras/node_export'</span>;
+            <pre><code><span class="keyword">import</span> { toPngDataURL } <span class="keyword">from</span> <span class="string">'lean-qr/extras/node_export'</span>;
 
 <span class="keyword">const</span> dataURL = <span class="method">toPngDataURL</span>(code, {
   <span class="property">on</span>: [<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">255</span>],
@@ -1080,7 +1041,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
   <span class="property">padX</span>: <span class="value">4</span>,
   <span class="property">padY</span>: <span class="value">4</span>,
   <span class="property">scale</span>: <span class="value">1</span>,
-});</pre>
+});</code></pre>
             <p>
               The options shown are the defaults, and match <a href="#toPngBuffer"><code>toPngBuffer</code></a
               >.
@@ -1098,19 +1059,17 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
               Call <code>makeAsyncComponent</code> from the global scope (not inside a render method) to generate a
               component which can be rendered later:
             </p>
-            <pre>
-<span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+            <pre><code><span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
 <span class="keyword">import</span> { makeAsyncComponent } <span class="keyword">from</span> <span class="string">'lean-qr/extras/react'</span>;
 <span class="keyword">import</span> <span class="keyword">* as</span> React <span class="keyword">from</span> <span class="string">'react'</span>;
 
-<span class="keyword">export const</span> QR = <span class="method">makeAsyncComponent</span>(React, generate);</pre>
+<span class="keyword">export const</span> QR = <span class="method">makeAsyncComponent</span>(React, generate);</code></pre>
             <p>
               All the configuration options documented for <a href="#generate"><code>generate</code></a> and
               <a href="#Bitmap2D_toCanvas"><code>toCanvas</code></a> can be passed to the wrapper component, plus a
               <code>className</code> for the rendered <code>canvas</code>:
             </p>
-            <pre>
-&lt;<span class="method">QR</span>
+            <pre><code>&lt;<span class="method">QR</span>
   <span class="property">content</span>=<span class="string">"Hello!"</span>
   <a href="#version"><span class="property">minVersion</span></a>={<span class="value">1</span>}
   <a href="#version"><span class="property">maxVersion</span></a>={<span class="value">40</span>}
@@ -1123,7 +1082,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
   <a href="#Bitmap2D_toCanvas"><span class="property">on</span></a>={[<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">255</span>]}
   <a href="#Bitmap2D_toCanvas"><span class="property">off</span></a>={[<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>]}
   <span class="property">className</span>=<span class="string">""</span>
-/&gt;</pre>
+/&gt;</code></pre>
             <p>The options shown are the defaults. All properties are optional except <code>content</code>.</p>
             <p>
               The component will render to a <code>&lt;canvas&gt;</code> from a <code>useEffect</code> hook (this is the
@@ -1136,10 +1095,9 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
               You can also change the default values for the component by passing an extra argument to
               <code>makeAsyncComponent</code>. For example, if you want all QR Codes to use at least correction level H:
             </p>
-            <pre>
-<span class="keyword">const</span> QR = <span class="method">makeAsyncComponent</span>(React, generate, {
+            <pre><code><span class="keyword">const</span> QR = <span class="method">makeAsyncComponent</span>(React, generate, {
   <span class="property">minCorrectionLevel</span>: correction.<span class="property">H</span>,
-});</pre>
+});</code></pre>
           </section>
           <section>
             <h4><code>makeSyncComponent(framework, generate, toSvgDataURL)</code></h4>
@@ -1148,20 +1106,18 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
               Call <code>makeSyncComponent</code> from the global scope (not inside a render method) to generate a
               component which can be rendered later:
             </p>
-            <pre>
-<span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+            <pre><code><span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
 <span class="keyword">import</span> { makeSyncComponent } <span class="keyword">from</span> <span class="string">'lean-qr/extras/react'</span>;
 <span class="keyword">import</span> { toSvgDataURL } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
 <span class="keyword">import</span> * as React <span class="keyword">from</span> <span class="string">'react'</span>;
 
-<span class="keyword">export const</span> QR = makeSyncComponent(React, generate, toSvgDataURL);</pre>
+<span class="keyword">export const</span> QR = makeSyncComponent(React, generate, toSvgDataURL);</code></pre>
             <p>
               All the configuration options documented for <a href="#generate"><code>generate</code></a> and
               <a href="#toSvgDataURL"><code>toSvgDataURL</code></a> can be passed to the wrapper component, plus a
               <code>className</code> for the rendered <code>img</code>:
             </p>
-            <pre>
-&lt;<span class="method">QR</span>
+            <pre><code>&lt;<span class="method">QR</span>
   <span class="property">content</span>=<span class="string">"Hello!"</span>
   <a href="#version"><span class="property">minVersion</span></a>={<span class="value">1</span>}
   <a href="#version"><span class="property">maxVersion</span></a>={<span class="value">40</span>}
@@ -1174,14 +1130,14 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
   <a href="#toSvgDataURL"><span class="property">on</span></a>=<span class="string">"black"</span>
   <a href="#toSvgDataURL"><span class="property">off</span></a>=<span class="string">"transparent"</span>
   <span class="property">className</span>=<span class="string">""</span>
-/&gt;</pre>
+/&gt;</code></pre>
             <p>
               Note: the API for this has some differences compared to
               <a href="#makeAsyncComponent"><code>makeAsyncComponent</code></a
               >: <code>on</code> and <code>off</code> take <code>string</code> values for the colour, rather than
               arrays:
             </p>
-            <pre>&lt;<span class="method">QR</span> <span class="property">content</span>=<span class="string">"Hello!"</span> <span class="property">on</span>=<span class="string">"black"</span> <span class="property">off</span>=<span class="string">"rgba(0,0,0,0)"</span> /&gt;</pre>
+            <pre><code>lt;<span class="method">QR</span> <span class="property">content</span>=<span class="string">"Hello!"</span> <span class="property">on</span>=<span class="string">"black"</span> <span class="property">off</span>=<span class="string">"rgba(0,0,0,0)"</span> /&gt;</code></pre>
             <p>
               The component will render to an <code>&lt;img&gt;</code> synchronously, using <code>useMemo</code> as an
               optimisation. This is not the most performant option if the code will change frequently (use
@@ -1207,15 +1163,14 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
               description rather than the code. If the error is from another library, this will extract the
               <code>message</code> property.
             </p>
-            <pre>
-<span class="keyword">import</span> { readError } <span class="keyword">from</span> <span class="string">'lean-qr/extras/errors'</span>;
+            <pre><code><span class="keyword">import</span> { readError } <span class="keyword">from</span> <span class="string">'lean-qr/extras/errors'</span>;
 
 <span class="keyword">try</span> {
   <span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>);
 } <span class="keyword">catch</span> (e) {
   <span class="keyword">const</span> message = <span class="method">readError</span>(e);
   window.<span class="method">alert</span>(message);
-}</pre>
+}</code></pre>
           </section>
         </section>
         <section>
@@ -1236,8 +1191,8 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
             <h4><code>&lt;lean-qr&gt;</code> / <code>LeanQRElement</code></h4>
             <a id="LeanQRElement"></a>
             <p>Displays a QR code on the page as an image.</p>
-            <pre>&lt;<span class="value">script</span> <span class="property">src</span>=<span class="string">"./node_modules/lean-qr/webcomponent.mjs"</span> <span class="property">type</span>=<span class="string">"module"</span>&gt;&lt;/<span class="value">script</span>&gt;</pre>
-            <pre>&lt;<span class="value">lean-qr</span>
+            <pre><code>&lt;<span class="value">script</span> <span class="property">src</span>=<span class="string">"./node_modules/lean-qr/webcomponent.mjs"</span> <span class="property">type</span>=<span class="string">"module"</span>&gt;&lt;/<span class="value">script</span>&gt;</code></pre>
+            <pre><code>&lt;<span class="value">lean-qr</span>
   <a href="#LeanQRElement_value_for"><span class="property">value</span></a>=<span class="string">"Hello!"</span>
   <a href="#LeanQRElement_value_for"><span class="property">for</span></a>=<span class="string">"my-other-element-id"</span>
   <a href="#LeanQRElement_other"><span class="property">min-version</span></a>=<span class="string">"1"</span>
@@ -1249,7 +1204,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
   <a href="#LeanQRElement_other"><span class="property">off</span></a>=<span class="string">"#FFFFFF"</span>
   <a href="#LeanQRElement_other"><span class="property">pad-x</span></a>=<span class="string">"4"</span>
   <a href="#LeanQRElement_other"><span class="property">pad-y</span></a>=<span class="string">"4"</span>
-&gt;&lt;/<span class="value">lean-qr</span>&gt;</pre>
+&gt;&lt;/<span class="value">lean-qr</span>&gt;</code></pre>
             <p>
               The component renders as a block element by default, sized to fill the available width. You can customise
               this with CSS as normal. See the following sections for details about the available attributes.
@@ -1360,29 +1315,26 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
           <h3>Custom Modes</h3>
           <a id="custom-modes"></a>
           <p>If you want to support a non-standard data format, you can write a custom mode:</p>
-          <pre>
-<span class="keyword">const</span> myMode = (value) =&gt; (data, version) =&gt; {
+          <pre><code><span class="keyword">const</span> myMode = (value) =&gt; (data, version) =&gt; {
   <span class="comment">// call data.push zero or more times to encode the value:</span>
   data.<span class="method">push</span>(<span class="value">0b101010</span>, <span class="value">6</span>); <span class="comment">// value, bits (supports up to 24-bits)</span>
 };
 
-<span class="keyword">const</span> code = <a href="#generate"><span class="method">generate</span></a>(myMode(<span class="string">'foobar'</span>));</pre>
+<span class="keyword">const</span> code = <a href="#generate"><span class="method">generate</span></a>(myMode(<span class="string">'foobar'</span>));</code></pre>
           <p>
             If you want your custom mode to be compatible with <a href="#mode_auto"><code>auto</code></a
             >, you need to provide a pair of properties:
           </p>
-          <pre>
-<span class="comment">// a function taking a character and returning true if it is suppoerted</span>
+          <pre><code><span class="comment">// a function taking a character and returning true if it is suppoerted</span>
 myMode.<span class="property">test</span> = RegExp.<span class="property">prototype</span>.<span class="property">test</span>.<span class="method">bind</span>(<span class="value">/[0-9a-zA-Z]/</span>);
 <span class="comment">// or</span>
 myMode.<span class="property">test</span> = (c) =&gt; <span class="value">/[0-9a-zA-Z]/</span>.<span class="method">test</span>(c);
 
 <span class="comment">// a function which estimates the number of bits required for an input</span>
 <span class="comment">// (fractional results will be rounded up)</span>
-myMode.<span class="property">est</span> = (value, version) =&gt; (<span class="value">12</span> + value.<span class="property">length</span> * <span class="value">8</span>);</pre>
+myMode.<span class="property">est</span> = (value, version) =&gt; (<span class="value">12</span> + value.<span class="property">length</span> * <span class="value">8</span>);</code></pre>
           <p>For example, the implementation of <code>ascii</code>:</p>
-          <pre>
-<span class="keyword">const</span> ascii = (value) =&gt; (data, version) =&gt; {
+          <pre><code><span class="keyword">const</span> ascii = (value) =&gt; (data, version) =&gt; {
   data.<span class="method">push</span>(<span class="value">0b0100</span>, <span class="value">4</span>);
   data.<span class="method">push</span>(value.<span class="property">length</span>, version &lt; <span class="value">10</span> ? <span class="value">8</span> : <span class="value">16</span>);
   [...value].<span class="method">forEach</span>((c) =&gt; data.<span class="method">push</span>(c.<span class="method">codePointAt</span>(<span class="value">0</span>), <span class="value">8</span>));
@@ -1391,7 +1343,7 @@ ascii.<span class="property">test</span> = RegExp.<span class="property">prototy
 ascii.<span class="property">est</span> = (value, version) =&gt; (
   <span class="value">4</span> + (version &lt; <span class="value">10</span> ? <span class="value">8</span> : <span class="value">16</span>) +
   value.<span class="property">length</span> * <span class="value">8</span>
-);</pre>
+);</code></pre>
           <p>See <a href="#mode">modes</a> for details on how to register your custom mode.</p>
         </section>
         <section>
@@ -1405,8 +1357,8 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
           </p>
           <pre
             class="diff"
-          ><del><span class="keyword">import</span> { generate, correction } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;</del>
-<ins><span class="keyword">import</span> { generate, correction } <span class="keyword">from</span> <span class="string">'lean-qr/nano'</span>;</ins></pre>
+          ><code><del><span class="keyword">import</span> { generate, correction } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;</del>
+<ins><span class="keyword">import</span> { generate, correction } <span class="keyword">from</span> <span class="string">'lean-qr/nano'</span>;</ins></code></pre>
           <p>
             The Nano version is API-compatible with the regular version of Lean QR (and can be used with all of the
             included extras including SVG, React/Preact wrapper, and NodeJS export), with some omissions:

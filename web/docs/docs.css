@@ -232,6 +232,17 @@ code {
   border-radius: 5px;
 }
 
+pre code {
+  display: block;
+  font: inherit;
+  padding: 0;
+  margin: 0;
+  position: initial;
+  top: 0;
+  border: none;
+  border-radius: 0;
+}
+
 math {
   font-size: 1.1em;
   padding: 1px 5px;
@@ -382,6 +393,10 @@ q {
   overflow-wrap: break-word;
 }
 
+a {
+  overflow-wrap: break-word; /* fix issue with long URLs not wrapping in Safari */
+}
+
 a:link,
 a:visited {
   text-decoration: none;
@@ -504,6 +519,21 @@ pre a:hover {
 #cdn2:checked ~ .tabcontent[data-for='cdn2'],
 #cdn3:checked ~ .tabcontent[data-for='cdn3'] {
   display: block;
+}
+
+@media (max-width: 600px) {
+  table {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 400px) {
+  th,
+  td {
+    padding-left: 5px;
+    padding-right: 10px;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
