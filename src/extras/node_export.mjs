@@ -16,14 +16,12 @@ export const toPngBuffer = (
 ) => {
   const w = (code.size + padX * 2) * scale;
   const h = (code.size + padY * 2) * scale;
-  const step = 1 + ((w + 7) >> 3);
+  const step = (w + 15) >> 3;
 
   const imageData = Buffer.alloc(h * step);
   for (let y = 0; y < h; ++y) {
     for (let x = 0; x < w; ++x) {
-      if (
-        code.get(Math.floor(x / scale) - padX, Math.floor(y / scale) - padY)
-      ) {
+      if (code.get(((x / scale) | 0) - padX, ((y / scale) | 0) - padY)) {
         imageData[y * step + 1 + (x >> 3)] |= 0x80 >> (x & 7);
       }
     }
@@ -33,7 +31,7 @@ export const toPngBuffer = (
   const onA = on[3] ?? 255;
   const trns = (offA & onA) < 255;
   const plte =
-    off[0] | off[1] | off[2] || (on[0] & on[1] & on[2]) < 255 || trns;
+    off[0] | off[1] | off[2] | ((on[0] & on[1] & on[2]) < 255) | trns;
 
   const ihdr = Buffer.alloc(13);
   ihdr.writeUInt32BE(w, 0);
@@ -62,11 +60,15 @@ const makeChunk = (type, data) => {
   b.writeUInt32BE(l, 0);
   b.writeUInt32BE(type, 4);
   b.set(data, 8);
-  let crc = ~0;
-  for (const byte of b.subarray(4, 8 + l)) {
-    crc = CRC_TABLE[(crc ^ byte) & 0xff] ^ (crc >>> 8);
-  }
-  b.writeUInt32BE(~crc >>> 0, 8 + l);
+  b.writeUInt32BE(
+    ~b
+      .subarray(4, 8 + l)
+      .reduce(
+        (crc, byte) => CRC_TABLE[(crc ^ byte) & 0xff] ^ (crc >>> 8),
+        ~0,
+      ) >>> 0,
+    8 + l,
+  );
   return b;
 };
 

@@ -2,15 +2,15 @@ import { toSvgPath, toSvgSource, toSvgDataURL } from './svg.mjs';
 import { Bitmap2D } from '../structures/Bitmap2D.mjs';
 import { makeBitmap } from '../test-helpers/makeBitmap.mjs';
 
+const BASIC_IMAGE = makeBitmap(`
+  ---
+  -#-
+  ---
+`);
+
 describe('toSvgPath', () => {
   it('identifies the outline around pixels', () => {
-    const bitmap = makeBitmap(`
-      ---
-      -#-
-      ---
-    `);
-
-    expect(toSvgPath(bitmap)).toEqual('M1 2L1 1L2 1L2 2Z');
+    expect(toSvgPath(BASIC_IMAGE)).toEqual('M1 2L1 1L2 1L2 2Z');
   });
 
   it('identifies outlines at the limits of the image', () => {
@@ -67,27 +67,21 @@ describe('toSvgPath', () => {
 
 describe('toSvgSource', () => {
   it('generates full SVG source for an image', () => {
-    const bitmap = makeBitmap(`
-      ---
-      -#-
-      ---
-    `);
-
-    expect(toSvgSource(bitmap)).toEqual(
+    expect(toSvgSource(BASIC_IMAGE)).toEqual(
       '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-4 -4 11 11" width="11" height="11" shape-rendering="crispedges"><path d="M1 2L1 1L2 1L2 2Z" fill="black"></path></svg>',
     );
   });
 
   it('adds a background rectangle if off colour is specified', () => {
-    const bitmap = makeBitmap(`
-      ---
-      -#-
-      ---
-    `);
-
-    expect(toSvgSource(bitmap, { off: 'red' })).toEqual(
+    expect(toSvgSource(BASIC_IMAGE, { off: 'red' })).toEqual(
       '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-4 -4 11 11" width="11" height="11" shape-rendering="crispedges"><rect x="-4" y="-4" width="11" height="11" fill="red"></rect><path d="M1 2L1 1L2 1L2 2Z" fill="black"></path></svg>',
     );
+  });
+
+  it('blocks unsafe characters', () => {
+    const src = toSvgSource(BASIC_IMAGE, { off: '"no" <bad> & \'chars\'' });
+    const fill = /fill=[^>]*/.exec(src);
+    expect(fill[0]).toEqual('fill="no bad  chars"');
   });
 
   it('can include XML declaration', () => {
@@ -107,13 +101,7 @@ describe('toSvgSource', () => {
 
 describe('toSvgDataURL', () => {
   it('generates a data:image/svg+xml URL for the code', () => {
-    const bitmap = makeBitmap(`
-      ---
-      -#-
-      ---
-    `);
-
-    const data = toSvgDataURL(bitmap);
+    const data = toSvgDataURL(BASIC_IMAGE);
     const [type, content] = data.split(';');
 
     expect(type).toEqual('data:image/svg+xml');

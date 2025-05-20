@@ -8,16 +8,16 @@ const make = (
   children = [],
   o = d.createElementNS(SVG_NS, tag),
 ) => {
-  Object.entries(attrs).forEach(([k, v]) => o.setAttribute(k, v));
+  Object.entries(attrs).map(([k, v]) => o.setAttribute(k, v));
   o.replaceChildren(...children);
   return o;
 };
 
-const makeSrc = (tag, attrs, children = []) =>
+const makeSrc = (_, tag, attrs, children = []) =>
   [
     `<${tag}`,
     ...Object.entries(attrs).map(
-      ([k, v]) => ` ${k}="${`${v}`.replaceAll(UNSAFE, '')}"`,
+      ([k, v]) => ` ${k}="${`${v}`.replace(UNSAFE, '')}"`,
     ),
     '>',
     ...children,
@@ -34,17 +34,15 @@ export const toSvgPath = (code) => {
   };
   for (let y = 0; y <= code.size; ++y) {
     for (let x = 0; x <= code.size; ++x) {
-      const v5 = code.get(x, y);
-      const v2 = code.get(x, y - 1);
-      const v4 = code.get(x - 1, y);
+      const v = code.get(x, y);
       const f = [
-        v4 !== v5 && x + ' ' + (y + 1),
+        code.get(x - 1, y) ^ v && x + ' ' + (y + 1),
         x + ' ' + y,
-        v2 !== v5 && x + 1 + ' ' + y,
+        code.get(x, y - 1) ^ v && x + 1 + ' ' + y,
       ].filter((v) => v);
 
       if (f.length > 1) {
-        if (!v5) {
+        if (!v) {
           f.reverse();
         }
 
@@ -73,11 +71,13 @@ const toSvgInternal = (
   code,
   { on = 'black', off, padX = 4, padY = 4, width, height, scale = 1 },
   mk,
+  makeParam0,
   target,
 ) => {
   const w = code.size + padX * 2;
   const h = code.size + padY * 2;
   return mk(
+    makeParam0,
     'svg',
     {
       xmlns: SVG_NS,
@@ -89,7 +89,7 @@ const toSvgInternal = (
     },
     [
       off
-        ? mk('rect', {
+        ? mk(makeParam0, 'rect', {
             x: -padX,
             y: -padY,
             width: w,
@@ -97,7 +97,7 @@ const toSvgInternal = (
             fill: off,
           })
         : '',
-      mk('path', { d: toSvgPath(code), fill: on }),
+      mk(makeParam0, 'path', { d: toSvgPath(code), fill: on }),
     ],
     target,
   );
@@ -105,8 +105,8 @@ const toSvgInternal = (
 
 export const toSvg = (code, svg, options = {}) =>
   svg.body
-    ? toSvgInternal(code, options, make.bind(0, svg))
-    : toSvgInternal(code, options, make.bind(0, svg.ownerDocument), svg);
+    ? toSvgInternal(code, options, make, svg)
+    : toSvgInternal(code, options, make, svg.ownerDocument, svg);
 
 export const toSvgSource = (code, options = {}) =>
   (options.xmlDeclaration ? '<?xml version="1.0" encoding="UTF-8" ?>' : '') +

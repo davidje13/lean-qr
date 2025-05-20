@@ -36,7 +36,7 @@ const dataOrError = (fn) => {
     return fn();
   } catch (e) {
     console.warn(e.message);
-    return undefined;
+    // implicit return undefined;
   }
 };
 
@@ -48,18 +48,20 @@ export const makeAsyncComponent =
   ) =>
   (props) => {
     const options = { ...defaultOptions, ...props };
-    const canvasRef = useRef(null);
-    const codeRef = useRef([null, {}]);
+    const canvasRef = useRef();
+    const codeRef = useRef([0, {}]);
     useEffect(
       () => {
-        canvasRef.current.hidden = !dataOrError(() => {
-          if (hasChange(options, codeRef.current[1], GENERATE_OPTS)) {
-            codeRef.current[0] = generate(options.content, options);
+        const code = codeRef.current;
+        const canvas = canvasRef.current;
+        canvas.hidden = !dataOrError(() => {
+          if (hasChange(options, code[1], GENERATE_OPTS)) {
+            code[0] = generate(options.content, options);
           }
-          codeRef.current[0].toCanvas(canvasRef.current, options);
+          code[0].toCanvas(canvas, options);
           return 1;
         });
-        codeRef.current[1] = options;
+        code[1] = options;
       },
       explode(options, ALL_OPTS),
     );
