@@ -9,6 +9,7 @@ import {
   ERROR_TOO_MUCH_DATA,
   ERROR_UNENCODABLE,
   makeUint8Array,
+  fail,
 } from '../util.mjs';
 
 const baseCache = [];

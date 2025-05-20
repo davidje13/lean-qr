@@ -9,50 +9,65 @@ expect.extend({ toMatchImage });
 const LONG_MESSAGE =
   'this is a much longer message which needs at least version 4';
 
-it(
-  'nano generate matches the output of full generate',
-  ({ message, options, fullOptions }) => {
-    const nanoCode = generateNano(message, options);
-    const fullCode = generateFull(mode.utf8(message), fullOptions ?? options);
-    expect(nanoCode).toMatchImage(
-      fullCode.toString({ on: '#', off: ' ', padX: 0, padY: 0 }),
-    );
-  },
-  {
-    parameters: [
-      {
-        name: 'plain text is encoded as utf8',
-        message: 'hello',
-        options: { minCorrectionLevel: correction.max },
-      },
-      {
-        name: 'custom correction level',
-        message: 'hello',
-        options: { minCorrectionLevel: correction.M },
-        fullOptions: {
-          minCorrectionLevel: correction.M,
-          maxCorrectionLevel: correction.M,
+describe('nano generate', () => {
+  it(
+    'matches the output of full generate',
+    ({ message, options, fullOptions }) => {
+      const nanoCode = generateNano(message, options);
+      const fullCode = generateFull(mode.utf8(message), fullOptions ?? options);
+      expect(nanoCode).toMatchImage(
+        fullCode.toString({ on: '#', off: ' ', padX: 0, padY: 0 }),
+      );
+    },
+    {
+      parameters: [
+        {
+          name: 'plain text is encoded as utf8',
+          message: 'hello',
+          options: { minCorrectionLevel: correction.max },
         },
-      },
-      {
-        name: 'fixed parameters',
-        message: 'hello',
-        options: { minVersion: 1, minCorrectionLevel: correction.Q },
-        fullOptions: {
-          minCorrectionLevel: correction.Q,
-          maxCorrectionLevel: correction.Q,
+        {
+          name: 'custom correction level',
+          message: 'hello',
+          options: { minCorrectionLevel: correction.M },
+          fullOptions: {
+            minCorrectionLevel: correction.M,
+            maxCorrectionLevel: correction.M,
+          },
         },
-      },
-      {
-        name: 'long message',
-        message: LONG_MESSAGE,
-        options: { minCorrectionLevel: correction.max },
-      },
-      {
-        name: 'allows larger versions to be forced',
-        message: LONG_MESSAGE,
-        options: { minVersion: 10, minCorrectionLevel: correction.max },
-      },
-    ],
-  },
-);
+        {
+          name: 'fixed parameters',
+          message: 'hello',
+          options: { minVersion: 1, minCorrectionLevel: correction.Q },
+          fullOptions: {
+            minCorrectionLevel: correction.Q,
+            maxCorrectionLevel: correction.Q,
+          },
+        },
+        {
+          name: 'long message',
+          message: LONG_MESSAGE,
+          options: { minCorrectionLevel: correction.max },
+        },
+        {
+          name: 'allows larger versions to be forced',
+          message: LONG_MESSAGE,
+          options: { minVersion: 10, minCorrectionLevel: correction.max },
+        },
+      ],
+    },
+  );
+
+  it('throws if given no input', () => {
+    expect(() => generateNano()).toThrow('lean-qr error 1');
+  });
+
+  it('throws if given unsupported input', () => {
+    expect(() => generateNano(mode.ascii('nope'))).toThrow('lean-qr error 5');
+  });
+
+  it('throws if given too much data', () => {
+    expect(() => generateNano('x'.repeat(2952))).not(toThrow());
+    expect(() => generateNano('x'.repeat(2953))).toThrow('lean-qr error 4');
+  });
+});
