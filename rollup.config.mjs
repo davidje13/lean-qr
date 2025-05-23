@@ -59,8 +59,8 @@ export default [
     ],
   },
   {
-    input: 'bin/cli.mjs',
-    external: [/\/src\//],
+    input: 'src/bin/cli.mjs',
+    external: [/\/src\/(?!bin\/)/],
     output: {
       file: 'build/cli.mjs',
       format: 'esm',

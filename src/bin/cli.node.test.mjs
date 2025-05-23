@@ -48,8 +48,12 @@ describe('CLI', () => {
 
 function runCLI(...args) {
   return new Promise((resolve) => {
-    const proc = execFile('./bin/cli.mjs', args, (error, stdout, stderr) => {
-      resolve({ error, exitCode: proc.exitCode, stdout, stderr });
-    });
+    const proc = execFile(
+      './src/bin/cli.mjs',
+      args,
+      (error, stdout, stderr) => {
+        resolve({ error, exitCode: proc.exitCode, stdout, stderr });
+      },
+    );
   });
 }
