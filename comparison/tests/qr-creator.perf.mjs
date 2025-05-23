@@ -6,8 +6,13 @@ if (isBrowser) {
   runPerformanceTest(
     'qr-creator',
     () => import('../build/qr-creator.mjs'),
-    // this API provides no way to know if it was successful or failed.
-    // from manual testing, we see it only succeeds for the simple message.
-    (module) => (message) => module.default.render({ text: message }, target),
+    (module) => (message) => {
+      if (!message.startsWith('THIS IS MY MESSAGE')) {
+        // this API provides no way to know if it was successful or failed.
+        // from manual testing, we see it only succeeds for the simple message.
+        throw new Error('message is silently unsupported');
+      }
+      return module.default.render({ text: message }, target);
+    },
   );
 }

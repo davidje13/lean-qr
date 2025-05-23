@@ -24,14 +24,14 @@
         <a id="quickstart"></a>
         <p>Choose your platform:</p>
         <section class="tabbox">
-          <input type="radio" name="tab" id="t1" value="node" /><label for="t1">NodeJS</label>
+          <input type="radio" name="tab" id="t1" value="node" /><label for="t1">Node.js</label>
           <input type="radio" name="tab" id="t2" value="browser" checked /><label for="t2">Browser Native</label>
           <input type="radio" name="tab" id="t3" value="react" /><label for="t3">React</label>
           <input type="radio" name="tab" id="t4" value="preact" /><label for="t4">Preact</label>
           <input type="radio" name="tab" id="t5" value="webcomponent" /><label for="t5">Web Component</label>
           <input type="radio" name="tab" id="t6" value="cli" /><label for="t6">Shell (CLI)</label>
           <div class="tabcontent" data-for="t1">
-            <h3>NodeJS</h3>
+            <h3>Node.js</h3>
             <p>Install the dependency:</p>
             <pre><code>npm install --save <span class="string">lean-qr</span></code></pre>
             <section>
@@ -848,7 +848,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(l
               <a href="#Bitmap2D_toCanvas"><code>toCanvas</code></a> &mdash; this will avoid blurry edges on high
               resolution displays and if the user zooms in).
             </p>
-            <p>Note that this is only available in-browser; it will fail if called in NodeJS.</p>
+            <p>Note that this is only available in-browser; it will fail if called in Node.js.</p>
           </section>
           <section>
             <h4><code>.get(x, y)</code></h4>
@@ -929,7 +929,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
             <a id="toSvgSource"></a>
             <p>
               Like <a href="#toSvg"><code>toSvg</code></a> but returns the source code for an SVG, rather than
-              manipulating DOM nodes (can be called inside NodeJS).
+              manipulating DOM nodes (can be called inside Node.js).
             </p>
             <pre><code><span class="keyword">import</span> { toSvgSource } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
 
@@ -962,7 +962,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
             <p>
               Like <a href="#toSvg"><code>toSvg</code></a> but returns a <code>data:image/svg+xml</code> URL containing
               the image data, suitable for displaying in an <code>img</code> tag or downloading from an
-              <code>a</code> tag. Can be called inside NodeJS.
+              <code>a</code> tag. Can be called inside Node.js.
             </p>
             <pre><code><span class="keyword">import</span> { toSvgDataURL } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
 
@@ -1006,8 +1006,8 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
           <h3>extras/node_export</h3>
           <a id="extras_node_export"></a>
           <p>
-            This is not included in the main library as it only applies to NodeJS, but if you need PNG output from
-            NodeJS, you can access it from a separate import (adds ~1kB).
+            This is not included in the main library as it only applies to Node.js, but if you need PNG output from
+            Node.js, you can access it from a separate import (adds ~1kB).
           </p>
           <section>
             <h4><code>toPngBuffer(code[, options])</code></h4>
@@ -1361,7 +1361,7 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
 <ins><span class="keyword">import</span> { generate, correction } <span class="keyword">from</span> <span class="string">'lean-qr/nano'</span>;</ins></code></pre>
           <p>
             The Nano version is API-compatible with the regular version of Lean QR (and can be used with all of the
-            included extras including SVG, React/Preact wrapper, and NodeJS export), with some omissions:
+            included extras including SVG, React/Preact wrapper, and Node.js export), with some omissions:
           </p>
           <ul>
             <li>
@@ -1472,11 +1472,14 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
               <tr>
                 <th rowspan="2">library</th>
                 <th rowspan="2">size / compressed</th>
-                <th rowspan="2">performance<sup>1</sup><br />(codes per second)</th>
+                <th rowspan="2">performance<sup>&starf;</sup><br />(codes per second)</th>
+                <th colspan="2">platforms</th>
                 <th colspan="6">supported encodings</th>
                 <th colspan="6">supported outputs</th>
               </tr>
               <tr>
+                <th>Node.js</th>
+                <th>web</th>
                 <th>num</th>
                 <th>alnum</th>
                 <th>latin-1</th>
@@ -1498,7 +1501,7 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                   <small>(<a href="https://qr.davidje13.com/" target="_blank" rel="noopener">demo</a>)</small>
                 </td>
                 <td class="R">6.9kB / 3.6kB</td>
-                <td>2800 / 66 / 35</td>
+                <td>2900 / 51 / 21</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
@@ -1507,37 +1510,43 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="with plugin">&#x2705;<sup>1</sup></td>
                 <td class="C" title="with plugin">&#x2705;<sup>2</sup></td>
-                <td class="C" title="with plugin">&#x2705;<sup>3</sup></td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td>-</td>
               </tr>
               <tr>
                 <td><a href="#lean-qr-nano">lean-qr/nano</a></td>
                 <td class="R">3.8kB / 2.2kB</td>
-                <td>untested</td>
-                <td class="C" title="no">&#x274C;</td>
-                <td class="C" title="no">&#x274C;</td>
-                <td class="C" title="no">&#x274C;</td>
+                <td>2700 / &#x274C; / &#x274C;</td>
+                <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="with plugin">&#x2705;<sup>1</sup></td>
                 <td class="C" title="with plugin">&#x2705;<sup>2</sup></td>
-                <td class="C" title="with plugin">&#x2705;<sup>3</sup></td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td>-</td>
               </tr>
               <tr>
                 <td><a href="https://www.npmjs.com/package/qrcode" target="_blank" rel="noopener">qrcode</a></td>
                 <td class="R">23.4kB / 9.0kB</td>
-                <td>3200 / 59 / 23 <sup>4</sup></td>
+                <td>3300 / 44 / 15 <sup>&dagger;</sup></td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="no">&#x274C;</td>
-                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>5</sup></td>
-                <td class="C" title="with plugin">&#x2705;<sup>6</sup></td>
+                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>3</sup></td>
+                <td class="C" title="with plugin">&#x2705;<sup>4</sup></td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
@@ -1549,7 +1558,9 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
               <tr>
                 <td><a href="https://www.npmjs.com/package/qr.js" target="_blank" rel="noopener">qr.js</a></td>
                 <td class="R">25.9kB / 6.5kB</td>
-                <td>730 / &#x274C; / &#x274C;</td>
+                <td>480 / &#x274C; / &#x274C;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="yes">&#x2705;</td>
@@ -1575,19 +1586,21 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                   >
                 </td>
                 <td class="R">56.7kB / 11.7kB</td>
-                <td>950 / &#x274C; / 17</td>
+                <td>760 / &#x274C; / 12 <sup>&dagger;&dagger;</sup></td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
-                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>5</sup></td>
-                <td class="C" title="with plugin">&#x2705;<sup>7</sup></td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>3</sup></td>
+                <td class="C" title="with plugin">&#x2705;<sup>5</sup></td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
-                <td class="C" title="in-browser">&#x26A0;&#xFE0F;<sup>8</sup></td>
+                <td class="C" title="in-browser">&#x26A0;&#xFE0F;<sup>6</sup></td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
-                <td><code>img</code></td>
+                <td>HTML <code>&lt;img&gt;</code></td>
               </tr>
               <tr>
                 <td>
@@ -1597,11 +1610,13 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                   >
                 </td>
                 <td class="R">12.1kB / 5.1kB</td>
-                <td>670 / &#x274C; / &#x274C; <sup>9</sup></td>
+                <td>580 / &#x274C; / &#x274C; <sup>&dagger;</sup></td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
-                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>5</sup></td>
+                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>3</sup></td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
@@ -1609,18 +1624,20 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
-                <td>Styling: Rounded edges</td>
+                <td>Rounded edges</td>
               </tr>
               <tr>
                 <td>
                   <a href="https://www.npmjs.com/package/awesome-qr" target="_blank" rel="noopener">awesome-qr</a>
                 </td>
                 <td class="R">45.8kB / 16.0kB</td>
-                <td>untested</td>
+                <td>97 / &#x274C; / &#x274C; <sup>&dagger;&dagger;</sup></td>
+                <td class="C" title="non-functional">&#x26A0;&#xFE0F;<sup>7</sup></td>
+                <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
-                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>5</sup></td>
+                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>3</sup></td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
@@ -1628,7 +1645,7 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="no">&#x274C;</td>
-                <td>Styling: Background image, animated GIF</td>
+                <td>Background image, animated GIF</td>
               </tr>
               <tr>
                 <td>
@@ -1642,16 +1659,18 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                   >
                 </td>
                 <td class="R">45.4kB / 13.3kB</td>
-                <td>620 / &#x274C; / 21 <sup>10</sup></td>
+                <td>1100 / &#x274C; / 23 <sup>&dagger;</sup></td>
+                <td class="C" title="no">&#x274C;</td>
+                <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="no">&#x274C;</td>
-                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>5</sup></td>
-                <td class="C" title="no">&#x274C;<sup>11</sup></td>
-                <td class="C" title="partial">&#x26A0;&#xFE0F;<sup>12</sup></td>
+                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>3</sup></td>
+                <td class="C" title="no">&#x274C;<sup>8</sup></td>
+                <td class="C" title="partial">&#x26A0;&#xFE0F;<sup>9</sup></td>
                 <td class="C" title="no">&#x274C;</td>
-                <td class="C" title="no">&#x274C;<sup>13</sup></td>
-                <td class="C" title="no">&#x274C;<sup>13</sup></td>
+                <td class="C" title="no">&#x274C;<sup>10</sup></td>
+                <td class="C" title="no">&#x274C;<sup>10</sup></td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td>-</td>
@@ -1661,55 +1680,59 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                   <a href="https://www.npmjs.com/package/qrjs2" target="_blank" rel="noopener">qrjs2</a>
                 </td>
                 <td class="R">9.5kB / 5.0kB</td>
-                <td>untested</td>
+                <td>2200 / &#x274C; / 40 <sup>&dagger;</sup></td>
+                <td class="C" title="yes">&#x2705;</td>
+                <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="no">&#x274C;</td>
-                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>5</sup></td>
+                <td class="C" title="non-standard">&#x26A0;&#xFE0F;<sup>3</sup></td>
                 <td class="C" title="no">&#x274C;</td>
-                <td class="C" title="partial">&#x26A0;&#xFE0F;<sup>14</sup></td>
+                <td class="C" title="partial">&#x26A0;&#xFE0F;<sup>11</sup></td>
                 <td class="C" title="no">&#x274C;</td>
                 <td class="C" title="no">&#x274C;</td>
-                <td class="C" title="in-browser">&#x26A0;&#xFE0F;<sup>8</sup></td>
-                <td class="C" title="in-browser">&#x26A0;&#xFE0F;<sup>8</sup></td>
+                <td class="C" title="in-browser">&#x26A0;&#xFE0F;<sup>6</sup></td>
+                <td class="C" title="in-browser">&#x26A0;&#xFE0F;<sup>6</sup></td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td>HTML <code>&lt;table&gt;</code></td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p><sup>1</sup> Measured in codes per second (higher is better). See <a href="#performance">methodology</a>.</p>
-        <p><sup>2</sup> Requires extra import, adds 1.3kB.</p>
-        <p><sup>3</sup> Requires extra import, adds 1.1kB.</p>
-        <p><sup>4</sup> Takes ~13ms to initialise when imported.</p>
-        <p><sup>5</sup> Non-standard: does not set ECI 26.</p>
-        <p><sup>6</sup> Requires extra import, adds 21kB.</p>
-        <p><sup>7</sup> Requires extra import, adds 39kB.</p>
-        <p><sup>8</sup> In-browser only.</p>
         <p>
-          <sup>9</sup> Tested in Chrome, as this library does not support NodeJS. Takes ~10ms to initialise when
-          imported.
+          <sup>&starf;</sup> Measured in codes per second (higher is better). See
+          <a href="#performance">methodology</a>.
         </p>
-        <p><sup>10</sup> Crudely measured using online demo.</p>
-        <p><sup>11</sup> Only available in Java version.</p>
-        <p><sup>12</sup> Automatic mixed modes only available in Java version.</p>
-        <p><sup>13</sup> Source code contains an example of this output, but it is not part of the library.</p>
-        <p><sup>14</sup> Does not support mixed modes.</p>
+        <p><sup>&dagger;</sup> Takes 5&ndash;10ms to initialise when imported.</p>
+        <p><sup>&dagger;&dagger;</sup> Takes 10&ndash;15ms to initialise when imported.</p>
+        <p><sup>1</sup> Requires extra import, adds 1.3kB.</p>
+        <p><sup>2</sup> Requires extra import, adds 1.1kB.</p>
+        <p><sup>3</sup> Non-standard: does not set ECI 26.</p>
+        <p><sup>4</sup> Requires extra import, adds 21kB.</p>
+        <p><sup>5</sup> Requires extra import, adds 39kB.</p>
+        <p><sup>6</sup> In-browser only.</p>
+        <p><sup>7</sup> Claims to support Node.js, but only worked in browsers when tested.</p>
+        <p><sup>8</sup> Only available in Java version.</p>
+        <p><sup>9</sup> Automatic mixed modes only available in Java version.</p>
+        <p><sup>10</sup> Source code contains an example of this output, but it is not part of the library.</p>
+        <p><sup>11</sup> Does not support mixed modes.</p>
         <section>
           <h3>Performance Methodology</h3>
           <a id="performance"></a>
           <p>
-            The performance of each library has been evaluated by running in NodeJS 18.14.0 on a "2.5 GHz Quad-Core
-            Intel Core i7" by repeatedly generating codes (including the output of a string or image, but not including
-            displaying or saving) for each test message with 8 random digits on the end (running "hot" but avoiding
-            caching), and using as much default configuration as possible. Timings have been averaged over a number of
-            samples, with the reported number of codes per second being calculated from the average time. Values are
-            listed to 2 significant figures.
+            The performance of each library has been evaluated by running on standard hardware (an 8GB Raspberry Pi 5
+            with PCIe storage), using Node.js 22, Headless Chrome 136, and Headless Firefox 138. The testing process
+            repeatedly generates QR Codes and outputs them as a string or image (but does not display or save the
+            result) for each of the 3 test messages (see below) with 8 random digits on the end (running "hot" but
+            avoiding caching), and using as much default configuration as possible. The listing shows the highest codes
+            per second for each test message across all environments (calculated from the time taken per QR Code, which
+            is averaged over a number of samples). Values are listed to 2 significant figures.
           </p>
           <p>
             Load / startup time has also been checked, and is noted in a footnote for libraries where it is &gt; 5ms.
           </p>
-          <p>The test messages used:</p>
+          <p>The script can be found in the <code>comparison</code> folder of the repository.</p>
+          <p>The test messages:</p>
           <ul>
             <li><q>THIS IS MY MESSAGE</q> (18 characters + 8 random digits)</li>
             <li>
@@ -1723,9 +1746,12 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                 Unicode means we will need quite a few of them to make it worthwhile
                 &pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;&pound;.</q
               >
-              repeated 5 times (3155 characters + 8 random digits)
+              repeated 5 times (3155 characters + 8 random digits; this requires the ability to encode with mixed modes)
             </li>
-            <li><q>A1</q> repeated 2100 times (4200 characters + 8 random digits)</li>
+            <li>
+              <q>A1</q> repeated 2100 times (4200 characters + 8 random digits; this requires the ability to encode as
+              alphanumeric)
+            </li>
           </ul>
         </section>
       </section>

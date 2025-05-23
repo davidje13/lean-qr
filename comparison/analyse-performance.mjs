@@ -31,18 +31,12 @@ const allTests = [
 ];
 
 const table = [
-  ['l', 'l', 'r', ...allTests.flatMap(() => ['r', 'r', 'r', 'r', 'r'])],
+  ['l', 'l', 'r', ...allTests.flatMap(() => ['r', 'r', 'r', 'r'])],
   [
     '',
     '',
     '',
-    ...allTests.flatMap((testName) => [
-      ['l', testName],
-      null,
-      null,
-      null,
-      null,
-    ]),
+    ...allTests.flatMap((testName) => [['l', testName], null, null, null]),
   ],
   [
     'Library',
@@ -51,7 +45,6 @@ const table = [
     ...allTests.flatMap(() => [
       ['l', 'first'],
       ['l', 'avg'],
-      ['l', 'worst'],
       ['l', 'avg rate'],
       ['l', 'samples'],
     ]),
@@ -72,7 +65,7 @@ for (const [, libRuns] of sortedLibraryRuns) {
   if (bestLoad.error) {
     row.push(
       ['l', '[init error]'],
-      ...allTests.flatMap(() => [null, null, null, null, null]),
+      ...allTests.flatMap(() => [null, null, null, null]),
     );
     continue;
   }
@@ -85,24 +78,48 @@ for (const [, libRuns] of sortedLibraryRuns) {
   for (const testName of allTests) {
     const testRuns = tests.get(testName);
     if (!testRuns) {
-      row.push(['l', '[skipped]'], null, null, null, null);
+      row.push(['l', '[skipped]'], null, null, null);
       continue;
     }
-    const bestTestRun = testRuns.reduce((a, b) =>
-      b.error ? a : a.error ? b : a.average < b.average ? a : b,
-    );
+    const bestTestRun = testRuns.reduce(bestRun);
     if (bestTestRun.error) {
-      row.push(['l', '[run error]'], null, null, null, null);
+      row.push(['l', '[run error]'], null, null, null);
+    } else if (wasInterrupted(bestTestRun)) {
+      row.push(
+        ['l', '[interrupted by other task, try again]'],
+        null,
+        null,
+        null,
+      );
     } else {
       row.push(
         fmt(bestTestRun.first) + 'ms',
         fmt(bestTestRun.average) + 'ms',
-        fmt(bestTestRun.worst) + 'ms',
         rate(bestTestRun.average) + '/s',
         String(bestTestRun.samples),
       );
     }
   }
+}
+
+function wasInterrupted(run) {
+  return run.worst > run.average * 2 + 50;
+}
+
+function bestRun(a, b) {
+  if (b.error) {
+    return a;
+  }
+  if (a.error) {
+    return b;
+  }
+  if (wasInterrupted(b)) {
+    return a;
+  }
+  if (wasInterrupted(a)) {
+    return b;
+  }
+  return a.average < b.average ? a : b;
 }
 
 process.stdout.write(drawTable(table));
