@@ -1,7 +1,7 @@
 import { isBrowser, runPerformanceTest } from './common.mjs';
 
 if (!isBrowser) {
-  // define document so that the import can succeed in NodeJS
+  // define document so that the import can succeed in Node.js
   globalThis.document = {};
 }
 
