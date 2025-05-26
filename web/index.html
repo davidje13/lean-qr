@@ -4,11 +4,12 @@
     <meta charset="utf-8" />
     <meta
       http-equiv="content-security-policy"
-      content="base-uri 'self'; default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; form-action 'none';"
+      content="base-uri 'self'; default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'self'; connect-src data:; form-action 'none';"
     />
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, minimal-ui" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="format-detection" content="telephone=no" />
     <title>Lean QR</title>
     <link rel="icon" href="/resources/favicon.png" />
@@ -16,142 +17,172 @@
     <link rel="stylesheet" href="/index.css" />
     <script type="module" src="/build/index.min.mjs"></script>
   </head>
-  <body>
+  <body class="noscript">
     <article>
-      <h1>Lean QR</h1>
       <form>
-        <textarea name="message" placeholder="Enter a message to be written as a QR Code"></textarea>
-        <details class="options">
-          <summary>Advanced options</summary>
-          <fieldset>
-            <legend>Version</legend>
-            <div>
-              <label>
-                <span aria-hidden="true">minimum</span>
-                <input type="number" name="min-version" min="1" max="40" value="1" aria-label="Minimum version" />
-              </label>
-              <label>
-                <span aria-hidden="true">maximum</span>
-                <input type="number" name="max-version" min="1" max="40" value="40" aria-label="Maximum version" />
-              </label>
-            </div>
-          </fieldset>
-          <fieldset>
-            <legend>Error Correction</legend>
-            <div>
-              <label>
-                <span aria-hidden="true">minimum</span>
-                <select name="min-correction" aria-label="Minimum error correction level">
-                  <option value="L" selected>L (7%)</option>
-                  <option value="M">M (15%)</option>
-                  <option value="Q">Q (25%)</option>
-                  <option value="H">H (30%)</option>
-                </select>
-              </label>
-              <label>
-                <span aria-hidden="true">maximum</span>
-                <select name="max-correction" aria-label="Maximim error correction level">
-                  <option value="L">L (7%)</option>
-                  <option value="M">M (15%)</option>
-                  <option value="Q">Q (25%)</option>
-                  <option value="H" selected>H (30%)</option>
-                </select>
-              </label>
-            </div>
-          </fieldset>
-          <fieldset>
-            <legend><label for="mask">Mask</label></legend>
-            <div>
-              <select name="mask" id="mask">
-                <option value="auto" selected>Automatic</option>
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-              </select>
-            </div>
-          </fieldset>
-          <fieldset>
-            <legend><label for="trailer">Trailer Data</label></legend>
-            <div>
-              <datalist id="trailer-common">
-                <option value="EC11" />
-                <option value="0000" />
-                <option value="3333" />
-                <option value="5555" />
-                <option value="5A5A" />
-                <option value="AAAA" />
-                <option value="FFFF" />
-              </datalist>
-              <input type="text" id="trailer" name="trailer" list="trailer-common" value="EC11" />
-            </div>
-          </fieldset>
-          <fieldset>
-            <legend>Output</legend>
-            <div>
-              <label>
-                <span aria-hidden="true">front</span>
-                <input type="color" name="on" value="#000000" aria-label="Pattern colour" />
-              </label>
-              <label>
-                <span aria-hidden="true">back</span>
-                <input type="color" name="off" value="#FFFFFF" aria-label="Background colour" />
-              </label>
-              <button
-                type="button"
-                id="reverse-col"
-                title="Swap foreground and background colours"
-                aria-label="Swap foreground and background colours"
-              >
-                &#x21CB;
-              </button>
-              <label>
-                <span aria-hidden="true">format</span>
-                <select name="format" aria-label="Preview format">
-                  <option value="canvas" selected>Canvas</option>
-                  <option value="text">Text</option>
-                  <option value="svg">SVG</option>
-                </select>
-              </label>
-            </div>
-          </fieldset>
-        </details>
-        <div id="download">
-          <a class="png" download="qr-code.png" aria-label="Download as PNG"> Download as PNG </a>
-          <a class="svg" download="qr-code.svg" aria-label="Download as SVG"> Download as SVG </a>
+        <div class="tabbox">
+          <h1>Lean QR</h1>
+          <input type="radio" name="tab" id="tab-message" checked /><label class="tab" for="tab-message" role="tab"
+            >Message</label
+          ><input type="radio" name="tab" id="tab-appearance" /><label class="tab" for="tab-appearance" role="tab"
+            >Appearance</label
+          ><input type="radio" name="tab" id="tab-advanced" /><label class="tab" for="tab-advanced" role="tab"
+            >Advanced</label
+          >
+          <div class="tabpanel message" role="tabpanel">
+            <textarea name="message" placeholder="Enter a message to be written as a QR Code"></textarea>
+          </div>
+          <div class="tabpanel appearance" role="tabpanel">
+            <section>
+              <fieldset class="colours">
+                <legend>Display Colours</legend>
+                <div class="picker-2col">
+                  <input type="color" name="on" value="#000000" title="Pattern colour" aria-label="Pattern colour" />
+                  <input
+                    type="color"
+                    name="off"
+                    value="#FFFFFF"
+                    title="Background colour"
+                    aria-label="Background colour"
+                  />
+                  <button
+                    type="button"
+                    id="reverse-col"
+                    title="Swap pattern and background colours"
+                    aria-label="Swap pattern and background colours"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 16 16" width="16" height="16">
+                      <path d="M3 4h2a7 7 0 0 1 7 7v2" stroke="currentColor" stroke-width="1.5" fill="none" />
+                      <path d="M0 4l5-3v6ZM12 16l-3-5h6Z" fill="currentColor" />
+                    </svg>
+                  </button>
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend><label for="scale">Download Scale</label></legend>
+                <div>
+                  <input type="number" id="scale" name="scale" value="10" min="1" step="1" />
+                </div>
+              </fieldset>
+            </section>
+          </div>
+          <div class="tabpanel advanced" role="tabpanel">
+            <section>
+              <fieldset>
+                <legend>Version</legend>
+                <div>
+                  <label>
+                    <span aria-hidden="true">minimum</span>
+                    <input type="number" name="min-version" min="1" max="40" value="1" aria-label="Minimum version" />
+                  </label>
+                  <label>
+                    <span aria-hidden="true">maximum</span>
+                    <input type="number" name="max-version" min="1" max="40" value="40" aria-label="Maximum version" />
+                  </label>
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>Error Correction</legend>
+                <div>
+                  <label>
+                    <span aria-hidden="true">minimum</span>
+                    <select name="min-correction" aria-label="Minimum error correction level">
+                      <option value="L" selected>L (7%)</option>
+                      <option value="M">M (15%)</option>
+                      <option value="Q">Q (25%)</option>
+                      <option value="H">H (30%)</option>
+                    </select>
+                  </label>
+                  <label>
+                    <span aria-hidden="true">maximum</span>
+                    <select name="max-correction" aria-label="Maximim error correction level">
+                      <option value="L">L (7%)</option>
+                      <option value="M">M (15%)</option>
+                      <option value="Q">Q (25%)</option>
+                      <option value="H" selected>H (30%)</option>
+                    </select>
+                  </label>
+                </div>
+              </fieldset>
+            </section>
+            <section>
+              <fieldset>
+                <legend><label for="mask">Mask</label></legend>
+                <div>
+                  <select name="mask" id="mask">
+                    <option value="auto" selected>Automatic</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                  </select>
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend><label for="trailer">Trailer Data</label></legend>
+                <div>
+                  <datalist id="trailer-common">
+                    <option value="EC11" />
+                    <option value="0000" />
+                    <option value="3333" />
+                    <option value="5555" />
+                    <option value="5A5A" />
+                    <option value="AAAA" />
+                    <option value="FFFF" />
+                  </datalist>
+                  <input type="text" id="trailer" name="trailer" list="trailer-common" value="EC11" />
+                </div>
+              </fieldset>
+            </section>
+            <section>
+              <fieldset>
+                <legend>Permitted Modes</legend>
+                <div class="check-list">
+                  <label><input type="checkbox" name="mode-numeric" checked /> Numeric</label>
+                  <label><input type="checkbox" name="mode-alphanumeric" checked /> Alphanumeric</label>
+                  <label><input type="checkbox" name="mode-ascii" checked /> ASCII</label>
+                  <label><input type="checkbox" name="mode-iso88591" checked /> ISO-8859-1</label>
+                  <label><input type="checkbox" name="mode-sjis" checked /> Shift-JIS</label>
+                  <label><input type="checkbox" name="mode-utf8" checked /> UTF-8</label>
+                </div>
+              </fieldset>
+            </section>
+          </div>
         </div>
-        <p id="error">
-          <noscript>
-            <p>You must enable JavaScript to generate a code.</p>
-          </noscript>
-        </p>
-        <div id="output">
-          <canvas class="qr" width="1" height="1" aria-label="QR Code"></canvas>
-          <pre class="qr" role="img" aria-label="QR Code"></pre>
-          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" aria-label="QR Code"></svg>
+        <div class="output">
+          <div id="download">
+            <a class="png" download="qr-code.png" aria-label="Download as PNG" title="Download as PNG">PNG</a>
+            <a class="svg" download="qr-code.svg" aria-label="Download as SVG" title="Download as SVG">SVG</a>
+            <a class="share" href="#" aria-label="Share QR Code">Share</a>
+          </div>
+          <p id="error">
+            <noscript>
+              <p>You must enable JavaScript to generate a code.</p>
+            </noscript>
+          </p>
+          <canvas id="qr" class="qr" width="1" height="1" aria-label="QR Code"></canvas>
         </div>
       </form>
-      <nav>
-        <a href="/docs/" target="_blank" title="Library documentation" aria-label="Library documentation">Docs</a>
-        <a
-          href="https://www.npmjs.com/package/lean-qr"
-          target="_blank"
-          title="See the library on NPM"
-          aria-label="See the library on NPM"
-          >NPM</a
-        >
-        <a
-          href="https://github.com/davidje13/lean-qr"
-          target="_blank"
-          title="Go to source code on GitHub"
-          aria-label="Go to source code on GitHub"
-          >GitHub</a
-        >
-      </nav>
     </article>
+    <nav>
+      <a href="/docs/" target="_blank" title="Library documentation" aria-label="Library documentation">Docs</a
+      ><a
+        href="https://www.npmjs.com/package/lean-qr"
+        target="_blank"
+        title="See the library on NPM"
+        aria-label="See the library on NPM"
+        >NPM</a
+      ><a
+        href="https://github.com/davidje13/lean-qr"
+        target="_blank"
+        title="Go to source code on GitHub"
+        aria-label="Go to source code on GitHub"
+        >GitHub</a
+      >
+    </nav>
   </body>
 </html>

@@ -1,5 +1,5 @@
-import { correction, generate } from '../src/index.mjs';
-import { toSvg, toSvgDataURL } from '../src/extras/svg.mjs';
+import { correction, generate, mode } from '../src/index.mjs';
+import { toSvgDataURL } from '../src/extras/svg.mjs';
 import { readError } from '../src/extras/errors.mjs';
 
 const getInput = (name) => document.querySelector(`[name="${name}"]`);
@@ -38,22 +38,23 @@ function getMask() {
 }
 
 const err = document.getElementById('error');
-const outputCanvas = document.querySelector('#output canvas');
-const outputText = document.querySelector('#output pre');
-const outputSvg = document.querySelector('#output svg');
+const qrCanvas = document.querySelector('#qr');
 const downloadPng = document.querySelector('#download .png');
 const downloadSvg = document.querySelector('#download .svg');
+const share = document.querySelector('#download .share');
+const modes = [
+  { mode: mode.numeric, input: getInput('mode-numeric') },
+  { mode: mode.alphaNumeric, input: getInput('mode-alphanumeric') },
+  { mode: mode.ascii, input: getInput('mode-ascii') },
+  { mode: mode.iso8859_1, input: getInput('mode-iso88591') },
+  { mode: mode.shift_jis, input: getInput('mode-sjis') },
+  { mode: mode.utf8, input: getInput('mode-utf8') },
+];
 
 let latestCode = null;
 
 function regenerate() {
   latestCode = null;
-  outputCanvas.style.display = 'none';
-  outputText.style.display = 'none';
-  outputSvg.style.display = 'none';
-  err.style.display = 'none';
-  downloadPng.removeAttribute('href');
-  downloadSvg.removeAttribute('href');
 
   try {
     const code = generate(getValue('message'), {
@@ -63,34 +64,20 @@ function regenerate() {
       maxCorrectionLevel: correction[getValue('max-correction')],
       mask: getMask(),
       trailer: getData('trailer', 0x0000, 0xffff),
+      modes: modes.filter(({ input }) => input.checked).map(({ mode }) => mode),
     });
     latestCode = code;
     downloadPng.setAttribute('href', '#');
     downloadSvg.setAttribute('href', '#');
 
-    switch (getValue('format')) {
-      case 'canvas':
-        code.toCanvas(outputCanvas, {
-          on: getColour('on'),
-          off: getColour('off'),
-        });
-        outputCanvas.style.display = 'block';
-        break;
-      case 'text':
-        outputText.innerText = code.toString({ on: '\u2588\u2588', off: '  ' });
-        outputText.style.color = getValue('on');
-        outputText.style.background = getValue('off');
-        outputText.style.transform = `scale(${(21 + 8) / (code.size + 8)})`;
-        outputText.style.display = 'inline-block';
-        break;
-      case 'svg':
-        toSvg(code, outputSvg, { on: getValue('on'), off: getValue('off') });
-        outputSvg.style.display = 'block';
-        break;
-    }
+    code.toCanvas(qrCanvas, {
+      on: getColour('on'),
+      off: getColour('off'),
+    });
+    document.body.className = 'success';
   } catch (e) {
     err.innerText = readError(e);
-    err.style.display = 'block';
+    document.body.className = 'error';
   }
 }
 
@@ -103,7 +90,7 @@ downloadPng.addEventListener('click', (e) => {
     type: 'image/png',
     on: getColour('on'),
     off: getColour('off'),
-    scale: 10,
+    scale: getInt('scale', 1, Number.POSITIVE_INFINITY),
   });
   downloadPng.setAttribute('href', url);
 });
@@ -116,10 +103,42 @@ downloadSvg.addEventListener('click', (e) => {
   const url = toSvgDataURL(latestCode, {
     on: getValue('on'),
     off: getValue('off'),
-    scale: 10,
+    scale: getInt('scale', 1, Number.POSITIVE_INFINITY),
   });
   downloadSvg.setAttribute('href', url);
 });
+
+if (
+  navigator.canShare?.({
+    files: [new File([], 'test.png', { type: 'image/png' })],
+  })
+) {
+  share.style.display = 'inline-block';
+  function doShare(e) {
+    e.preventDefault();
+    if (!latestCode) {
+      return;
+    }
+    const url = latestCode.toDataURL({
+      type: 'image/png',
+      on: getColour('on'),
+      off: getColour('off'),
+      scale: getInt('scale', 1, Number.POSITIVE_INFINITY),
+    });
+    fetch(url)
+      .then((r) => r.blob())
+      .then((blob) =>
+        navigator.share({
+          title: getValue('message'),
+          files: [new File([blob], 'qr-code.png', { type: blob.type })],
+        }),
+      )
+      .catch(() => null);
+  }
+  share.addEventListener('click', doShare);
+  qrCanvas.addEventListener('click', doShare);
+  qrCanvas.style.cursor = 'pointer';
+}
 
 document
   .querySelectorAll('input, select, textarea')
