@@ -12,23 +12,15 @@ const tRNS = 0x74524e53;
 
 export const toPngBuffer = (
   code,
-  {
-    on = [0, 0, 0],
-    off = [0, 0, 0, 0],
-    pad = 4,
-    padX = pad,
-    padY = pad,
-    scale = 1,
-  } = {},
+  { on = [0, 0, 0], off = [0, 0, 0, 0], pad = 4, scale = 1 } = {},
 ) => {
-  const w = (code.size + padX * 2) * scale;
-  const h = (code.size + padY * 2) * scale;
-  const step = (w + 15) >> 3;
+  const s = (code.size + pad * 2) * scale;
+  const step = (s + 15) >> 3;
 
-  const imageData = Buffer.alloc(h * step);
-  for (let y = 0; y < h; ++y) {
-    for (let x = 0; x < w; ++x) {
-      if (code.get(((x / scale) | 0) - padX, ((y / scale) | 0) - padY)) {
+  const imageData = Buffer.alloc(s * step);
+  for (let y = 0; y < s; ++y) {
+    for (let x = 0; x < s; ++x) {
+      if (code.get(((x / scale) | 0) - pad, ((y / scale) | 0) - pad)) {
         imageData[y * step + 1 + (x >> 3)] |= 0x80 >> (x & 7);
       }
     }
@@ -41,8 +33,8 @@ export const toPngBuffer = (
     off[0] | off[1] | off[2] | ((on[0] & on[1] & on[2]) < 255) | trns;
 
   const ihdr = Buffer.alloc(13);
-  ihdr.writeInt32BE(w, 0);
-  ihdr.writeInt32BE(h, 4);
+  ihdr.writeInt32BE(s, 0);
+  ihdr.writeInt32BE(s, 4);
   ihdr[8] = 1; // bit depth
   ihdr[9] = plte ? 3 : 0; // colour type: indexed / greyscale
 

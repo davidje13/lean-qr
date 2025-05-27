@@ -143,8 +143,8 @@ describe('makeVueSvgComponent', () => {
     const Component = makeVueSvgComponent(framework, spyGenerate, toSvgDataURL);
 
     const { container, advance } = getTyped(MOUNT)(Component, [
-      { content: 'TEST', padX: 2 },
-      { content: 'TEST', padX: 10 },
+      { content: 'TEST', pad: 2 },
+      { content: 'TEST', pad: 10 },
     ]);
 
     const img = container.querySelector('img');

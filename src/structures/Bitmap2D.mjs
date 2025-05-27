@@ -12,17 +12,10 @@ export const Bitmap2D = (
 
   // begin-exclude-webcomponent
   // begin-exclude-nano
-  toString({
-    on = '##',
-    off = '  ',
-    lf = '\n',
-    pad = 4,
-    padX = pad,
-    padY = pad,
-  } = {}) {
+  toString({ on = '##', off = '  ', lf = '\n', pad = 4 } = {}) {
     let r = '';
-    for (let y = -padY; y < size + padY; ++y) {
-      for (let x = -padX; x < size + padX; ++x) {
+    for (let y = -pad; y < size + pad; ++y) {
+      for (let x = -pad; x < size + pad; ++x) {
         r += this.get(x, y) ? on : off;
       }
       r += lf;
@@ -32,27 +25,17 @@ export const Bitmap2D = (
   // end-exclude-nano
   // end-exclude-webcomponent
 
-  toImageData(
-    context,
-    {
-      on = [0, 0, 0],
-      off = [0, 0, 0, 0],
-      pad = 4,
-      padX = pad,
-      padY = pad,
-    } = {},
-  ) {
-    const fullX = size + padX * 2;
-    const fullY = size + padY * 2;
-    const target = context.createImageData(fullX, fullY);
+  toImageData(context, { on = [0, 0, 0], off = [0, 0, 0, 0], pad = 4 } = {}) {
+    const fullS = size + pad * 2;
+    const target = context.createImageData(fullS, fullS);
     const abgr = new Uint32Array(target.data.buffer);
     target.data.set([...on, 255]);
     const cOn = abgr[0];
     target.data.set([...off, 255]);
     const cOff = abgr[0];
-    for (let y = 0; y < fullY; ++y) {
-      for (let x = 0; x < fullX; ++x) {
-        abgr[y * fullX + x] = this.get(x - padX, y - padY) ? cOn : cOff;
+    for (let y = 0; y < fullS; ++y) {
+      for (let x = 0; x < fullS; ++x) {
+        abgr[y * fullS + x] = this.get(x - pad, y - pad) ? cOn : cOff;
       }
     }
     return target;
