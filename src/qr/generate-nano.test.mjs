@@ -1,6 +1,6 @@
 import { generate as generateNano } from './generate-nano.mjs';
 import { generate as generateFull } from './generate.mjs';
-import { mode } from './options/modes.mjs';
+import { ascii, utf8 } from './options/modes.mjs';
 import { correction } from './options/corrections.mjs';
 import { toMatchImage } from '../test-helpers/toMatchImage.mjs';
 
@@ -14,7 +14,7 @@ describe('nano generate', () => {
     'matches the output of full generate',
     ({ message, options, fullOptions }) => {
       const nanoCode = generateNano(message, options);
-      const fullCode = generateFull(mode.utf8(message), fullOptions ?? options);
+      const fullCode = generateFull(utf8(message), fullOptions ?? options);
       expect(nanoCode).toMatchImage(
         fullCode.toString({ on: '#', off: ' ', pad: 0 }),
       );
@@ -63,7 +63,7 @@ describe('nano generate', () => {
   });
 
   it('throws if given unsupported input', () => {
-    expect(() => generateNano(mode.ascii('nope'))).toThrow('lean-qr error 5');
+    expect(() => generateNano(ascii('nope'))).toThrow('lean-qr error 5');
   });
 
   it('throws if given too much data', () => {

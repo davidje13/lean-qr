@@ -1,5 +1,5 @@
 import { generate } from './generate.mjs';
-import { mode } from './options/modes.mjs';
+import { multi, alphaNumeric, ascii, shift_jis } from './options/modes.mjs';
 import { correction } from './options/corrections.mjs';
 import { loadImage } from '../test-helpers/loadImage.mjs';
 import { toMatchImage } from '../test-helpers/toMatchImage.mjs';
@@ -8,7 +8,7 @@ expect.extend({ toMatchImage });
 
 // Source https://www.thonky.com/qr-code-tutorial/format-version-information
 const KNOWN = loadImage('helloworld.png');
-const KNOWN_DATA = mode.alphaNumeric('HELLO WORLD');
+const KNOWN_DATA = alphaNumeric('HELLO WORLD');
 const KNOWN_PARAMS = {
   minCorrectionLevel: correction.Q,
   maxCorrectionLevel: correction.Q,
@@ -80,19 +80,19 @@ describe('generate', () => {
 
   it('throws if too much data is provided for the max version', () => {
     expect(() =>
-      generate(mode.ascii(LONG_MESSAGE), {
+      generate(ascii(LONG_MESSAGE), {
         maxVersion: 2,
       }),
     ).toThrow('lean-qr error 4');
   });
 
   it('picks a version depending on the message length', () => {
-    const code = generate(mode.ascii(LONG_MESSAGE));
+    const code = generate(ascii(LONG_MESSAGE));
     expect(code.size).toEqual(4 * 4 + 17);
   });
 
   it('allows larger versions to be forced', () => {
-    const code = generate(mode.ascii(LONG_MESSAGE), { minVersion: 10 });
+    const code = generate(ascii(LONG_MESSAGE), { minVersion: 10 });
     expect(code.size).toEqual(10 * 4 + 17);
   });
 
@@ -107,7 +107,7 @@ describe('generate', () => {
 describe('known examples', () => {
   it('wikipedia link', () => {
     // Source: https://en.wikipedia.org/wiki/File:QR_code_for_mobile_English_Wikipedia.svg
-    const code = generate(mode.ascii('http://en.m.wikipedia.org'), {
+    const code = generate(ascii('http://en.m.wikipedia.org'), {
       minCorrectionLevel: correction.Q,
       maxCorrectionLevel: correction.Q,
       mask: 1,
@@ -117,13 +117,13 @@ describe('known examples', () => {
 
   it('Ver1', () => {
     // Source: https://en.wikipedia.org/wiki/File:Qr-1.svg
-    const code = generate(mode.ascii('Ver1'));
+    const code = generate(ascii('Ver1'));
     expect(code).toMatchImage(loadImage('v1.png'));
   });
 
   it('Version 2', () => {
     // Source: https://en.wikipedia.org/wiki/File:Qr-2.svg
-    const code = generate(mode.ascii('Version 2'), {
+    const code = generate(ascii('Version 2'), {
       minCorrectionLevel: correction.H,
     });
     expect(code).toMatchImage(loadImage('v2.png'));
@@ -131,7 +131,7 @@ describe('known examples', () => {
 
   it('Version 3', () => {
     // Source: https://en.wikipedia.org/wiki/File:Qr-3.svg
-    const code = generate(mode.ascii('Version 3 QR Code'), {
+    const code = generate(ascii('Version 3 QR Code'), {
       minCorrectionLevel: correction.H,
     });
     expect(code).toMatchImage(loadImage('v3.png'));
@@ -139,7 +139,7 @@ describe('known examples', () => {
 
   it('Version 4', () => {
     // Source: https://en.wikipedia.org/wiki/File:Qr-4.svg
-    const code = generate(mode.ascii('Version 4 QR Code, up to 50 char'), {
+    const code = generate(ascii('Version 4 QR Code, up to 50 char'), {
       minCorrectionLevel: correction.H,
     });
     expect(code).toMatchImage(loadImage('v4.png'));
@@ -148,12 +148,12 @@ describe('known examples', () => {
   it('Version 10', () => {
     // Source: https://en.wikipedia.org/wiki/File:Qr-code-ver-10.svg
     const code = generate(
-      mode.multi(
-        mode.alphaNumeric('VERSION 10 QR CODE'),
-        mode.ascii(','),
-        mode.alphaNumeric(' UP TO 174 CHAR AT H LEVEL'),
-        mode.ascii(','),
-        mode.alphaNumeric(
+      multi(
+        alphaNumeric('VERSION 10 QR CODE'),
+        ascii(','),
+        alphaNumeric(' UP TO 174 CHAR AT H LEVEL'),
+        ascii(','),
+        alphaNumeric(
           ' WITH 57X57 MODULES AND PLENTY OF ERROR CORRECTION TO GO AROUND.' +
             '  NOTE THAT THERE ARE ADDITIONAL TRACKING BOXES',
         ),
@@ -192,7 +192,7 @@ describe('known examples', () => {
   it('Version 25', () => {
     // Source: https://en.wikipedia.org/wiki/File:QR_Code_Version_25.svg
     const code = generate(
-      mode.ascii(
+      ascii(
         `Version 25 QR Code, up to 1853 characters at L level.\n${COMMON_BLURB}`,
       ),
     );
@@ -202,7 +202,7 @@ describe('known examples', () => {
   it('Version 40', () => {
     // Source: https://en.wikipedia.org/wiki/File:Qr-code-ver-40.svg
     const code = generate(
-      mode.ascii(
+      ascii(
         `Version 40 QR Code can contain up to 1852 chars.\n${COMMON_BLURB}\n`,
       ),
       { minCorrectionLevel: correction.H, mask: 2 },
@@ -212,7 +212,7 @@ describe('known examples', () => {
 
   it('Kanji', () => {
     const kanji = '\u6F22\u5B57'; // 漢字 "Kanji"
-    const code = generate(mode.shift_jis(kanji), {
+    const code = generate(shift_jis(kanji), {
       minCorrectionLevel: correction.H,
       maxCorrectionLevel: correction.H,
       minVersion: 1,

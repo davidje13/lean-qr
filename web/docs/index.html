@@ -1562,6 +1562,10 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
             as required when building. If you are including the scripts directly in a HTML page, you can add
             <code>type="module"</code> to support ESM.
           </li>
+          <li>
+            <code>generate.with</code> has been removed, as it was rarely useful. If you were using it, change your code
+            to pass a full list of modes to consider to the <code>modes</code> option of <code>generate</code>.
+          </li>
         </ul>
       </section>
       <section>

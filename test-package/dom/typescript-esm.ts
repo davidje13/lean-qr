@@ -51,7 +51,7 @@ process.stdout.write(toSvgSource(code3, { pad: 2, xmlDeclaration: true }));
 process.stdout.write(toPngBuffer(code3, { pad: 2, scale: 10 }).toString());
 
 try {
-  const code4 = generate.with(customMode)('123');
+  const code4 = generate('123', { modes: [customMode] });
   process.stdout.write(code4.get(0, 0) ? 'y' : 'n');
 } catch (e) {
   process.stderr.write(readError(e));
@@ -92,16 +92,10 @@ const badCustomMode = Object.assign(() => () => null, {
 });
 
 // @ts-expect-error
-generate.with(badCustomMode);
+generate('', { modes: [badCustomMode] });
 
 // @ts-expect-error
-generate.with(customMode)(7);
-
-// @ts-expect-error
-generate.with(7)('hello');
-
-// @ts-expect-error
-generate.with(customMode).with(customMode)('hello');
+generate('', { modes: [7] });
 
 // @ts-expect-error
 code.toCanvas(canvas, { on: [0, 0], off: [255, 255, 255, 0] });

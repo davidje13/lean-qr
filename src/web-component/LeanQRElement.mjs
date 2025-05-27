@@ -1,13 +1,21 @@
-import { generate, mode } from '../index.mjs';
+import {
+  numeric,
+  alphaNumeric,
+  ascii,
+  iso8859_1,
+  utf8,
+  shift_jis,
+} from '../qr/options/modes.mjs';
+import { generate } from '../qr/generate.mjs';
 import { parseCol } from './utils.mjs';
 
 const MODE_LOOKUP = new Map([
-  ['numeric', mode.numeric],
-  ['alphanumeric', mode.alphaNumeric],
-  ['ascii', mode.ascii],
-  ['iso8859_1', mode.iso8859_1],
-  ['shift_jis', mode.shift_jis],
-  ['utf8', mode.utf8],
+  ['numeric', numeric],
+  ['alphanumeric', alphaNumeric],
+  ['ascii', ascii],
+  ['iso8859_1', iso8859_1],
+  ['shift_jis', shift_jis],
+  ['utf8', utf8],
 ]);
 
 const getCorrection = (v) => 'LMQH'.indexOf(v);
