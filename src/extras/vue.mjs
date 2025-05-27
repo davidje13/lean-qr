@@ -1,10 +1,3 @@
-import {
-  fail,
-  ERROR_BAD_GENERATE,
-  ERROR_BAD_TO_SVG_DATA_URL,
-  ERROR_BAD_FRAMEWORK,
-} from '../util.mjs';
-
 const GENERATE_OPTS = [
   'minCorrectionLevel',
   'maxCorrectionLevel',
@@ -26,6 +19,14 @@ const dataOrError = (fn) => {
   }
 };
 
+const BAD_FRAMEWORK = 'Bad framework';
+const BAD_GENERATE = 'Bad generate';
+const BAD_SVG = 'Bad toSvgDataURL';
+
+const fail = (m) => {
+  throw new TypeError(m);
+};
+
 const extract = (o, props) =>
   Object.fromEntries(
     props.map((k) => [k, o[k]]).filter(([_, v]) => v !== undefined),
@@ -38,8 +39,8 @@ const COMMON = {
 };
 
 export const makeVueCanvasComponent = (
-  { h } = fail(ERROR_BAD_FRAMEWORK),
-  generate = fail(ERROR_BAD_GENERATE),
+  { h } = fail(BAD_FRAMEWORK),
+  generate = fail(BAD_GENERATE),
   defaultOptions = {},
 ) => ({
   name: 'LeanQRCanvas',
@@ -77,9 +78,9 @@ export const makeVueCanvasComponent = (
 });
 
 export const makeVueSvgComponent = (
-  { h } = fail(ERROR_BAD_FRAMEWORK),
-  generate = fail(ERROR_BAD_GENERATE),
-  toSvgDataURL = fail(ERROR_BAD_TO_SVG_DATA_URL),
+  { h } = fail(BAD_FRAMEWORK),
+  generate = fail(BAD_GENERATE),
+  toSvgDataURL = fail(BAD_SVG),
   defaultOptions = {},
 ) => ({
   name: 'LeanQRSvg',

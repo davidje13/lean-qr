@@ -1401,52 +1401,30 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
             <thead>
               <tr>
                 <th>code</th>
-                <th>message</th>
                 <th>meaning</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>1</td>
-                <td>lean-qr error 1</td>
                 <td>No <code>content</code> provided</td>
               </tr>
               <tr>
                 <td>2</td>
-                <td>lean-qr error 2</td>
                 <td><code>maxVersion</code> must be &geq; <code>minVersion</code></td>
               </tr>
               <tr>
                 <td>3</td>
-                <td>lean-qr error 3</td>
                 <td><code>maxCorrectionLevel</code> must be &geq; <code>minCorrectionLevel</code></td>
               </tr>
               <tr>
                 <td>4</td>
-                <td>lean-qr error 4</td>
                 <td><code>content</code> exceeds maximum capacity of <code>maxVersion</code></td>
               </tr>
               <tr>
                 <td>5</td>
-                <td>lean-qr error 5</td>
                 <td><code>content</code> cannot be encoded using the chosen <code>modes</code></td>
               </tr>
-              <tr>
-                <td>6</td>
-                <td>lean-qr error 6</td>
-                <td>Invalid <code>framework</code> provided to the React wrapper</td>
-              </tr>
-              <tr>
-                <td>7</td>
-                <td>lean-qr error 7</td>
-                <td>Invalid <code>generate</code> function provided to the React wrapper</td>
-              </tr>
-              <tr>
-                <td>8</td>
-                <td>lean-qr error 8</td>
-                <td>Invalid <code>toSvgDataURL</code> function provided to the React wrapper</td>
-              </tr>
-              <tr></tr>
             </tbody>
           </table>
           <p>
@@ -1578,6 +1556,11 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
             <code>max</code> and <code>min</code> have been removed from the
             <a href="#correction"><code>correction</code></a> export (switch to <code>H</code> and
             <code>L</code> respectively).
+          </li>
+          <li>
+            The <code>react</code> and <code>vue</code> extras now throw <code>TypeError</code>s if given invalid
+            arguments when building components. These are programmer-level errors which only exist for debugging, and
+            should not occur in working code. Previously these were reported as Lean QR errors 6, 7, and 8.
           </li>
         </ul>
       </section>
