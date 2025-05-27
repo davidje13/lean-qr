@@ -1,6 +1,6 @@
 import { Bitmap1D } from '../structures/Bitmap1D.mjs';
 import { Bitmap2D } from '../structures/Bitmap2D.mjs';
-import { mode, DEFAULT_AUTO_MODES } from './options/modes.mjs';
+import { auto } from './options/modes.mjs';
 import { masks } from './options/masks.mjs';
 import {
   correctionData,
@@ -39,7 +39,7 @@ export const generate = (
     fail(ERROR_INVALID_VERSION_RANGE);
   }
   if (typeof modeData === 'string') {
-    modeData = mode.auto(modeData, autoModeConfig);
+    modeData = auto(modeData, autoModeConfig);
   }
 
   for (
@@ -91,13 +91,3 @@ export const generate = (
   }
   fail(ERROR_TOO_MUCH_DATA);
 };
-
-// begin-exclude-webcomponent
-generate.with =
-  (...extraModes) =>
-  (modeData, options) =>
-    generate(modeData, {
-      modes: [...DEFAULT_AUTO_MODES, ...extraModes],
-      ...options,
-    });
-// end-exclude-webcomponent
