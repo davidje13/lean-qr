@@ -1,4 +1,4 @@
-index.mjs:              sha384-FujhaNkhk/NY5MR0bQWxxSKGQS57WL+B5Sv3Ue4v/vu8vthNkZtE3zNNGEuQ1Tbj
+index.mjs:              sha384-+cwZf2MOeII2co/npyMDTrl9bijMmufGWZVEl+ugD9FdvKt1/kSj/4ejDavLDSS9
 nano.mjs:               sha384-M3xrhZG+C4yOgbDoEM0ujbqv+o6Dja8lqAV5Q9qON6AyzP2sIfxWQRageEAYRIAM
 extras/svg.mjs:         sha384-gDlAAD5FU7cURdmN7VX6sD1sJHsi1L5MoRt20eEGlxzWk/U1qPAazKpeSh4av9t9
 extras/png.mjs:         sha384-x+fUAQLOds6jXwpDbh6CWuteKZvKDi3KwFGnm/y69y4JIRr8izhR4Fo3sUSaZ7q7

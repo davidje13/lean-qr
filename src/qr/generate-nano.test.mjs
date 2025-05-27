@@ -24,7 +24,7 @@ describe('nano generate', () => {
         {
           name: 'plain text is encoded as utf8',
           message: 'hello',
-          options: { minCorrectionLevel: correction.max },
+          options: { minCorrectionLevel: correction.H },
         },
         {
           name: 'custom correction level',
@@ -47,12 +47,12 @@ describe('nano generate', () => {
         {
           name: 'long message',
           message: LONG_MESSAGE,
-          options: { minCorrectionLevel: correction.max },
+          options: { minCorrectionLevel: correction.H },
         },
         {
           name: 'allows larger versions to be forced',
           message: LONG_MESSAGE,
-          options: { minVersion: 10, minCorrectionLevel: correction.max },
+          options: { minVersion: 10, minCorrectionLevel: correction.H },
         },
       ],
     },

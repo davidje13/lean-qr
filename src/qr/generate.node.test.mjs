@@ -54,8 +54,8 @@ describe('generate', () => {
   it('automatically picks the highest correction level by default', () => {
     const code = generate(KNOWN_DATA, {
       ...KNOWN_PARAMS,
-      minCorrectionLevel: correction.min,
-      maxCorrectionLevel: correction.max,
+      minCorrectionLevel: correction.L,
+      maxCorrectionLevel: correction.H,
     });
     expect(code).toMatchImage(KNOWN);
   });

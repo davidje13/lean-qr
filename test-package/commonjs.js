@@ -64,7 +64,7 @@ if (sample !== expected) {
   throw new Error("require('lean-qr') produced incorrect output\n" + sample);
 }
 
-const config = { minCorrectionLevel: correction.max };
+const config = { minCorrectionLevel: correction.H };
 const sample2 = generate(mode.utf8('LEAN-QR LIBRARY'), config);
 const sample2Nano = generateNano('LEAN-QR LIBRARY', config);
 if (!equal(sample2Nano, sample2)) {
