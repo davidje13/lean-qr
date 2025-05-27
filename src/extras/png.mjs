@@ -8,16 +8,15 @@ const tRNS = 0x74524e53;
 
 export const toPngBytes = async (
   code,
-  { on = [0, 0, 0], off = [0, 0, 0, 0], padX = 4, padY = 4, scale = 1 } = {},
+  { on = [0, 0, 0], off = [0, 0, 0, 0], pad = 4, scale = 1 } = {},
 ) => {
-  const w = (code.size + padX * 2) * scale;
-  const h = (code.size + padY * 2) * scale;
-  const step = (w + 15) >> 3;
+  const s = (code.size + pad * 2) * scale;
+  const step = (s + 15) >> 3;
 
-  const imageData = new Uint8Array(h * step);
-  for (let y = 0; y < h; ++y) {
-    for (let x = 0; x < w; ++x) {
-      if (code.get(((x / scale) | 0) - padX, ((y / scale) | 0) - padY)) {
+  const imageData = new Uint8Array(s * step);
+  for (let y = 0; y < s; ++y) {
+    for (let x = 0; x < s; ++x) {
+      if (code.get(((x / scale) | 0) - pad, ((y / scale) | 0) - pad)) {
         imageData[y * step + 1 + (x >> 3)] |= 0x80 >> (x & 7);
       }
     }
@@ -31,8 +30,8 @@ export const toPngBytes = async (
 
   const ihdr = new Uint8Array(13);
   const ihdrDV = new DataView(ihdr.buffer);
-  ihdrDV.setInt32(0, w);
-  ihdrDV.setInt32(4, h);
+  ihdrDV.setInt32(0, s);
+  ihdrDV.setInt32(4, s);
   ihdr[8] = 1; // bit depth
   ihdr[9] = plte ? 3 : 0; // colour type: indexed / greyscale
 

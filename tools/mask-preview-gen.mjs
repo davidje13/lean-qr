@@ -13,8 +13,7 @@ const size = 12;
 const options = {
   on: [255, 255, 255],
   off: [0, 0, 0],
-  padX: 0,
-  padY: 0,
+  pad: 0,
   scale: 1,
 };
 

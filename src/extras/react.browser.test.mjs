@@ -56,13 +56,13 @@ describe('makeAsyncComponent', () => {
     const spyGenerate = mock(generate);
     const Component = makeAsyncComponent(framework, spyGenerate);
 
-    render(h(Component, { content: 'TEST', padX: 2 }), container);
+    render(h(Component, { content: 'TEST', pad: 2 }), container);
 
     const canvas = container.querySelector('canvas');
     await expect.poll(() => canvas.width, equals(25));
     expect(spyGenerate).toHaveBeenCalled({ times: 1 });
 
-    render(h(Component, { content: 'TEST', padX: 10 }), container);
+    render(h(Component, { content: 'TEST', pad: 10 }), container);
     await expect.poll(() => canvas.width, equals(41));
     expect(spyGenerate).toHaveBeenCalled({ times: 1 });
   });
@@ -123,13 +123,13 @@ describe('makeSyncComponent', () => {
     const spyGenerate = mock(generate);
     const Component = makeSyncComponent(framework, spyGenerate, toSvgDataURL);
 
-    render(h(Component, { content: 'TEST', padX: 2 }), container);
+    render(h(Component, { content: 'TEST', pad: 2 }), container);
 
     const img = container.querySelector('img');
     const content1 = img.src;
     expect(spyGenerate).toHaveBeenCalled({ times: 1 });
 
-    render(h(Component, { content: 'TEST', padX: 10 }), container);
+    render(h(Component, { content: 'TEST', pad: 10 }), container);
     expect(img.src).not(equals(content1));
     expect(spyGenerate).toHaveBeenCalled({ times: 1 });
   });

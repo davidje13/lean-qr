@@ -214,10 +214,7 @@ try {
   });
 
   const tm2 = Date.now();
-  const result = await formatter(code, {
-    padX: args.padding,
-    padY: args.padding,
-  });
+  const result = await formatter(code, { pad: args.padding });
 
   const tm3 = Date.now();
   process.stdout.write(result);

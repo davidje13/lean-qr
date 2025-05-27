@@ -23,8 +23,7 @@ const ATTRS = Object.entries({
   modes: ['modes', (v) => v.matchAll(/\w+/g).map(([m]) => MODE_LOOKUP.get(m))],
   on: ['on', parseCol],
   off: ['off', parseCol],
-  padX: ['pad-x', parseInt],
-  padY: ['pad-y', parseInt],
+  pad: ['pad', parseInt],
 });
 
 export class LeanQRElement extends HTMLElement {
@@ -38,6 +37,7 @@ export class LeanQRElement extends HTMLElement {
     canvas.style.display = 'block';
     canvas.style.width = '100%';
     canvas.style.imageRendering = 'pixelated';
+    this.style.aspectRatio = '1';
     this.setAttribute('role', 'img');
     this.attachShadow({ mode: 'closed' }).append(canvas);
   }
@@ -94,7 +94,6 @@ export class LeanQRElement extends HTMLElement {
       try {
         const code = generate(msg, options);
         code.toCanvas(canvas, options);
-        this.style.aspectRatio = `${canvas.width} / ${canvas.height}`;
       } catch (e) {
         console.error('QR code rendering failed', e);
         canvas.getContext('2d').clearRect(0, 0, 200, 200);

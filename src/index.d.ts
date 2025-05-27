@@ -40,11 +40,8 @@ declare module 'lean-qr' {
     /** the text to use for linefeeds between rows */
     lf?: string;
 
-    /** the padding to apply on the left and right of the output (populated with 'off' modules) */
-    padX?: number;
-
-    /** the padding to apply on the top and bottom of the output (populated with 'off' modules) */
-    padY?: number;
+    /** the padding to apply around the output (populated with 'off' modules) */
+    pad?: number;
   }
 
   export interface ImageDataOptions {
@@ -54,11 +51,8 @@ declare module 'lean-qr' {
     /** the colour to use for modules which are 'off' (typically white) */
     off?: RGBA;
 
-    /** the padding to apply on the left and right of the output (filled with 'off') */
-    padX?: number;
-
-    /** the padding to apply on the top and bottom of the output (filled with 'off') */
-    padY?: number;
+    /** the padding to apply around the output (filled with 'off') */
+    pad?: number;
   }
 
   export interface Bitmap2D {
@@ -263,10 +257,8 @@ declare module 'lean-qr/extras/svg' {
     on?: string;
     /** the colour to use for modules which are 'off' (typically white) */
     off?: string;
-    /** the padding to apply on the left and right of the output (filled with 'off') */
-    padX?: number;
-    /** the padding to apply on the top and bottom of the output (filled with 'off') */
-    padY?: number;
+    /** the padding to apply around the output (filled with 'off') */
+    pad?: number;
     /** a width to apply to the resulting image (overrides `scale`) */
     width?: number | null;
     /** a height to apply to the resulting image (overrides `scale`) */
@@ -337,10 +329,8 @@ declare module 'lean-qr/extras/png' {
     on?: RGBA;
     /** the colour to use for modules which are 'off' (typically white) */
     off?: RGBA;
-    /** the padding to apply on the left and right of the output (filled with 'off') */
-    padX?: number;
-    /** the padding to apply on the top and bottom of the output (filled with 'off') */
-    padY?: number;
+    /** the padding to apply around the output (filled with 'off') */
+    pad?: number;
     /** a scale to apply to the resulting image (`scale` pixels = 1 module) */
     scale?: number;
   }

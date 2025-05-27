@@ -42,8 +42,8 @@ const customMode = Object.assign(() => () => null, {
 });
 
 const code3 = generate(mode.shift_jis('123'), { minVersion: 3 });
-process.stdout.write(toSvgSource(code3, { padX: 2, xmlDeclaration: true }));
-toPngBytes(code3, { padX: 2, scale: 10 }).then((pngBuffer) =>
+process.stdout.write(toSvgSource(code3, { pad: 2, xmlDeclaration: true }));
+toPngBytes(code3, { pad: 2, scale: 10 }).then((pngBuffer) =>
   process.stdout.write(pngBuffer.toString()),
 );
 

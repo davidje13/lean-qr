@@ -19,10 +19,10 @@ describe('LeanQRElement', () => {
   });
 
   it('sets styles', () => {
-    const c = render('<lean-qr value="hello" pad-x="2"></lean-qr>');
+    const c = render('<lean-qr value="hello"></lean-qr>');
     const el = c.querySelector('lean-qr');
 
-    expect(getComputedStyle(el).aspectRatio).toEqual('25 / 29');
+    expect(getComputedStyle(el).aspectRatio).toEqual('1 / 1');
   });
 
   it('can source content from another element', () => {
@@ -120,7 +120,7 @@ describe('LeanQRElement', () => {
   it('deduplicates changes when multiple attributes change', async () => {
     const c = render(`
       <value-counter id="src" value="hello"></value-counter>
-      <lean-qr for="src" pad-x="4" pad-y="4"></lean-qr>
+      <lean-qr for="src" pad="4"></lean-qr>
     `);
     const src = c.querySelector('value-counter');
     const el = c.querySelector('lean-qr');
@@ -128,8 +128,7 @@ describe('LeanQRElement', () => {
     expect(src.count).toEqual(1);
 
     el.setAttribute('value', 'message 2');
-    el.setAttribute('pad-x', '8');
-    el.setAttribute('pad-y', '8');
+    el.setAttribute('pad', '8');
     await nextTick();
     expect(src.count).toEqual(2);
   });

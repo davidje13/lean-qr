@@ -20,8 +20,7 @@ export const toMatchImage = (expectedImage) => (actualImage) => {
       on: '#',
       off: ' ',
       lf: '\n',
-      padX: 0,
-      padY: 0,
+      pad: 0,
     });
   }
   if (typeof expectedImage !== 'string') {
@@ -34,8 +33,7 @@ export const toMatchImage = (expectedImage) => (actualImage) => {
       on: '#',
       off: ' ',
       lf: '\n',
-      padX: 0,
-      padY: 0,
+      pad: 0,
     });
   }
   if (typeof actualImage !== 'string') {
