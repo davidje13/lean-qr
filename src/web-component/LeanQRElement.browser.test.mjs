@@ -19,10 +19,10 @@ describe('LeanQRElement', () => {
   });
 
   it('sets styles', () => {
-    const c = render('<lean-qr value="hello" pad-x="2"></lean-qr>');
+    const c = render('<lean-qr value="hello"></lean-qr>');
     const el = c.querySelector('lean-qr');
 
-    expect(getComputedStyle(el).aspectRatio).toEqual('25 / 29');
+    expect(getComputedStyle(el).aspectRatio).toEqual('1 / 1');
   });
 
   it('can source content from another element', () => {
