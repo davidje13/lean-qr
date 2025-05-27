@@ -76,22 +76,13 @@ describe('masks', () => {
       const dimX = 6;
       const dimY = id === 4 ? 4 : 6;
 
-      it('returns true or false for any given pixel location', () => {
-        for (let y = 0; y < 10; ++y) {
-          for (let x = 0; x < 10; ++x) {
-            const value = mask(x, y);
-            expect(typeof value).toEqual('boolean');
-          }
-        }
-      });
-
       it(`defines a repeating ${dimX}x${dimY} pattern`, () => {
         for (let y = 0; y < dimY; ++y) {
           for (let x = 0; x < dimX; ++x) {
-            const value = mask(x, y);
-            expect(value).toEqual(mask(x + dimX, y));
-            expect(value).toEqual(mask(x, y + dimY));
-            expect(value).toEqual(mask(x + dimX, y + dimY));
+            const value = Boolean(mask(x, y));
+            expect(value).toEqual(Boolean(mask(x + dimX, y)));
+            expect(value).toEqual(Boolean(mask(x, y + dimY)));
+            expect(value).toEqual(Boolean(mask(x + dimX, y + dimY)));
           }
         }
       });
@@ -100,7 +91,7 @@ describe('masks', () => {
         let actual = '';
         for (let y = 0; y < dimY; ++y) {
           for (let x = 0; x < dimX; ++x) {
-            actual += mask(x, y) ? '#' : ' ';
+            actual += mask(x, y) ? ' ' : '#';
           }
           actual += '\n';
         }

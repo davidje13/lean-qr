@@ -23,6 +23,6 @@ for (let i = 0; i < masks.length; ++i) {
 
   await writeFile(
     path,
-    toPngBuffer({ size, get: (x, y) => !masks[i](x, y) }, options),
+    toPngBuffer({ size, get: (x, y) => Boolean(masks[i](x, y)) }, options),
   );
 }

@@ -96,7 +96,7 @@ export const applyMask = ({ size, _data }, mask, maskId, ecLevel) => {
   for (let j = 0; j < size; ++j) {
     for (let i = 0; i < size; ++i) {
       const p = j * size + i;
-      _data[p] ^= mask(i, j) & ((_data[p] >> 1) ^ 1);
+      _data[p] ^= !(mask(i, j) || _data[p] & 2);
     }
   }
   const info = ((ecLevel ^ 1) << 3) | maskId;
