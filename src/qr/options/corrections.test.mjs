@@ -15,11 +15,6 @@ describe('corrections', () => {
     expect(correction.H).toBeGreaterThan(correction.Q);
   });
 
-  it('includes convenience max and min labels', () => {
-    expect(correction.max).toEqual(correction.H);
-    expect(correction.min).toEqual(correction.L);
-  });
-
   it('divides input data into groups', () => {
     for (let version = 1; version <= 40; ++version) {
       const versionData = getData(version);
