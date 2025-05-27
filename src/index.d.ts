@@ -44,16 +44,14 @@ declare module 'lean-qr' {
     pad?: number;
 
     /**
-     * the padding to apply on the left and right of the output (populated with 'off' modules)
      * @deprecated use `pad` instead
      */
-    padX?: number;
+    padX?: never;
 
     /**
-     * the padding to apply on the top and bottom of the output (populated with 'off' modules)
      * @deprecated use `pad` instead
      */
-    padY?: number;
+    padY?: never;
   }
 
   export interface ImageDataOptions {
@@ -67,16 +65,14 @@ declare module 'lean-qr' {
     pad?: number;
 
     /**
-     * the padding to apply on the left and right of the output (filled with 'off')
      * @deprecated use `pad` instead
      */
-    padX?: number;
+    padX?: never;
 
     /**
-     * the padding to apply on the top and bottom of the output (filled with 'off')
      * @deprecated use `pad` instead
      */
-    padY?: number;
+    padY?: never;
   }
 
   export interface Bitmap2D {
@@ -278,15 +274,13 @@ declare module 'lean-qr/extras/svg' {
     /** the padding to apply around the output (filled with 'off') */
     pad?: number;
     /**
-     * the padding to apply on the left and right of the output (filled with 'off')
      * @deprecated use `pad` instead
      */
-    padX?: number;
+    padX?: never;
     /**
-     * the padding to apply on the top and bottom of the output (filled with 'off')
      * @deprecated use `pad` instead
      */
-    padY?: number;
+    padY?: never;
     /** a width to apply to the resulting image (overrides `scale`) */
     width?: number | null;
     /** a height to apply to the resulting image (overrides `scale`) */
@@ -360,15 +354,13 @@ declare module 'lean-qr/extras/node_export' {
     /** the padding to apply around the output (filled with 'off') */
     pad?: number;
     /**
-     * the padding to apply on the left and right of the output (filled with 'off')
      * @deprecated use `pad` instead
      */
-    padX?: number;
+    padX?: never;
     /**
-     * the padding to apply on the top and bottom of the output (filled with 'off')
      * @deprecated use `pad` instead
      */
-    padY?: number;
+    padY?: never;
     /** a scale to apply to the resulting image (`scale` pixels = 1 module) */
     scale?: number;
   }

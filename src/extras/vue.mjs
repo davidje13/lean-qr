@@ -15,16 +15,7 @@ const GENERATE_OPTS = [
   'modes',
 ];
 
-const DISPLAY_OPTS = [
-  'on',
-  'off',
-  'pad',
-  'padX',
-  'padY',
-  'width',
-  'height',
-  'scale',
-];
+const DISPLAY_OPTS = ['on', 'off', 'pad', 'width', 'height', 'scale'];
 
 const dataOrError = (fn) => {
   try {
