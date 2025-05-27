@@ -5,9 +5,6 @@ import {
   ERROR_INVALID_ERROR_CORRECTION_RANGE,
   ERROR_TOO_MUCH_DATA,
   ERROR_UNENCODABLE,
-  ERROR_BAD_FRAMEWORK,
-  ERROR_BAD_GENERATE,
-  ERROR_BAD_TO_SVG_DATA_URL,
 } from '../util.mjs';
 import { readError } from './errors.mjs';
 
@@ -35,12 +32,6 @@ describe('readError', () => {
         {
           code: ERROR_UNENCODABLE,
           expected: 'Data cannot be encoded using requested modes',
-        },
-        { code: ERROR_BAD_FRAMEWORK, expected: 'Bad framework' },
-        { code: ERROR_BAD_GENERATE, expected: 'Bad generate function' },
-        {
-          code: ERROR_BAD_TO_SVG_DATA_URL,
-          expected: 'Bad toSvgDataURL function',
         },
       ],
     },
