@@ -1,4 +1,4 @@
-index.mjs:                  6796 bytes /     3614 bytes (compressed)
+index.mjs:                  6784 bytes /     3607 bytes (compressed)
 nano.mjs:                   3736 bytes /     2138 bytes (compressed)
 extras/svg.mjs:             1287 bytes /      920 bytes (compressed)
 extras/node_export.mjs:     1034 bytes /      764 bytes (compressed)

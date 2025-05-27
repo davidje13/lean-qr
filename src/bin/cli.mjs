@@ -46,7 +46,7 @@ const FLAGS = [
     short: 'c',
     type: 'enum',
     values: [...Object.keys(correction)],
-    def: 'min',
+    def: 'L',
     info: 'Set the minimum error correction level',
   },
   {
@@ -55,7 +55,7 @@ const FLAGS = [
     short: 'C',
     type: 'enum',
     values: [...Object.keys(correction)],
-    def: 'max',
+    def: 'H',
     info: 'Set the maximum error correction level',
   },
   {
