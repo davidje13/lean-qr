@@ -197,22 +197,10 @@ declare module 'lean-qr' {
    * @param options optional configuration for the QR code.
    * @returns the requested QR code.
    */
-  export type GenerateFn = (
+  export function generate(
     data: Mode | string,
     options?: Readonly<GenerateOptions>,
-  ) => Bitmap2D;
-  interface Generate extends GenerateFn {
-    /**
-     * Creates a scoped `generate` function which considers additional modes
-     * when using auto encoding.
-     *
-     * @param modes the modes to add.
-     * @returns a `generate` function which will additionally consider the
-     * given modes when using auto encoding.
-     */
-    with(...modes: ReadonlyArray<ModeFactory>): GenerateFn;
-  }
-  export const generate: Generate;
+  ): Bitmap2D;
 }
 
 declare module 'lean-qr/nano' {
