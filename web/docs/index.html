@@ -1557,6 +1557,14 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
         </p>
         <ul>
           <li>
+            <code>padX</code> and <code>padY</code> (<code>pad-x</code> and <code>pad-y</code> in the WebComponent
+            wrapper) have been combined into <code>pad</code>, as it is rarely useful to customise x / y padding
+            independently. If you are customising the padding, replace uses of <code>padX</code> and
+            <code>padY</code> with <code>pad</code>. If you need separate x / y padding values, you can use
+            <a href="#Bitmap2D_toImageData"><code>toImageData</code></a> and position the image in your own canvas
+            (which will also enable you to have independent left/right and top/bottom padding values).
+          </li>
+          <li>
             CommonJS exports (.js) have been removed. Only ESM (.mjs) exports are available. Node.js 18+ is capable of
             using these interchangeably with CommonJS files, and most bundlers will automatically transpile the sources
             as required when building. If you are including the scripts directly in a HTML page, you can add

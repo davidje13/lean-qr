@@ -24,8 +24,6 @@ const ALL_OPTS = [
   'on',
   'off',
   'pad',
-  'padX',
-  'padY',
   'width',
   'height',
   'scale',

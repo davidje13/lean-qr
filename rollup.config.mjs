@@ -40,7 +40,7 @@ export default [
           properties: {
             keep_quoted: 'strict',
             regex:
-              /^_|^(toCanvas|toImageData|auto|numeric|alphaNumeric|ascii|iso8859_1|shift_jis|utf8|(min|max)(CorrectionLevel|Version)|mask|modes|on|off|pad[XY])$/,
+              /^_|^(toCanvas|toImageData|auto|numeric|alphaNumeric|ascii|iso8859_1|shift_jis|utf8|(min|max)(CorrectionLevel|Version)|mask|modes|on|off|pad)$/,
           },
         },
       }),

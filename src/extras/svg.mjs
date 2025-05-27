@@ -68,40 +68,30 @@ export const toSvgPath = (code) => {
 
 const toSvgInternal = (
   code,
-  {
-    on = 'black',
-    off,
-    pad = 4,
-    padX = pad,
-    padY = pad,
-    width,
-    height,
-    scale = 1,
-  },
+  { on = 'black', off, pad = 4, width, height, scale = 1 },
   mk,
   makeParam0,
   target,
-) => {
-  const w = code.size + padX * 2;
-  const h = code.size + padY * 2;
-  return mk(
+  s = code.size + pad * 2,
+) =>
+  mk(
     makeParam0,
     'svg',
     {
       xmlns: SVG_NS,
       version: '1.1',
-      viewBox: `${-padX} ${-padY} ${w} ${h}`,
-      width: width ?? w * scale,
-      height: height ?? h * scale,
+      viewBox: `${-pad} ${-pad} ${s} ${s}`,
+      width: width ?? s * scale,
+      height: height ?? s * scale,
       'shape-rendering': 'crispedges',
     },
     [
       off
         ? mk(makeParam0, 'rect', {
-            x: -padX,
-            y: -padY,
-            width: w,
-            height: h,
+            x: -pad,
+            y: -pad,
+            width: s,
+            height: s,
             fill: off,
           })
         : '',
@@ -109,7 +99,6 @@ const toSvgInternal = (
     ],
     target,
   );
-};
 
 export const toSvg = (code, svg, options = {}) =>
   svg.body
