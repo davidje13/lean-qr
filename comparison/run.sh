@@ -44,7 +44,7 @@ measure() {
 {
   printf "lean-qr:                    $(measure build/lean-qr.mjs)\n";
   printf "lean-qr/nano:               $(measure build/lean-qr-nano.mjs)\n";
-  printf "lean-qr png:                $(measure node_modules/lean-qr/extras/node_export.mjs)\n";
+  printf "lean-qr png:                $(measure node_modules/lean-qr/extras/png.mjs)\n";
   printf "lean-qr svg:                $(measure node_modules/lean-qr/extras/svg.mjs)\n";
   printf "qrcode:                     $(measure build/qrcode.browser.mjs)\n";
   printf "qrcode shift-jis:           $(measure node_modules/qrcode/helper/to-sjis.js)\n";

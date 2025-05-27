@@ -1,18 +1,18 @@
 import { makeBitmap } from '../test-helpers/makeBitmap.mjs';
-import { toPngBuffer } from './node_export.mjs';
+import { toPngBytes } from './png.mjs';
 import { PNG } from 'pngjs';
 
-describe('toPngBuffer', () => {
-  it('returns a valid PNG containing the code', () => {
+describe('toPngBytes', () => {
+  it('returns a valid PNG containing the code', async () => {
     const bitmap = makeBitmap(`
       ##-
       -#-
       ---
     `);
 
-    const pngData = toPngBuffer(bitmap);
+    const pngData = await toPngBytes(bitmap);
 
-    const png = PNG.sync.read(pngData);
+    const png = PNG.sync.read(Buffer.from(pngData));
     expect(png.width).equals(3 + 8);
     expect(png.height).equals(3 + 8);
 
@@ -28,16 +28,16 @@ describe('toPngBuffer', () => {
     expect(getLine(png, 4, 6, 3)).equals([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   });
 
-  it('scales up the code', () => {
+  it('scales up the code', async () => {
     const bitmap = makeBitmap(`
       ##-
       -#-
       ---
     `);
 
-    const pngData = toPngBuffer(bitmap, { scale: 3 });
+    const pngData = await toPngBytes(bitmap, { scale: 3 });
 
-    const png = PNG.sync.read(pngData);
+    const png = PNG.sync.read(Buffer.from(pngData));
     expect(png.width).equals((3 + 8) * 3);
     expect(png.height).equals((3 + 8) * 3);
 
@@ -58,19 +58,19 @@ describe('toPngBuffer', () => {
     ]);
   });
 
-  it('uses custom on and off colours if given', () => {
+  it('uses custom on and off colours if given', async () => {
     const bitmap = makeBitmap(`
       ##-
       -#-
       ---
     `);
 
-    const pngData = toPngBuffer(bitmap, {
+    const pngData = await toPngBytes(bitmap, {
       on: [10, 20, 30],
       off: [40, 50, 60],
     });
 
-    const png = PNG.sync.read(pngData);
+    const png = PNG.sync.read(Buffer.from(pngData));
     expect(png.width).equals(3 + 8);
     expect(png.height).equals(3 + 8);
 

@@ -327,7 +327,7 @@ declare module 'lean-qr/extras/svg' {
   ): string;
 }
 
-declare module 'lean-qr/extras/node_export' {
+declare module 'lean-qr/extras/png' {
   import type { RGBA, Bitmap2D as FullBitmap2D } from 'lean-qr';
 
   type Bitmap2D = Pick<FullBitmap2D, 'size' | 'get'>;
@@ -351,24 +351,24 @@ declare module 'lean-qr/extras/node_export' {
    *
    * @param code the QR code to convert.
    * @param options optional configuration for the display.
-   * @returns a PNG document.
+   * @returns a promise of a PNG document as a Uint8Array.
    */
-  export function toPngBuffer(
+  export function toPngBytes(
     code: Bitmap2D,
     options?: Readonly<PNGOptions>,
-  ): Uint8Array;
+  ): Promise<Uint8Array>;
 
   /**
    * Generate a `data:image/png` URL.
    *
    * @param code the QR code to convert.
    * @param options optional configuration for the display.
-   * @returns a string suitable for use as the `src` of an `img` tag.
+   * @returns a promise of a string suitable for use as the `src` of an `img` tag.
    */
   export function toPngDataURL(
     code: Bitmap2D,
     options?: Readonly<PNGOptions>,
-  ): string;
+  ): Promise<string>;
 }
 
 declare module 'lean-qr/extras/react' {

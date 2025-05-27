@@ -19,9 +19,9 @@
       "types": "./index.d.ts",
       "default": "./extras/svg.mjs"
     },
-    "./extras/node_export": {
+    "./extras/png": {
       "types": "./index.d.ts",
-      "default": "./extras/node_export.mjs"
+      "default": "./extras/png.mjs"
     },
     "./extras/react": {
       "types": "./index.d.ts",

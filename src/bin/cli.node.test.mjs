@@ -29,8 +29,9 @@ describe('CLI', () => {
       'hello',
     );
     expect(stderr).toEqual('');
-    expect(stdout).toEqual(
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOgAAADoAQMAAADfZzo7AAAABlBMVEX///8AAABVwtN+AAAAqElEQVR42u2YSw7AIAgFvf+laVQgqKl7B14TUhy7UPmYtlYqlZ6WTM33xYPSYHePSfvqu+2D5iWgYywPbb4rdGpWrrmAoVq/9PmpdRwap93bFobKrGXWsgRNrWjP0f3sgdRalZfwNReA1IhPamCq6/dQ3z/G0RD1Yw6cxm4VOzSWhhCwS5igabiLeOtKQTXYtxyAUt2H428Aj8YSnoC6fxw9kpZKpSf1ATT+CVoxmcrAAAAAAElFTkSuQmCC\n',
+    // the exact compression may vary, so we just check the non-compressed parts of the PNG format:
+    expect(stdout).toMatch(
+      /^data:image\/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOgAAADoAQMAAADfZzo7AAAABlBMVEX\/\/\/8AAABVwtN\+AAAA.*\n$/,
     );
     expect(exitCode).toEqual(0);
   });
