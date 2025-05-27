@@ -1,4 +1,4 @@
-index.mjs:              sha384-5eiFSEz2NaNt+Lfm93Rmm5x7vSgp7M8biPG1boZRq9X+ChPEes+U7sdGGKVoWwdm
+index.mjs:              sha384-liz5NPbrGullW5TRI29yRheatC6Kawq1MEKNC7Uu3QHGQcqsivoYmt+QgEfZUNOH
 nano.mjs:               sha384-+0JBv5Of7NyXAoJEeCB5Id43BGrrfSr1XviqrCfa+HBEJ5Xduife4c7ul/fZ5osb
 extras/svg.mjs:         sha384-Xi4GVHCjreRGNY8PY7mNgoQ6H+olyIO0VoSfD62uWwjdpGHfp1jzTn7eY05Qr4Ar
 extras/node_export.mjs: sha384-10NpsdeHmEFZEggXaYJ7Bl6d7nY05p+FO4+Dvn56uBg7HyCX21lYxGBhoyMV9DUe

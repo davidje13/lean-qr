@@ -29,14 +29,8 @@ export const minCorrection = 0;
 export const maxCorrection = 3;
 
 export const correction = {
-  // begin-exclude-nano
-  min: 0,
-  // end-exclude-nano
   L: 0,
   M: 1,
   Q: 2,
   H: 3,
-  // begin-exclude-nano
-  max: 3,
-  // end-exclude-nano
 };
