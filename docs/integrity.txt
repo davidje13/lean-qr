@@ -2,6 +2,6 @@ index.mjs:              sha384-6Uu0RYalZ7Zv802Ew4mdhp8Hzq4Kl/hDwjQowRN3ws0N566c/
 nano.mjs:               sha384-v8pAURUCvIAHRMAtQgbuZoaevbsskAKM7SN3ZVpoITG+8bVtwPDsQNos1U9Xm109
 extras/svg.mjs:         sha384-sN4wvly+wHEmarJx+GQ2R5xN7Yc8aSKfYA4B46z5jc4vSYsJPjHshQgm8N9qRbb6
 extras/png.mjs:         sha384-qynCi6V+sV6sJkLkzS7YzBcDNYq8yKXOBuCB8ryQPn+YpR8FxL3Rbuqww4VJy+6x
-extras/react.mjs:       sha384-RrBUL+Wv8RlIybi++aeW9efM6ivaKJIabU2EBRH2NwMrKXdbRw0BeZFBFBpj89Et
-extras/errors.mjs:      sha384-LaUpr3MpI+ZWjDG8L54lwBzgymdm+C1fijP3Z3HukZOFOn3nmRUtgK5aTmOSVm/q
+extras/react.mjs:       sha384-tBpX03hVoiM6ppjXyzBcycLd6MWaX39TmBFxDe0o6X8rk/0MP96KZF+wUiPNhi3R
+extras/errors.mjs:      sha384-A4FJ+PpRZmCYNAzOqPpM2OYs3ZzbMtK5g1PRnQWWgApleo0/PBTwvrWXcrAMrnT6
 webcomponent.mjs:       sha384-XfzBvn0yflUylaD1JaSwWNgueVuMEKJQMgjk2qrWbhXwrfJzFtmK8EwnLsHzfsrH

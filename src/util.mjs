@@ -10,6 +10,3 @@ export const ERROR_INVALID_VERSION_RANGE = 2;
 export const ERROR_INVALID_ERROR_CORRECTION_RANGE = 3;
 export const ERROR_TOO_MUCH_DATA = 4;
 export const ERROR_UNENCODABLE = 5;
-export const ERROR_BAD_FRAMEWORK = 6;
-export const ERROR_BAD_GENERATE = 7;
-export const ERROR_BAD_TO_SVG_DATA_URL = 8;
