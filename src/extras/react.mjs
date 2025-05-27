@@ -1,10 +1,3 @@
-import {
-  fail,
-  ERROR_BAD_FRAMEWORK,
-  ERROR_BAD_GENERATE,
-  ERROR_BAD_TO_SVG_DATA_URL,
-} from '../util.mjs';
-
 const hasChange = (a, b, props) => props.some((prop) => a[prop] !== b[prop]);
 const explode = (o, props) => props.map((prop) => o[prop]);
 
@@ -39,10 +32,18 @@ const dataOrError = (fn) => {
   }
 };
 
+const BAD_FRAMEWORK = 'Bad framework';
+const BAD_GENERATE = 'Bad generate';
+const BAD_SVG = 'Bad toSvgDataURL';
+
+const fail = (m) => {
+  throw new TypeError(m);
+};
+
 export const makeAsyncComponent =
   (
-    { createElement, useEffect, useRef } = fail(ERROR_BAD_FRAMEWORK),
-    generate = fail(ERROR_BAD_GENERATE),
+    { createElement, useEffect, useRef } = fail(BAD_FRAMEWORK),
+    generate = fail(BAD_GENERATE),
     defaultOptions = {},
   ) =>
   (props) => {
@@ -74,9 +75,9 @@ export const makeAsyncComponent =
 
 export const makeSyncComponent =
   (
-    { createElement, useMemo } = fail(ERROR_BAD_FRAMEWORK),
-    generate = fail(ERROR_BAD_GENERATE),
-    toSvgDataURL = fail(ERROR_BAD_TO_SVG_DATA_URL),
+    { createElement, useMemo } = fail(BAD_FRAMEWORK),
+    generate = fail(BAD_GENERATE),
+    toSvgDataURL = fail(BAD_SVG),
     defaultOptions = {},
   ) =>
   (props) => {
