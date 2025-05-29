@@ -52,25 +52,35 @@ const modes = [
 ];
 
 let latestCode = null;
+let latestOptions = '';
 
 function regenerate() {
-  latestCode = null;
-
   try {
-    const code = generate(getValue('message'), {
+    const options = {
+      message: getValue('message'),
       minVersion: getInt('min-version', 1, 40),
       maxVersion: getInt('max-version', 1, 40),
-      minCorrectionLevel: correction[getValue('min-correction')],
-      maxCorrectionLevel: correction[getValue('max-correction')],
+      minCorrectionLevel: getValue('min-correction'),
+      maxCorrectionLevel: getValue('max-correction'),
       mask: getMask(),
       trailer: getData('trailer', 0x0000, 0xffff),
-      modes: modes.filter(({ input }) => input.checked).map(({ mode }) => mode),
-    });
-    latestCode = code;
+      modes: modes
+        .map(({ input }, i) => (input.checked ? i : -1))
+        .filter((i) => i !== -1),
+    };
+    if (JSON.stringify(options) !== latestOptions) {
+      latestCode = generate(options.message, {
+        ...options,
+        minCorrectionLevel: correction[options.minCorrectionLevel],
+        maxCorrectionLevel: correction[options.maxCorrectionLevel],
+        modes: options.modes.map((i) => modes[i].mode),
+      });
+      latestOptions = JSON.stringify(options);
+    }
     downloadPng.setAttribute('href', '#');
     downloadSvg.setAttribute('href', '#');
 
-    code.toCanvas(qrCanvas, {
+    latestCode.toCanvas(qrCanvas, {
       on: getColour('on'),
       off: getColour('off'),
     });
@@ -78,34 +88,40 @@ function regenerate() {
   } catch (e) {
     err.innerText = readError(e);
     document.body.className = 'error';
+    latestCode = null;
+    latestOptions = '';
   }
 }
 
 downloadPng.addEventListener('click', (e) => {
-  if (!latestCode) {
-    e.preventDefault();
-    return;
+  if (e.currentTarget.getAttribute('href') === '#') {
+    if (!latestCode) {
+      e.preventDefault();
+      return;
+    }
+    const url = latestCode.toDataURL({
+      type: 'image/png',
+      on: getColour('on'),
+      off: getColour('off'),
+      scale: getInt('scale', 1, Number.POSITIVE_INFINITY),
+    });
+    e.currentTarget.setAttribute('href', url);
   }
-  const url = latestCode.toDataURL({
-    type: 'image/png',
-    on: getColour('on'),
-    off: getColour('off'),
-    scale: getInt('scale', 1, Number.POSITIVE_INFINITY),
-  });
-  downloadPng.setAttribute('href', url);
 });
 
 downloadSvg.addEventListener('click', (e) => {
-  if (!latestCode) {
-    e.preventDefault();
-    return;
+  if (e.currentTarget.getAttribute('href') === '#') {
+    if (!latestCode) {
+      e.preventDefault();
+      return;
+    }
+    const url = toSvgDataURL(latestCode, {
+      on: getValue('on'),
+      off: getValue('off'),
+      scale: getInt('scale', 1, Number.POSITIVE_INFINITY),
+    });
+    e.currentTarget.setAttribute('href', url);
   }
-  const url = toSvgDataURL(latestCode, {
-    on: getValue('on'),
-    off: getValue('off'),
-    scale: getInt('scale', 1, Number.POSITIVE_INFINITY),
-  });
-  downloadSvg.setAttribute('href', url);
 });
 
 if (
