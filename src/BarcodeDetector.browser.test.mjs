@@ -24,20 +24,40 @@ it(
           mode.numeric('123'),
         ),
       },
-
-      // Temporarily disabling these as they fail to read on Chrome on M-series macs
-      // See https://issues.chromium.org/issues/384033047
-      //{ name: 'iso8859-1', message: 'ISO8859-1-compatible characters \u00A31.00' },
-      //{ name: 'shift-jis', message: 'Kanji characters \u6F22\u5B57' },
-      //{ name: 'mixed iso8859-1 and utf8', message: 'iso8859 \u00A3\u00A3\u00A3\u00A3\u00A3 then utf8 \u2026' },
+      {
+        name: 'iso8859-1',
+        message: 'ISO8859-1-compatible characters \u00A31.00',
+        knownARMFail: true,
+      },
+      {
+        name: 'shift-jis',
+        message: 'Kanji characters \u6F22\u5B57',
+        knownARMFail: true,
+      },
+      {
+        name: 'mixed iso8859-1 and utf8',
+        message: 'iso8859 \u00A3\u00A3\u00A3\u00A3\u00A3 then utf8 \u2026',
+        knownARMFail: true,
+      },
     ],
   },
-  async ({ message, expected = message, encoded = message }) => {
+  async ({
+    message,
+    expected = message,
+    encoded = message,
+    knownARMFail = false,
+  }) => {
     const code = generate(encoded);
     const image = code.toImageData(VIRTUAL_CANVAS, IMAGE_OPTIONS);
     const detector = new BarcodeDetector({ formats: ['qr_code'] });
     const detected = await detector.detect(image);
     expect(detected).hasLength(1);
-    expect(detected[0].rawValue).equals(expected);
+    const detectedValue = detected[0].rawValue;
+    if (detectedValue === '' && knownARMFail) {
+      skip(
+        'known M-series Mac issue: https://issues.chromium.org/issues/384033047',
+      );
+    }
+    expect(detectedValue).equals(expected);
   },
 );
