@@ -76,7 +76,7 @@ export class LeanQRElement extends HTMLElement {
       return;
     }
     const forId = this.getAttribute('for');
-    const target = forId ? doc.getElementById(forId) : null;
+    const target = forId && doc.getElementById(forId);
     const msg = this._getAndWatch(target) ?? this.getAttribute('value') ?? '';
     const options = { msg };
     for (const [key, [attr, mapper]] of ATTRS) {
@@ -108,11 +108,11 @@ export class LeanQRElement extends HTMLElement {
   _getAndWatch(target) {
     if (!target) {
       this._stopWatching();
-      return null;
+      return; // undefined
     }
     const targetValue = target.value;
-    const value = targetValue ?? (target.href || undefined);
-    const isContent = value === undefined;
+    const value = targetValue ?? (target.href || 0);
+    const isContent = value === 0;
     if (target !== this._observing || isContent !== this._observingContent) {
       this._stopWatching();
       this._observer.observe(target, {
@@ -126,14 +126,14 @@ export class LeanQRElement extends HTMLElement {
           characterData: true,
         });
       }
-      if (targetValue !== undefined) {
+      if (targetValue ?? 0 !== 0) {
         target.addEventListener('input', this._changed, { passive: true });
         target.addEventListener('change', this._changed, { passive: true });
       }
       this._observing = target;
       this._observingContent = isContent;
     }
-    return value ?? target.textContent;
+    return isContent ? target.textContent : value;
   }
 
   _stopWatching() {
@@ -141,7 +141,7 @@ export class LeanQRElement extends HTMLElement {
       this._observing.removeEventListener('input', this._changed);
       this._observing.removeEventListener('change', this._changed);
       this._observer.disconnect();
-      this._observing = null;
+      this._observing = 0;
     }
   }
 }

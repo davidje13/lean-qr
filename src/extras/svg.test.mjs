@@ -79,7 +79,9 @@ describe('toSvgSource', () => {
   });
 
   it('blocks unsafe characters', () => {
-    const src = toSvgSource(BASIC_IMAGE, { off: '"no" <bad> & \'chars\'' });
+    const src = toSvgSource(BASIC_IMAGE, {
+      off: '"no" \x00bad\n & \tchars\u2026',
+    });
     const fill = /fill=[^>]*/.exec(src);
     expect(fill[0]).toEqual('fill="no bad  chars"');
   });

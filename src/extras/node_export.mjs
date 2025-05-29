@@ -34,8 +34,8 @@ export const toPngBuffer = (
     off[0] | off[1] | off[2] | ((on[0] & on[1] & on[2]) < 255) | trns;
 
   const ihdr = Buffer.alloc(13);
-  ihdr.writeUInt32BE(w, 0);
-  ihdr.writeUInt32BE(h, 4);
+  ihdr.writeInt32BE(w, 0);
+  ihdr.writeInt32BE(h, 4);
   ihdr[8] = 1; // bit depth
   ihdr[9] = plte ? 3 : 0; // colour type: indexed / greyscale
 
@@ -57,16 +57,13 @@ export const toPngDataURL = (code, options) =>
 const makeChunk = (type, data) => {
   const l = data.length;
   const b = Buffer.alloc(12 + l);
-  b.writeUInt32BE(l, 0);
-  b.writeUInt32BE(type, 4);
+  b.writeInt32BE(l, 0);
+  b.writeInt32BE(type, 4);
   b.set(data, 8);
-  b.writeUInt32BE(
+  b.writeInt32BE(
     ~b
       .subarray(4, 8 + l)
-      .reduce(
-        (crc, byte) => CRC_TABLE[(crc ^ byte) & 0xff] ^ (crc >>> 8),
-        ~0,
-      ) >>> 0,
+      .reduce((crc, byte) => CRC_TABLE[(crc ^ byte) & 0xff] ^ (crc >>> 8), ~0),
     8 + l,
   );
   return b;

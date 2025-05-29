@@ -88,7 +88,7 @@ export const makeSyncComponent =
     );
     const data = useMemo(
       () => code && dataOrError(() => toSvgDataURL(code, options)),
-      [code, ...explode(options, ALL_OPTS)],
+      explode(options, ALL_OPTS), // depends on code, but code depends on a subset of ALL_OPTS
     );
 
     if (!data) {

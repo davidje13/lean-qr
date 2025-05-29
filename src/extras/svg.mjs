@@ -1,5 +1,4 @@
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const UNSAFE = /[^-a-zA-Z0-9 .,:/#%()]/g;
 
 const make = (
   d,
@@ -17,7 +16,7 @@ const makeSrc = (_, tag, attrs, children = []) =>
   [
     `<${tag}`,
     ...Object.entries(attrs).map(
-      ([k, v]) => ` ${k}="${`${v}`.replace(UNSAFE, '')}"`,
+      ([k, v]) => ` ${k}="${`${v}`.replace(/[^ -~]|["&]/g, '')}"`,
     ),
     '>',
     ...children,
