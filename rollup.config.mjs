@@ -12,10 +12,7 @@ const plugins = [
 
 const target = (path) => ({
   input: `src/${path}.mjs`,
-  output: [
-    { file: `build/${path}.mjs`, format: 'esm' },
-    { file: `build/${path}.js`, format: 'cjs' },
-  ],
+  output: { file: `build/${path}.mjs`, format: 'esm' },
   plugins,
 });
 
