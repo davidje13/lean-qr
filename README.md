@@ -85,5 +85,6 @@ should _not_ put this in your application code.
 
 - [Quickstart](https://qr.davidje13.com/docs/#quickstart)
 - [API Reference](https://qr.davidje13.com/docs/#api)
+- [Migrating from Version 2.x to 3.x](https://qr.davidje13.com/docs/#v3)
 - [Source Code](https://github.com/davidje13/lean-qr)
 - [Comparison With Other Libraries](https://qr.davidje13.com/docs/#comparison)

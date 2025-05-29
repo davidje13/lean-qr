@@ -4,43 +4,36 @@
   "description": "minimal QR code generation",
   "private": true,
   "bin": "./cli.mjs",
-  "main": "index.js",
+  "main": "index.mjs",
   "types": "index.d.ts",
   "exports": {
     ".": {
-      "require": "./index.js",
-      "import": "./index.mjs",
-      "types": "./index.d.ts"
+      "types": "./index.d.ts",
+      "default": "./index.mjs"
     },
     "./nano": {
-      "require": "./nano.mjs",
-      "import": "./nano.mjs",
-      "types": "./index.d.ts"
+      "types": "./index.d.ts",
+      "default": "./nano.mjs"
     },
     "./extras/svg": {
-      "require": "./extras/svg.js",
-      "import": "./extras/svg.mjs",
-      "types": "./index.d.ts"
+      "types": "./index.d.ts",
+      "default": "./extras/svg.mjs"
     },
     "./extras/node_export": {
-      "require": "./extras/node_export.js",
-      "import": "./extras/node_export.mjs",
-      "types": "./index.d.ts"
+      "types": "./index.d.ts",
+      "default": "./extras/node_export.mjs"
     },
     "./extras/react": {
-      "require": "./extras/react.js",
-      "import": "./extras/react.mjs",
-      "types": "./index.d.ts"
+      "types": "./index.d.ts",
+      "default": "./extras/react.mjs"
     },
     "./extras/vue": {
-      "require": "./extras/vue.js",
-      "import": "./extras/vue.mjs",
-      "types": "./index.d.ts"
+      "types": "./index.d.ts",
+      "default": "./extras/vue.mjs"
     },
     "./webcomponent": {
-      "require": "./webcomponent.mjs",
-      "import": "./webcomponent.mjs",
-      "types": "./webcomponent.d.ts"
+      "types": "./webcomponent.d.ts",
+      "default": "./webcomponent.mjs"
     }
   },
   "scripts": {
