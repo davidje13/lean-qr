@@ -1,14 +1,8 @@
 index.mjs:              sha384-t+Srr58g0YdXYGilymfaxMFvFMy3OMPIuKCEo67AZhCKKYzbZqqucoONAzov+InR
-index.js:               sha384-891dmJ3O6EdTEMN6Evag5DoSXKE2KDyKeN39Hab3a6Gilh3TGzGxr+y08FHuyE3h
 nano.mjs:               sha384-avNlMHLjqxeTtXysYm13MNj05YYIEl5Fg3itpc7p/JdjS3ULukmDYKaqUMtBj6tT
 extras/svg.mjs:         sha384-Gk8g8nmt6RvyscmK2SxGhYHjrlr8PGRa9CD96IKO9EfLBGE1Wpj/pT8TgbuUXYXM
-extras/svg.js:          sha384-VYnYxwUAQvjDtTiso2ihlfJcfZY60ZgYYdd5YKEO1B4BtZ3P7fxQ5WNuPPG/i8Np
 extras/node_export.mjs: sha384-jY8CQmq1wxq5w4nuvoBv5cQ+YlO4CAy1qLQ1ZzisUY+YKNSk0IiiQBG6xzZ4t7il
-extras/node_export.js:  sha384-g4HpqzQUy1Loaqxn38MDc9htZmx7yYvCSFm248gncNblW6H+iEOJFw/hFwW3J1Qg
 extras/react.mjs:       sha384-8tTku0K/yQdfbpQe6HJV4yREj6LONo9qL61VSnEca64bgiovLi6Gt7aIOAdkCIFB
-extras/react.js:        sha384-7KdXN073du8GWehbnMJGmhxETGoY8tjdEr472OC9GSzWdBIMMaDKtd5rH+3VD5Vl
 extras/vue.mjs:         sha384-5H8/4LFa3jyM0fpXuHcuoGw8/nUk0yXCK3g6J8suTC+KGk8fd4O7QQ/QHcRqdQS7
-extras/vue.js:          sha384-R8zbDk4aYc/bnGMYx9xp1FHCs9b5binRwZlZ4fGJjkW/8/Bo6GxTIDF1kwqHsjl9
 extras/errors.mjs:      sha384-LaUpr3MpI+ZWjDG8L54lwBzgymdm+C1fijP3Z3HukZOFOn3nmRUtgK5aTmOSVm/q
-extras/errors.js:       sha384-lpwl8zlB1GwhvS1ftgUv4mCvOhlixuRa8fRag2aZ2PEEPKQ++l+IjhZL8lhbZMVe
 webcomponent.mjs:       sha384-0W2ukcNaexuSfxr1OMk6kruCr4UEvzZTZrT2B0JA4c6Uiv/FtQOmRVCqLXyC7MbC

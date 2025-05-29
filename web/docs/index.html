@@ -1548,6 +1548,23 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
         </section>
       </section>
       <section>
+        <h2>Version 3 Migration Guide</h2>
+        <a id="v3"></a>
+        <p>
+          Version 3 drops support for Node.js 17 and earlier, as well as old bundlers which cannot work with ESM. It
+          also contains a handful of breaking API changes. Most users with moderately up-to-date build systems should
+          have no issues updating from version 2.x to 3.x. The full list of changes:
+        </p>
+        <ul>
+          <li>
+            CommonJS exports (.js) have been removed. Only ESM (.mjs) exports are available. Node.js 18+ is capable of
+            using these interchangeably with CommonJS files, and most bundlers will automatically transpile the sources
+            as required when building. If you are including the scripts directly in a HTML page, you can add
+            <code>type="module"</code> to support ESM.
+          </li>
+        </ul>
+      </section>
+      <section>
         <h2>Comparison With Other Libraries</h2>
         <a id="comparison"></a>
         <p>
