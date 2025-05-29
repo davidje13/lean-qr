@@ -1,5 +1,5 @@
 import { makeBitmap } from '../test-helpers/makeBitmap.mjs';
-import { toPngBytes } from './png.mjs';
+import { toPngBytes, toPngDataURL } from './png.mjs';
 import { PNG } from 'pngjs';
 
 describe('toPngBytes', () => {
@@ -77,6 +77,16 @@ describe('toPngBytes', () => {
     expect(getLine(png, 0, 0, 1)).equals([40, 50, 60, 255]);
     expect(getLine(png, 4, 4, 1)).equals([10, 20, 30, 255]);
     expect(getLine(png, 4, 5, 1)).equals([40, 50, 60, 255]);
+  });
+});
+
+describe('toPngDataURL', () => {
+  it('returns a PNG data URL', async () => {
+    const url = await toPngDataURL(makeBitmap('#'));
+    // the exact compression may vary, so we just check the non-compressed parts of the PNG format:
+    expect(url).startsWith(
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJAQMAAADaX5RTAAAABlBMVEUAAAAAAAClZ7nPAAAA',
+    );
   });
 });
 
