@@ -50,5 +50,6 @@ pages:
   script:
     - mv web public
   artifacts:
+    expire_in: 20 minutes # safe to delete: https://gitlab.com/gitlab-org/gitlab/-/issues/36358#note_2232186823
     paths:
       - public
