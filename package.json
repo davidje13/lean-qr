@@ -40,7 +40,7 @@
   },
   "scripts": {
     "format": "prettier --write .",
-    "start": "./tools/build.sh && cd web && static-server --index index.html --port 8080",
+    "start": "./tools/build.sh && python3 -m http.server -b 127.0.0.1 -d web 8080",
     "test": "lean-test --target=node,chrome,firefox -x '**/*.node.*' -x '**/*.browser.*' && lean-test -i '**/*.node.test.*' && lean-test --target=chrome,firefox --preprocess=rollup -i '**/*.browser.test.*' && ./test-package/run.sh && prettier --check .",
     "dopublish": "./tools/build.sh && npm publish package.tgz"
   },
@@ -68,8 +68,7 @@
     "lean-test": "2.x",
     "pngjs": "7.x",
     "preact": "10.x",
-    "prettier": "3.5.3",
-    "rollup": "4.x",
-    "static-server": "2.x"
+    "prettier": "3.6.2",
+    "rollup": "4.x"
   }
 }
