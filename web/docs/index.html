@@ -1185,6 +1185,20 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
 <span class="keyword">import</span> { h, defineComponent } <span class="keyword">from</span> <span class="string">'vue'</span>;
 
 <span class="keyword">export const</span> QR = <span class="method">defineComponent</span>(<span class="method">makeVueCanvasComponent</span>({ h }, generate));</code></pre>
+            <p>You can now use this component in your app:</p>
+            <pre><code>&lt;<span class="value">script</span> <span class="property">setup</span>&gt;
+<span class="keyword">import</span> { QR } <span class="keyword">from</span> <span class="string">'./my-qr-component.js'</span>;
+&lt;/<span class="value">script</span>&gt;
+
+&lt;<span class="value">style</span>&gt;
+<span class="string">.qr-code</span> {
+  <span class="property">width</span>: <span class="value">300px;</span>
+}
+&lt;/<span class="value">style</span>&gt;
+
+&lt;<span class="value">template</span>&gt;
+  &lt;<span class="value">QR</span> <span class="property">content</span>=<span class="string">"LEAN-QR LIBRARY"</span> <span class="property">class</span>=<span class="string">"qr-code"</span> /&gt;
+&lt;/<span class="value">template</span>&gt;</code></pre>
             <p>
               All the configuration options documented for <a href="#generate"><code>generate</code></a> and
               <a href="#Bitmap2D_toCanvas"><code>toCanvas</code></a> can be passed to the wrapper component:
@@ -1205,8 +1219,8 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
             <p>The options shown are the defaults. All properties are optional except <code>content</code>.</p>
             <p>
               The component will render to a <code>&lt;canvas&gt;</code>, but this cannot be server-side rendered
-              (nothing will appear on the client until hydration completes). If server-side or synchronous rendering is
-              important to you (at the expense of some performance), use
+              (nothing will appear on the client until hydration completes). If server-side rendering is important to
+              you (at the expense of some performance if the code changes dynamically), use
               <a href="#makeVueSvgComponent"><code>makeVueSvgComponent</code></a> instead.
             </p>
             <p>
@@ -1231,6 +1245,20 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
 <span class="keyword">import</span> { h, defineComponent } <span class="keyword">from</span> <span class="string">'vue'</span>;
 
 <span class="keyword">export const</span> QR = <span class="method">defineComponent</span>(<span class="method">makeVueSvgComponent</span>(React, generate, toSvgDataURL));</code></pre>
+            <p>You can now use this component in your app:</p>
+            <pre><code>&lt;<span class="value">script</span> <span class="property">setup</span>&gt;
+<span class="keyword">import</span> { QR } <span class="keyword">from</span> <span class="string">'./my-qr-component.js'</span>;
+&lt;/<span class="value">script</span>&gt;
+
+&lt;<span class="value">style</span>&gt;
+<span class="string">.qr-code</span> {
+  <span class="property">width</span>: <span class="value">300px;</span>
+}
+&lt;/<span class="value">style</span>&gt;
+
+&lt;<span class="value">template</span>&gt;
+  &lt;<span class="value">QR</span> <span class="property">content</span>=<span class="string">"LEAN-QR LIBRARY"</span> <span class="property">class</span>=<span class="string">"qr-code"</span> /&gt;
+&lt;/<span class="value">template</span>&gt;</code></pre>
             <p>
               All the configuration options documented for <a href="#generate"><code>generate</code></a> and
               <a href="#toSvgDataURL"><code>toSvgDataURL</code></a> can be passed to the wrapper component:
@@ -1256,11 +1284,10 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
             </p>
             <pre><code>&lt;<span class="method">QR</span> <span class="property">content</span>=<span class="string">"Hello!"</span> <span class="property">on</span>=<span class="string">"black"</span> <span class="property">off</span>=<span class="string">"rgba(0,0,0,0)"</span> /&gt;</code></pre>
             <p>
-              The component will render to an <code>&lt;img&gt;</code> synchronously, using <code>useMemo</code> as an
+              The component will render to an <code>&lt;img&gt;</code> synchronously, caching the result as an
               optimisation. This is not the most performant option if the code will change frequently (use
               <a href="#makeVueCanvasComponent"><code>makeVueCanvasComponent</code></a> instead if that is your
-              use-case, to avoid rendering lag), but supports server-side rendering and avoids the QR Code "flickering"
-              when it first appears.
+              use-case, to avoid rendering lag), but supports server-side rendering.
             </p>
           </section>
         </section>
