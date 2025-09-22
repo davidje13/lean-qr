@@ -233,6 +233,8 @@ declare module 'lean-qr' {
      * @param modes the modes to add.
      * @returns a `generate` function which will additionally consider the
      * given modes when using auto encoding.
+     *
+     * @deprecated this will be removed in version 3. Prefer passing an explicit list of modes when calling `generate`.
      */
     with(...modes: ReadonlyArray<ModeFactory>): GenerateFn;
   }

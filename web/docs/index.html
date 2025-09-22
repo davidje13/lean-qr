@@ -327,9 +327,6 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               <li><a href="#mask">Masks (<code>mask</code>)</a></li>
               <li><a href="#mode">Modes (<code>modes</code>)</a></li>
               <li><a href="#trailer">Trailer (<code>trailer</code>)</a></li>
-              <li>
-                <a href="#generate_with"><code>.with</code></a>
-              </li>
             </ul>
           </li>
           <li>
@@ -747,33 +744,6 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               >, which may be desirable for artistic reasons. In general, this should be left as the default value to
               maximise readability.
             </p>
-          </section>
-          <section>
-            <h4><code>.with(...modes)</code></h4>
-            <a id="generate_with"></a>
-            <p>Adds one or more <a href="#custom-modes">custom modes</a> to the list of default modes.</p>
-            <pre><code><span class="keyword">const</span> myGenerate = generate.<span class="method">with</span>(myCustomMode);
-<span class="keyword">const</span> code = <span class="method">myGenerate</span>(<span class="string">'text'</span>);</code></pre>
-            <p>
-              This is equivalent to adding the custom mode(s) to the <a href="#mode"><code>modes</code></a> argument in
-              all calls:
-            </p>
-            <pre><code><span class="keyword">const</span> code = <span class="method">generate</span>(<span class="string">'LEAN-QR LIBRARY'</span>, {
-  <span class="property">modes</span>: [
-    mode.<span class="property">numeric</span>,
-    mode.<span class="property">alphaNumeric</span>,
-    mode.<span class="property">ascii</span>,
-    mode.<span class="property">iso8859_1</span>,
-    mode.<span class="property">shift_jis</span>,
-    mode.<span class="property">utf8</span>,
-    myCustomMode,
-  ],
-});</code></pre>
-            <p>
-              Note that you only need to register custom modes if you want to use automatic encoding. There is no need
-              to register a custom mode if you call it explicitly:
-            </p>
-            <pre><code><span class="keyword">const</span> code = <span class="method">generate</span>(<span class="method">myCustomMode</span>(<span class="string">'FOOBAR'</span>));</code></pre>
           </section>
         </section>
         <section>
@@ -1550,9 +1520,6 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
             <li>
               The <a href="#correction"><code>correction</code></a> export does not include <code>max</code> (use
               <code>H</code>) or <code>min</code> (use <code>L</code>).
-            </li>
-            <li>
-              <a href="#generate_with"><code>generate.with</code></a> is not available.
             </li>
           </ul>
         </section>
