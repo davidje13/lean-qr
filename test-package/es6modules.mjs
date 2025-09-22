@@ -2,6 +2,7 @@ import { generate, correction, mode } from 'lean-qr';
 import { generate as generateNano } from 'lean-qr/nano';
 import { toSvgSource, toSvgDataURL } from 'lean-qr/extras/svg';
 import { toPngBuffer } from 'lean-qr/extras/node_export';
+import { toPngBytes } from 'lean-qr/extras/png';
 import { makeAsyncComponent, makeSyncComponent } from 'lean-qr/extras/react';
 import { h } from 'preact';
 import * as hooks from 'preact/hooks';
@@ -19,6 +20,12 @@ if (typeof toSvgSource !== 'function') {
 if (typeof toPngBuffer !== 'function') {
   throw new Error(
     "import 'lean-qr/extras/node_export' did not return toPngBuffer function",
+  );
+}
+
+if (typeof toPngBytes !== 'function') {
+  throw new Error(
+    "import 'lean-qr/extras/png' did not return toPngBytes function",
   );
 }
 

@@ -4,7 +4,7 @@ import { writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { toPngBuffer } from '../src/extras/node_export.mjs';
+import { toPngBytes } from '../src/extras/png.mjs';
 import { masks } from '../src/qr/options/masks.mjs';
 
 const SELF_DIR = dirname(fileURLToPath(import.meta.url));
@@ -17,6 +17,6 @@ for (let i = 0; i < masks.length; ++i) {
 
   await writeFile(
     path,
-    toPngBuffer({ size, get: (x, y) => Boolean(masks[i](x, y)) }, options),
+    await toPngBytes({ size, get: (x, y) => Boolean(masks[i](x, y)) }, options),
   );
 }

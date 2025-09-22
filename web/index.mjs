@@ -1,5 +1,6 @@
 import { correction, generate, mode } from '../src/index.mjs';
 import { toSvgDataURL } from '../src/extras/svg.mjs';
+import { toPngDataURL, toPngBytes } from '../src/extras/png.mjs';
 import { readError } from '../src/extras/errors.mjs';
 
 const getInput = (name) => document.querySelector(`[name="${name}"]`);
@@ -93,19 +94,19 @@ function regenerate() {
   }
 }
 
-downloadPng.addEventListener('click', (e) => {
+downloadPng.addEventListener('click', async (e) => {
   if (e.currentTarget.getAttribute('href') === '#') {
+    e.preventDefault();
     if (!latestCode) {
-      e.preventDefault();
       return;
     }
-    const url = latestCode.toDataURL({
-      type: 'image/png',
+    const url = await toPngDataURL(latestCode, {
       on: getColour('on'),
       off: getColour('off'),
       scale: getInt('scale', 1, Number.POSITIVE_INFINITY),
     });
     e.currentTarget.setAttribute('href', url);
+    e.currentTarget.click();
   }
 });
 
@@ -135,18 +136,15 @@ if (
     if (!latestCode) {
       return;
     }
-    const url = latestCode.toDataURL({
-      type: 'image/png',
+    toPngBytes(latestCode, {
       on: getColour('on'),
       off: getColour('off'),
       scale: getInt('scale', 1, Number.POSITIVE_INFINITY),
-    });
-    fetch(url)
-      .then((r) => r.blob())
-      .then((blob) =>
+    })
+      .then((data) =>
         navigator.share({
           title: getValue('message'),
-          files: [new File([blob], 'qr-code.png', { type: blob.type })],
+          files: [new File([data], 'qr-code.png', { type: 'image/png' })],
         }),
       )
       .catch(() => null);

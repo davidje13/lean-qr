@@ -2,7 +2,7 @@
 
 import { mode, correction, generate } from '../index.mjs';
 import { toSvgDataURL, toSvgSource } from '../extras/svg.mjs';
-import { toPngBuffer, toPngDataURL } from '../extras/node_export.mjs';
+import { toPngBytes, toPngDataURL } from '../extras/png.mjs';
 import { readError } from '../extras/errors.mjs';
 import { printUsage, parseArgs } from './argparser.mjs';
 
@@ -178,12 +178,19 @@ try {
     formatter = (code, options) =>
       toSvgDataURL(code, { ...SVG_OPTIONS, ...options }) + '\n';
   } else if (args.format === 'png') {
-    formatter = (code, options) =>
-      toPngBuffer(code, { ...PNG_OPTIONS, scale: args.scale, ...options });
+    formatter = async (code, options) =>
+      await toPngBytes(code, {
+        ...PNG_OPTIONS,
+        scale: args.scale,
+        ...options,
+      });
   } else if (args.format === 'png-data-url') {
-    formatter = (code, options) =>
-      toPngDataURL(code, { ...PNG_OPTIONS, scale: args.scale, ...options }) +
-      '\n';
+    formatter = async (code, options) =>
+      (await toPngDataURL(code, {
+        ...PNG_OPTIONS,
+        scale: args.scale,
+        ...options,
+      })) + '\n';
   } else if (TEXT_FORMATS.has(args.format)) {
     formatter = (code, options) =>
       code.toString({ ...TEXT_FORMATS.get(args.format), ...options });
@@ -207,7 +214,7 @@ try {
   });
 
   const tm2 = Date.now();
-  const result = formatter(code, { pad: args.padding });
+  const result = await formatter(code, { pad: args.padding });
 
   const tm3 = Date.now();
   process.stdout.write(result);
