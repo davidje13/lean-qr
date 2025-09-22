@@ -26,6 +26,7 @@ export default [
   target('index'),
   target('extras/svg'),
   target('extras/node_export'),
+  target('extras/png'),
   target('extras/react'),
   target('extras/vue'),
   target('extras/errors'),

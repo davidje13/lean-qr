@@ -61,11 +61,11 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
             <section>
               <h4>Generate PNG for serving from a webserver:</h4>
               <pre><code><span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
-<span class="keyword">import</span> { toPngBuffer } <span class="keyword">from</span> <span class="string">'lean-qr/extras/node_export'</span>;
+<span class="keyword">import</span> { toPngBytes } <span class="keyword">from</span> <span class="string">'lean-qr/extras/png'</span>;
 
 <span class="keyword">const</span> code = <a href="#generate"><span class="method">generate</span></a>(<span class="string">'LEAN-QR LIBRARY'</span>);
 
-<span class="keyword">const</span> png = <a href="#toPngBuffer"><span class="method">toPngBuffer</span></a>(code, { <span class="property">scale</span>: <span class="value">8</span> });</code></pre>
+<span class="keyword">const</span> png = <span class="keyword">await</span> <a href="#toPngBytes"><span class="method">toPngBytes</span></a>(code, { <span class="property">scale</span>: <span class="value">8</span> });</code></pre>
               <p>
                 Note: SVG is the recommended file export format as it will automatically scale without blurring, but you
                 can also render PNGs using the CSS: <code>image-rendering: pixelated</code>.
@@ -370,10 +370,10 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
             </ul>
           </li>
           <li>
-            <a href="#extras_node_export">extras/node_export</a>
+            <a href="#extras_png">extras/png</a>
             <ul>
               <li>
-                <a href="#toPngBuffer"><code>toPngBuffer(code[, options])</code></a>
+                <a href="#toPngBytes"><code>toPngBytes(code[, options])</code></a>
               </li>
               <li>
                 <a href="#toPngDataURL"><code>toPngDataURL(code[, options])</code></a>
@@ -1029,46 +1029,54 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
           </section>
         </section>
         <section>
-          <h3>extras/node_export</h3>
-          <a id="extras_node_export"></a>
+          <h3>extras/png</h3>
+          <a id="extras_png"></a>
           <p>
-            This is not included in the main library as it only applies to Node.js, but if you need PNG output from
-            Node.js, you can access it from a separate import (adds ~1kB).
+            If you need PNG output from Node.js, or smaller PNG file sizes from a browser, you can access these PNG
+            helpers from a separate import (adds ~1kB).
           </p>
           <section>
-            <h4><code>toPngBuffer(code[, options])</code></h4>
-            <a id="toPngBuffer"></a>
-            <p>Returns a <code>Buffer</code> containing a PNG file for the QR Code.</p>
-            <pre><code><span class="keyword">import</span> { toPngBuffer } <span class="keyword">from</span> <span class="string">'lean-qr/extras/node_export'</span>;
+            <h4><code>toPngBytes(code[, options])</code></h4>
+            <a id="toPngBytes"></a>
+            <p>Returns a promise of a <code>Uint8Array</code> containing a PNG file for the QR Code.</p>
+            <pre><code><span class="keyword">import</span> { toPngBytes } <span class="keyword">from</span> <span class="string">'lean-qr/extras/png'</span>;
 
-<span class="keyword">const</span> pngBuffer = <span class="method">toPngBuffer</span>(code, {
+<span class="keyword">const</span> pngBuffer = <span class="keyword">await</span> <span class="method">toPngBytes</span>(code, {
   <span class="property">on</span>: [<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">255</span>],
   <span class="property">off</span>: [<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>],
   <span class="property">pad</span>: <span class="value">4</span>,
   <span class="property">scale</span>: <span class="value">1</span>,
 });</code></pre>
             <p>The options shown are the defaults.</p>
-            <p>Returns a complete PNG Buffer which can be written to a standalone file.</p>
+            <p>Returns a promise of a complete PNG byte array which can be written to a standalone file.</p>
           </section>
           <section>
             <h4><code>toPngDataURL(code[, options])</code></h4>
             <a id="toPngDataURL"></a>
             <p>
-              Like <a href="#toPngBuffer"><code>toPngBuffer</code></a> but returns a <code>data:image/png</code> URL
-              containing the image data, suitable for displaying in an <code>img</code> tag or downloading from an
-              <code>a</code> tag.
+              Like <a href="#toPngBytes"><code>toPngBytes</code></a> but returns a promise of a
+              <code>data:image/png</code> URL containing the image data, suitable for displaying in an
+              <code>img</code> tag or downloading from an <code>a</code> tag.
             </p>
-            <pre><code><span class="keyword">import</span> { toPngDataURL } <span class="keyword">from</span> <span class="string">'lean-qr/extras/node_export'</span>;
+            <pre><code><span class="keyword">import</span> { toPngDataURL } <span class="keyword">from</span> <span class="string">'lean-qr/extras/png'</span>;
 
-<span class="keyword">const</span> dataURL = <span class="method">toPngDataURL</span>(code, {
+<span class="keyword">const</span> dataURL = <span class="keyword">await</span> <span class="method">toPngDataURL</span>(code, {
   <span class="property">on</span>: [<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">255</span>],
   <span class="property">off</span>: [<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>],
   <span class="property">pad</span>: <span class="value">4</span>,
   <span class="property">scale</span>: <span class="value">1</span>,
 });</code></pre>
             <p>
-              The options shown are the defaults, and match <a href="#toPngBuffer"><code>toPngBuffer</code></a
+              The options shown are the defaults, and match <a href="#toPngBytes"><code>toPngBytes</code></a
               >.
+            </p>
+            <p>
+              Note: inside browsers where <code>&lt;canvas&gt;</code> is supported, you can alternatively get a PNG data
+              URL synchronously by using <a href="#Bitmap2D_toDataURL"><code>toDataURL</code></a
+              >, but it will usually produce significantly larger file sizes (~30&times; larger). This is because most
+              browsers will output 32-bit PNGs, but <code>toPngDataURL</code> will generate a 1-bit PNG with a 2-colour
+              palette. If the filesize of the generated PNG is not a concern, it is generally easier to use
+              <code>toDataURL</code>.
             </p>
           </section>
         </section>
@@ -1562,6 +1570,12 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
             arguments when building components. These are programmer-level errors which only exist for debugging, and
             should not occur in working code. Previously these were reported as Lean QR errors 6, 7, and 8.
           </li>
+          <li>
+            The <code>node_export</code> extra has has been superseeded by the <code>png</code> extra, which uses
+            cross-platform APIs to work in browsers and other Javascript environments. Note that due to the new APIs,
+            the functions provided by <code>png</code> are asynchronous. To avoid breaking existing NodeJS code which
+            relies on synchronously-generated PNGs, <code>node_export</code> is still available for now.
+          </li>
         </ul>
       </section>
       <section>
@@ -1811,7 +1825,7 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
         <p><sup>&dagger;</sup> Takes 5&ndash;10ms to initialise when imported.</p>
         <p><sup>&dagger;&dagger;</sup> Takes 10&ndash;15ms to initialise when imported.</p>
         <p><sup>1</sup> Requires extra import, adds 1.3kB.</p>
-        <p><sup>2</sup> Requires extra import, adds 1.1kB.</p>
+        <p><sup>2</sup> Requires extra import, adds 1.3kB.</p>
         <p><sup>3</sup> Non-standard: does not set ECI 26.</p>
         <p><sup>4</sup> Requires extra import, adds 21kB.</p>
         <p><sup>5</sup> Requires extra import, adds 39kB.</p>

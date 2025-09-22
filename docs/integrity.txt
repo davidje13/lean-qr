@@ -2,6 +2,7 @@ index.mjs:              sha384-liz5NPbrGullW5TRI29yRheatC6Kawq1MEKNC7Uu3QHGQcqsi
 nano.mjs:               sha384-+0JBv5Of7NyXAoJEeCB5Id43BGrrfSr1XviqrCfa+HBEJ5Xduife4c7ul/fZ5osb
 extras/svg.mjs:         sha384-Xi4GVHCjreRGNY8PY7mNgoQ6H+olyIO0VoSfD62uWwjdpGHfp1jzTn7eY05Qr4Ar
 extras/node_export.mjs: sha384-10NpsdeHmEFZEggXaYJ7Bl6d7nY05p+FO4+Dvn56uBg7HyCX21lYxGBhoyMV9DUe
+extras/png.mjs:         sha384-CyPD40JDH5FOBRBW0CseCMgNi+6ieSWozkWDtnBaP9l3g7Z+Ry5R6f8j5rf2jO7H
 extras/react.mjs:       sha384-woPCEuNuvDtgdwEnmEylb38HB097vOLXNGeWDiZtdl5yarNmNPcZjUAatufqSbS/
 extras/vue.mjs:         sha384-VOub0KYpJTi52QTZDMKJ0dTUgAi+gjOdO8vjOodpYzI+DjVKkSXsGheHXt9bc1A4
 extras/errors.mjs:      sha384-A4FJ+PpRZmCYNAzOqPpM2OYs3ZzbMtK5g1PRnQWWgApleo0/PBTwvrWXcrAMrnT6

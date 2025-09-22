@@ -24,7 +24,7 @@ measure() {
   fi;
 }
 
-FILES="index.mjs nano.mjs extras/svg.mjs extras/node_export.mjs extras/react.mjs extras/vue.mjs extras/errors.mjs webcomponent.mjs";
+FILES="index.mjs nano.mjs extras/svg.mjs extras/node_export.mjs extras/png.mjs extras/react.mjs extras/vue.mjs extras/errors.mjs webcomponent.mjs";
 
 for FILE in $FILES; do
   printf "%-24s%s\n" "$FILE:" "$(measure "$BASE_DIR/build/$FILE")";
