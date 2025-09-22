@@ -30,8 +30,7 @@ render(
     maxCorrectionLevel={correction.H}
     mask={0}
     trailer={0x1234}
-    padX={4}
-    padY={4}
+    pad={4}
     on={[0, 0, 0, 255]}
     off={[255, 255, 255, 255]}
   />,
@@ -47,8 +46,7 @@ render(
     maxCorrectionLevel={correction.H}
     mask={0}
     trailer={0x1234}
-    padX={4}
-    padY={4}
+    pad={4}
     on="#000000"
     off="#FFFFFF"
   />,

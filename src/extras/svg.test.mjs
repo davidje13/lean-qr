@@ -89,11 +89,7 @@ describe('toSvgSource', () => {
   it('can include XML declaration', () => {
     const bitmap = Bitmap2D(1);
 
-    const source = toSvgSource(bitmap, {
-      xmlDeclaration: true,
-      padX: 0,
-      padY: 0,
-    });
+    const source = toSvgSource(bitmap, { xmlDeclaration: true, pad: 0 });
 
     expect(source).toEqual(
       '<?xml version="1.0" encoding="UTF-8" ?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1 1" width="1" height="1" shape-rendering="crispedges"><path d="" fill="black"></path></svg>',

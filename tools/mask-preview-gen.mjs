@@ -10,13 +10,7 @@ import { masks } from '../src/qr/options/masks.mjs';
 const SELF_DIR = dirname(fileURLToPath(import.meta.url));
 
 const size = 12;
-const options = {
-  on: [255, 255, 255],
-  off: [0, 0, 0],
-  padX: 0,
-  padY: 0,
-  scale: 1,
-};
+const options = { on: [255, 255, 255], off: [0, 0, 0], pad: 0, scale: 1 };
 
 for (let i = 0; i < masks.length; ++i) {
   const path = join(SELF_DIR, '..', 'web', 'resources', `mask${i}.png`);

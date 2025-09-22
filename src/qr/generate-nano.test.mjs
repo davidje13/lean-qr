@@ -16,7 +16,7 @@ describe('nano generate', () => {
       const nanoCode = generateNano(message, options);
       const fullCode = generateFull(mode.utf8(message), fullOptions ?? options);
       expect(nanoCode).toMatchImage(
-        fullCode.toString({ on: '#', off: ' ', padX: 0, padY: 0 }),
+        fullCode.toString({ on: '#', off: ' ', pad: 0 }),
       );
     },
     {

@@ -40,10 +40,19 @@ declare module 'lean-qr' {
     /** the text to use for linefeeds between rows */
     lf?: string;
 
-    /** the padding to apply on the left and right of the output (populated with 'off' modules) */
+    /** the padding to apply around the output (populated with 'off' modules) */
+    pad?: number;
+
+    /**
+     * the padding to apply on the left and right of the output (populated with 'off' modules)
+     * @deprecated use `pad` instead
+     */
     padX?: number;
 
-    /** the padding to apply on the top and bottom of the output (populated with 'off' modules) */
+    /**
+     * the padding to apply on the top and bottom of the output (populated with 'off' modules)
+     * @deprecated use `pad` instead
+     */
     padY?: number;
   }
 
@@ -54,10 +63,19 @@ declare module 'lean-qr' {
     /** the colour to use for modules which are 'off' (typically white) */
     off?: RGBA;
 
-    /** the padding to apply on the left and right of the output (filled with 'off') */
+    /** the padding to apply around the output (filled with 'off') */
+    pad?: number;
+
+    /**
+     * the padding to apply on the left and right of the output (filled with 'off')
+     * @deprecated use `pad` instead
+     */
     padX?: number;
 
-    /** the padding to apply on the top and bottom of the output (filled with 'off') */
+    /**
+     * the padding to apply on the top and bottom of the output (filled with 'off')
+     * @deprecated use `pad` instead
+     */
     padY?: number;
   }
 
@@ -263,9 +281,17 @@ declare module 'lean-qr/extras/svg' {
     on?: string;
     /** the colour to use for modules which are 'off' (typically white) */
     off?: string;
-    /** the padding to apply on the left and right of the output (filled with 'off') */
+    /** the padding to apply around the output (filled with 'off') */
+    pad?: number;
+    /**
+     * the padding to apply on the left and right of the output (filled with 'off')
+     * @deprecated use `pad` instead
+     */
     padX?: number;
-    /** the padding to apply on the top and bottom of the output (filled with 'off') */
+    /**
+     * the padding to apply on the top and bottom of the output (filled with 'off')
+     * @deprecated use `pad` instead
+     */
     padY?: number;
     /** a width to apply to the resulting image (overrides `scale`) */
     width?: number | null;
@@ -337,9 +363,17 @@ declare module 'lean-qr/extras/node_export' {
     on?: RGBA;
     /** the colour to use for modules which are 'off' (typically white) */
     off?: RGBA;
-    /** the padding to apply on the left and right of the output (filled with 'off') */
+    /** the padding to apply around the output (filled with 'off') */
+    pad?: number;
+    /**
+     * the padding to apply on the left and right of the output (filled with 'off')
+     * @deprecated use `pad` instead
+     */
     padX?: number;
-    /** the padding to apply on the top and bottom of the output (filled with 'off') */
+    /**
+     * the padding to apply on the top and bottom of the output (filled with 'off')
+     * @deprecated use `pad` instead
+     */
     padY?: number;
     /** a scale to apply to the resulting image (`scale` pixels = 1 module) */
     scale?: number;

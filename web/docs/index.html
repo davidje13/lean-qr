@@ -791,8 +791,7 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
   <span class="property">on</span>: <span class="string">'##'</span>,
   <span class="property">off</span>: <span class="string">'  '</span>, <span class="comment">// note: this is 2 spaces</span>
   <span class="property">lf</span>: <span class="string">'\n'</span>,
-  <span class="property">padX</span>: <span class="value">4</span>,
-  <span class="property">padY</span>: <span class="value">4</span>,
+  <span class="property">pad</span>: <span class="value">4</span>,
 }));</code></pre>
             <p>
               The options shown are the defaults. Note that for portability, the defaults only use ASCII characters, but
@@ -845,8 +844,7 @@ console.<span class="method">log</span>(code.<span class="method">toString</span
 code.<span class="method">toCanvas</span>(targetCanvas, {
   <span class="property">on</span>: [<span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0xFF</span>], <span class="comment">// black</span>
   <span class="property">off</span>: [<span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>], <span class="comment">// transparent</span>
-  <span class="property">padX</span>: <span class="value">4</span>,
-  <span class="property">padY</span>: <span class="value">4</span>,
+  <span class="property">pad</span>: <span class="value">4</span>,
 });</code></pre>
             <p>The options shown are the defaults.</p>
             <p>
@@ -877,8 +875,7 @@ code.<span class="method">toCanvas</span>(targetCanvas, {
 <span class="keyword">const</span> imageData = code.<span class="method">toImageData</span>(myContext, {
   <span class="property">on</span>: [<span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0xFF</span>], <span class="comment">// black</span>
   <span class="property">off</span>: [<span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>], <span class="comment">// transparent</span>
-  <span class="property">padX</span>: <span class="value">4</span>,
-  <span class="property">padY</span>: <span class="value">4</span>,
+  <span class="property">pad</span>: <span class="value">4</span>,
 });
 
 <span class="comment">// later</span>
@@ -893,8 +890,7 @@ myContext.<span class="method">putImageData</span>(imageData, 200, 100);</code><
   <span class="property">type</span>: <span class="string">'image/png'</span>,
   <span class="property">on</span>: [<span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0xFF</span>], <span class="comment">// black</span>
   <span class="property">off</span>: [<span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>, <span class="value">0x00</span>], <span class="comment">// transparent</span>
-  <span class="property">padX</span>: <span class="value">4</span>,
-  <span class="property">padY</span>: <span class="value">4</span>,
+  <span class="property">pad</span>: <span class="value">4</span>,
   <span class="property">scale</span>: <span class="value">1</span>,
 });
 
@@ -960,8 +956,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(l
 <span class="method">toSvg</span>(code, mySvg, {
   <span class="property">on</span>: <span class="string">'black'</span>,
   <span class="property">off</span>: <span class="string">'transparent'</span>,
-  <span class="property">padX</span>: <span class="value">4</span>,
-  <span class="property">padY</span>: <span class="value">4</span>,
+  <span class="property">pad</span>: <span class="value">4</span>,
   <span class="property">width</span>: <span class="value">null</span>,
   <span class="property">height</span>: <span class="value">null</span>,
   <span class="property">scale</span>: <span class="value">1</span>,
@@ -999,8 +994,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
 <span class="keyword">const</span> svgSource = <span class="method">toSvgSource</span>(code, {
   <span class="property">on</span>: <span class="string">'black'</span>,
   <span class="property">off</span>: <span class="string">'transparent'</span>,
-  <span class="property">padX</span>: <span class="value">4</span>,
-  <span class="property">padY</span>: <span class="value">4</span>,
+  <span class="property">pad</span>: <span class="value">4</span>,
   <span class="property">width</span>: <span class="value">null</span>,
   <span class="property">height</span>: <span class="value">null</span>,
   <span class="property">xmlDeclaration</span>: <span class="value">false</span>,
@@ -1032,8 +1026,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
 <span class="keyword">const</span> dataURL = <span class="method">toSvgDataURL</span>(code, {
   <span class="property">on</span>: <span class="string">'black'</span>,
   <span class="property">off</span>: <span class="string">'transparent'</span>,
-  <span class="property">padX</span>: <span class="value">4</span>,
-  <span class="property">padY</span>: <span class="value">4</span>,
+  <span class="property">pad</span>: <span class="value">4</span>,
   <span class="property">width</span>: <span class="value">null</span>,
   <span class="property">height</span>: <span class="value">null</span>,
   <span class="property">scale</span>: <span class="value">1</span>,
@@ -1081,8 +1074,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
 <span class="keyword">const</span> pngBuffer = <span class="method">toPngBuffer</span>(code, {
   <span class="property">on</span>: [<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">255</span>],
   <span class="property">off</span>: [<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>],
-  <span class="property">padX</span>: <span class="value">4</span>,
-  <span class="property">padY</span>: <span class="value">4</span>,
+  <span class="property">pad</span>: <span class="value">4</span>,
   <span class="property">scale</span>: <span class="value">1</span>,
 });</code></pre>
             <p>The options shown are the defaults.</p>
@@ -1101,8 +1093,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
 <span class="keyword">const</span> dataURL = <span class="method">toPngDataURL</span>(code, {
   <span class="property">on</span>: [<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">255</span>],
   <span class="property">off</span>: [<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>],
-  <span class="property">padX</span>: <span class="value">4</span>,
-  <span class="property">padY</span>: <span class="value">4</span>,
+  <span class="property">pad</span>: <span class="value">4</span>,
   <span class="property">scale</span>: <span class="value">1</span>,
 });</code></pre>
             <p>
@@ -1140,8 +1131,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
   <a href="#correction"><span class="property">maxCorrectionLevel</span></a>={correction.<span class="property">H</span>}
   <a href="#mask"><span class="property">mask</span></a>={<span class="value">null</span>}
   <a href="#trailer"><span class="property">trailer</span></a>={<span class="value">0xEC11</span>}
-  <a href="#Bitmap2D_toCanvas"><span class="property">padX</span></a>={<span class="value">4</span>}
-  <a href="#Bitmap2D_toCanvas"><span class="property">padY</span></a>={<span class="value">4</span>}
+  <a href="#Bitmap2D_toCanvas"><span class="property">pad</span></a>={<span class="value">4</span>}
   <a href="#Bitmap2D_toCanvas"><span class="property">on</span></a>={[<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">255</span>]}
   <a href="#Bitmap2D_toCanvas"><span class="property">off</span></a>={[<span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>, <span class="value">0</span>]}
   <span class="property">className</span>=<span class="string">""</span>
@@ -1188,8 +1178,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
   <a href="#correction"><span class="property">maxCorrectionLevel</span></a>={correction.<span class="property">H</span>}
   <a href="#mask"><span class="property">mask</span></a>={<span class="value">null</span>}
   <a href="#trailer"><span class="property">trailer</span></a>={<span class="value">0xEC11</span>}
-  <a href="#toSvgDataURL"><span class="property">padX</span></a>={<span class="value">4</span>}
-  <a href="#toSvgDataURL"><span class="property">padY</span></a>={<span class="value">4</span>}
+  <a href="#toSvgDataURL"><span class="property">pad</span></a>={<span class="value">4</span>}
   <a href="#toSvgDataURL"><span class="property">on</span></a>=<span class="string">"black"</span>
   <a href="#toSvgDataURL"><span class="property">off</span></a>=<span class="string">"transparent"</span>
   <span class="property">className</span>=<span class="string">""</span>
@@ -1238,8 +1227,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
   <a href="#correction"><span class="property">:maxCorrectionLevel</span></a>=<span class="string">"correction.H"</span>
   <a href="#mask"><span class="property">:mask</span></a>=<span class="string">"null"</span>
   <a href="#trailer"><span class="property">:trailer</span></a>=<span class="string">"0xEC11"</span>
-  <a href="#Bitmap2D_toCanvas"><span class="property">:padX</span></a>=<span class="string">"4"</span>
-  <a href="#Bitmap2D_toCanvas"><span class="property">:padY</span></a>=<span class="string">"4"</span>
+  <a href="#Bitmap2D_toCanvas"><span class="property">:pad</span></a>=<span class="string">"4"</span>
   <a href="#Bitmap2D_toCanvas"><span class="property">:on</span></a>=<span class="string">"[0, 0, 0, 255]"</span>
   <a href="#Bitmap2D_toCanvas"><span class="property">:off</span></a>=<span class="string">"[0, 0, 0, 0]"</span>
   <span class="property">class</span>=<span class="string">""</span>
@@ -1285,8 +1273,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
   <a href="#correction"><span class="property">:maxCorrectionLevel</span></a>=<span class="string">"correction.H"</span>
   <a href="#mask"><span class="property">:mask</span></a>=<span class="string">"null"</span>
   <a href="#trailer"><span class="property">:trailer</span></a>=<span class="string">"0xEC11"</span>
-  <a href="#Bitmap2D_toCanvas"><span class="property">:padX</span></a>=<span class="string">"4"</span>
-  <a href="#Bitmap2D_toCanvas"><span class="property">:padY</span></a>=<span class="string">"4"</span>
+  <a href="#Bitmap2D_toCanvas"><span class="property">:pad</span></a>=<span class="string">"4"</span>
   <a href="#Bitmap2D_toCanvas"><span class="property">on</span></a>=<span class="string">"black"</span>
   <a href="#Bitmap2D_toCanvas"><span class="property">off</span></a>=<span class="string">"transparent"</span>
   <span class="property">class</span>=<span class="string">""</span>
@@ -1362,8 +1349,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
   <a href="#LeanQRElement_other"><span class="property">modes</span></a>=<span class="string">"numeric alphanumeric ascii iso8859_1 shift_jis utf8"</span>
   <a href="#LeanQRElement_other"><span class="property">on</span></a>=<span class="string">"#000000"</span>
   <a href="#LeanQRElement_other"><span class="property">off</span></a>=<span class="string">"#FFFFFF"</span>
-  <a href="#LeanQRElement_other"><span class="property">pad-x</span></a>=<span class="string">"4"</span>
-  <a href="#LeanQRElement_other"><span class="property">pad-y</span></a>=<span class="string">"4"</span>
+  <a href="#LeanQRElement_other"><span class="property">pad</span></a>=<span class="string">"4"</span>
 &gt;&lt;/<span class="value">lean-qr</span>&gt;</code></pre>
             <p>
               The component renders as a block element by default, sized to fill the available width. You can customise

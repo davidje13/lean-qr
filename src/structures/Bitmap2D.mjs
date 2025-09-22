@@ -12,7 +12,14 @@ export const Bitmap2D = (
 
   // begin-exclude-webcomponent
   // begin-exclude-nano
-  toString({ on = '##', off = '  ', lf = '\n', padX = 4, padY = 4 } = {}) {
+  toString({
+    on = '##',
+    off = '  ',
+    lf = '\n',
+    pad = 4,
+    padX = pad,
+    padY = pad,
+  } = {}) {
     let r = '';
     for (let y = -padY; y < size + padY; ++y) {
       for (let x = -padX; x < size + padX; ++x) {
@@ -27,7 +34,13 @@ export const Bitmap2D = (
 
   toImageData(
     context,
-    { on = [0, 0, 0], off = [0, 0, 0, 0], padX = 4, padY = 4 } = {},
+    {
+      on = [0, 0, 0],
+      off = [0, 0, 0, 0],
+      pad = 4,
+      padX = pad,
+      padY = pad,
+    } = {},
   ) {
     const fullX = size + padX * 2;
     const fullY = size + padY * 2;

@@ -12,7 +12,14 @@ const tRNS = 0x74524e53;
 
 export const toPngBuffer = (
   code,
-  { on = [0, 0, 0], off = [0, 0, 0, 0], padX = 4, padY = 4, scale = 1 } = {},
+  {
+    on = [0, 0, 0],
+    off = [0, 0, 0, 0],
+    pad = 4,
+    padX = pad,
+    padY = pad,
+    scale = 1,
+  } = {},
 ) => {
   const w = (code.size + padX * 2) * scale;
   const h = (code.size + padY * 2) * scale;

@@ -76,15 +76,16 @@ describe('Bitmap2D', () => {
         on: '!',
         off: '_',
         lf: '\r\n',
-        padX: 2,
-        padY: 1,
+        pad: 2,
       });
       expect(str).toEqual(
         [
           '_______\r\n',
+          '_______\r\n',
           '__!____\r\n',
           '__!____\r\n',
           '__!_!__\r\n',
+          '_______\r\n',
           '_______\r\n',
         ].join(''),
       );
@@ -113,18 +114,17 @@ describe('Bitmap2D', () => {
       const imageData = TEST_IMAGE.toImageData(VIRTUAL_CANVAS, {
         on: [0x50, 0x60, 0x70, 0x80],
         off: [0x10, 0x20, 0x30, 0x40],
-        padX: 2,
-        padY: 1,
+        pad: 2,
       });
       expect(imageData.width).toEqual(7);
-      expect(imageData.height).toEqual(5);
+      expect(imageData.height).toEqual(7);
 
       expect(imageData.data[0]).toEqual(0x10);
       expect(imageData.data[1]).toEqual(0x20);
       expect(imageData.data[2]).toEqual(0x30);
       expect(imageData.data[3]).toEqual(0x40);
 
-      const p = (1 * imageData.width + 2) * 4;
+      const p = (2 * imageData.width + 2) * 4;
       expect(imageData.data[p + 0]).toEqual(0x50);
       expect(imageData.data[p + 1]).toEqual(0x60);
       expect(imageData.data[p + 2]).toEqual(0x70);

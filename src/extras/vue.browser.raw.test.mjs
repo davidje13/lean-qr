@@ -65,8 +65,8 @@ describe('makeVueCanvasComponent', () => {
     const Component = makeVueCanvasComponent(framework, spyGenerate);
 
     const { container, advance } = getTyped(MOUNT)(Component, [
-      { content: 'TEST', padX: 2 },
-      { content: 'TEST', padX: 10 },
+      { content: 'TEST', pad: 2 },
+      { content: 'TEST', pad: 10 },
     ]);
 
     const canvas = container.querySelector('canvas');

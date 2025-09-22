@@ -23,6 +23,7 @@ const ATTRS = Object.entries({
   modes: ['modes', (v) => v.matchAll(/\w+/g).map(([m]) => MODE_LOOKUP.get(m))],
   on: ['on', parseCol],
   off: ['off', parseCol],
+  pad: ['pad', parseInt],
   padX: ['pad-x', parseInt],
   padY: ['pad-y', parseInt],
 });

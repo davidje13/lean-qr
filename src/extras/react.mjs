@@ -23,6 +23,7 @@ const ALL_OPTS = [
   ...GENERATE_OPTS,
   'on',
   'off',
+  'pad',
   'padX',
   'padY',
   'width',

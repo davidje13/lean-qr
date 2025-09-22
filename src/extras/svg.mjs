@@ -68,7 +68,16 @@ export const toSvgPath = (code) => {
 
 const toSvgInternal = (
   code,
-  { on = 'black', off, padX = 4, padY = 4, width, height, scale = 1 },
+  {
+    on = 'black',
+    off,
+    pad = 4,
+    padX = pad,
+    padY = pad,
+    width,
+    height,
+    scale = 1,
+  },
   mk,
   makeParam0,
   target,
