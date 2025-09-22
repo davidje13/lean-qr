@@ -1,9 +1,14 @@
 import { generate, correction, mode } from 'lean-qr';
 import { generate as generateNano } from 'lean-qr/nano';
-import { toSvgSource } from 'lean-qr/extras/svg';
+import { toSvgDataURL, toSvgSource } from 'lean-qr/extras/svg';
 import { toPngBuffer } from 'lean-qr/extras/node_export';
+import {
+  makeVueCanvasComponent,
+  makeVueSvgComponent,
+} from 'lean-qr/extras/vue';
 import { readError } from 'lean-qr/extras/errors';
 import { LeanQRElement } from 'lean-qr/webcomponent';
+import { createApp, defineComponent, h } from '@vue/runtime-dom';
 
 // this file just checks types; the code is not executed
 
@@ -158,3 +163,40 @@ nanoCode.toString({ on: 'y', off: 'n' });
 
 // @ts-expect-error
 nanoCode.toDataURL();
+
+const VueCanvasComponent = defineComponent(
+  makeVueCanvasComponent({ h }, generate, {
+    minVersion: 10,
+    on: [0, 0, 0, 255],
+  }),
+);
+createApp(VueCanvasComponent).mount('#root');
+
+// @ts-expect-error
+makeVueCanvasComponent({}, generate);
+
+// @ts-expect-error
+makeVueCanvasComponent({ h }, '');
+
+// @ts-expect-error
+makeVueCanvasComponent({ h }, generate, { scale: 2 });
+
+const VueSvgComponent = defineComponent(
+  makeVueSvgComponent({ h }, generate, toSvgDataURL, {
+    minVersion: 10,
+    scale: 2,
+  }),
+);
+createApp(VueSvgComponent).mount('#root');
+
+// @ts-expect-error
+makeVueSvgComponent({}, generate, toSvgDataURL);
+
+// @ts-expect-error
+makeVueSvgComponent({ h }, '', toSvgDataURL);
+
+// @ts-expect-error
+makeVueSvgComponent({ h }, generate, '');
+
+// @ts-expect-error
+makeVueSvgComponent({ h }, generate, toSvgDataURL, { on: [0, 0, 0, 255] });

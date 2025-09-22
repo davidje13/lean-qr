@@ -7,6 +7,7 @@
   "devDependencies": {
     "@types/node": "18.x",
     "@types/react-dom": "19.x",
+    "@vue/runtime-dom": "3.x",
     "lean-qr": "file:lean-qr.tgz",
     "typescript": "5.8.x"
   }

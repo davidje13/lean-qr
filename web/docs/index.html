@@ -28,8 +28,9 @@
           <input type="radio" name="tab" id="t2" value="browser" checked /><label for="t2">Browser Native</label>
           <input type="radio" name="tab" id="t3" value="react" /><label for="t3">React</label>
           <input type="radio" name="tab" id="t4" value="preact" /><label for="t4">Preact</label>
-          <input type="radio" name="tab" id="t5" value="webcomponent" /><label for="t5">Web Component</label>
-          <input type="radio" name="tab" id="t6" value="cli" /><label for="t6">Shell (CLI)</label>
+          <input type="radio" name="tab" id="t5" value="vue" /><label for="t5">Vue</label>
+          <input type="radio" name="tab" id="t6" value="webcomponent" /><label for="t6">Web Component</label>
+          <input type="radio" name="tab" id="t7" value="cli" /><label for="t7">Shell (CLI)</label>
           <div class="tabcontent" data-for="t1">
             <h3>Node.js</h3>
             <p>Install the dependency:</p>
@@ -52,7 +53,8 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
 <span class="keyword">const</span> code = <a href="#generate"><span class="method">generate</span></a>(<span class="string">'LEAN-QR LIBRARY'</span>);
 
 <span class="keyword">const</span> svg = <a href="#toSvgSource"><span class="method">toSvgSource</span></a>(code, {
-  <span class="comment">// set to false if you want to embed the QR Code inside a HTML document</span>
+  <span class="comment">// set to false if you want to embed the SVG directly in a HTML document</span>
+  <span class="comment">// (keep as true if this will be a separate file, or in an &lt;img src=...&gt;)</span>
   <span class="property">xmlDeclaration</span>: <span class="value">true</span>,
 });</code></pre>
             </section>
@@ -124,6 +126,7 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
 <span class="keyword">import</span> <span class="keyword">* as</span> React <span class="keyword">from</span> <span class="string">'react'</span>;
 
 <span class="comment">// creates a react component (do this at the top-level)</span>
+<span class="comment">// you can also set the defaults here (e.g. correction level, colours, etc.)</span>
 <span class="keyword">const</span> QR = <a href="#makeAsyncComponent"><span class="method">makeAsyncComponent</span></a>(React, generate);
 
 <span class="comment">// example usage:</span>
@@ -169,6 +172,7 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
 <span class="keyword">import</span> <span class="keyword">* as</span> hooks <span class="keyword">from</span> <span class="string">'preact/hooks'</span>;
 
 <span class="comment">// creates a preact component (do this at the top-level)</span>
+<span class="comment">// you can also set the defaults here (e.g. correction level, colours, etc.)</span>
 <span class="keyword">const</span> QR = <a href="#makeAsyncComponent"><span class="method">makeAsyncComponent</span></a>({ createElement, ...hooks }, generate);
 
 <span class="comment">// example usage:</span>
@@ -189,6 +193,48 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
             </p>
           </div>
           <div class="tabcontent" data-for="t5">
+            <h3>Vue</h3>
+            <p>Install the dependency:</p>
+            <pre><code>npm install --save <span class="string">lean-qr</span></code></pre>
+            <p>
+              A convenience component factory is provided for Vue; you can use this in a separate <code>.js</code> or
+              <code>.ts</code> file to create a component:
+            </p>
+            <pre><code><span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+<span class="keyword">import</span> { makeVueCanvasComponent } <span class="keyword">from</span> <span class="string">'lean-qr/extras/vue'</span>;
+<span class="keyword">import</span> { h, defineComponent } <span class="keyword">from</span> <span class="string">'vue'</span>;
+
+<span class="comment">// you can also set the defaults here (e.g. correction level, colours, etc.)</span>
+<span class="keyword">export const</span> QR = <span class="method">defineComponent</span>(<a href="#makeVueCanvasComponent"><span class="method">makeVueCanvasComponent</span></a>({ h }, generate));</code></pre>
+            <p>Which you can then use in your app:</p>
+            <pre><code>&lt;<span class="value">script</span> <span class="property">setup</span>&gt;
+<span class="keyword">import</span> { QR } <span class="keyword">from</span> <span class="string">'./my-qr-component.js'</span>;
+&lt;/<span class="value">script</span>&gt;
+
+&lt;<span class="value">style</span>&gt;
+<span class="string">.qr-code</span> {
+  <span class="property">width</span>: <span class="value">300px;</span>
+}
+&lt;/<span class="value">style</span>&gt;
+
+&lt;<span class="value">template</span>&gt;
+  &lt;<span class="value">QR</span> <span class="property">content</span>=<span class="string">"LEAN-QR LIBRARY"</span> <span class="property">class</span>=<span class="string">"qr-code"</span> /&gt;
+&lt;/<span class="value">template</span>&gt;</code></pre>
+            <p>
+              Note that this uses <code>canvas</code> rendering, which is optimal on the client-side, but will not work
+              if you want to perform server-side rendering (the QR Code will not be visible until client-side hydration
+              has completed). If you need server-side rendering, use
+              <a href="#makeVueSvgComponent"><code>makeVueSvgComponent</code></a>
+              instead:
+            </p>
+            <pre><code><span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+<span class="keyword">import</span> { toSvgDataURL } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
+<span class="keyword">import</span> { makeVueSvgComponent } <span class="keyword">from</span> <span class="string">'lean-qr/extras/vue'</span>;
+<span class="keyword">import</span> { h, defineComponent } <span class="keyword">from</span> <span class="string">'vue'</span>;
+
+<span class="keyword">export const</span> QR = <span class="method">defineComponent</span>(<a href="#makeVueSvgComponent"><span class="method">makeVueSvgComponent</span></a>({ h }, generate, toSvgDataURL));</code></pre>
+          </div>
+          <div class="tabcontent" data-for="t6">
             <h3>Web Component</h3>
             <p>
               If you just want a basic QR code and do not want to write any custom Javascript, you can import the Web
@@ -238,7 +284,7 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               </p>
             </section>
           </div>
-          <div class="tabcontent" data-for="t6">
+          <div class="tabcontent" data-for="t7">
             <h3>Shell (CLI)</h3>
             <p>
               Though not recommended for production use, it is possible to use the built-in commandline interface to
@@ -341,10 +387,27 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
             <a href="#extras_react">extras/react</a>
             <ul>
               <li>
-                <a href="#makeAsyncComponent"><code>makeAsyncComponent(framework, generate)</code></a>
+                <a href="#makeAsyncComponent"><code>makeAsyncComponent(framework, generate[, defaults])</code></a>
               </li>
               <li>
-                <a href="#makeSyncComponent"><code>makeSyncComponent(framework, generate, toSvgDataURL)</code></a>
+                <a href="#makeSyncComponent"
+                  ><code>makeSyncComponent(framework, generate, toSvgDataURL[, defaults])</code></a
+                >
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#extras_vue">extras/vue</a>
+            <ul>
+              <li>
+                <a href="#makeVueCanvasComponent"
+                  ><code>makeVueCanvasComponent(framework, generate[, defaults])</code></a
+                >
+              </li>
+              <li>
+                <a href="#makeVueSvgComponent"
+                  ><code>makeVueSvgComponent(framework, generate, toSvgDataURL[, defaults])</code></a
+                >
               </li>
             </ul>
           </li>
@@ -1053,7 +1116,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
           <a id="extras_react"></a>
           <p>This import provides convenience wrapper components for React and Preact.</p>
           <section>
-            <h4><code>makeAsyncComponent(framework, generate)</code></h4>
+            <h4><code>makeAsyncComponent(framework, generate[, defaults])</code></h4>
             <a id="makeAsyncComponent"></a>
             <p>
               Call <code>makeAsyncComponent</code> from the global scope (not inside a render method) to generate a
@@ -1100,7 +1163,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
 });</code></pre>
           </section>
           <section>
-            <h4><code>makeSyncComponent(framework, generate, toSvgDataURL)</code></h4>
+            <h4><code>makeSyncComponent(framework, generate, toSvgDataURL[, defaults])</code></h4>
             <a id="makeSyncComponent"></a>
             <p>
               Call <code>makeSyncComponent</code> from the global scope (not inside a render method) to generate a
@@ -1137,13 +1200,110 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
               >: <code>on</code> and <code>off</code> take <code>string</code> values for the colour, rather than
               arrays:
             </p>
-            <pre><code>lt;<span class="method">QR</span> <span class="property">content</span>=<span class="string">"Hello!"</span> <span class="property">on</span>=<span class="string">"black"</span> <span class="property">off</span>=<span class="string">"rgba(0,0,0,0)"</span> /&gt;</code></pre>
+            <pre><code>&lt;<span class="method">QR</span> <span class="property">content</span>=<span class="string">"Hello!"</span> <span class="property">on</span>=<span class="string">"black"</span> <span class="property">off</span>=<span class="string">"rgba(0,0,0,0)"</span> /&gt;</code></pre>
             <p>
               The component will render to an <code>&lt;img&gt;</code> synchronously, using <code>useMemo</code> as an
               optimisation. This is not the most performant option if the code will change frequently (use
               <a href="#makeAsyncComponent"><code>makeAsyncComponent</code></a> instead if that is your use-case, to
               avoid rendering lag), but supports server-side rendering and avoids the QR Code "flickering" when it first
               appears.
+            </p>
+          </section>
+        </section>
+        <section>
+          <h3>extras/vue</h3>
+          <a id="extras_vue"></a>
+          <p>This import provides convenience wrapper components for Vue.</p>
+          <section>
+            <h4><code>makeVueCanvasComponent(framework, generate[, defaults])</code></h4>
+            <a id="makeVueCanvasComponent"></a>
+            <p>
+              Call <code>makeVueCanvasComponent</code> from the global scope (not inside another component) to generate
+              a component which can be rendered later:
+            </p>
+            <pre><code><span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+<span class="keyword">import</span> { makeVueCanvasComponent } <span class="keyword">from</span> <span class="string">'lean-qr/extras/vue'</span>;
+<span class="keyword">import</span> { h, defineComponent } <span class="keyword">from</span> <span class="string">'vue'</span>;
+
+<span class="keyword">export const</span> QR = <span class="method">defineComponent</span>(<span class="method">makeVueCanvasComponent</span>({ h }, generate));</code></pre>
+            <p>
+              All the configuration options documented for <a href="#generate"><code>generate</code></a> and
+              <a href="#Bitmap2D_toCanvas"><code>toCanvas</code></a> can be passed to the wrapper component:
+            </p>
+            <pre><code>&lt;<span class="method">QR</span>
+  <span class="property">content</span>=<span class="string">"Hello!"</span>
+  <a href="#version"><span class="property">:minVersion</span></a>=<span class="string">"1"</span>
+  <a href="#version"><span class="property">:maxVersion</span></a>=<span class="string">"40"</span>
+  <a href="#correction"><span class="property">:minCorrectionLevel</span></a>=<span class="string">"correction.L"</span>
+  <a href="#correction"><span class="property">:maxCorrectionLevel</span></a>=<span class="string">"correction.H"</span>
+  <a href="#mask"><span class="property">:mask</span></a>=<span class="string">"null"</span>
+  <a href="#trailer"><span class="property">:trailer</span></a>=<span class="string">"0xEC11"</span>
+  <a href="#Bitmap2D_toCanvas"><span class="property">:padX</span></a>=<span class="string">"4"</span>
+  <a href="#Bitmap2D_toCanvas"><span class="property">:padY</span></a>=<span class="string">"4"</span>
+  <a href="#Bitmap2D_toCanvas"><span class="property">:on</span></a>=<span class="string">"[0, 0, 0, 255]"</span>
+  <a href="#Bitmap2D_toCanvas"><span class="property">:off</span></a>=<span class="string">"[0, 0, 0, 0]"</span>
+  <span class="property">class</span>=<span class="string">""</span>
+/&gt;</code></pre>
+            <p>The options shown are the defaults. All properties are optional except <code>content</code>.</p>
+            <p>
+              The component will render to a <code>&lt;canvas&gt;</code>, but this cannot be server-side rendered
+              (nothing will appear on the client until hydration completes). If server-side or synchronous rendering is
+              important to you (at the expense of some performance), use
+              <a href="#makeVueSvgComponent"><code>makeVueSvgComponent</code></a> instead.
+            </p>
+            <p>
+              You can also change the default values for the component by passing an extra argument to
+              <code>makeVueCanvasComponent</code>. For example, if you want all QR Codes to use at least correction
+              level H:
+            </p>
+            <pre><code><span class="keyword">const</span> QR = <span class="method">defineComponent</span>(<span class="method">makeVueCanvasComponent</span>({ h }, generate, {
+  <span class="property">minCorrectionLevel</span>: correction.<span class="property">H</span>,
+}));</code></pre>
+          </section>
+          <section>
+            <h4><code>makeVueSvgComponent(framework, generate, toSvgDataURL[, defaults])</code></h4>
+            <a id="makeVueSvgComponent"></a>
+            <p>
+              Call <code>makeVueSvgComponent</code> from the global scope (not inside another component) to generate a
+              component which can be rendered later:
+            </p>
+            <pre><code><span class="keyword">import</span> { generate } <span class="keyword">from</span> <span class="string">'lean-qr'</span>;
+<span class="keyword">import</span> { makeVueSvgComponent } <span class="keyword">from</span> <span class="string">'lean-qr/extras/vue'</span>;
+<span class="keyword">import</span> { toSvgDataURL } <span class="keyword">from</span> <span class="string">'lean-qr/extras/svg'</span>;
+<span class="keyword">import</span> { h, defineComponent } <span class="keyword">from</span> <span class="string">'vue'</span>;
+
+<span class="keyword">export const</span> QR = <span class="method">defineComponent</span>(<span class="method">makeVueSvgComponent</span>(React, generate, toSvgDataURL));</code></pre>
+            <p>
+              All the configuration options documented for <a href="#generate"><code>generate</code></a> and
+              <a href="#toSvgDataURL"><code>toSvgDataURL</code></a> can be passed to the wrapper component:
+            </p>
+            <pre><code>&lt;<span class="method">QR</span>
+  <span class="property">content</span>=<span class="string">"Hello!"</span>
+  <a href="#version"><span class="property">:minVersion</span></a>=<span class="string">"1"</span>
+  <a href="#version"><span class="property">:maxVersion</span></a>=<span class="string">"40"</span>
+  <a href="#correction"><span class="property">:minCorrectionLevel</span></a>=<span class="string">"correction.L"</span>
+  <a href="#correction"><span class="property">:maxCorrectionLevel</span></a>=<span class="string">"correction.H"</span>
+  <a href="#mask"><span class="property">:mask</span></a>=<span class="string">"null"</span>
+  <a href="#trailer"><span class="property">:trailer</span></a>=<span class="string">"0xEC11"</span>
+  <a href="#Bitmap2D_toCanvas"><span class="property">:padX</span></a>=<span class="string">"4"</span>
+  <a href="#Bitmap2D_toCanvas"><span class="property">:padY</span></a>=<span class="string">"4"</span>
+  <a href="#Bitmap2D_toCanvas"><span class="property">on</span></a>=<span class="string">"black"</span>
+  <a href="#Bitmap2D_toCanvas"><span class="property">off</span></a>=<span class="string">"transparent"</span>
+  <span class="property">class</span>=<span class="string">""</span>
+/&gt;</code></pre>
+            <p>
+              Note: the API for this has some differences compared to
+              <a href="#makeVueCanvasComponent"><code>makeVueCanvasComponent</code></a
+              >: <code>on</code> and <code>off</code> take <code>string</code> values for the colour, rather than
+              arrays:
+            </p>
+            <pre><code>&lt;<span class="method">QR</span> <span class="property">content</span>=<span class="string">"Hello!"</span> <span class="property">on</span>=<span class="string">"black"</span> <span class="property">off</span>=<span class="string">"rgba(0,0,0,0)"</span> /&gt;</code></pre>
+            <p>
+              The component will render to an <code>&lt;img&gt;</code> synchronously, using <code>useMemo</code> as an
+              optimisation. This is not the most performant option if the code will change frequently (use
+              <a href="#makeVueCanvasComponent"><code>makeVueCanvasComponent</code></a> instead if that is your
+              use-case, to avoid rendering lag), but supports server-side rendering and avoids the QR Code "flickering"
+              when it first appears.
             </p>
           </section>
         </section>

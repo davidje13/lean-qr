@@ -2,13 +2,18 @@ import terser from '@rollup/plugin-terser';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { strip } from './tools/rollup-plugin-strip.mjs';
 
-const plugins = [
-  nodeResolve(), // for tests
-  terser({
-    format: { ascii_only: true },
-    mangle: { properties: { regex: /^_/ } },
-  }),
-];
+const plugins = [];
+if (process.env['TEST'] === 'true') {
+  plugins.push(nodeResolve());
+}
+if (process.env['NO_MINIFY'] !== 'true') {
+  plugins.push(
+    terser({
+      format: { ascii_only: true },
+      mangle: { properties: { regex: /^_/ } },
+    }),
+  );
+}
 
 const target = (path) => ({
   input: `src/${path}.mjs`,
@@ -24,6 +29,7 @@ export default [
   target('extras/svg'),
   target('extras/node_export'),
   target('extras/react'),
+  target('extras/vue'),
   target('extras/errors'),
   {
     input: 'src/web-component/LeanQRElement.mjs',

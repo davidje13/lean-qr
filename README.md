@@ -2,7 +2,8 @@
 
 Lean QR is a lightweight yet fully-featured library for generating QR Codes. It
 runs in Node.js and all recent browsers, and includes wrapper components for
-[React, Preact](https://qr.davidje13.com/docs/#extras_react), and
+[React, Preact](https://qr.davidje13.com/docs/#extras_react),
+[Vue](https://qr.davidje13.com/docs/#extras_vue), and
 [native Web Components](https://qr.davidje13.com/docs/#webcomponent). Under 4kB
 compressed.
 
@@ -39,7 +40,7 @@ npx lean-qr 'MY MESSAGE HERE'
 ## Basic Usage
 
 See the [Quickstart](https://qr.davidje13.com/docs/#quickstart) documentation
-for Node.js / Browser / React / Preact / Web Components / CLI usage.
+for Node.js / Browser / React / Preact / Vue / Web Components / CLI usage.
 
 ```shell
 npm install --save lean-qr

@@ -32,6 +32,11 @@
       "import": "./extras/react.mjs",
       "types": "./index.d.ts"
     },
+    "./extras/vue": {
+      "require": "./extras/vue.js",
+      "import": "./extras/vue.mjs",
+      "types": "./index.d.ts"
+    },
     "./webcomponent": {
       "require": "./webcomponent.mjs",
       "import": "./webcomponent.mjs",
@@ -41,7 +46,7 @@
   "scripts": {
     "format": "prettier --write .",
     "start": "./tools/build.sh && python3 -m http.server -b 127.0.0.1 -d web 8080",
-    "test": "lean-test --target=node,chrome,firefox -x '**/*.node.*' -x '**/*.browser.*' && lean-test -i '**/*.node.test.*' && lean-test --target=chrome,firefox --preprocess=rollup -i '**/*.browser.test.*' && ./test-package/run.sh && prettier --check .",
+    "test": "lean-test --target=node,chrome,firefox -x '**/*.node.*' -x '**/*.browser.*' && lean-test -i '**/*.node.test.*' && TEST=true lean-test --target=chrome,firefox --preprocess=rollup -i '**/*.browser.test.*' && TEST=true NO_MINIFY=true lean-test --target=chrome,firefox --preprocess=rollup -i '**/*.browser.raw.test.*' && ./test-package/run.sh && prettier --check .",
     "dopublish": "./tools/build.sh && npm publish package.tgz"
   },
   "repository": {
@@ -54,6 +59,7 @@
     "barcode",
     "react",
     "preact",
+    "vue",
     "web-component"
   ],
   "author": "David Evans",
@@ -65,6 +71,7 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "16.x",
     "@rollup/plugin-terser": "0.4.x",
+    "@vue/runtime-dom": "3.x",
     "lean-test": "2.x",
     "pngjs": "7.x",
     "preact": "10.x",

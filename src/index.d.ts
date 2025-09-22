@@ -413,6 +413,13 @@ declare module 'lean-qr/extras/react' {
    * Generate an asynchronous QR component (rendering to a `canvas`).
    * You should call this just once, in the global scope.
    *
+   * ```js
+   * import * as React from 'react';
+   * import { generate } from 'lean-qr';
+   * import { makeAsyncComponent } from 'lean-qr/extras/react';
+   * const QR = makeAsyncComponent(React, generate);
+   * ```
+   *
    * This is not suitable for server-side rendering (use `makeSyncComponent`
    * instead).
    *
@@ -455,6 +462,14 @@ declare module 'lean-qr/extras/react' {
    * Generate a synchronous QR component (rendering to an SVG).
    * You should call this just once, in the global scope.
    *
+   * ```js
+   * import * as React from 'react';
+   * import { generate } from 'lean-qr';
+   * import { toSvgDataURL } from 'lean-qr/extras/svg';
+   * import { makeSyncComponent } from 'lean-qr/extras/react';
+   * const QR = makeSyncComponent(React, generate, toSvgDataURL);
+   * ```
+   *
    * This is best suited for server-side rendering (prefer
    * `makeAsyncComponent` if you only need client-side rendering).
    *
@@ -476,6 +491,114 @@ declare module 'lean-qr/extras/react' {
     toSvgDataURL: typeof toSvgDataURLFn,
     defaultProps?: Readonly<Partial<SyncQRComponentProps>>,
   ): SyncQRComponent<T>;
+}
+
+declare module 'lean-qr/extras/vue' {
+  import type {
+    Bitmap2D as FullBitmap2D,
+    GenerateOptions,
+    ImageDataOptions,
+  } from 'lean-qr';
+  import type {
+    SVGOptions,
+    toSvgDataURL as toSvgDataURLFn,
+  } from 'lean-qr/extras/svg';
+
+  export interface Framework<T> {
+    h:
+      | ((type: 'canvas', props: { ref: string; style: string }) => T)
+      | ((type: 'img', props: { src: string; style: string }) => T);
+  }
+
+  interface QRComponentProps {
+    content: string;
+  }
+
+  export interface VueCanvasComponentProps
+    extends ImageDataOptions,
+      GenerateOptions,
+      QRComponentProps {}
+
+  type VueComponentDefinition<Props, Node> = {
+    props: {
+      [k in keyof Props]: {
+        type: {
+          (): Props[k];
+          required: undefined extends Props[k] ? false : true;
+        };
+      };
+    };
+    render: () => Node;
+  } & ThisType<unknown>;
+
+  /**
+   * Generate a QR component which renders to a `canvas`.
+   * You should call this just once, in the global scope.
+   *
+   * ```js
+   * import { h, defineComponent } from 'vue';
+   * import { generate } from 'lean-qr';
+   * import { makeVueCanvasComponent } from 'lean-qr/extras/vue';
+   * export const QR = defineComponent(makeVueCanvasComponent({ h }, generate));
+   * ```
+   *
+   * This is not suitable for server-side rendering (use `makeSyncComponent`
+   * instead).
+   *
+   * @param framework the framework to use (e.g. `{ h }`).
+   * @param generate the `generate` function to use
+   * (from `lean-qr` or `lean-qr/nano`).
+   * @param defaultProps optional default properties to apply when the
+   * component is used (overridden by properties set on use).
+   * @returns a component which can be rendered elsewhere.
+   */
+  export function makeVueCanvasComponent<T>(
+    framework: Readonly<Framework<T>>,
+    generate: (
+      data: string,
+      options?: Readonly<GenerateOptions>,
+    ) => Pick<FullBitmap2D, 'toCanvas'>,
+    defaultProps?: Readonly<Partial<VueCanvasComponentProps>>,
+  ): VueComponentDefinition<Partial<VueCanvasComponentProps>, T>;
+
+  export interface VueSVGComponentProps
+    extends SVGOptions,
+      GenerateOptions,
+      QRComponentProps {}
+
+  /**
+   * Generate a QR component which renders to an SVG.
+   * You should call this just once, in the global scope:
+   *
+   * ```js
+   * import { h, defineComponent } from 'vue';
+   * import { generate } from 'lean-qr';
+   * import { toSvgDataURL } from 'lean-qr/extras/svg';
+   * import { makeVueSvgComponent } from 'lean-qr/extras/vue';
+   * export const QR = defineComponent(makeVueSvgComponent({ h }, generate, toSvgDataURL));
+   * ```
+   *
+   * This is best suited for server-side rendering (prefer
+   * `makeAsyncComponent` if you only need client-side rendering).
+   *
+   * @param framework the framework to use (e.g. `{ h }`).
+   * @param generate the `generate` function to use
+   * (from `lean-qr` or `lean-qr/nano`).
+   * @param toSvgDataURL the `toSvgDataURL` function to use
+   * (from `lean-qr/extras/svg`).
+   * @param defaultProps optional default properties to apply when the
+   * component is used (overridden by properties set on use).
+   * @returns a component which can be rendered elsewhere.
+   */
+  export function makeVueSvgComponent<T>(
+    framework: Readonly<Framework<T>>,
+    generate: (
+      data: string,
+      options?: Readonly<GenerateOptions>,
+    ) => Pick<FullBitmap2D, 'size' | 'get'>,
+    toSvgDataURL: typeof toSvgDataURLFn,
+    defaultProps?: Readonly<Partial<VueSVGComponentProps>>,
+  ): VueComponentDefinition<Partial<VueSVGComponentProps>, T>;
 }
 
 declare module 'lean-qr/extras/errors' {

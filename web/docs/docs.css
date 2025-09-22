@@ -515,6 +515,7 @@ pre a:hover {
 #t4:checked ~ .tabcontent[data-for='t4'],
 #t5:checked ~ .tabcontent[data-for='t5'],
 #t6:checked ~ .tabcontent[data-for='t6'],
+#t7:checked ~ .tabcontent[data-for='t7'],
 #cdn1:checked ~ .tabcontent[data-for='cdn1'],
 #cdn2:checked ~ .tabcontent[data-for='cdn2'],
 #cdn3:checked ~ .tabcontent[data-for='cdn3'] {

@@ -7,6 +7,8 @@ extras/node_export.mjs: sha384-vDdG08dczAA8j/By/GiwtrqjafVZm1DXdQLDKGCwKrXuIC2Lh
 extras/node_export.js:  sha384-nNXJptbfQvBp0DoxkQH5M4GrRxAYHnzGv/NPIo/edW3fuqebROprdJZ3WZYGV0oa
 extras/react.mjs:       sha384-X3LkFD+WeUm4HUWCAvZt/aZUO173VE+tt/Wmi82mDGM+5AIyR8FKAL2dsaba3V9k
 extras/react.js:        sha384-HUIGlIhZ15CDhcxYgnFsbpLXyshwCBxIYTGrEQjUMCpmyHnF41ULSLeSo+qUmnaP
+extras/vue.mjs:         sha384-01Ecc9JJ6F8YDw9VMNVEZ1IqlFFGQZjAua5VEd/cWjOjdQp8UXR2bPZQSrTzqfVS
+extras/vue.js:          sha384-bHISb/wghU1Fttty+eQHchZTmh+gQ24fcZo823OgVT5jcFMc3pO1Cib+vWRsoOY/
 extras/errors.mjs:      sha384-LaUpr3MpI+ZWjDG8L54lwBzgymdm+C1fijP3Z3HukZOFOn3nmRUtgK5aTmOSVm/q
 extras/errors.js:       sha384-lpwl8zlB1GwhvS1ftgUv4mCvOhlixuRa8fRag2aZ2PEEPKQ++l+IjhZL8lhbZMVe
 webcomponent.mjs:       sha384-pAK/5YWXYaPkUo/sBmhsGTlbwZ/KIVPh7ClFpnplMuu9dH34Brg4ckX3QsiHbBKN
