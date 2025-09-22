@@ -357,7 +357,9 @@ declare module 'lean-qr/extras/node_export' {
 
   /**
    * Generate a PNG document which can be exported to a file or served from a
-   * web server.
+   * web server. This implementation is synchronous but can only be used in
+   * Node.js - in browsers you must use the asynchronous `toPngBytes` from
+   * `extras/png`.
    *
    * @param code the QR code to convert.
    * @param options optional configuration for the display.
@@ -369,7 +371,9 @@ declare module 'lean-qr/extras/node_export' {
   ): Uint8Array;
 
   /**
-   * Generate a `data:image/png` URL.
+   * Generate a `data:image/png` URL. This implementation is synchronous but
+   * can only be used in Node.js - in browsers you must use the asynchronous
+   * `toPngDataURL` from `extras/png`.
    *
    * @param code the QR code to convert.
    * @param options optional configuration for the display.
@@ -379,6 +383,56 @@ declare module 'lean-qr/extras/node_export' {
     code: Bitmap2D,
     options?: Readonly<PNGOptions>,
   ): string;
+}
+
+declare module 'lean-qr/extras/png' {
+  import type { RGBA, Bitmap2D as FullBitmap2D } from 'lean-qr';
+
+  type Bitmap2D = Pick<FullBitmap2D, 'size' | 'get'>;
+
+  export interface PNGOptions {
+    /** the colour to use for modules which are 'on' (typically black) */
+    on?: RGBA;
+    /** the colour to use for modules which are 'off' (typically white) */
+    off?: RGBA;
+    /** the padding to apply around the output (filled with 'off') */
+    pad?: number;
+    /**
+     * @deprecated use `pad` instead
+     */
+    padX?: never;
+    /**
+     * @deprecated use `pad` instead
+     */
+    padY?: never;
+    /** a scale to apply to the resulting image (`scale` pixels = 1 module) */
+    scale?: number;
+  }
+
+  /**
+   * Generate a PNG document which can be exported to a file or served from a
+   * web server.
+   *
+   * @param code the QR code to convert.
+   * @param options optional configuration for the display.
+   * @returns a promise of a PNG document as a Uint8Array.
+   */
+  export function toPngBytes(
+    code: Bitmap2D,
+    options?: Readonly<PNGOptions>,
+  ): Promise<Uint8Array>;
+
+  /**
+   * Generate a `data:image/png` URL.
+   *
+   * @param code the QR code to convert.
+   * @param options optional configuration for the display.
+   * @returns a promise of a string suitable for use as the `src` of an `img` tag.
+   */
+  export function toPngDataURL(
+    code: Bitmap2D,
+    options?: Readonly<PNGOptions>,
+  ): Promise<string>;
 }
 
 declare module 'lean-qr/extras/react' {

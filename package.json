@@ -23,6 +23,10 @@
       "types": "./index.d.ts",
       "default": "./extras/node_export.mjs"
     },
+    "./extras/png": {
+      "types": "./index.d.ts",
+      "default": "./extras/png.mjs"
+    },
     "./extras/react": {
       "types": "./index.d.ts",
       "default": "./extras/react.mjs"
