@@ -21,6 +21,7 @@ const target = (path) => ({
     { file: `build/${path}.mjs`, format: 'esm' },
     { file: `build/${path}.js`, format: 'cjs' },
   ],
+  external: [/^node:/],
   plugins,
 });
 
