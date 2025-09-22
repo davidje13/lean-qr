@@ -185,7 +185,10 @@ declare module 'lean-qr' {
 
   export type Correction = number & { readonly _: unique symbol };
   export const correction: Readonly<{
-    /** minimum possible correction level (same as L) */
+    /**
+     * minimum possible correction level (same as L)
+     * @deprecated use correction.L
+     */
     min: Correction;
     /** ~7.5% error tolerance, ~25% data overhead */
     L: Correction;
@@ -195,7 +198,10 @@ declare module 'lean-qr' {
     Q: Correction;
     /** ~30% error tolerance, ~190% data overhead */
     H: Correction;
-    /** maximum possible correction level (same as H) */
+    /**
+     * maximum possible correction level (same as H)
+     * @deprecated use correction.H
+     */
     max: Correction;
   }>;
 
