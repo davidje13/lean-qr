@@ -2,6 +2,7 @@ const { generate, correction, mode } = require('lean-qr');
 const { generate: generateNano } = require('lean-qr/nano');
 const { toSvgSource, toSvgDataURL } = require('lean-qr/extras/svg');
 const { toPngBuffer } = require('lean-qr/extras/node_export');
+const { toPngBytes } = require('lean-qr/extras/png');
 const {
   makeAsyncComponent,
   makeSyncComponent,
@@ -22,6 +23,12 @@ if (typeof toSvgSource !== 'function') {
 if (typeof toPngBuffer !== 'function') {
   throw new Error(
     "require('lean-qr/extras/node_export') did not return toPngBuffer function",
+  );
+}
+
+if (typeof toPngBytes !== 'function') {
+  throw new Error(
+    "require('lean-qr/extras/png') did not return toPngBytes function",
   );
 }
 

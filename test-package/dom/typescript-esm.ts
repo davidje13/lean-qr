@@ -2,6 +2,7 @@ import { generate, correction, mode } from 'lean-qr';
 import { generate as generateNano } from 'lean-qr/nano';
 import { toSvgDataURL, toSvgSource } from 'lean-qr/extras/svg';
 import { toPngBuffer } from 'lean-qr/extras/node_export';
+import { toPngBytes } from 'lean-qr/extras/png';
 import {
   makeVueCanvasComponent,
   makeVueSvgComponent,
@@ -40,6 +41,9 @@ const svgSource = toSvgSource(code2);
 process.stdout.write(svgSource);
 const pngBuffer = toPngBuffer(code);
 process.stdout.write(pngBuffer.BYTES_PER_ELEMENT.toString());
+toPngBytes(code).then((pngBuffer) =>
+  process.stdout.write(pngBuffer.BYTES_PER_ELEMENT.toString()),
+);
 
 const customMode = Object.assign(() => () => null, {
   test: () => true,
@@ -49,6 +53,9 @@ const customMode = Object.assign(() => () => null, {
 const code3 = generate(mode.shift_jis('123'), { minVersion: 3 });
 process.stdout.write(toSvgSource(code3, { pad: 2, xmlDeclaration: true }));
 process.stdout.write(toPngBuffer(code3, { pad: 2, scale: 10 }).toString());
+toPngBytes(code3, { pad: 2, scale: 10 }).then((pngBuffer) =>
+  process.stdout.write(pngBuffer.toString()),
+);
 
 try {
   const code4 = generate('123', { modes: [customMode] });
@@ -116,6 +123,9 @@ toSvgSource('123');
 toPngBuffer('123');
 
 // @ts-expect-error
+toPngBytes('123');
+
+// @ts-expect-error
 mode.shift_jis(1);
 
 // @ts-expect-error
@@ -128,6 +138,9 @@ const nanoSvgSource = toSvgSource(nanoCode);
 process.stdout.write(nanoSvgSource);
 const nanoPngBuffer = toPngBuffer(nanoCode);
 process.stdout.write(nanoPngBuffer.BYTES_PER_ELEMENT.toString());
+toPngBytes(nanoCode).then((pngBuffer) =>
+  process.stdout.write(pngBuffer.BYTES_PER_ELEMENT.toString()),
+);
 
 generateNano('123', {
   minVersion: 3,

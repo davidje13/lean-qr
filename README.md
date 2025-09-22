@@ -26,7 +26,7 @@ compressed.
 - Comprehensive automated testing;
 - Multiple output formats
   ([canvas](https://qr.davidje13.com/docs/#Bitmap2D_toCanvas) /
-  [PNG](https://qr.davidje13.com/docs/#toPngBuffer) /
+  [PNG](https://qr.davidje13.com/docs/#toPngBytes) /
   [SVG](https://qr.davidje13.com/docs/#toSvgSource) /
   [text](https://qr.davidje13.com/docs/#Bitmap2D_toString)).
 
