@@ -1558,54 +1558,6 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
         </section>
       </section>
       <section>
-        <h2>Version 2 Migration Guide</h2>
-        <a id="v2"></a>
-        <p>
-          Version 2 brings many advantages, including better support for QR features, faster performance, and reduced
-          code size. For basic use, updating from version 1.x to 2.x should have no issues, but if you are using more
-          advanced customisation options or relying on specific behaviours, you may need to update your code:
-        </p>
-        <ul>
-          <li>
-            <code>.reg</code> (regular expression) properties of modes have been replaced with <code>.test</code> (API
-            compatible with <code>RegExp.test</code>). Custom modes which integrate with <code>auto</code> will need
-            updating;
-          </li>
-          <li>
-            <code>iso8859_1</code> mode will now explicitly set the ECI to 3 for better compatibility with some readers.
-            If you only need 7-bit ASCII characters, use <code>ascii</code> mode instead (which does not set the ECI,
-            saving some space). <code>auto</code> mode will handle this automatically;
-          </li>
-          <li>
-            <code>auto</code> mode is now able to mix <code>utf8</code> with other modes if it will save space (some QR
-            Codes may change, but the meaning will be the same);
-          </li>
-          <li>
-            <code>shift_jis</code> mode is now available by default (the <code>extras/jis</code> export has been
-            removed);
-          </li>
-          <li>
-            custom modes can now be registered using <code>updatedGenerator = generator.with(myCustomMode)</code>,
-            avoiding the need to specify all the default modes;
-          </li>
-          <li>
-            <code>toSvgSource</code> / <code>toSvgDataURL</code> now accept <code>rgb()</code> /
-            <code>rgba()</code> syntax for colours, matching <code>toSvg</code>;
-          </li>
-          <li>
-            <code>toCanvas</code> / <code>toImageData</code> / <code>toDataURL</code> no longer accept 32-bit
-            little-endian integer values for colours. If you were using this legacy behaviour, update your code to pass
-            colours as arrays instead: <code>[red, green, blue, alpha?]</code> (for example,
-            <code>[255, 0, 255, 255]</code> = purple);
-          </li>
-          <li>
-            errors are now reported as codes to save space. If you want to present errors in a human-readable way, you
-            can use <code>extras/errors</code> to convert;
-          </li>
-          <li>internal properties and methods are now minified (documented methods are not affected).</li>
-        </ul>
-      </section>
-      <section>
         <h2>Comparison With Other Libraries</h2>
         <a id="comparison"></a>
         <p>
