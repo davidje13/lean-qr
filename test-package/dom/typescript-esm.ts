@@ -171,14 +171,21 @@ const VueCanvasComponent = defineComponent(
   }),
 );
 createApp(VueCanvasComponent).mount('#root');
+h(VueCanvasComponent, { content: '', on: [0, 0, 0, 255] });
 
-// @ts-expect-error
+// @ts-expect-error - content is required
+h(VueCanvasComponent, {});
+
+// @ts-expect-error - on should be an array
+h(VueCanvasComponent, { content: '', on: 'black' });
+
+// @ts-expect-error - bad framework
 makeVueCanvasComponent({}, generate);
 
-// @ts-expect-error
+// @ts-expect-error - bad generate
 makeVueCanvasComponent({ h }, '');
 
-// @ts-expect-error
+// @ts-expect-error - unknown default
 makeVueCanvasComponent({ h }, generate, { scale: 2 });
 
 const VueSvgComponent = defineComponent(
@@ -188,15 +195,22 @@ const VueSvgComponent = defineComponent(
   }),
 );
 createApp(VueSvgComponent).mount('#root');
+h(VueSvgComponent, { content: '' });
 
-// @ts-expect-error
+// @ts-expect-error - content is required
+h(VueSvgComponent, {});
+
+// @ts-expect-error - on should be a string
+h(VueSvgComponent, { content: '', on: [0, 0, 0, 255] });
+
+// @ts-expect-error - bad framework
 makeVueSvgComponent({}, generate, toSvgDataURL);
 
-// @ts-expect-error
+// @ts-expect-error - bad generate
 makeVueSvgComponent({ h }, '', toSvgDataURL);
 
-// @ts-expect-error
+// @ts-expect-error - bad toSvgDataURL
 makeVueSvgComponent({ h }, generate, '');
 
-// @ts-expect-error
+// @ts-expect-error - invalid type for default 'on' value
 makeVueSvgComponent({ h }, generate, toSvgDataURL, { on: [0, 0, 0, 255] });

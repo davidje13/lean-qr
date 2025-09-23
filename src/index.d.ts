@@ -546,10 +546,10 @@ declare module 'lean-qr/extras/vue' {
     toSvgDataURL as toSvgDataURLFn,
   } from 'lean-qr/extras/svg';
 
-  export interface Framework<T> {
+  export interface Framework {
     h:
-      | ((type: 'canvas', props: { ref: string; style: string }) => T)
-      | ((type: 'img', props: { src: string; style: string }) => T);
+      | ((type: 'canvas', props: { ref: string; style: string }) => unknown)
+      | ((type: 'img', props: { src: string; style: string }) => unknown);
   }
 
   interface QRComponentProps {
@@ -561,16 +561,13 @@ declare module 'lean-qr/extras/vue' {
       GenerateOptions,
       QRComponentProps {}
 
-  type VueComponentDefinition<Props, Node> = {
+  type VueComponentDefinition<Props> = {
     props: {
-      [k in keyof Props]: {
-        type: {
-          (): Props[k];
-          required: undefined extends Props[k] ? false : true;
-        };
+      [k in keyof Props]-?: {
+        type: { (): Required<Props>[k] };
+        required: undefined extends Props[k] ? false : true;
       };
     };
-    render: () => Node;
   } & ThisType<unknown>;
 
   /**
@@ -594,14 +591,14 @@ declare module 'lean-qr/extras/vue' {
    * component is used (overridden by properties set on use).
    * @returns a component which can be rendered elsewhere.
    */
-  export function makeVueCanvasComponent<T>(
-    framework: Readonly<Framework<T>>,
+  export function makeVueCanvasComponent(
+    framework: Readonly<Framework>,
     generate: (
       data: string,
       options?: Readonly<GenerateOptions>,
     ) => Pick<FullBitmap2D, 'toCanvas'>,
     defaultProps?: Readonly<Partial<VueCanvasComponentProps>>,
-  ): VueComponentDefinition<Partial<VueCanvasComponentProps>, T>;
+  ): VueComponentDefinition<VueCanvasComponentProps>;
 
   export interface VueSVGComponentProps
     extends SVGOptions,
@@ -632,15 +629,15 @@ declare module 'lean-qr/extras/vue' {
    * component is used (overridden by properties set on use).
    * @returns a component which can be rendered elsewhere.
    */
-  export function makeVueSvgComponent<T>(
-    framework: Readonly<Framework<T>>,
+  export function makeVueSvgComponent(
+    framework: Readonly<Framework>,
     generate: (
       data: string,
       options?: Readonly<GenerateOptions>,
     ) => Pick<FullBitmap2D, 'size' | 'get'>,
     toSvgDataURL: typeof toSvgDataURLFn,
     defaultProps?: Readonly<Partial<VueSVGComponentProps>>,
-  ): VueComponentDefinition<Partial<VueSVGComponentProps>, T>;
+  ): VueComponentDefinition<VueSVGComponentProps>;
 }
 
 declare module 'lean-qr/extras/errors' {
