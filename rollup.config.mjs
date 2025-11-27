@@ -2,6 +2,11 @@ import terser from '@rollup/plugin-terser';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { strip } from './tools/rollup-plugin-strip.mjs';
 
+const commonTerserOptions = {
+  ecma: 2015,
+  format: { ascii_only: true },
+};
+
 const plugins = [];
 if (process.env['TEST'] === 'true') {
   plugins.push(nodeResolve());
@@ -9,7 +14,7 @@ if (process.env['TEST'] === 'true') {
 if (process.env['NO_MINIFY'] !== 'true') {
   plugins.push(
     terser({
-      format: { ascii_only: true },
+      ...commonTerserOptions,
       mangle: { properties: { regex: /^_/ } },
     }),
   );
@@ -38,7 +43,7 @@ export default [
     plugins: [
       strip('exclude-webcomponent'),
       terser({
-        format: { ascii_only: true },
+        ...commonTerserOptions,
         mangle: {
           properties: {
             keep_quoted: 'strict',
@@ -55,7 +60,7 @@ export default [
     plugins: [
       strip('exclude-nano'),
       terser({
-        format: { ascii_only: true },
+        ...commonTerserOptions,
         mangle: {
           properties: {
             keep_quoted: 'strict',
