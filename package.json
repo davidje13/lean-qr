@@ -56,11 +56,17 @@
   "keywords": [
     "qr",
     "qr-code",
+    "qrcode",
     "barcode",
     "react",
+    "react-component",
     "preact",
+    "preact-component",
     "vue",
-    "web-component"
+    "vue-component",
+    "web-component",
+    "console",
+    "terminal"
   ],
   "author": "David Evans",
   "license": "MIT",
