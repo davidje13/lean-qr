@@ -2,7 +2,7 @@ import { runPerformanceTest } from './common.mjs';
 
 runPerformanceTest(
   'qrcode-generator',
-  () => import('../build/qrcode-generator.js'),
+  () => import('../build/qrcode-generator.mjs'),
   (module) => (message) => {
     const code = module.default(0, 'L');
     code.addData(

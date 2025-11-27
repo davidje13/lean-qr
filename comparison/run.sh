@@ -23,11 +23,15 @@ mkdir -p build;
 # Copy/transpile files to use into build folder
 cp node_modules/lean-qr/index.mjs build/lean-qr.mjs;
 cp node_modules/lean-qr/nano.mjs build/lean-qr-nano.mjs;
-cp node_modules/qrcode-generator/qrcode.js build/qrcode-generator.js;
+cp node_modules/qrcode-generator/dist/qrcode.mjs build/qrcode-generator.mjs;
 cp node_modules/qr-creator/dist/qr-creator.es6.min.js build/qr-creator.mjs;
 cp node_modules/awesome-qr/dist/awesome-qr.js build/awesome-qr.js;
 curl -L https://github.com/nayuki/QR-Code-generator/releases/download/v1.8.0/qrcodegen-v1.8.0-es6.js > build/qr-code-generator.js;
 cp node_modules/qrjs2/js/qrjs2.js build/qrjs2.js;
+cp node_modules/qruri/index.js build/qruri.js;
+sed -e "s/require('.\\/canvas')/require('.\\/canvas-proxy.js')/" < node_modules/qruri/index.js > build/qruri-node.js;
+sed -e "s/require('.\\/canvas')/()=>document.createElement('canvas')/" < node_modules/qruri/index.js > build/qruri-browser.js;
+cp node_modules/qruri/canvas.js build/canvas-proxy.js;
 npm run --silent build;
 
 echo;
@@ -49,12 +53,13 @@ measure() {
   printf "qrcode:                     $(measure build/qrcode.browser.mjs)\n";
   printf "qrcode shift-jis:           $(measure node_modules/qrcode/helper/to-sjis.js)\n";
   printf "qr.js:                      $(measure build/qrjs.mjs)\n";
-  printf "qrcode-generator:           $(measure build/qrcode-generator.js)\n";
-  printf "qrcode-generator shift-jis: $(measure node_modules/qrcode-generator/qrcode_SJIS.js)\n";
+  printf "qrcode-generator:           $(measure build/qrcode-generator.mjs)\n";
+  printf "qrcode-generator shift-jis: $(measure node_modules/qrcode-generator/dist/qrcode_SJIS.mjs)\n";
   printf "qr-creator:                 $(measure build/qr-creator.mjs)\n";
   printf "awesome-qr:                 $(measure build/awesome-qr.js)\n";
   printf "qr-code-generator:          $(measure build/qr-code-generator.js)\n";
   printf "qrjs2:                      $(measure build/qrjs2.js)\n";
+  printf "qruri:                      $(measure node_modules/qruri/index.js)\n";
 } | tee results/sizes.txt;
 
 # We (ab)use lean-test to get browser runners for our tests, but to get output from it
