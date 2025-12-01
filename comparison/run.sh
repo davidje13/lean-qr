@@ -32,6 +32,7 @@ cp node_modules/qruri/index.js build/qruri.js;
 sed -e "s/require('.\\/canvas')/require('.\\/canvas-proxy.js')/" < node_modules/qruri/index.js > build/qruri-node.js;
 sed -e "s/require('.\\/canvas')/()=>document.createElement('canvas')/" < node_modules/qruri/index.js > build/qruri-browser.js;
 cp node_modules/qruri/canvas.js build/canvas-proxy.js;
+cp node_modules/qr/index.js build/qr.mjs;
 npm run --silent build;
 
 echo;
@@ -60,6 +61,7 @@ measure() {
   printf "qr-code-generator:          $(measure build/qr-code-generator.js)\n";
   printf "qrjs2:                      $(measure build/qrjs2.js)\n";
   printf "qruri:                      $(measure node_modules/qruri/index.js)\n";
+  printf "qr:                         $(measure build/qr.mjs)\n";
 } | tee results/sizes.txt;
 
 # We (ab)use lean-test to get browser runners for our tests, but to get output from it

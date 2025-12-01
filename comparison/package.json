@@ -8,6 +8,7 @@
   "dependencies": {
     "awesome-qr": "2.1.5-rc.0",
     "lean-qr": "file:lean-qr.tgz",
+    "qr": "0.5.3",
     "qr-creator": "1.0.0",
     "qr.js": "0.0.0",
     "qrcode": "1.5.4",
