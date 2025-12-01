@@ -6,7 +6,7 @@ import { toMatchImage } from '../test-helpers/toMatchImage.mjs';
 
 expect.extend({ toMatchImage });
 
-const LONG_MESSAGE =
+const V4_MESSAGE =
   'this is a much longer message which needs at least version 4';
 
 describe('nano generate', () => {
@@ -46,13 +46,18 @@ describe('nano generate', () => {
         },
         {
           name: 'long message',
-          message: LONG_MESSAGE,
+          message: V4_MESSAGE,
           options: { minCorrectionLevel: correction.H },
         },
         {
           name: 'allows larger versions to be forced',
-          message: LONG_MESSAGE,
+          message: V4_MESSAGE,
           options: { minVersion: 10, minCorrectionLevel: correction.H },
+        },
+        {
+          name: 'message with 2-byte length',
+          message: 'a'.repeat(260),
+          options: { minCorrectionLevel: correction.H },
         },
       ],
     },
