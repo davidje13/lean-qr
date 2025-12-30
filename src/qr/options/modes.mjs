@@ -11,7 +11,13 @@ const multi =
 const eci = (id) => (data) => {
   if (data.eci !== id) {
     data.push(0b0111, 4);
-    data.push(id, 8);
+    if (id < 0x80) {
+      data.push(id, 8);
+    } else if (id < 0x4000) {
+      data.push(0x8000 | id, 16);
+    } else {
+      data.push(0xc00000 | id, 24);
+    }
     data.eci = id;
   }
 };

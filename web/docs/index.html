@@ -681,10 +681,9 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               <h5><code>eci(value)</code> / <code>bytes(data)</code></h5>
               <a id="mode_eci"></a>
               <p>
-                <code>mode.eci</code> lets you switch the Extended Channel Interpretation of the message (<a
-                  href="https://en.wikipedia.org/wiki/Extended_Channel_Interpretation"
-                  target="_blank"
-                  rel="noopener"
+                <code>mode.eci</code> lets you switch the Extended Channel Interpretation of the message (accepts
+                integer IDs from 0 to 999999;
+                <a href="https://en.wikipedia.org/wiki/Extended_Channel_Interpretation" target="_blank" rel="noopener"
                   >Wikipedia includes a list of recognised values</a
                 >). After setting this, subsequent <code>mode.bytes</code> will be interpreted in the specified
                 character set.
@@ -702,6 +701,10 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
                 26. <code>mode.ascii</code> does not set an explicit ECI mode, as readers are supposed to default to ECI
                 3 (and even though some default to ECI 26 instead, these share the same codepoints for all ASCII
                 values).
+              </p>
+              <p>
+                If you wish to use ECI values other than 3 and 26 (which are widely recognised by common QR code
+                readers), ensure you test your QR code with the readers you want to support.
               </p>
               <p>
                 If you set an ECI which is not compatible with ASCII, do not follow it with a
@@ -1588,7 +1591,7 @@ ascii.<span class="property">est</span> = (value, version) =&gt; (
                   <a href="https://www.npmjs.com/package/lean-qr" target="_blank" rel="noopener">lean-qr</a>
                   <small>(<a href="https://qr.davidje13.com/" target="_blank" rel="noopener">demo</a>)</small>
                 </td>
-                <td class="R">6.9kB / 3.6kB</td>
+                <td class="R">6.9kB / 3.7kB</td>
                 <td>2900 / 51 / 21</td>
                 <td class="C" title="yes">&#x2705;</td>
                 <td class="C" title="yes">&#x2705;</td>

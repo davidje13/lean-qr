@@ -392,6 +392,35 @@ describe('mode.utf8', () => {
   });
 });
 
+describe('mode.eci', () => {
+  it('stores the ECI ID', () => {
+    const data = Bitmap1D();
+    mode.eci(26)(data, 1);
+    expect(data).toMatchBits(`
+      0111
+      0 0011010
+    `);
+  });
+
+  it('uses 2 bytes for larger ECI IDs', () => {
+    const data = Bitmap1D();
+    mode.eci(899)(data, 1);
+    expect(data).toMatchBits(`
+      0111
+      10 000011 10000011
+    `);
+  });
+
+  it('uses 3 bytes for very large ECI IDs', () => {
+    const data = Bitmap1D();
+    mode.eci(16384)(data, 1);
+    expect(data).toMatchBits(`
+      0111
+      110 00000 01000000 00000000
+    `);
+  });
+});
+
 describe('mode.multi', () => {
   it('appends multiple modes in succession', () => {
     const data = Bitmap1D();
