@@ -325,7 +325,41 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
                 >
               </li>
               <li><a href="#mask">Masks (<code>mask</code>)</a></li>
-              <li><a href="#mode">Modes (<code>modes</code>)</a></li>
+              <li>
+                <a href="#mode">Modes (<code>modes</code>)</a>
+                <ul>
+                  <li>
+                    <a href="#mode_encodings"><code>mode.numeric(text)</code></a>
+                  </li>
+                  <li>
+                    <a href="#mode_encodings"><code>mode.alphaNumeric(text)</code></a>
+                  </li>
+                  <li>
+                    <a href="#mode_encodings"><code>mode.ascii(text)</code></a>
+                  </li>
+                  <li>
+                    <a href="#mode_encodings"><code>mode.iso8859_1(text)</code></a>
+                  </li>
+                  <li>
+                    <a href="#mode_encodings"><code>mode.shift_jis(text)</code></a>
+                  </li>
+                  <li>
+                    <a href="#mode_encodings"><code>mode.utf8(text)</code></a>
+                  </li>
+                  <li>
+                    <a href="#mode_multi"><code>mode.multi(...modes)</code></a>
+                  </li>
+                  <li>
+                    <a href="#mode_eci"><code>mode.eci(value)</code></a>
+                  </li>
+                  <li>
+                    <a href="#mode_eci"><code>mode.bytes(data)</code></a>
+                  </li>
+                  <li>
+                    <a href="#mode_auto"><code>mode.auto(text[, options])</code></a>
+                  </li>
+                </ul>
+              </li>
               <li><a href="#trailer">Trailer (<code>trailer</code>)</a></li>
             </ul>
           </li>
@@ -625,6 +659,7 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               encoding conforms to the accepted character set. If you provide mismatched content, the resulting QR Code
               will likely be malformed. The available modes and their supported character sets are:
             </p>
+            <a id="mode_encodings"></a>
             <table>
               <thead>
                 <tr>
