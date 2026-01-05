@@ -117,6 +117,22 @@ describe('LeanQRElement', () => {
     expect(el.getAttribute('title')).toEqual('message 2');
   });
 
+  it('updates automatically when source value changes from blank', async () => {
+    const c = render(`
+      <input type="text" id="source" value="" />
+      <lean-qr for="source"></lean-qr>
+    `);
+    const source = c.querySelector('#source');
+    const el = c.querySelector('lean-qr');
+
+    expect(el.getAttribute('title')).toEqual('');
+
+    source.value = 'message 2';
+    source.dispatchEvent(new CustomEvent('input'));
+    await nextTick();
+    expect(el.getAttribute('title')).toEqual('message 2');
+  });
+
   it('deduplicates changes when multiple attributes change', async () => {
     const c = render(`
       <value-counter id="src" value="hello"></value-counter>

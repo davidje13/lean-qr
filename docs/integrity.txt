@@ -11,4 +11,4 @@ extras/vue.mjs:         sha384-Q4U/qU20x7la3XGJDH1okfzFYN5r+AahC/KAu3xJi5vmOj0GP
 extras/vue.js:          sha384-lkJRxa/w/MmxmQCuZWCv3qKGlSyuRD86eaGUWktxjO/n7pcUstsLUW2COHlYDYQ4
 extras/errors.mjs:      sha384-LaUpr3MpI+ZWjDG8L54lwBzgymdm+C1fijP3Z3HukZOFOn3nmRUtgK5aTmOSVm/q
 extras/errors.js:       sha384-lpwl8zlB1GwhvS1ftgUv4mCvOhlixuRa8fRag2aZ2PEEPKQ++l+IjhZL8lhbZMVe
-webcomponent.mjs:       sha384-qEnJ44o+q4U5Coy2oSQk+VUSujAopoS0ehKAHURdzOOyw8J+YtxqhAnOwmwV8zlo
+webcomponent.mjs:       sha384-2dVuqPIEbh5UMgcrZtR3/DrpMR562lQy9XEtWVbS7Bj8pF32//q+jQlgtHzZxEnv

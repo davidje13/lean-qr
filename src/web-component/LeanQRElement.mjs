@@ -126,7 +126,7 @@ export class LeanQRElement extends HTMLElement {
           characterData: true,
         });
       }
-      if (targetValue ?? 0 !== 0) {
+      if ((targetValue ?? 0) !== 0) {
         target.addEventListener('input', this._changed, { passive: true });
         target.addEventListener('change', this._changed, { passive: true });
       }
