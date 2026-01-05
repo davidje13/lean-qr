@@ -271,12 +271,12 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
             </section>
             <section>
               <h4>Display a QR code with fixed content:</h4>
-              <pre><code>&lt;<a href="#LeanQRElement"><span class="value">lean-qr</span></a> <span class="property">value</span>=<span class="string">"MY MESSAGE HERE"</span> <span class="property">style</span>=<span class="string">"width: 100px"</span>&gt;&lt;/<span class="value">lean-qr</span>&gt;</code></pre>
+              <pre><code>&lt;<a href="#LeanQRElement"><span class="value">lean-qr</span></a> <span class="property">value</span>=<span class="string">"MY MESSAGE HERE"</span> <span class="property">style</span>=<span class="string">"display: inline-block; width: 100px"</span>&gt;&lt;/<span class="value">lean-qr</span>&gt;</code></pre>
             </section>
             <section>
               <h4>Display a QR code linked to another element:</h4>
               <pre><code>&lt;<span class="value">a</span> <span class="property">id</span>=<span class="string">"mylink"</span> <span class="property">href</span>=<span class="string">"https://example.com/"</span>&gt;My link&lt;/<span class="value">a</span>&gt;
-&lt;<a href="#LeanQRElement"><span class="value">lean-qr</span></a> <span class="property">for</span>=<span class="string">"mylink"</span> <span class="property">style</span>=<span class="string">"width: 100px"</span>&gt;&lt;/<span class="value">lean-qr</span>&gt;</code></pre>
+&lt;<a href="#LeanQRElement"><span class="value">lean-qr</span></a> <span class="property">for</span>=<span class="string">"mylink"</span> <span class="property">style</span>=<span class="string">"display: inline-block; width: 100px"</span>&gt;&lt;/<span class="value">lean-qr</span>&gt;</code></pre>
               <p>
                 In this example, the QR code will contain <code>https://example.com/</code>. You can also link to
                 <code>&lt;input&gt;</code> elements to create a live QR code from their <code>value</code>, or any other
@@ -1384,6 +1384,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
   <a href="#LeanQRElement_other"><span class="property">max-correction-level</span></a>=<span class="string">"H"</span>
   <a href="#LeanQRElement_other"><span class="property">modes</span></a>=<span class="string">"numeric alphanumeric ascii iso8859_1 shift_jis utf8"</span>
   <a href="#LeanQRElement_other"><span class="property">mask</span></a>=<span class="string">""</span>
+  <a href="#LeanQRElement_other"><span class="property">trailer</span></a>=<span class="string">"0xEC11"</span>
   <a href="#LeanQRElement_other"><span class="property">on</span></a>=<span class="string">"#000000"</span>
   <a href="#LeanQRElement_other"><span class="property">off</span></a>=<span class="string">"#FFFFFF"</span>
   <a href="#LeanQRElement_other"><span class="property">pad</span></a>=<span class="string">"4"</span>

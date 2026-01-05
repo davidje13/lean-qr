@@ -19,6 +19,7 @@ const ATTRS = Object.entries({
   minVersion: ['min-version'],
   maxVersion: ['max-version'],
   mask: ['mask'],
+  trailer: ['trailer'],
   modes: ['modes', (v) => v.matchAll(/\w+/g).map(([m]) => MODE_LOOKUP.get(m))],
   on: ['on', parseCol],
   off: ['off', parseCol],
