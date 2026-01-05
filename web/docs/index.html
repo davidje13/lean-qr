@@ -728,7 +728,7 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               <a id="mode_eci"></a>
               <p>
                 <code>mode.eci</code> lets you switch the Extended Channel Interpretation of the message (accepts
-                integer IDs from 0 to 999999). After setting this, subsequent <code>mode.bytes</code> will be
+                integer IDs from 0 to 811799). After setting this, subsequent <code>mode.bytes</code> will be
                 interpreted in the specified character set (ECI values can also be used to control other aspects such as
                 compression but these are rarely supported by QR code readers).
               </p>
@@ -736,7 +736,12 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
   mode.<span class="method">eci</span>(<span class="value">24</span>), <span class="comment">// Arabic (Windows-1256)</span>
   mode.<span class="method">bytes</span>([<span class="value">0xD3</span>]), <span class="comment">// Shin character</span>
 ));</code></pre>
-              <p>Known ECI values for character sets:</p>
+              <p>
+                Known ECI values for character sets: (see also on
+                <a href="https://en.wikipedia.org/wiki/Extended_Channel_Interpretation" target="_blank" rel="noopener"
+                  >Wikipedia</a
+                >)
+              </p>
               <table>
                 <thead>
                   <tr>
@@ -946,17 +951,6 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
                 >.
               </p>
               <p>
-                <a href="https://en.wikipedia.org/wiki/Extended_Channel_Interpretation" target="_blank" rel="noopener"
-                  >Wikipedia includes a list of common known ECI values</a
-                >, and the full list of registered ECI values is
-                <a
-                  href="https://web.aimglobal.org/external/wcpages/wcecommerce/eComItemDetailsPage.aspx?ItemID=805"
-                  target="_blank"
-                  rel="noopener"
-                  >available for purchase from AIM</a
-                >.
-              </p>
-              <p>
                 <code>mode.eci</code> will avoid outputting additional switches if the ECI already matches the requested
                 value.
               </p>
@@ -975,6 +969,62 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
                 If you set an ECI which is not compatible with ASCII, do not follow it with a
                 <code>mode.ascii</code> section (prefer <code>mode.iso8859_1</code> or <code>mode.utf8</code>, as these
                 will explicitly set the ECI for their content).
+              </p>
+              <p>Though not supported by common readers, other ECI values exist for additional purposes:</p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>ECI</th>
+                    <th>meaning</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>0&ndash;899</td>
+                    <td>Standardised character set interpretation (see above)</td>
+                  </tr>
+                  <tr>
+                    <td>900&ndash;399999</td>
+                    <td>Standardised transformation (e.g. compression, encryption)</td>
+                  </tr>
+                  <tr>
+                    <td>400000&ndash;799995</td>
+                    <td>Private use transformation</td>
+                  </tr>
+                  <tr>
+                    <td>799996</td>
+                    <td>Transformation prefix</td>
+                  </tr>
+                  <tr>
+                    <td>799997&ndash;799998</td>
+                    <td>Invalid</td>
+                  </tr>
+                  <tr>
+                    <td>799999</td>
+                    <td>Null transformation (end current transformation without beginning a new one)</td>
+                  </tr>
+                  <tr>
+                    <td>800000&ndash;810898</td>
+                    <td>Standardised application file format interpretation</td>
+                  </tr>
+                  <tr>
+                    <td>810899</td>
+                    <td>Interpretive prefix</td>
+                  </tr>
+                  <tr>
+                    <td>810900&ndash;811799</td>
+                    <td>Private use transformation</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>
+                The full list of standardised ECI values is available for purchase from AIM as
+                <a
+                  href="https://web.aimglobal.org/external/wcpages/wcecommerce/eComItemDetailsPage.aspx?ItemID=805"
+                  target="_blank"
+                  rel="noopener"
+                  >ECI Part 3: Register</a
+                >.
               </p>
             </section>
             <section>
