@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, minimal-ui" />
+    <title>Library Demo</title>
+    <link rel="icon" href="/resources/favicon.png" />
+
+    <!--
+      This example uses an import map for integrity checking because the file is hosted by a third-party,
+      but you can also just import the file directly if you are hosting it yourself.
+    -->
+    <script type="importmap">
+      {
+        "imports": {
+          "lean-qr": "https://cdn.jsdelivr.net/npm/lean-qr@2.7.1/index.mjs"
+        },
+        "integrity": {
+          "https://cdn.jsdelivr.net/npm/lean-qr@2.7.1/index.mjs": "sha384-m4b9mo8rku6/YQbV1e52UTglSzniaJVeyuq4NnpxRZtq9UrxWXKj+/Mx9MvtPRhK"
+        }
+      }
+    </script>
+    <script type="module">
+      import { generate } from 'lean-qr';
+
+      const code = generate('Lean QR');
+      code.toCanvas(document.getElementById('my-output'));
+    </script>
+  </head>
+  <body>
+    <h1>Library Demo</h1>
+    <p>
+      This demonstrates loading the Lean QR library from a third-party CDN with integrity checking, and using it to
+      render a simple QR Code. View the page source to see how it is implemented.
+    </p>
+    <canvas id="my-output" style="width: 300px; image-rendering: pixelated"></canvas>
+  </body>
+</html>

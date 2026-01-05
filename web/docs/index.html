@@ -96,6 +96,14 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
   }
 &lt;/<span class="value">style</span>&gt;</code></pre>
             <section>
+              <h4>Using a CDN</h4>
+              <p>
+                If you wish to use a third party CDN to load Lean QR instead of hosting the library yourself, you can
+                see how to load the script (and how to add subresource integrity checks for security) in the
+                <a href="/examples/library.html" target="_blank" rel="noopener">library example</a>.
+              </p>
+            </section>
+            <section>
               <h4>Providing a download link</h4>
               <p>If you want to offer users a way to download the QR code as an image file, you can use a data URL:</p>
               <pre><code>&lt;<span class="value">a</span> <span class="property">href</span>=<span class="string">"#"</span> <span class="property">download</span>=<span class="string">"qr.png"</span> <span class="property">id</span>=<span class="string">"download-link"</span>&gt;Download&lt;/<span class="value">a</span>&gt;
@@ -720,16 +728,234 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               <a id="mode_eci"></a>
               <p>
                 <code>mode.eci</code> lets you switch the Extended Channel Interpretation of the message (accepts
-                integer IDs from 0 to 999999;
-                <a href="https://en.wikipedia.org/wiki/Extended_Channel_Interpretation" target="_blank" rel="noopener"
-                  >Wikipedia includes a list of recognised values</a
-                >). After setting this, subsequent <code>mode.bytes</code> will be interpreted in the specified
-                character set.
+                integer IDs from 0 to 999999). After setting this, subsequent <code>mode.bytes</code> will be
+                interpreted in the specified character set (ECI values can also be used to control other aspects such as
+                compression but these are rarely supported by QR code readers).
               </p>
               <pre><code><span class="keyword">const</span> code = <span class="method">generate</span>(mode.<span class="method">multi</span>(
   mode.<span class="method">eci</span>(<span class="value">24</span>), <span class="comment">// Arabic (Windows-1256)</span>
   mode.<span class="method">bytes</span>([<span class="value">0xD3</span>]), <span class="comment">// Shin character</span>
 ));</code></pre>
+              <p>Known ECI values for character sets:</p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>ECI</th>
+                    <th>character set</th>
+                    <th>reader support</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>0</td>
+                    <td>Code Page 437 with GLI rules</td>
+                    <td>&#x274C; Obsolete (prefer ECI 2)</td>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                    <td>Latin-1 with GLI rules</td>
+                    <td>&#x274C; Obsolete (prefer ECI 3)</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Code Page 437</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>ISO/IEC 8859-1 (Latin-1 Western European)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>ISO/IEC 8859-2 (Latin-2 Central European)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>ISO/IEC 8859-3 (Latin-3 South European)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td>ISO/IEC 8859-4 (Latin-4 North European)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td>ISO/IEC 8859-5 (Latin/Cyrillic)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>8</td>
+                    <td>ISO/IEC 8859-6 (Latin/Arabic)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>9</td>
+                    <td>ISO/IEC 8859-7 (Latin/Greek)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>10</td>
+                    <td>ISO/IEC 8859-8 (Latin/Hebrew)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>11</td>
+                    <td>ISO/IEC 8859-9 (Latin-5 Turkish)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>12</td>
+                    <td>ISO/IEC 8859-10 (Latin-6 Nordic)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>13</td>
+                    <td>ISO/IEC 8859-11 (Latin/Thai)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>14</td>
+                    <td>-</td>
+                    <td>&#x274C; Reserved for future use</td>
+                  </tr>
+                  <tr>
+                    <td>15</td>
+                    <td>ISO/IEC 8859-13 (Latin-7 Baltic Rim)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>16</td>
+                    <td>ISO/IEC 8859-14 (Latin-8 Celtic)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>17</td>
+                    <td>ISO/IEC 8859-15 (Latin-9 Western European)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>18</td>
+                    <td>ISO/IEC 8859-16 (Latin-10 South-Eastern European)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>19</td>
+                    <td>-</td>
+                    <td>&#x274C; Reserved for future use</td>
+                  </tr>
+                  <tr>
+                    <td>20</td>
+                    <td>Shift JIS</td>
+                    <td>&#x26A0;&#xFE0F; Prefer <code>mode.shift_jis</code></td>
+                  </tr>
+                  <tr>
+                    <td>21</td>
+                    <td>Windows-1250 (modification of Latin-2 Central European)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>22</td>
+                    <td>Windows-1251 (Latin/Cyrillic)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>23</td>
+                    <td>Windows-1252 (superset of Latin-1 Western European)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>24</td>
+                    <td>Windows-1256 (Arabic)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>25</td>
+                    <td>UTF-16BE</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>26</td>
+                    <td>UTF-8</td>
+                    <td>&#x2705; Widely supported</td>
+                  </tr>
+                  <tr>
+                    <td>27</td>
+                    <td>ISO/IEC 646:1991 IRV (US-ASCII)</td>
+                    <td>&#x2705; Widely supported</td>
+                  </tr>
+                  <tr>
+                    <td>28</td>
+                    <td>Big5</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>29</td>
+                    <td>GB/T 2312 (Simplified Chinese)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>30</td>
+                    <td>KS X 1001 (Korean)</td>
+                    <td>&#x2705; Widely supported<sup>&dagger;</sup></td>
+                  </tr>
+                  <tr>
+                    <td>31</td>
+                    <td>GBK</td>
+                    <td>&#x274C; Not widely supported</td>
+                  </tr>
+                  <tr>
+                    <td>32</td>
+                    <td>GB 18030</td>
+                    <td>&#x274C; Not widely supported</td>
+                  </tr>
+                  <tr>
+                    <td>33</td>
+                    <td>UTF-16LE</td>
+                    <td>&#x274C; Not widely supported</td>
+                  </tr>
+                  <tr>
+                    <td>34</td>
+                    <td>UTF-32BE</td>
+                    <td>&#x274C; Not widely supported, added to spec in 2022</td>
+                  </tr>
+                  <tr>
+                    <td>35</td>
+                    <td>UTF-32LE</td>
+                    <td>&#x274C; Not widely supported, added to spec in 2022</td>
+                  </tr>
+                  <tr>
+                    <td>170</td>
+                    <td>ISO/IEC 646 INV</td>
+                    <td>&#x2705; Widely supported</td>
+                  </tr>
+                  <tr>
+                    <td>899</td>
+                    <td>8-bit binary data</td>
+                    <td>&#x274C; Rarely supported</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>
+                <sup>&dagger;</sup> all ECI values except 26, 27, and 170 may fail to read when using
+                <code>BarcodeDetector</code> in Google Chrome on M-series Macs
+                <a href="https://issues.chromium.org/issues/384033047" target="_blank" rel="noopener"
+                  >due to a Chromium bug</a
+                >.
+              </p>
+              <p>
+                <a href="https://en.wikipedia.org/wiki/Extended_Channel_Interpretation" target="_blank" rel="noopener"
+                  >Wikipedia includes a list of common known ECI values</a
+                >, and the full list of registered ECI values is
+                <a
+                  href="https://web.aimglobal.org/external/wcpages/wcecommerce/eComItemDetailsPage.aspx?ItemID=805"
+                  target="_blank"
+                  rel="noopener"
+                  >available for purchase from AIM</a
+                >.
+              </p>
               <p>
                 <code>mode.eci</code> will avoid outputting additional switches if the ECI already matches the requested
                 value.
@@ -742,7 +968,8 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               </p>
               <p>
                 If you wish to use ECI values other than 3 and 26 (which are widely recognised by common QR code
-                readers), ensure you test your QR code with the readers you want to support.
+                readers), ensure you test your QR code with the readers you want to support. You can test the ECI values
+                listed above <a href="/examples/eci.html" target="_blank" rel="noopener">using this demo page</a>.
               </p>
               <p>
                 If you set an ECI which is not compatible with ASCII, do not follow it with a
@@ -1489,7 +1716,6 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
                 <td>lean-qr error 8</td>
                 <td>Invalid <code>toSvgDataURL</code> function provided to the React wrapper</td>
               </tr>
-              <tr></tr>
             </tbody>
           </table>
           <p>

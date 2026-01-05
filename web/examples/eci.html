@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, minimal-ui" />
+    <title>ECI Tester</title>
+    <link rel="icon" href="/resources/favicon.png" />
+
+    <script type="importmap">
+      {
+        "imports": {
+          "lean-qr": "https://cdn.jsdelivr.net/npm/lean-qr@2.7.1/index.mjs"
+        },
+        "integrity": {
+          "https://cdn.jsdelivr.net/npm/lean-qr@2.7.1/index.mjs": "sha384-m4b9mo8rku6/YQbV1e52UTglSzniaJVeyuq4NnpxRZtq9UrxWXKj+/Mx9MvtPRhK"
+        }
+      }
+    </script>
+    <script type="module">
+      import { generate, mode } from 'lean-qr';
+
+      const CHOICES = [
+        { eci: 0, name: 'Obsolete', bytes: utf8('Code Page 437 + GLI with shaded box ', 0xb2) },
+        { eci: 1, name: 'Obsolete', bytes: utf8('Latin-1 + GLI with pound ', 0xa3) },
+        { eci: 2, name: 'Code Page 437', bytes: utf8('Code Page 437 with shaded box ', 0xb2) },
+        { eci: 3, name: 'Latin-1', bytes: utf8('Latin-1 with pound ', 0xa3) },
+        { eci: 4, name: 'Latin-2', bytes: utf8('Latin-2 with L with stroke ', 0xa3) },
+        { eci: 5, name: 'Latin-3', bytes: utf8('Latin-3 with H with stroke ', 0xa1) },
+        { eci: 6, name: 'Latin-4', bytes: utf8('Latin-4 with kra (small K) ', 0xa2) },
+        { eci: 7, name: 'Latin/Cyrillic', bytes: utf8('Latin/Cyrillic with Dje ', 0xa2) },
+        { eci: 8, name: 'Latin/Arabic', bytes: utf8('Latin/Arabic with reversed ? ', 0xbf) },
+        { eci: 9, name: 'Latin/Greek', bytes: utf8('Latin/Greek with Sigma ', 0xd3) },
+        { eci: 10, name: 'Latin/Hebrew', bytes: utf8('Latin/Hebrew with multiply ', 0xaa) },
+        { eci: 11, name: 'Latin-5', bytes: utf8('Latin-5 with dotless i ', 0xfd) },
+        { eci: 12, name: 'Latin-6', bytes: utf8('Latin-6 with kra (small K) ', 0xff) },
+        { eci: 13, name: 'Latin/Thai', bytes: utf8('Latin/Thai with Baht currency symbol ', 0xdf) },
+        { eci: 15, name: 'Latin-7', bytes: utf8('Latin-7 with AE ', 0xaf) },
+        { eci: 16, name: 'Latin-8', bytes: utf8('Latin-8 with C dot ', 0xa4) },
+        { eci: 17, name: 'Latin-9', bytes: utf8('Latin-9 with Euro currency symbol ', 0xa4) },
+        { eci: 18, name: 'Latin-10', bytes: utf8('Latin-10 with OE ', 0xbc) },
+        { eci: 20, name: 'Shift JIS', bytes: wide_sjis('shiftjis') },
+        {
+          eci: 21,
+          name: 'Windows-1250',
+          bytes: utf8('Windows-1250 with Euro currency symbol ', 0x80, ' and S acute ', 0x8c),
+        },
+        { eci: 22, name: 'Windows-1251', bytes: utf8('Windows-1251 with Dje ', 0x80) },
+        { eci: 23, name: 'Windows-1252', bytes: utf8('Windows-1252 with Euro currency symbol ', 0x80) },
+        { eci: 24, name: 'Windows-1256', bytes: utf8('Windows-1256 with reversed ? ', 0xbf) },
+        { eci: 25, name: 'UTF-16BE', bytes: utf16('UTF-16BE with pound £ and emoji \u{1F60A}', true) },
+        { eci: 26, name: 'UTF-8', bytes: utf8('UTF-8 with pound £ and emoji \u{1F60A}') },
+        { eci: 27, name: 'US-ASCII', bytes: utf8('US-ASCII') },
+        { eci: 28, name: 'Big5', bytes: utf8('Big5 with wide ? ', 0xa1, 0x48) },
+        { eci: 29, name: 'GB/T 2312', bytes: utf8('GB/T 2312 with ellipsis ', 0xa1, 0xad) },
+        { eci: 30, name: 'KS X 1001', bytes: utf8('KS X 1001 with backslash ', 0x5c, ' and therefore ', 0xa1, 0xc5) },
+        { eci: 31, name: 'GBK', bytes: utf8('GBK with star ', 0xa1, 0xef) },
+        { eci: 32, name: 'GB 18030', bytes: utf8('GB 18030 with vii ', 0xa2, 0xa7) },
+        { eci: 33, name: 'UTF-16LE', bytes: utf16('UTF-16LE with pound £ and emoji \u{1F60A}', false) },
+        { eci: 34, name: 'UTF-32BE', bytes: utf32('UTF-32BE with pound £ and emoji \u{1F60A}', true) },
+        { eci: 35, name: 'UTF-32LE', bytes: utf32('UTF-32LE with pound £ and emoji \u{1F60A}', false) },
+        { eci: 170, name: 'ISO 646 INV', bytes: utf8('ISO 646 INV') },
+        { eci: 899, name: '8-bit binary data', bytes: utf8('raw bytes: ', 0xff, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00) },
+      ];
+
+      function utf8(...parts) {
+        const encoder = new TextEncoder();
+        const r = [];
+        for (const part of parts) {
+          if (typeof part === 'string') {
+            r.push(...encoder.encode(part));
+          } else {
+            r.push(part);
+          }
+        }
+        return r;
+      }
+      function utf16(message, be) {
+        const r = [];
+        for (let i = 0; i < message.length; ++i) {
+          const cc = message.charCodeAt(i);
+          if (be) {
+            r.push(cc >>> 8, cc & 0xff);
+          } else {
+            r.push(cc & 0xff, cc >>> 8);
+          }
+        }
+        return r;
+      }
+      function utf32(message, be) {
+        const r = [];
+        for (const c of message) {
+          const cp = c.codePointAt(0);
+          if (be) {
+            r.push(cp >>> 24, (cp >>> 16) & 0xff, (cp >>> 8) & 0xff, cp & 0xff);
+          } else {
+            r.push(cp & 0xff, (cp >>> 8) & 0xff, (cp >>> 16) & 0xff, cp >>> 24);
+          }
+        }
+        return r;
+      }
+      function wide_sjis(message) {
+        const r = [];
+        for (const c of message) {
+          const letter = c.charCodeAt(0) - 0x61;
+          r.push(0x82, 0x81 + letter);
+        }
+        return r;
+      }
+
+      const selector = document.getElementsByTagName('select')[0];
+      const output = document.getElementsByTagName('canvas')[0];
+      const readOutput = document.getElementById('read');
+      let selfRead = () => {};
+
+      for (const choice of CHOICES) {
+        const option = document.createElement('option');
+        option.innerText = `${choice.name} (ECI ${choice.eci})`;
+        selector.append(option);
+      }
+
+      selector.addEventListener('change', update);
+
+      // QR code rendering
+      function update() {
+        const choice = CHOICES[selector.selectedIndex];
+        const code = generate(mode.multi(mode.eci(choice.eci), mode.bytes(choice.bytes)));
+        code.toCanvas(output, { on: [0, 0, 0, 255], off: [255, 255, 255, 255] });
+        selfRead();
+      }
+
+      update();
+
+      // QR code reading
+      if (typeof window.BarcodeDetector === 'undefined') {
+        readOutput.innerText = 'Your browser does not support BarcodeDetector.';
+      } else if (!(await BarcodeDetector.getSupportedFormats()).includes('qr_code')) {
+        readOutput.innerText = "Your browser's BarcodeDetector does not support qr_code.";
+      } else {
+        const detector = new BarcodeDetector({ formats: ['qr_code'] });
+        selfRead = async () => {
+          readOutput.innerText = 'Reading\u2026';
+          const detected = await detector.detect(output);
+          if (detected.length !== 1) {
+            readOutput.innerText = `BarcodeDetector detected ${detected.length} QR Codes.`;
+          } else if (detected[0].rawValue) {
+            readOutput.innerText = `BarcodeDetector read QR code as: "${detected[0].rawValue}"`;
+          } else {
+            readOutput.innerText = 'BarcodeDetector detected but failed to read QR code.';
+          }
+        };
+        selfRead();
+      }
+    </script>
+  </head>
+  <body>
+    <h1>ECI Tests</h1>
+    <p>Pick an ECI value to generate a test QR code:</p>
+    <select></select>
+    <br />
+    <canvas style="width: 300px; image-rendering: pixelated"></canvas>
+    <div id="read"></div>
+  </body>
+</html>
