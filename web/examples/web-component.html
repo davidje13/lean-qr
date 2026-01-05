@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, minimal-ui" />
+    <title>Simple Web Component Demos</title>
+    <link rel="icon" href="/resources/favicon.png" />
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/lean-qr@2.7.0/webcomponent.mjs"
+      integrity="sha384-qEnJ44o+q4U5Coy2oSQk+VUSujAopoS0ehKAHURdzOOyw8J+YtxqhAnOwmwV8zlo"
+      type="module"
+    ></script>
+  </head>
+  <body>
+    <h1>Simple Web Component Demos</h1>
+    <p>
+      These are simple examples of how to use Lean QR as a Web Component without needing to write any custom Javascript.
+      View the page source to see how each example is implemented.
+    </p>
+
+    <section>
+      <h2>With static content</h2>
+      <lean-qr value="Lean QR" style="display: block; width: 200px"></lean-qr>
+    </section>
+
+    <section>
+      <h2>Referencing a link</h2>
+      <a href="https://qr.davidje13.com/" id="my-link">The link</a>
+      <lean-qr for="my-link" style="display: block; width: 200px"></lean-qr>
+    </section>
+
+    <section>
+      <h2>Referencing a live input</h2>
+      <input type="text" id="my-input" placeholder="enter content here" />
+      <lean-qr for="my-input" style="display: block; width: 200px"></lean-qr>
+    </section>
+  </body>
+</html>

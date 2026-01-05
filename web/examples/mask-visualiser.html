@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, minimal-ui" />
+    <title>Mask visualiser</title>
+    <link rel="icon" href="/resources/favicon.png" />
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/lean-qr@2.7.0/webcomponent.mjs"
+      integrity="sha384-qEnJ44o+q4U5Coy2oSQk+VUSujAopoS0ehKAHURdzOOyw8J+YtxqhAnOwmwV8zlo"
+      type="module"
+    ></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .grid {
+        --size: max(min(100svw, 100svh), 300px);
+        margin: 0 auto;
+        width: var(--size);
+        height: var(--size);
+        display: grid;
+        grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+        place-items: center stretch;
+      }
+      .r90 {
+        transform: rotate(90deg);
+      }
+      .r180 {
+        transform: rotate(180deg);
+      }
+      .r270 {
+        transform: rotate(270deg);
+      }
+      input {
+        text-align: center;
+        min-width: 0;
+        padding: 10px;
+        border: 1px solid #666666;
+        border-radius: 100px;
+        font-size: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid">
+      <lean-qr for="target" trailer="0x0000" max-correction-level="L" min-version="17" mask="3"></lean-qr>
+      <lean-qr for="target" trailer="0x0000" max-correction-level="L" min-version="17" mask="0"></lean-qr>
+      <lean-qr for="target" trailer="0x0000" max-correction-level="L" min-version="17" mask="6" class="r90"></lean-qr>
+      <lean-qr for="target" trailer="0x0000" max-correction-level="L" min-version="17" mask="4" class="r270"></lean-qr>
+      <input type="text" id="target" placeholder="enter content here" />
+      <lean-qr for="target" trailer="0x0000" max-correction-level="L" min-version="17" mask="1" class="r90"></lean-qr>
+      <lean-qr for="target" trailer="0x0000" max-correction-level="L" min-version="17" mask="5" class="r270"></lean-qr>
+      <lean-qr for="target" trailer="0x0000" max-correction-level="L" min-version="17" mask="2" class="r180"></lean-qr>
+      <lean-qr for="target" trailer="0x0000" max-correction-level="L" min-version="17" mask="7" class="r180"></lean-qr>
+    </div>
+  </body>
+</html>
