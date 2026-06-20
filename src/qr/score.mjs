@@ -5,7 +5,7 @@ const matches = 0b00000000001_00000000001;
 export const scoreCode = ({ size, _data }, score = 0, totalOn = 0) => {
   for (let i = 0; i < size; ++i) {
     for (let n = 0; n < 2; ++n) {
-      for (let j = 0, state = 0, consec = 0, last; j < size; ++j) {
+      for (let j = 0, state = 0, consec = 0, last = 0; j < size; ++j) {
         const cur = _data[n ? i * size + j : j * size + i] & 1;
         totalOn += cur;
         state = ((state >> 1) | initial) & (pattern ^ (cur - 1));

@@ -23,7 +23,7 @@ export const calculateEC = (versionBytes, correction) => {
   const result = makeUint8Array(size);
   size = 0;
   for (const bs of blocks) {
-    for (let i = 0, prev; size !== prev; ++i) {
+    for (let i = 0, prev = -1; size !== prev; ++i) {
       prev = size;
       for (const block of bs) {
         if (i < block.length) {
