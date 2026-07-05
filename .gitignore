@@ -4,6 +4,7 @@ xcuserdata/
 
 node_modules/
 *.tgz
+/web-bundle.zip
 
 build/
 comparison/results/

@@ -6,6 +6,13 @@ BASE_DIR="$(cd "$(dirname "$0")/.."; pwd)";
 echo "Cleaning build...";
 rm -r "$BASE_DIR/build" "$BASE_DIR/web/build" 2>/dev/null || true;
 
+echo "Copying static web files...";
+mkdir -p "$BASE_DIR/web/build";
+find "$BASE_DIR/web/static" -type f -name ".DS_Store" -delete;
+cp -r "$BASE_DIR/web/static" "$BASE_DIR/web/build/static";
+rm "$BASE_DIR/web/build/static/index.mjs";
+cp "$BASE_DIR/web/config.json" "$BASE_DIR/web/build/config.json";
+
 echo "Building library...";
 echo;
 

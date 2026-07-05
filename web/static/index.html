@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta
       http-equiv="content-security-policy"
-      content="base-uri 'self'; default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'self'; connect-src data:; form-action 'none';"
+      content="base-uri 'self'; default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'self'; connect-src data:; frame-src 'self' data:; form-action 'self';"
     />
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, minimal-ui" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -15,11 +15,11 @@
     <link rel="icon" href="/resources/favicon.png" />
     <link rel="apple-touch-icon" href="/resources/apple-touch-icon.png" />
     <link rel="stylesheet" href="/index.css" />
-    <script type="module" src="/build/index.min.mjs"></script>
+    <script type="module" src="/index.min.mjs"></script>
   </head>
   <body class="noscript">
     <article>
-      <form>
+      <form id="request-form" action="/code/preview.html" method="post" target="output">
         <div class="tabbox">
           <h1>Lean QR</h1>
           <input type="radio" name="tab" id="tab-message" checked /><label class="tab" for="tab-message" role="tab"
@@ -48,6 +48,7 @@
                   <button
                     type="button"
                     id="reverse-col"
+                    class="unless-noscript"
                     title="Swap pattern and background colours"
                     aria-label="Swap pattern and background colours"
                   >
@@ -126,13 +127,13 @@
                 <legend><label for="trailer">Trailer Data</label></legend>
                 <div>
                   <datalist id="trailer-common">
-                    <option value="EC11" />
-                    <option value="0000" />
-                    <option value="3333" />
-                    <option value="5555" />
-                    <option value="5A5A" />
-                    <option value="AAAA" />
-                    <option value="FFFF" />
+                    <option value="EC11"></option>
+                    <option value="0000"></option>
+                    <option value="3333"></option>
+                    <option value="5555"></option>
+                    <option value="5A5A"></option>
+                    <option value="AAAA"></option>
+                    <option value="FFFF"></option>
                   </datalist>
                   <input type="text" id="trailer" name="trailer" list="trailer-common" value="EC11" />
                 </div>
@@ -153,17 +154,36 @@
             </section>
           </div>
         </div>
-        <div class="output">
-          <div id="download">
+        <div class="if-noscript submit">
+          <div class="download">
+            <button
+              type="submit"
+              class="png"
+              aria-label="Download as PNG"
+              title="Download as PNG"
+              formaction="/code/qr-code.png"
+              >PNG</button
+            >
+            <button
+              type="submit"
+              class="svg"
+              aria-label="Download as SVG"
+              title="Download as SVG"
+              formaction="/code/qr-code.svg"
+              >SVG</button
+            >
+            <button class="preview" type="submit">Update Preview</button>
+          </div>
+          <p>(enable Javascript for live updates)</p>
+        </div>
+        <iframe class="if-noscript noscript-output" name="output"></iframe>
+        <div class="output unless-noscript">
+          <div id="download" class="download">
             <a class="png" download="qr-code.png" aria-label="Download as PNG" title="Download as PNG">PNG</a>
             <a class="svg" download="qr-code.svg" aria-label="Download as SVG" title="Download as SVG">SVG</a>
             <a class="share" href="#" aria-label="Share QR Code">Share</a>
           </div>
-          <p id="error">
-            <noscript>
-              <p>You must enable JavaScript to generate a code.</p>
-            </noscript>
-          </p>
+          <p id="error"></p>
           <canvas id="qr" class="qr" width="1" height="1" aria-label="QR Code"></canvas>
         </div>
       </form>

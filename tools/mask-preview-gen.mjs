@@ -13,7 +13,14 @@ const size = 12;
 const options = { on: [255, 255, 255], off: [0, 0, 0], pad: 0, scale: 1 };
 
 for (let i = 0; i < masks.length; ++i) {
-  const path = join(SELF_DIR, '..', 'web', 'resources', `mask${i}.png`);
+  const path = join(
+    SELF_DIR,
+    '..',
+    'web',
+    'static',
+    'resources',
+    `mask${i}.png`,
+  );
 
   await writeFile(
     path,

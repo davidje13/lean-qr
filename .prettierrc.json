@@ -4,6 +4,10 @@
   "overrides": [
     { "files": "*.md", "options": { "proseWrap": "always" } },
     { "files": "*.html", "options": { "printWidth": 120 } },
-    { "files": "*.json", "options": { "trailingComma": "none" } }
+    { "files": "*.json", "options": { "trailingComma": "none" } },
+    {
+      "files": "web/static/index.html",
+      "options": { "htmlWhitespaceSensitivity": "strict" }
+    }
   ]
 }

@@ -11,13 +11,12 @@ const plugins = [];
 if (process.env['TEST'] === 'true') {
   plugins.push(nodeResolve());
 }
+const minify = terser({
+  ...commonTerserOptions,
+  mangle: { properties: { regex: /^_/ } },
+});
 if (process.env['NO_MINIFY'] !== 'true') {
-  plugins.push(
-    terser({
-      ...commonTerserOptions,
-      mangle: { properties: { regex: /^_/ } },
-    }),
-  );
+  plugins.push(minify);
 }
 
 const target = (path) => ({
@@ -30,7 +29,7 @@ const target = (path) => ({
   plugins,
 });
 
-export default [
+const targets = [
   target('index'),
   target('extras/svg'),
   target('extras/node_export'),
@@ -81,8 +80,25 @@ export default [
     plugins,
   },
   {
-    input: 'web/index.mjs',
-    output: { file: 'web/build/index.min.mjs', format: 'esm' },
+    input: 'web/static/index.mjs',
+    output: { file: 'web/build/static/index.min.mjs', format: 'esm' },
     plugins,
+    filter: 'web-frontend',
+  },
+  {
+    input: 'web/generate-code.mjs',
+    external: ['web-listener'],
+    output: { file: 'web/build/generate-code.mjs', format: 'esm' },
+    plugins: [nodeResolve(), minify],
   },
 ];
+
+const filteredTargets = process.env['BUILD_FILTER']
+  ? targets.filter((c) => c.filter === process.env['BUILD_FILTER'])
+  : targets;
+
+for (const target of filteredTargets) {
+  delete target.filter; // avoid warnings from rollup
+}
+
+export default filteredTargets;

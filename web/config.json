@@ -1,0 +1,36 @@
+{
+  "$schema": "../node_modules/web-listener/schema.json",
+  "servers": [
+    {
+      "port": 8080,
+      "mount": [
+        {
+          "type": "headers",
+          "headers": {
+            "cache-control": "public, max-age=600, stale-while-revalidate, stale-if-error",
+            "content-security-policy": "base-uri 'self'; default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'self'; connect-src data:; frame-src 'self' data:; form-action 'self'",
+            "x-content-type-options": "nosniff",
+            "referrer-policy": "no-referrer"
+          }
+        },
+        { "type": "custom", "path": "/code", "import": "./generate-code.mjs" },
+        {
+          "type": "files",
+          "path": "/",
+          "dir": "./static",
+          "options": {
+            "negotiation": [
+              {
+                "feature": "encoding",
+                "options": [
+                  { "value": "br", "file": "{file}.br" },
+                  { "value": "deflate", "file": "{file}.deflate" }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

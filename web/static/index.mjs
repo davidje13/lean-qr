@@ -1,6 +1,6 @@
-import { correction, generate, mode } from '../src/index.mjs';
-import { toSvgDataURL } from '../src/extras/svg.mjs';
-import { readError } from '../src/extras/errors.mjs';
+import { correction, generate, mode } from '../../src/index.mjs';
+import { toSvgDataURL } from '../../src/extras/svg.mjs';
+import { readError } from '../../src/extras/errors.mjs';
 
 const getInput = (name) => document.querySelector(`[name="${name}"]`);
 const getValue = (name) => getInput(name).value;
@@ -34,11 +34,11 @@ function getMask() {
   if (raw === 'auto') {
     return null;
   }
-  return Number(raw);
+  return getInt(raw, 0, 7);
 }
 
 const err = document.getElementById('error');
-const qrCanvas = document.querySelector('#qr');
+const qrCanvas = document.getElementById('qr');
 const downloadPng = document.querySelector('#download .png');
 const downloadSvg = document.querySelector('#download .svg');
 const share = document.querySelector('#download .share');
@@ -158,6 +158,10 @@ if (
   qrCanvas.style.cursor = 'pointer';
 }
 
+document.getElementById('request-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  regenerate();
+});
 document
   .querySelectorAll('input, select, textarea')
   .forEach((o) => o.addEventListener('input', regenerate));

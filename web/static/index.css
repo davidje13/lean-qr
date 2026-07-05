@@ -233,10 +233,6 @@ input#trailer {
   left: 16px;
 }
 
-.noscript .picker-2col button {
-  display: none;
-}
-
 .picker-2col button {
   position: absolute;
   z-index: 1;
@@ -262,6 +258,14 @@ input#trailer {
   color: var(--button-hover);
 }
 
+.submit {
+  text-align: center;
+}
+
+.submit p {
+  margin-top: 4px;
+}
+
 .output {
   width: 100%;
   flex: 1;
@@ -278,9 +282,13 @@ input#trailer {
   text-align: center;
 }
 
-.noscript #error,
 .error #error {
   display: block;
+}
+
+.detail {
+  text-align: center;
+  margin: -100px 0 100px;
 }
 
 #qr {
@@ -300,8 +308,7 @@ input#trailer {
   display: block;
 }
 
-#download {
-  display: none;
+.download {
   flex-flow: row wrap;
   gap: 10px;
   justify-content: center;
@@ -309,17 +316,26 @@ input#trailer {
   font-size: 1.5em;
 }
 
+#download {
+  display: none;
+}
+
 .success #download {
   display: flex;
 }
 
-#download a::before {
+.download a::before,
+.download button::before {
   content: '\2B07\FE0F';
-  padding-right: 5px;
+  padding-right: 8px;
 }
 
-#download .share::before {
+.download .share::before {
   content: '\27A1\FE0F';
+}
+
+button.preview::before {
+  content: '\21A9\FE0F';
 }
 
 nav {
@@ -332,27 +348,58 @@ nav {
   text-align: right;
 }
 
-a {
+a,
+.download button {
   display: inline-block;
+  background: none;
+  border: none;
+  margin: 0;
   padding: 6px 10px 4px;
   border-radius: 10px;
   transition: 0.1s linear background;
+  cursor: pointer;
+  font: inherit;
 }
 
 a:link,
-a:visited {
+a:visited,
+.download button {
   text-decoration: none;
   color: var(--link);
 }
 
 a:active,
-a:hover {
+a:hover,
+.download button:hover {
   color: var(--link-hover);
   background: var(--link-back);
 }
 
 .share {
   display: none;
+}
+
+body:not(.noscript) .if-noscript {
+  display: none;
+}
+
+body.noscript .unless-noscript {
+  display: none;
+}
+
+body.noscript form {
+  padding-bottom: 80px;
+}
+
+.noscript-output {
+  border: none;
+  flex: 1 0 600px;
+}
+
+body.output {
+  box-sizing: border-box;
+  min-height: calc(100vh - 4px);
+  margin-top: 4px;
 }
 
 @media (max-width: 610px) {
