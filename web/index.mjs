@@ -94,7 +94,8 @@ function regenerate() {
 }
 
 downloadPng.addEventListener('click', (e) => {
-  if (e.currentTarget.getAttribute('href') === '#') {
+  const target = e.currentTarget;
+  if (target.getAttribute('href') === '#') {
     if (!latestCode) {
       e.preventDefault();
       return;
@@ -105,12 +106,13 @@ downloadPng.addEventListener('click', (e) => {
       off: getColour('off'),
       scale: getInt('scale', 1, Number.POSITIVE_INFINITY),
     });
-    e.currentTarget.setAttribute('href', url);
+    target.setAttribute('href', url);
   }
 });
 
 downloadSvg.addEventListener('click', (e) => {
-  if (e.currentTarget.getAttribute('href') === '#') {
+  const target = e.currentTarget;
+  if (target.getAttribute('href') === '#') {
     if (!latestCode) {
       e.preventDefault();
       return;
@@ -120,7 +122,7 @@ downloadSvg.addEventListener('click', (e) => {
       off: getValue('off'),
       scale: getInt('scale', 1, Number.POSITIVE_INFINITY),
     });
-    e.currentTarget.setAttribute('href', url);
+    target.setAttribute('href', url);
   }
 });
 
