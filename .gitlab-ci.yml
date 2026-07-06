@@ -52,8 +52,7 @@ pages:
     - node:20
     - node:22
     - node:24
-  environment:
-    - sign # grant access to SIGNING_KEY and SIGNING_KEY_PASS project variables
+  environment: sign # grant access to SIGNING_KEY and SIGNING_KEY_PASS project variables
   script:
     - apk add --update --no-cache openssl
     - openssl dgst -sha256 -sign "$SIGNING_KEY" -passin "pass:$SIGNING_KEY_PASS" -out web/web-bundle.zip.sign web/web-bundle.zip
