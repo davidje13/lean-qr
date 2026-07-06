@@ -37,12 +37,11 @@ node:24:
     - npm install-test
     - apt-get update && apt-get install -y --no-install-recommends zip
     - npm run build-web
-    - cp web-bundle.zip web/build/static/web-bundle.zip
   artifacts:
     name: web
     expire_in: 20 minutes
     paths:
-      - web/build/static
+      - web-bundle.zip
 
 pages:
   stage: package
@@ -54,9 +53,10 @@ pages:
     - node:24
   environment: sign # grant access to SIGNING_KEY and SIGNING_KEY_PASS project variables
   script:
-    - apk add --update --no-cache openssl
-    - openssl dgst -sha256 -sign "$SIGNING_KEY" -passin "pass:$SIGNING_KEY_PASS" -out web/web-bundle.zip.sign web/web-bundle.zip
-    - mv web public
+    - apk add --update --no-cache openssl unzip
+    - mkdir public && mv web-bundle.zip public/
+    - openssl dgst -sha256 -sign "$SIGNING_KEY" -passin "file:$SIGNING_KEY_PASS" -out public/web-bundle.zip.sign public/web-bundle.zip
+    - cd public && unzip web-bundle.zip
   artifacts:
     expire_in: 20 minutes # safe to delete: https://gitlab.com/gitlab-org/gitlab/-/issues/36358#note_2232186823
     paths:
