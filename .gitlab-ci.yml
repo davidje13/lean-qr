@@ -40,7 +40,7 @@ node:24:
     - npm run build-web
   artifacts:
     name: web
-    expire_in: 20 minutes # latest build does not expire until there is a new successful build https://gitlab.com/gitlab-org/gitlab/-/issues/36358#note_2232186823
+    expire_in: 20 minutes
     paths:
       - web-bundle.zip
 
@@ -57,7 +57,7 @@ sign:
     - apk add --update --no-cache openssl
     - openssl dgst -sha256 -sign "$SIGNING_KEY" -passin "file:$SIGNING_KEY_PASS" -out web-bundle.zip.sign web-bundle.zip
   artifacts:
-    expire_in: 20 minutes
+    expire_in: 20 minutes # latest build does not expire until there is a new successful build https://gitlab.com/gitlab-org/gitlab/-/issues/36358#note_2232186823
     paths:
       - web-bundle.zip
       - web-bundle.zip.sign
@@ -70,10 +70,10 @@ deploy:
     - sign
   environment: deploy # grant access to DEPLOY_SIGNING_KEY and DEPLOY_SIGNING_KEY_PASS project variables
   script:
+    - apk add --update --no-cache openssl unzip
     - POST_DETAIL="$(date -u '+%Y-%m-%dT%H:%M:%SZ');qr"
     - POST_SIGN="$(printf '%s' "$POST_DETAIL" | openssl dgst -sha256 -sign "$DEPLOY_SIGNING_KEY" -passin "file:$DEPLOY_SIGNING_KEY_PASS" -hex -)"
     #- curl -X POST --data-urlencode "detail=$POST_DETAIL" --data-urlencode "signature=$POST_SIGN" 'https://davidje13.com/cd/deploy'
-    - apk add --update --no-cache unzip
     - unzip web-bundle.zip
   artifacts:
     expire_in: 20 minutes
