@@ -49,8 +49,8 @@ sign:
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
   dependencies:
-    - node:20
     - node:22
+    - node:24
     - node:26
   environment: sign # grant access to SIGNING_KEY and SIGNING_KEY_PASS project variables
   script:
