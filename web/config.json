@@ -8,7 +8,7 @@
           "type": "headers",
           "headers": {
             "cache-control": "public, max-age=600, stale-while-revalidate=31536000, stale-if-error=31536000",
-            "content-security-policy": "base-uri 'self'; default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'self'; connect-src data:; frame-src 'self' data:; form-action 'self'",
+            "content-security-policy": "base-uri 'self'; default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'self'; connect-src data:; frame-src 'self' data:; frame-ancestors 'self'; form-action 'self'",
             "x-content-type-options": "nosniff",
             "referrer-policy": "no-referrer"
           }
@@ -17,7 +17,7 @@
           "type": "headers",
           "path": "/examples",
           "headers": {
-            "content-security-policy": "base-uri 'self'; default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'self'; connect-src data:"
+            "content-security-policy": "base-uri 'self'; default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'self'; connect-src data:; frame-ancestors 'self'"
           }
         },
         { "type": "custom", "path": "/code", "import": "./generate-code.mjs" },
