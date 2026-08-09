@@ -5,24 +5,23 @@ import { readError } from '../../src/extras/errors.mjs';
 const getInput = (name) => document.querySelector(`[name="${name}"]`);
 const getValue = (name) => getInput(name).value;
 
-function getInt(name, min, max) {
-  const v = Number.parseInt(getValue(name), 10);
+function toInt(str, min, max, base = 10) {
+  const v = Number.parseInt(str, base);
   if (Number.isNaN(v)) {
     return min;
   }
   return Math.max(min, Math.min(max, v));
 }
 
-function getData(name, min, max) {
-  const raw = getValue(name)
-    .toLowerCase()
-    .replace(/[^0-9a-f]/g, '');
-  const v = Number.parseInt(raw, 16);
-  if (Number.isNaN(v)) {
-    return min;
-  }
-  return Math.max(min, Math.min(max, v));
-}
+const getData = (name, min, max) =>
+  toInt(
+    getValue(name)
+      .toLowerCase()
+      .replace(/[^0-9a-f]/g, ''),
+    min,
+    max,
+    16,
+  );
 
 function getColour(name) {
   const rgb = Number.parseInt(getValue(name).slice(1), 16);
@@ -34,7 +33,7 @@ function getMask() {
   if (raw === 'auto') {
     return null;
   }
-  return getInt(raw, 0, 7);
+  return toInt(raw, 0, 7);
 }
 
 const err = document.getElementById('error');
@@ -58,8 +57,8 @@ function regenerate() {
   try {
     const options = {
       message: getValue('message'),
-      minVersion: getInt('min-version', 1, 40),
-      maxVersion: getInt('max-version', 1, 40),
+      minVersion: toInt(getValue('min-version'), 1, 40),
+      maxVersion: toInt(getValue('max-version'), 1, 40),
       minCorrectionLevel: getValue('min-correction'),
       maxCorrectionLevel: getValue('max-correction'),
       mask: getMask(),
@@ -104,7 +103,7 @@ downloadPng.addEventListener('click', (e) => {
       type: 'image/png',
       on: getColour('on'),
       off: getColour('off'),
-      scale: getInt('scale', 1, Number.POSITIVE_INFINITY),
+      scale: toInt(getValue('scale'), 1, Number.POSITIVE_INFINITY),
     });
     target.setAttribute('href', url);
   }
@@ -120,7 +119,7 @@ downloadSvg.addEventListener('click', (e) => {
     const url = toSvgDataURL(latestCode, {
       on: getValue('on'),
       off: getValue('off'),
-      scale: getInt('scale', 1, Number.POSITIVE_INFINITY),
+      scale: toInt(getValue('scale'), 1, Number.POSITIVE_INFINITY),
     });
     target.setAttribute('href', url);
   }
@@ -141,7 +140,7 @@ if (
       type: 'image/png',
       on: getColour('on'),
       off: getColour('off'),
-      scale: getInt('scale', 1, Number.POSITIVE_INFINITY),
+      scale: toInt(getValue('scale'), 1, Number.POSITIVE_INFINITY),
     });
     fetch(url)
       .then((r) => r.blob())
