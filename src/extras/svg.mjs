@@ -24,46 +24,34 @@ const makeSrc = (_, tag, attrs, children = []) =>
   ].join('');
 
 export const toSvgPath = (code) => {
-  const anchors = new Map();
-  const paths = [];
-  const getAndDelete = (key) => {
-    const v = anchors.get(key);
-    anchors.delete(key);
-    return v;
-  };
+  const anchors = [];
+  let path = '';
   for (let y = 0; y <= code.size; ++y) {
     for (let x = 0; x <= code.size; ++x) {
       const v = code.get(x, y);
-      const f = [
-        code.get(x - 1, y) ^ v && x + ' ' + (y + 1),
-        x + ' ' + y,
-        code.get(x, y - 1) ^ v && x + 1 + ' ' + y,
-      ].filter((v) => v);
+      const f1 = (x << 8) | y;
+      let f0 = code.get(x - 1, y) ^ v && f1 + 1;
+      let f2 = code.get(x, y - 1) ^ v && f1 + 256;
 
-      if (f.length > 1) {
+      if (f0 || f2) {
         if (!v) {
-          f.reverse();
+          [f0, f2] = [f2, f0];
         }
 
-        const end = f.pop();
-        const a = getAndDelete(f[0]) || [];
-        const b = getAndDelete(end);
-        a.push(...f);
+        const a = (anchors[f0 || f1] ||= []);
+        const b = anchors[f2 || f1];
+        f0 && a.push(f1);
+        f2 && a.push(f2);
         if (a === b) {
-          paths.push(a);
+          path += `M${a.map((v) => `${v >> 8} ${v & 0xff}`).join('L')}Z`;
         } else {
-          if (b) {
-            b.unshift(...a);
-          } else {
-            anchors.set(end, a);
-          }
-          anchors.set(a[0], b || a);
+          b && a.push(...b);
+          anchors[a[a.length - 1]] = a;
         }
       }
     }
   }
-
-  return paths.map((p) => `M${p.join('L')}Z`).join('');
+  return path;
 };
 
 const toSvgInternal = (

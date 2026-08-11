@@ -10,7 +10,7 @@ const BASIC_IMAGE = makeBitmap(`
 
 describe('toSvgPath', () => {
   it('identifies the outline around pixels', () => {
-    expect(toSvgPath(BASIC_IMAGE)).toEqual('M1 2L1 1L2 1L2 2Z');
+    expect(toSvgPath(BASIC_IMAGE)).toEqual('M1 1L2 1L2 2L1 2Z');
   });
 
   it('identifies outlines at the limits of the image', () => {
@@ -18,7 +18,7 @@ describe('toSvgPath', () => {
       #
     `);
 
-    expect(toSvgPath(bitmap)).toEqual('M0 1L0 0L1 0L1 1Z');
+    expect(toSvgPath(bitmap)).toEqual('M0 0L1 0L1 1L0 1Z');
   });
 
   it('returns blank for a blank input', () => {
@@ -35,7 +35,7 @@ describe('toSvgPath', () => {
       ----
     `);
 
-    expect(toSvgPath(bitmap)).toEqual('M2 3L1 3L1 2L1 1L2 1L3 1L3 2L3 3Z');
+    expect(toSvgPath(bitmap)).toEqual('M1 3L1 2L1 1L2 1L3 1L3 2L3 3L2 3Z');
   });
 
   it('creates separate paths for unconnected regions', () => {
@@ -47,7 +47,7 @@ describe('toSvgPath', () => {
       -----
     `);
 
-    expect(toSvgPath(bitmap)).toEqual('M1 2L1 1L2 1L2 2ZM3 3L3 2L4 2L4 3Z');
+    expect(toSvgPath(bitmap)).toEqual('M1 1L2 1L2 2L1 2ZM3 2L4 2L4 3L3 3Z');
   });
 
   it('creates reversed paths for inner holes', () => {
@@ -60,7 +60,21 @@ describe('toSvgPath', () => {
     `);
 
     expect(toSvgPath(bitmap)).toEqual(
-      'M3 3L3 2L2 2L2 3ZM3 4L2 4L1 4L1 3L1 2L1 1L2 1L3 1L4 1L4 2L4 3L4 4Z',
+      'M3 2L2 2L2 3L3 3ZM2 4L1 4L1 3L1 2L1 1L2 1L3 1L4 1L4 2L4 3L4 4L3 4Z',
+    );
+  });
+
+  it('creates paths for complex shapes', () => {
+    const bitmap = makeBitmap(`
+      #-#-#
+      ##-##
+      -#-#-
+      -###-
+      ----#
+    `);
+
+    expect(toSvgPath(bitmap)).toEqual(
+      'M2 4L1 4L1 3L1 2L0 2L0 1L0 0L1 0L1 1L2 1L2 0L3 0L3 1L2 1L2 2L2 3L3 3L3 2L3 1L4 1L4 0L5 0L5 1L5 2L4 2L4 3L4 4L3 4ZM4 4L5 4L5 5L4 5Z',
     );
   });
 });
@@ -68,13 +82,13 @@ describe('toSvgPath', () => {
 describe('toSvgSource', () => {
   it('generates full SVG source for an image', () => {
     expect(toSvgSource(BASIC_IMAGE)).toEqual(
-      '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-4 -4 11 11" width="11" height="11" shape-rendering="crispedges"><path d="M1 2L1 1L2 1L2 2Z" fill="black"></path></svg>',
+      '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-4 -4 11 11" width="11" height="11" shape-rendering="crispedges"><path d="M1 1L2 1L2 2L1 2Z" fill="black"></path></svg>',
     );
   });
 
   it('adds a background rectangle if off colour is specified', () => {
     expect(toSvgSource(BASIC_IMAGE, { off: 'red' })).toEqual(
-      '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-4 -4 11 11" width="11" height="11" shape-rendering="crispedges"><rect x="-4" y="-4" width="11" height="11" fill="red"></rect><path d="M1 2L1 1L2 1L2 2Z" fill="black"></path></svg>',
+      '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-4 -4 11 11" width="11" height="11" shape-rendering="crispedges"><rect x="-4" y="-4" width="11" height="11" fill="red"></rect><path d="M1 1L2 1L2 2L1 2Z" fill="black"></path></svg>',
     );
   });
 
@@ -108,7 +122,7 @@ describe('toSvgDataURL', () => {
         'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiID8+PHN2ZyB4bWxu' +
         'cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgdmll' +
         'd0JveD0iLTQgLTQgMTEgMTEiIHdpZHRoPSIxMSIgaGVpZ2h0PSIxMSIgc2hhcGUt' +
-        'cmVuZGVyaW5nPSJjcmlzcGVkZ2VzIj48cGF0aCBkPSJNMSAyTDEgMUwyIDFMMiAy' +
+        'cmVuZGVyaW5nPSJjcmlzcGVkZ2VzIj48cGF0aCBkPSJNMSAxTDIgMUwyIDJMMSAy' +
         'WiIgZmlsbD0iYmxhY2siPjwvcGF0aD48L3N2Zz4=',
     );
   });
