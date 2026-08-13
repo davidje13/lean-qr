@@ -263,7 +263,7 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               <div class="tabcontent" data-for="cdn2">
                 <p>Always set the <code>integrity</code> attribute for security when using a third party CDN.</p>
                 <pre><code>&lt;<span class="value">script</span>
-  <span class="property">src</span>=<span class="string">"https://cdn.jsdelivr.net/npm/lean-qr@2.7.2/webcomponent.mjs"</span>
+  <span class="property">src</span>=<span class="string">"https://cdn.jsdelivr.net/npm/lean-qr@2.7.3/webcomponent.mjs"</span>
   <span class="property">integrity</span>=<span class="string">"sha384-QTlW/1U8Fi4zgSsbEx+i8+CHNfzzIWxgw8hH0hc4qwVBJN5omqCsXJ6a7d8aDzKd"</span>
   <span class="property">type</span>=<span class="string">"module"</span>
 &gt;&lt;/<span class="value">script</span>&gt;</code></pre>
@@ -271,7 +271,7 @@ process.<span class="property">stdout</span>.<span class="method">write</span>(c
               <div class="tabcontent" data-for="cdn3">
                 <p>Always set the <code>integrity</code> attribute for security when using a third party CDN.</p>
                 <pre><code>&lt;<span class="value">script</span>
-  <span class="property">src</span>=<span class="string">"https://www.unpkg.com/lean-qr@2.7.2/webcomponent.mjs"</span>
+  <span class="property">src</span>=<span class="string">"https://www.unpkg.com/lean-qr@2.7.3/webcomponent.mjs"</span>
   <span class="property">integrity</span>=<span class="string">"sha384-QTlW/1U8Fi4zgSsbEx+i8+CHNfzzIWxgw8hH0hc4qwVBJN5omqCsXJ6a7d8aDzKd"</span>
   <span class="property">type</span>=<span class="string">"module"</span>
 &gt;&lt;/<span class="value">script</span>&gt;</code></pre>
@@ -1232,7 +1232,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(l
           <a id="extras_svg"></a>
           <p>
             This is not included in the main library to keep it small, but if you need SVG output, you can access it
-            from a separate import (adds ~2kB).
+            from a separate import (adds 1.3kB).
           </p>
           <section>
             <h4><code>toSvg(code, target[, options])</code></h4>
@@ -1351,7 +1351,7 @@ document.<span class="property">body</span>.<span class="method">append</span>(m
           <a id="extras_node_export"></a>
           <p>
             This is not included in the main library as it only applies to Node.js, but if you need PNG output from
-            Node.js, you can access it from a separate import (adds ~1kB).
+            Node.js, you can access it from a separate import (adds 1.1kB).
           </p>
           <section>
             <h4><code>toPngBuffer(code[, options])</code></h4>
