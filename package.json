@@ -48,6 +48,7 @@
     "start": "BUILD_FILTER=web-frontend web-listener -c web/config.json --dir web/build/static --exec 'rollup --config rollup.config.mjs --watch' --no-cache",
     "build-web": "./tools/build.sh && web-listener ./web/build/static --write-compressed --brotli --no-serve && cd web/build && zip -8Xr -n .br:.png - * > ../../web-bundle.zip",
     "test": "lean-test --target=node,chrome,firefox -x '**/*.node.*' -x '**/*.browser.*' && lean-test -i '**/*.node.test.*' && TEST=true lean-test --target=chrome,firefox --preprocess=rollup -i '**/*.browser.test.*' && TEST=true NO_MINIFY=true lean-test --target=chrome,firefox --preprocess=rollup -i '**/*.browser.raw.test.*' && ./test-package/run.sh && prettier --check .",
+    "reduced-test": "lean-test --target=node -x '**/*.node.*' -x '**/*.browser.*' && lean-test -i '**/*.node.test.*' && ./test-package/run.sh && prettier --check .",
     "dopublish": "./tools/build.sh && npm publish package.tgz"
   },
   "repository": {
@@ -59,6 +60,7 @@
     "qr-code",
     "qrcode",
     "barcode",
+    "iso-18004",
     "react",
     "react-component",
     "preact",
