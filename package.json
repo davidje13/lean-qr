@@ -1,6 +1,6 @@
 {
   "name": "lean-qr",
-  "version": "2.7.3",
+  "version": "2.7.4",
   "description": "minimal QR code generation",
   "private": true,
   "bin": "./cli.mjs",
