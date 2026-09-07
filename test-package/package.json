@@ -5,10 +5,10 @@
     "test": "node commonjs.js && node es6modules.mjs && tsc --project dom/tsconfig.json && tsc --project dom/tsconfig-bundler.json && tsc --project react/tsconfig.json && tsc --project preact/tsconfig.json && ./cli.sh"
   },
   "devDependencies": {
-    "@types/node": "18.x",
+    "@types/node": "20.x",
     "@types/react-dom": "19.x",
     "@vue/runtime-dom": "3.x",
     "lean-qr": "file:lean-qr.tgz",
-    "typescript": "5.8.x"
+    "typescript": "6.0.x"
   }
 }

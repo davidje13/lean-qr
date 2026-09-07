@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["node"],
     "module": "es2015",
     "moduleResolution": "bundler",
     "strict": true,

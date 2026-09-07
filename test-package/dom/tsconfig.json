@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "types": ["node"],
+    "module": "preserve",
     "strict": true,
     "noImplicitAny": true,
     "noEmit": true

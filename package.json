@@ -84,8 +84,8 @@
     "lean-test": "2.x",
     "pngjs": "7.x",
     "preact": "10.x",
-    "prettier": "3.6.2",
+    "prettier": "3.9.6",
     "rollup": "4.x",
-    "web-listener": "1.4.x"
+    "web-listener": "1.5.x"
   }
 }

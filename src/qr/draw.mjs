@@ -1,7 +1,7 @@
 const remBinPoly = (num, den, denBitsMinusOne) => {
   num <<= denBitsMinusOne;
   let r = num;
-  for (let i = 0x8000000; (i >>= 1); ) {
+  for (let i = 0x8000000; (i >>= 1);) {
     if (r & i) {
       r ^= den * (i >> denBitsMinusOne);
     }

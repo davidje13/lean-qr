@@ -45,7 +45,7 @@ export function drawTable(table) {
         outputRow.push('-'.repeat(columns[i].maxW));
       }
     } else {
-      for (let i = 0; i < row.length; ) {
+      for (let i = 0; i < row.length;) {
         if (i > 0) {
           outputRow.push(gap);
         }

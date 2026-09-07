@@ -443,9 +443,7 @@ declare module 'lean-qr/extras/react' {
   }
 
   export interface AsyncQRComponentProps
-    extends ImageDataOptions,
-      GenerateOptions,
-      QRComponentProps {}
+    extends ImageDataOptions, GenerateOptions, QRComponentProps {}
 
   export type AsyncQRComponent<T> = (
     props: Readonly<AsyncQRComponentProps>,
@@ -494,9 +492,7 @@ declare module 'lean-qr/extras/react' {
   }
 
   export interface SyncQRComponentProps
-    extends SVGOptions,
-      GenerateOptions,
-      QRComponentProps {}
+    extends SVGOptions, GenerateOptions, QRComponentProps {}
 
   export type SyncQRComponent<T> = (props: Readonly<SyncQRComponentProps>) => T;
 
@@ -557,9 +553,7 @@ declare module 'lean-qr/extras/vue' {
   }
 
   export interface VueCanvasComponentProps
-    extends ImageDataOptions,
-      GenerateOptions,
-      QRComponentProps {}
+    extends ImageDataOptions, GenerateOptions, QRComponentProps {}
 
   type VueComponentDefinition<Props> = {
     props: {
@@ -601,9 +595,7 @@ declare module 'lean-qr/extras/vue' {
   ): VueComponentDefinition<VueCanvasComponentProps>;
 
   export interface VueSVGComponentProps
-    extends SVGOptions,
-      GenerateOptions,
-      QRComponentProps {}
+    extends SVGOptions, GenerateOptions, QRComponentProps {}
 
   /**
    * Generate a QR component which renders to an SVG.
