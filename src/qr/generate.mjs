@@ -79,11 +79,11 @@ export const generate = (
       drawCode(code, base.p, calculateEC(data._bytes, correction));
 
       // pick best mask
-      return (masks[mask ?? -1] ? [masks[mask]] : masks)
+      return (masks[mask] ? [masks[mask]] : masks)
         .map((m, maskId) => {
           const masked = Bitmap2D(code.size, code._data);
           applyMask(masked, m, mask ?? maskId, cl);
-          masked.s = scoreCode(masked);
+          masked.s = masks[mask] ? 0 : scoreCode(masked);
           return masked;
         })
         .reduce((best, masked) => (masked.s < best.s ? masked : best));
