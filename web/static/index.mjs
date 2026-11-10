@@ -4,6 +4,14 @@ import { readError } from '../../src/extras/errors.mjs';
 
 const getInput = (name) => document.querySelector(`[name="${name}"]`);
 const getValue = (name) => getInput(name).value;
+const getIntValue = (name, min, max) => {
+  const o = getInput(name);
+  const v = o.valueAsNumber ?? Number.parseInt(o.value, 10);
+  if (Number.isNaN(v)) {
+    return min;
+  }
+  return Math.max(min, Math.min(max, v | 0));
+};
 
 function toInt(str, min, max, base = 10) {
   const v = Number.parseInt(str, base);
@@ -57,8 +65,8 @@ function regenerate() {
   try {
     const options = {
       message: getValue('message'),
-      minVersion: toInt(getValue('min-version'), 1, 40),
-      maxVersion: toInt(getValue('max-version'), 1, 40),
+      minVersion: getIntValue('min-version', 1, 40),
+      maxVersion: getIntValue('max-version', 1, 40),
       minCorrectionLevel: getValue('min-correction'),
       maxCorrectionLevel: getValue('max-correction'),
       mask: getMask(),
@@ -103,7 +111,7 @@ downloadPng.addEventListener('click', (e) => {
       type: 'image/png',
       on: getColour('on'),
       off: getColour('off'),
-      scale: toInt(getValue('scale'), 1, Number.POSITIVE_INFINITY),
+      scale: getIntValue('scale', 1, Number.POSITIVE_INFINITY),
     });
     target.setAttribute('href', url);
   }
@@ -119,7 +127,7 @@ downloadSvg.addEventListener('click', (e) => {
     const url = toSvgDataURL(latestCode, {
       on: getValue('on'),
       off: getValue('off'),
-      scale: toInt(getValue('scale'), 1, Number.POSITIVE_INFINITY),
+      scale: getIntValue('scale', 1, Number.POSITIVE_INFINITY),
     });
     target.setAttribute('href', url);
   }
@@ -140,7 +148,7 @@ if (
       type: 'image/png',
       on: getColour('on'),
       off: getColour('off'),
-      scale: toInt(getValue('scale'), 1, Number.POSITIVE_INFINITY),
+      scale: getIntValue('scale', 1, Number.POSITIVE_INFINITY),
     });
     fetch(url)
       .then((r) => r.blob())
